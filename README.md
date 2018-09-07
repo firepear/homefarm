@@ -13,3 +13,4 @@ Homefarm makes a few assumptions:
 1. Login as the default user and run `sudo apt-get --yes install git`
 1. `git clone https://github.com/firepear/homefarm.git`
 1. `cd homefarm`
+1. `sudo ./control-setup`
