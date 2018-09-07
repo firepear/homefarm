@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# update the system
+echo "Updating system software..."
+sleep 1
+apk update
+apk upgrade
+
 
 
 # TODOS
