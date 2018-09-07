@@ -26,14 +26,14 @@ fi
 # install python
 echo
 echo
-echo "Installing Python..."
+echo "Installing Ansible prerequisites..."
 sleep 1
-apk add python3
+apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl1.0 openssl1.0-dev
 
 # install ansible
 echo
 echo
-echo "Installing ansible..."
+echo "Installing Ansible..."
 sleep 1
 pip3 install ansible
 
