@@ -62,3 +62,5 @@ At this point the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
 running `'ansible -m ping [NODE_NAME]'` from the control node. (Halt
 the 'serve' script first, if it's still running.)
+
+# Managing the farm

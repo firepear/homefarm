@@ -44,13 +44,11 @@ echo
 echo "Creating user for Ansible..."
 sleep 1
 adduser -h /home/farmer -D farmer
+echo "farmer:$(openssl rand -base64 32)" | chpasswd
 mkdir /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
 wget ${1}:8000/id_farmer.pub -O /home/farmer/.ssh/authorized_keys
 chown -R farmer:farmer /home/farmer/.ssh
-
-# boinctui
-# https://github.com/mpentler/boinctui-extended/archive/1.0.2.tar.gz
 
 # TODOS
 #
