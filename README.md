@@ -9,4 +9,7 @@ Homefarm makes a few assumptions:
 
 ## Control machine setup
 
-
+1. Image an SD card with Raspbian Lite, boot the Pi, and do any initial network/locale/etc configuration that you wish. Reboot if necessary.
+1. Login as the default user and run `sudo apt-get --yes install git`
+1. `git clone github.com:firepear/homefarm.git`
+1. `cd homefarm`
