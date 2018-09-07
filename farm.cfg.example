@@ -2,4 +2,6 @@
 node00 ansible_connection=local
 
 [compute]
+node01
 node02
+node03
