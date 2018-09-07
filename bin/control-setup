@@ -31,7 +31,7 @@ echo
 echo "Generating SSH configuration for Ansible..."
 apt-get --yes install keychain
 ssh-keygen -t ecdsa -N "" -f id_ecdsa
-mkdir /home/pi/.ssh
+mkdir -p /home/pi/.ssh
 mv id_ecdsa* /home/pi/.ssh
 chown -R pi:pi /home/pi/.ssh
 chmod 700 /home/pi/.ssh
