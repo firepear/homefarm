@@ -37,6 +37,8 @@ mv id_ecdsa* /home/pi/.ssh
 chown -R pi:pi /home/pi/.ssh
 chmod 700 /home/pi/.ssh
 echo <<EOF >> /home/pi/.bashrc
+
+# set up easy ssh-agent for homefarm
 /usr/bin/keychain ~/.ssh/id_ecdsa
 source ~/.keychain/${HOSTNAME}-sh > /dev/null
 EOF
