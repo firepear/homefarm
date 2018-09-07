@@ -31,15 +31,15 @@ echo
 echo "Generating SSH configuration for Ansible..."
 sleep 1
 apt-get --yes install keychain
-ssh-keygen -t ecdsa -N "" -f id_ecdsa
+ssh-keygen -t ed25519 -N "" -f id_farmer
 mkdir -p /home/pi/.ssh
-mv id_ecdsa* /home/pi/.ssh
+mv id_farmer* /home/pi/.ssh
 chown -R pi:pi /home/pi/.ssh
 chmod 700 /home/pi/.ssh
 cat <<EOF | tee -a /home/pi/.bashrc > /dev/null
 
 # set up easy ssh-agent for homefarm
-/usr/bin/keychain ~/.ssh/id_ecdsa
+/usr/bin/keychain ~/.ssh/id_farmer
 source ~/.keychain/${HOSTNAME}-sh > /dev/null
 EOF
 
@@ -50,7 +50,7 @@ echo
 echo "Finalizing controller setup..."
 sleep 1
 mkdir http
-cp /home/pi/.ssh/id_ecdsa.pub ./http
+cp /home/pi/.ssh/id_farmer.pub ./http
 ln -s /home/pi/homefarm/bin/compute-setup ./http
 chown -R pi:pi http
 apt-get --yes install boinctui

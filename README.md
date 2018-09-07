@@ -45,9 +45,11 @@ script. When done with installs, terminate the server with `Ctrl-C`.
 
 1. Download [Alpine Linux
    Standard](https://alpinelinux.org/downloads/) and install it.
-    * The Alpine installer will handle WiFi properly on install, but
-      will not enable `wpa_supplicant` for subsequent boots, so before
-      rebooting run `'rc-update add wpa_supplicant boot'`.
+1. Login after reboot
+    1. If you are on WiFi, run `'/etc/init.d/wpa_supplicant start'` to
+       bring up the networking
+    1. Then run `'rc-update add wpa_supplicant boot'` to enable it for
+       all future boots
 1. Run `'wget [CONTROL_NODE_IP]:8000/compute-setup'` to fetch the
    compute node setup script from your control node.
 1. Run `'sh ./compute-setup [CONTROL_NODE_IP]'`. This first run will

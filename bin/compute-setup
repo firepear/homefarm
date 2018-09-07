@@ -45,7 +45,7 @@ sleep 1
 adduser -h /home/farmer -D farmer
 mkdir /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
-wget ${1}:8000/id_ecdsa.pub -O /home/farmer/.ssh/authorized_keys
+wget ${1}:8000/id_farmer.pub -O /home/farmer/.ssh/authorized_keys
 chown -R farmer:farmer /home/farmer/.ssh
 
 # boinctui
