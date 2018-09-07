@@ -38,4 +38,9 @@ The controller is now ready.
 
 ## Compute node setup
 
-...in progress.
+1. Download [Alpine Linux
+   Standard](https://alpinelinux.org/downloads/) and install it.
+    * The Alpine installer will handle WiFi properly on install, but
+      will not enable `wpa_supplicant` for subsequent boots, so before
+      rebooting run `rc-update add wpa_supplicant boot`.
+1. X
