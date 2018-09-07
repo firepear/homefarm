@@ -28,7 +28,7 @@ echo "Continuing setup!"
 echo
 echo "Installing Ansible prerequisites..."
 sleep 1
-apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl1.0 openssl1.0-dev
+apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl1.0 openssl1.0-dev sudo
 ln -s /usr/bin/python3 /usr/bin/python
 
 # install ansible
@@ -45,6 +45,7 @@ echo "Creating user for Ansible..."
 sleep 1
 adduser -h /home/farmer -D farmer
 echo "farmer:$(openssl rand -base64 32)" | chpasswd
+echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
 mkdir /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
 wget ${1}:8000/id_farmer.pub -O /home/farmer/.ssh/authorized_keys
