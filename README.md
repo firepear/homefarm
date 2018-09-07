@@ -21,7 +21,7 @@ Homefarm makes a few assumptions:
    Pi, and do any initial network/locale/etc configuration that you
    wish (recommended: enable the ssh daemon via
    `raspi-config`). Reboot if necessary.
-1. Login as the default user and run `'sudo apt-get --yes install git'`
+1. Login as the default user and run ```sudo apt-get --yes install git```
 1. Run `'git clone https://github.com/firepear/homefarm.git'`
 1. Run `'cd homefarm'`
 1. Run `'sudo ./control-setup'`. The Pi will reboot after this
