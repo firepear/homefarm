@@ -41,11 +41,12 @@ The controller is now ready.
 Before installing a new compute node, login to the control node and
 run `'cd ~/homefarm && ./bin/serve'`. This will start a Python webserver
 to make available the `compute-setup` script and data needed by that
-script.
+script. When done with installs, terminate the server with `Ctrl-C`.
 
 1. Download [Alpine Linux
    Standard](https://alpinelinux.org/downloads/) and install it.
     * The Alpine installer will handle WiFi properly on install, but
       will not enable `wpa_supplicant` for subsequent boots, so before
       rebooting run `'rc-update add wpa_supplicant boot'`.
-1. Fetch the compute node setup script from your control node
+1. Fetch the compute node setup script from your control node by
+   running `wget [CONTROL_NODE_IP]:8000/compute-setup`
