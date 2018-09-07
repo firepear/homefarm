@@ -23,8 +23,8 @@ if [[ ! -e "./.firststage" ]]; then
     reboot
 fi
 
-# install python
-echo
+# install preqs
+echo "Continuing setup!"
 echo
 echo "Installing Ansible prerequisites..."
 sleep 1
