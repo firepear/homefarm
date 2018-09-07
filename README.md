@@ -1,5 +1,5 @@
 # homefarm
-Configuration and tools for deploying and managing a BOINC compute farm using Ansible, Raspbian, and Alpine Linux.
+Tools for deploying and managing a BOINC compute farm using Ansible, Raspbian, and Alpine Linux.
 
 Homefarm makes a few assumptions:
 
