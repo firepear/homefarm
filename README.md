@@ -14,14 +14,14 @@ Homefarm makes a few assumptions:
 
 # Setting up your farm
 
-## Control node setup
+## Control node install
 
 1. Image an SD card with [Raspbian
    Lite](https://www.raspberrypi.org/downloads/raspbian/), boot the
    Pi, and do any initial network/locale/etc configuration that you
-   wish (recommended: enable the ssh daemon via
-   `raspi-config`). Reboot if necessary.
-1. Login as the default user and run ```sudo apt-get --yes install git```
+   wish. (Recommended: enable the ssh daemon via `raspi-config`.)
+   Reboot if necessary.
+1. Login as the default user and run `'sudo apt-get --yes install git'`
 1. Run `'git clone https://github.com/firepear/homefarm.git'`
 1. Run `'cd homefarm'`
 1. Run `'sudo ./control-setup'`. The Pi will reboot after this
@@ -36,7 +36,7 @@ Homefarm makes a few assumptions:
 
 The controller is now ready.
 
-## Compute node setup
+## Compute node install
 
 Before installing a new compute node, login to the control node and
 run `'cd ~/homefarm && bash ./bin/serve'`. This will start a Python webserver
@@ -57,3 +57,8 @@ script. When done with installs, terminate the server with `Ctrl-C`.
    ensure all libraries are up to date.
 1. Log back after reboot and re-run `'sh ./compute-setup
    [CONTROL_NODE_IP]'` to complete bootstrapping.
+
+At this point the compute node is ready for Ansible to take over its
+configuration management. You can test that everything is working by
+running `'ansible -m ping [NODE_NAME]'` from the control node. (Halt
+the 'serve' script first, if it's still running.)
