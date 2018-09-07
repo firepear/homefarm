@@ -43,7 +43,8 @@ cat <<EOF | tee -a /home/pi/.bashrc > /dev/null
 source ~/.keychain/${HOSTNAME}-sh > /dev/null
 EOF
 
-# setup dir for serving to compute nodes
+# setup dir for serving to compute nodes and do a tiny bit of
+# housekeeping
 echo
 echo
 echo "Finalizing controller setup..."
@@ -52,7 +53,11 @@ mkdir http
 cp /home/pi/.ssh/id_ecdsa.pub ./http
 ln -s /home/pi/homefarm/bin/compute-setup ./http
 chown -R pi:pi http
+apt-get --yes install boinctui
+apt-get clean
 
+echo
+echo
 echo "Setup complete. Rebooting in 5 seconds!"
 sleep 5
 reboot
