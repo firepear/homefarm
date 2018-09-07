@@ -49,4 +49,4 @@ script. When done with installs, terminate the server with `Ctrl-C`.
       will not enable `wpa_supplicant` for subsequent boots, so before
       rebooting run `'rc-update add wpa_supplicant boot'`.
 1. Fetch the compute node setup script from your control node by
-   running `wget [CONTROL_NODE_IP]:8000/compute-setup`
+   running `'wget [CONTROL_NODE_IP]:8000/compute-setup'`
