@@ -1,13 +1,55 @@
 #!/bin/bash
 set -e
 
-# update the system
-echo "Updating system software..."
+if [[ "${1}" == "" ]]; then
+    echo "error: no control IP specified"
+    echo "Usage is: ${0} [CONTROL_NODE_IP]"
+    exit 1
+fi
+
+if [[ ! -e "./.firststage" ]]; then
+    # update the system
+    echo "Updating system software..."
+    sleep 1
+    # switch to rolling release
+    sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories
+    apk upgrade --update-cache --available
+    touch "./.firststage"
+    echo
+    echo
+    echo "Update complete. Rebooting in 5 seconds..."
+    sleep 5
+    sync
+    reboot
+fi
+
+# install python
+echo
+echo
+echo "Installing Python..."
 sleep 1
-apk update
-apk upgrade
+apk install python3
 
+# install ansible
+echo
+echo
+echo "Installing ansible..."
+sleep 1
+pip3 install ansible
 
+# create user and setup ssh keys
+echo
+echo
+echo "Creating user for Ansible..."
+sleep 1
+useradd -d /home/farmer -m farmer
+mkdir /home/farmer/.ssh
+chmod 700 /home/farmer/.ssh
+wget ${1}:8000/id_ecdsa.pub -O /home/farmer/.ssh/authorized_keys
+chown -R farmer:farmer /home/farmer/.ssh
+
+# boinctui
+# https://github.com/mpentler/boinctui-extended/archive/1.0.2.tar.gz
 
 # TODOS
 #
