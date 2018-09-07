@@ -1,2 +1,13 @@
 #!/bin/bash
 set -e
+
+# somewhere in here we need to get the contents of gui_rpc_auth.cfg
+# shipped to the control machine, so it can be included in
+# ~/.boinctui.cfg
+
+# write playbooks that use boinccmd to attach to projects if we don't
+# detect that we already are. which projects to connect to are based
+# on vars in the playbook.
+
+# other playbooks to do management, like suspend, resume, no new work,
+# allow work? seems reasonable.
