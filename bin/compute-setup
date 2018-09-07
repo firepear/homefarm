@@ -28,7 +28,7 @@ echo
 echo
 echo "Installing Python..."
 sleep 1
-apk install python3
+apk add python3
 
 # install ansible
 echo
