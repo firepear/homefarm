@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # copy the example config to the real config
 cp farm.cfg.example farm.cfg
