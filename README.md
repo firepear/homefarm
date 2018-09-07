@@ -50,8 +50,8 @@ script. When done with installs, terminate the server with `Ctrl-C`.
       rebooting run `'rc-update add wpa_supplicant boot'`.
 1. Run `'wget [CONTROL_NODE_IP]:8000/compute-setup'` to fetch the
    compute node setup script from your control node.
-1. Run `'sh ./compute-setup'`. This first run will update to Alpine's
-   rolling release distro, and then reboot to ensure all libraries are
-   up to date.
-1. Log back after reboot and re-run `'sh ./compute-setup'` to complete
-   bootstrapping.
+1. Run `'sh ./compute-setup [CONTROL_NODE_IP]'`. This first run will
+   update to Alpine's rolling release distro, and then reboot to
+   ensure all libraries are up to date.
+1. Log back after reboot and re-run `'sh ./compute-setup
+   [CONTROL_NODE_IP]'` to complete bootstrapping.
