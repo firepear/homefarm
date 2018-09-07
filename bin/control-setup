@@ -9,9 +9,16 @@ chown pi:pi farm.cfg
 echo Updating system software...
 sleep 1
 apt-get update
-apt-get dist-upgrade
+apt-get --yes dist-upgrade
 
 # install pip
+echo
+echo
+echo Installing pip (the Python package manager)...
+sleep 1
+apt-get --yes install python3-pip
+
+# install ansible
 echo
 echo
 echo Installing ansible...
