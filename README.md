@@ -12,15 +12,18 @@ Homefarm makes a few assumptions:
 1. Image an SD card with [Raspbian
    Lite](https://www.raspberrypi.org/downloads/raspbian/), boot the
    Pi, and do any initial network/locale/etc configuration that you
-   wish. Reboot if necessary.
+   wish (recommended: enable the ssh daemon via
+   `raspi-config`). Reboot if necessary.
 1. Login as the default user and run `'sudo apt-get --yes install git'`
 1. Run `'git clone https://github.com/firepear/homefarm.git'`
-1. `'cd homefarm'`
-1. `'sudo ./control-setup'`
-1. Edit `farm.cfg`, which is the machine Ansible inventory. Change
+1. Run `'cd homefarm'`
+1. Run `'sudo ./control-setup'`
+
+1. Edit `farm.cfg`, which is our Ansible inventory. Change
    `node00` in the `[control]` stanza to match the name you've given
    the controller (AKA your Raspberry Pi). Then add the names of all
    the machines you'll be setting up as compute nodes to the
    `[compute]` stanza.
+
 1. Make sure the names and IP addresses of these machines are in your
    controller's `/etc/hosts` file.

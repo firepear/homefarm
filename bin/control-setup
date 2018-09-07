@@ -24,3 +24,31 @@ echo
 echo "Installing ansible..."
 sleep 1
 pip3 install ansible
+
+# generate ssh key
+echo
+echo
+echo "Generating SSH configuration for Ansible..."
+apt-get --yes install keychain
+ssh-keygen -t ecdsa -N "" -f id_ecdsa
+mkdir /home/pi/.ssh
+mv id_ecdsa* /home/pi/.ssh
+chown -R pi:pi /home/pi/.ssh
+chmod 700 /home/pi/.ssh
+echo <<EOF >> .bashrc
+/usr/bin/keychain ~/.ssh/id_ecdsa
+source ~/.keychain/${HOSTNAME}-sh > /dev/null
+EOF
+
+# setup dir for serving to compute nodes
+echo
+echo
+echo "Finalizing controller setup..."
+mkdir http
+cp /home/pi/.ssh/id_ecdsa.pub ./http
+ln -s ./bin/compute-setup ./http
+chown -R pi:pi http
+
+echo "Setup complete. Rebooting in 5 seconds!"
+sleep 5
+reboot
