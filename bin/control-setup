@@ -6,7 +6,7 @@ cp farm.cfg.example farm.cfg
 chown pi:pi farm.cfg
 
 # update the system
-echo Updating system software...
+echo "Updating system software..."
 sleep 1
 apt-get update
 apt-get --yes dist-upgrade
@@ -14,13 +14,13 @@ apt-get --yes dist-upgrade
 # install pip
 echo
 echo
-echo Installing pip (the Python package manager)...
+echo "Installing pip (the Python package manager)..."
 sleep 1
 apt-get --yes install python3-pip
 
 # install ansible
 echo
 echo
-echo Installing ansible...
+echo "Installing ansible..."
 sleep 1
 pip3 install ansible
