@@ -42,6 +42,8 @@ run `'cd ~/homefarm && ./bin/serve'`. This will start a Python webserver
 to make available the `compute-setup` script and data needed by that
 script. When done with installs, terminate the server with `Ctrl-C`.
 
+On the compute node:
+
 1. Download [Alpine Linux
    Standard](https://alpinelinux.org/downloads/) and install it.
 1. Login after reboot
