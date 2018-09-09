@@ -4,9 +4,6 @@
 
   tasks:
   - name: Add a boinc user
-    apk:
-      name: shadow
-      update_cache: yes
     user:
       name: boinc
       comment: BOINC client
