@@ -7,5 +7,5 @@
     user:
       name: boinc
       comment: BOINC client
-      create-home: False
+      create_home: False
       shell: /sbin/nologin
