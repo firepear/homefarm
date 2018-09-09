@@ -1,5 +1,5 @@
 ---
-- name: Add a 'boinc' user
+- name: Add a boinc user
   user:
     name: boinc
     comment: BOINC client
