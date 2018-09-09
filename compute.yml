@@ -4,8 +4,9 @@
 
   tasks:
   - name: Add a boinc user
+    become: true
     user:
       name: boinc
       comment: BOINC client
-      create_home: False
+      create_home: false
       shell: /sbin/nologin
