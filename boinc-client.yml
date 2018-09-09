@@ -3,7 +3,7 @@
   remote_user: farmer
 
   vars:
-    boinc_work_dir: /var/local/lib/boinc
+    boinc_work_dir: /var/lib/boinc
 
   tasks:
   - name: Add a boinc user
@@ -13,6 +13,12 @@
       comment: BOINC client
       home: "{{ boinc_work_dir }}"
       shell: /sbin/nologin
+  - name: Ensure boinc owns its homedir
+    become: true
+    file:
+      path: "{{ boinc_work_dir }}"
+      owner: boinc
+      mode: 0755
   - name: Install fixed init script
     become: true
     template:
