@@ -432,12 +432,13 @@ case "$1" in
         else
           echo -n "Stopping BOINC client daemon:  "
           if [ -f $PIDFILE ] ; then
-            PID=`cat $PIDFILE`
-            if [ "`pgrep ${0}`" == "${PID}" ] ; then
+              PID=`cat $PIDFILE`
+              EXECNAME=$(basename ${0})
+            if [ "pgrep ${EXECNAME}" == "${PID}" ] ; then
               kill ${PID}
               sleep 5
             fi
-            if [ -z "`pgrep ${0}`" ] ; then
+            if [ -z "`pgrep ${EXECNAME}`" ] ; then
               echo_success
             else
               echo_failure
