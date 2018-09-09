@@ -8,5 +8,5 @@
     user:
       name: boinc
       comment: BOINC client
-      create_home: false
+      home: /var/lib/boinc
       shell: /sbin/nologin
