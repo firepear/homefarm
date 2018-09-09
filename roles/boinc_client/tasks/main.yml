@@ -1,15 +1,22 @@
 ---
+- include boincuser
 
 # notes for constructing the boinc build task
 #
 # pre-requisite packages:
 #   installed by setup: autoconf, m4, make, gcc, pkgconf, openssl
-#   needed by role: libtool, automake, libcurl, g++
+#   needed by role: libtool, automake, libcurl, curl-dev, g++
 #
 # config/build steps
 #   ./_autosetup
 #   ./configure --disable-server --disable-manager
-#   make
+#   make && make install
+#
+# init script gets put in /usr/local/etc/init.d by 'make install'
+#   rc-update add boinc-client
+#
+# need boinc user
+
 
 # TODOS
 #

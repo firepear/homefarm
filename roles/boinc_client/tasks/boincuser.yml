@@ -1,0 +1,7 @@
+---
+- name: Add a 'boinc' user
+  user:
+    name: boinc
+    comment: BOINC client
+    create-home: False
+    shell: /sbin/nologin
