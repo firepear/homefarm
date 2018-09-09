@@ -1,0 +1,4 @@
+---
+- hosts: compute
+  roles:
+    boinc-client
