@@ -23,14 +23,13 @@ Homefarm makes a few assumptions:
    Reboot if necessary.
 1. Login as the default user and run `'sudo apt-get --yes install git'`
 1. Run `'git clone https://github.com/firepear/homefarm.git'`
-1. Run `'cd homefarm'`
-1. Run `'sudo ./control-setup'`. The Pi will reboot after this
-   script completes.
+1. Run `'cd homefarm && sudo ./control-setup'`. The Pi will reboot
+   after this script completes.
 1. Login after reboot and edit `farm.cfg`, which is our Ansible
    inventory. Change `node00` in the `[control]` stanza to match the
-   name you've given the controller (AKA your Raspberry Pi). Then add
-   the names of all the machines you'll be setting up as compute nodes
-   to the `[compute]` stanza.
+   name you've given the controller (AKA your Raspberry Pi). Then put
+   the names of all machines you'll be setting up as compute nodes in
+   the `[compute]` stanza.
 1. Make sure the names and IP addresses of these machines are in your
    controller's `/etc/hosts` file.
 
