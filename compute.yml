@@ -10,3 +10,10 @@
       comment: BOINC client
       home: /var/lib/boinc
       shell: /sbin/nologin
+  - name: Ensure boinc owns its working directory
+    become: true
+    file:
+      path: /var/lib/boinc
+      owner: boinc
+      mode: 0755
+      state: directory
