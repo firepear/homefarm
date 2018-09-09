@@ -12,7 +12,10 @@ if [[ ! -e "./.firststage" ]]; then
     echo "Updating system software..."
     sleep 1
     # switch to rolling release
+    apk add sed
     sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories
+    # enable community repo
+    sed -i -E '0,/community/{s:#(.*)/edge/community:\1/edge/community:}' /etc/apk/repositories
     apk upgrade --update-cache --available
     touch "./.firststage"
     echo
