@@ -47,6 +47,7 @@ For the compute node:
 1. Download [Alpine Linux
    Standard](https://alpinelinux.org/downloads/) and install it.
 1. Login after reboot
+    * If you're on a wired connection, skip to step #3.
     * If you installed via WiFi, you'll likely be surprised to learn
       that it was not permanently enabled by the installer. Your
       configuration is still there though. Run
