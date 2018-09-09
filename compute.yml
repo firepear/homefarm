@@ -1,4 +1,5 @@
 ---
 - hosts: compute
+  remote_user: farmer
   roles:
     boinc-client
