@@ -430,14 +430,14 @@ case "$1" in
           echo -n "BOINC is not running (no lockfiles found)."
           echo_success
         else
-          echo -n "Stopping BOINC client daemon:  "    
+          echo -n "Stopping BOINC client daemon:  "
           if [ -f $PIDFILE ] ; then
             PID=`cat $PIDFILE`
-            if [ -n "`${PS} $PID | grep $PID`" ] ; then
-              kill `cat $PIDFILE`
+            if [ "`pgrep ${0}`" == "${PID}" ] ; then
+              kill ${PID}
               sleep 5
             fi
-            if [ -z "`${PS} $PID | grep $PID`" ] ; then
+            if [ -z "`pgrep ${0}`" ] ; then
               echo_success
             else
               echo_failure
