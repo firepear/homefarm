@@ -2,18 +2,22 @@
 - hosts: compute
   remote_user: farmer
 
+  vars:
+    boinc_work_dir: /var/local/lib/boinc
+
   tasks:
   - name: Add a boinc user
     become: true
     user:
       name: boinc
       comment: BOINC client
-      home: /var/lib/boinc
+      home: "{{ boinc_work_dir }}"
       shell: /sbin/nologin
-  - name: Ensure boinc owns its working directory
+  - name: Install fixed init script
     become: true
-    file:
-      path: /var/lib/boinc
-      owner: boinc
+    template:
+      src: templates/boinc-client-init.j2
+      dest: /usr/local/etc/init.d
+      owner: root
+      group: root
       mode: 0755
-      state: directory
