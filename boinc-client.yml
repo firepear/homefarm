@@ -23,7 +23,7 @@
     become: true
     template:
       src: templates/boinc-client-init.j2
-      dest: /usr/local/etc/init.d
+      dest: /usr/local/etc/init.d/boinc-client
       owner: root
       group: root
       mode: 0755
