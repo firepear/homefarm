@@ -47,8 +47,11 @@ For the compute node:
 1. Download [Alpine Linux
    Standard](https://alpinelinux.org/downloads/) and install it.
 1. Login after reboot
-    * If you are on WiFi, run `'/etc/init.d/wpa_supplicant start'` to
-      bring up the networking.
+    * If you installed via WiFi, you'll likely be surprised to learn
+      that it was not permanently enabled by the installer. Your
+      configuration is still there though. Run
+      `'/etc/init.d/wpa_supplicant start'` to bring up the networking
+      for this boot.
     * Then run `'rc-update add wpa_supplicant boot'` to enable WiFi
       for all future boots.
 1. Run `'wget [CONTROL_NODE_IP]:8000/compute-setup'` to fetch the
