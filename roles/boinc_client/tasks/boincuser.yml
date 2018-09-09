@@ -1,4 +1,5 @@
 ---
+
 - name: Add a 'boinc' user
   user:
     name: boinc
