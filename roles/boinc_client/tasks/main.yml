@@ -1,0 +1,26 @@
+---
+
+# notes for constructing the boinc build task
+#
+# pre-requisite packages:
+#   installed by setup: autoconf, m4, make, gcc, pkgconf, openssl
+#   needed by role: libtool, automake, libcurl, g++
+#
+# config/build steps
+#   ./_autosetup
+#   ./configure --disable-server --disable-manager
+#   make
+
+# TODOS
+#
+# somewhere in here we need to get the contents of gui_rpc_auth.cfg
+# shipped to the control machine, so it can be included in
+# ~/.boinctui.cfg (this should probably be a playbook that runs on the
+# control machine)
+
+# write playbooks that use boinccmd to attach to projects if we don't
+# detect that we already are. which projects to connect to are based
+# on vars in the playbook.
+
+# other playbooks to do management, like suspend, resume, no new work,
+# allow work? seems reasonable.
