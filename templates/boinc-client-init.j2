@@ -201,7 +201,7 @@ else
 fi
 
 # check if we have pidof.  If not use ps and grep for the same job.
-if [ -x /sbin/pidof || -x /bin/pidof ] ; then 
+if [ -x /sbin/pidof ] ; then 
   function local_pidof() { 
     pidof -s -x -o $$ -o $PPID -o %PPID $1 
   }
