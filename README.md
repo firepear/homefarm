@@ -38,7 +38,7 @@ The controller is now ready.
 ## Compute node install
 
 Before installing a new compute node, login to the control node and
-run `'cd ~/homefarm && bash ./bin/serve'`. This will start a Python webserver
+run `'cd ~/homefarm && ./bin/serve'`. This will start a Python webserver
 to make available the `compute-setup` script and data needed by that
 script. When done with installs, terminate the server with `Ctrl-C`.
 
