@@ -22,7 +22,7 @@
     mode: 0755
 
 - name: Check installed BOINC version
-  shell: "boinc --version | grep {{ boinc_version }}"
+  shell: "/usr/local/bin/boinc --version | grep {{ boinc_version }}"
   register: boinc_installed
   changed_when: false
   ignore_errors: true
