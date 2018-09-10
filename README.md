@@ -75,6 +75,8 @@ and start BOINC on them.
 
 ## Set up BOINC projects
 
+After the `compute-nodes` playbook has sucessfully executed:
+
 1. Define the projects the farm will be working on by editing
    `projects.yml`:
      * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
