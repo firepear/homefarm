@@ -1,0 +1,9 @@
+---
+- projects:
+    - url: PROJ_URL
+      email: PROJ_EMAIL_ADDR
+      passwd: PROJ_PASSWORD
+    - url: PROJ2_URL
+      email: PROJ2_EMAIL_ADDR
+      passwd: PROJ2_PASSWORD
+

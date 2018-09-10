@@ -26,10 +26,10 @@ Homefarm makes a few assumptions:
 1. Run `'cd homefarm && sudo ./control-setup'`. The Pi will reboot
    after this script completes.
 
-## Post install control node config
+## Farm configuration
 
 All actions described in this section happen in the `homefarm`
-directory unless otherwise noted.
+directory on the control node, unless otherwise noted.
 
 Set up the Ansible inventory:
 
@@ -41,9 +41,16 @@ Set up the Ansible inventory:
 1. Make sure the names and IP addresses of these machines are in your
    controller's `/etc/hosts` file.
 
+Define the projects the farm will be working on by editing
+`projects.yml`:
 
+1. Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
+   `PROJ_PASSWORD` values for each project.
+1. Add/delete stanzas as needed.
+1. When info for all your projects has been added, save the file and
+   run the command `'ansible-playbook attach-projects.yml'`.
 
-The controller is now ready.
+The controller is now ready to manage compute nodes.
 
 ## Compute node install
 
