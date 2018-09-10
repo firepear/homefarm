@@ -83,5 +83,4 @@
   service:
     name: boinc-client
     enabled: yes
-    state: restarted
   when: boinc_init.changed
