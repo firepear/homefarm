@@ -1,5 +1,26 @@
 ---
-- include boincuser
+- import_tasks boincuser.yml
+
+- name: Install BOINC dependencies
+  become: true
+  apk:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - libtool
+    - automake
+    - libcurl
+    - curl-dev
+    - g++
+
+- name: Install fixed init script
+  become: true
+  template:
+    src: boinc-client-init.j2
+    dest: /usr/local/etc/init.d/boinc-client
+    owner: root
+    group: root
+    mode: 0755
 
 # notes for constructing the boinc build task
 #

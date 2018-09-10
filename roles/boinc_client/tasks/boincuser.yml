@@ -1,7 +1,8 @@
 ---
 - name: Add a boinc user
+  become: true
   user:
     name: boinc
     comment: BOINC client
-    create-home: False
+    home: "{{ boinc_work_dir }}"
     shell: /sbin/nologin

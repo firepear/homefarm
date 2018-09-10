@@ -1,0 +1,5 @@
+---
+boinc_work_dir: /var/lib/boinc
+boinc_version: "7.9.3"
+boinc_src_url: "https://github.com/BOINC/boinc/releases/tag/client_release%2F7.10%2F7.9.3"
+boinc_sha256: 76e4be2f3a41dcbb9b8e8746069e4559a36ec7da9c52c6737373fc41100e9298
