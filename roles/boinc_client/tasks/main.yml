@@ -83,3 +83,4 @@
   command:
     "bash -lc 'rc-update add boinc-client'"
   when: boinc_init.changed
+
