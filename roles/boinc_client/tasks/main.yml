@@ -46,7 +46,7 @@
   command:
     "bash -lc './_autosetup'"
   args:
-    chdir: "{{ boinc_src_unpack }}"
+    chdir: "{{ boinc_src_unpack_dir }}"
   register: boinc_preconfigured
   when: boinc_installed is failed
 
@@ -63,7 +63,7 @@
   command:
     "bash -lc 'make && make install'"
   args:
-    chdir: "{{ boinc_src_unpack }}"
+    chdir: "{{ boinc_src_unpack_dir }}"
   when: boinc_configured.changed
   notify: Restart BOINC
 
