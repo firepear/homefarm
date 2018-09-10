@@ -4,6 +4,9 @@
 
   vars:
     boinc_work_dir: /var/lib/boinc
+    boinc_version: "7.9.3"
+    boinc_src_url: "https://github.com/BOINC/boinc/releases/tag/client_release%2F7.10%2F7.9.3"
+    boinc_sha256: 76e4be2f3a41dcbb9b8e8746069e4559a36ec7da9c52c6737373fc41100e9298
 
   tasks:
   - name: Add a boinc user
@@ -13,6 +16,19 @@
       comment: BOINC client
       home: "{{ boinc_work_dir }}"
       shell: /sbin/nologin
+
+  - name: Install BOINC dependencies
+    become: true
+    apk:
+      name: "{{ item }}"
+      update_cache: yes
+    with_items:
+      - libtool
+      - automake
+      - libcurl
+      - curl-dev
+      - g++
+
   - name: Install fixed init script
     become: true
     template:
