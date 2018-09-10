@@ -1,4 +1,14 @@
 ---
+- name: Start BOINC
+  service:
+    name: boinc-client
+    state: started
+
+- name: Stop BOINC
+  service:
+    name: boinc-client
+    state: stopped
+
 - name: Restart BOINC
   service:
     name: boinc-client
