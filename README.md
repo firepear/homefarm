@@ -69,6 +69,10 @@ At this point the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
 running `'ansible -m ping [NODE_NAME]'` from the control node.
 
+When all initial compute nodes have been installed, return to the
+control node and run `'ansible-playbook compute-nodes.yml'` to install
+and start BOINC on them.
+
 ## Set up BOINC projects
 
 1. Define the projects the farm will be working on by editing
