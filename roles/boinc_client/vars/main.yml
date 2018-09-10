@@ -1,8 +1,9 @@
 ---
 boinc_work_dir: /var/lib/boinc
 boinc_version: "7.9.3"
+boinc_release: "7.10-7.9.3"
 boinc_src_url: "https://github.com/BOINC/boinc/archive/client_release/7.10/7.9.3.tar.gz"
 boinc_src_sha256: 76e4be2f3a41dcbb9b8e8746069e4559a36ec7da9c52c6737373fc41100e9298
 boinc_src_dir: /usr/local/src
 boinc_src_file: "{{ boinc_src_dir }}/boinc-client.tar.gz"
-boinc_src_unpack: "{{ boinc_src_dir }}/boinc-client-{{ boinc_version }}"
+boinc_src_unpack_dir: "{{ boinc_src_dir }}/boinc-client_{{ boinc_release }}"

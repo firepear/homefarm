@@ -37,9 +37,9 @@
 - name: Extract BOINC source
   unarchive:
     src: "{{ boinc_src_file }}"
-    dest: "{{ boinc_src_unpack }}"
+    dest: "{{ boinc_src_dir }}"
     remote_src: true
-    creates: "{{ boinc_src_unpack }}"
+    creates: "{{ boinc_src_unpack_dir }}"
   when: boinc_installed is failed
 
 - name: Preconfigure BOINC source tree
@@ -54,7 +54,7 @@
   command:
     "bash -lc './configure --disable-server --disable-manager'"
   args:
-    chdir: "{{ boinc_src_unpack }}"
+    chdir: "{{ boinc_src_unpack_dir }}"
   register: boinc_configured
   when: boinc_preconfigured.changed
 
@@ -84,19 +84,6 @@
     "bash -lc 'rc-update add boinc-client'"
   when: boinc_init.changed
   notify: Restart BOINC
-
-# notes for constructing the boinc build task
-#
-# config/build steps
-#   ./_autosetup
-#   ./configure --disable-server --disable-manager
-#   make && make install
-#
-# init script gets put in /usr/local/etc/init.d by 'make install'
-#   rc-update add boinc-client
-#
-# need boinc user
-
 
 # TODOS
 #
