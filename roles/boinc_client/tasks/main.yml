@@ -80,7 +80,10 @@
 
 - name: Enable BOINC in openrc
   become: true
-  command:
-    "bash -lc 'rc-update add boinc-client'"
+  service:
+    name: boinc-client
+    enabled: yes
+    state: restarted
+  #command:
+  #  "bash -lc 'rc-update add boinc-client'"
   when: boinc_init.changed
-

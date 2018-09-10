@@ -1,15 +1,18 @@
 ---
 - name: Start BOINC
+  become: true
   service:
     name: boinc-client
     state: started
 
 - name: Stop BOINC
+  become: true
   service:
     name: boinc-client
     state: stopped
 
 - name: Restart BOINC
+  become: true
   service:
     name: boinc-client
     state: restarted
