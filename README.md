@@ -25,13 +25,23 @@ Homefarm makes a few assumptions:
 1. Run `'git clone https://github.com/firepear/homefarm.git'`
 1. Run `'cd homefarm && sudo ./control-setup'`. The Pi will reboot
    after this script completes.
-1. Login after reboot and edit `farm.cfg`, which is our Ansible
-   inventory. Change `node00` in the `[control]` stanza to match the
-   name you've given the controller (AKA your Raspberry Pi). Then put
-   the names of all machines you'll be setting up as compute nodes in
-   the `[compute]` stanza.
+
+## Post install control node config
+
+All actions described in this section happen in the `homefarm`
+directory unless otherwise noted.
+
+Set up the Ansible inventory:
+
+1. Edit `farm.cfg`.
+     * Change `node00` in the `[control]` stanza to match the name
+       you've given the controller (AKA your Raspberry Pi).
+     * Put the names of all machines you'll be setting up as compute
+       nodes in the `[compute]` stanza.
 1. Make sure the names and IP addresses of these machines are in your
    controller's `/etc/hosts` file.
+
+
 
 The controller is now ready.
 
@@ -67,5 +77,6 @@ At this point the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
 running `'ansible -m ping [NODE_NAME]'` from the control node.
 
-
 # Managing the farm
+
+## Adding projects to BOINC

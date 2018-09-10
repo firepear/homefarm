@@ -2,8 +2,11 @@
 set -e
 
 # copy the example config to the real config
-cp farm.cfg.example farm.cfg
+cp examples/farm.cfg farm.cfg
 chown pi:pi farm.cfg
+# copy the example projects config to the real one
+cp examples/projects.yml projects.yml
+chown pi:pi projects.yml
 
 # update the system
 echo "Updating system software..."
