@@ -427,25 +427,21 @@ case "$1" in
   stop)
         cd $BOINCDIR
         if [ ! -f $PIDFILE -a ! -f lockfile -a ! -f $LOCKFILE ] ; then
-          echo -n "BOINC is not running (no lockfiles found)."
-          echo_success
+            echo -n "BOINC is not running (no lockfiles found)."
+            echo_success
         else
-          echo -n "Stopping BOINC client daemon:  "
-          if [ -f $PIDFILE ] ; then
-              PID=`cat $PIDFILE`
-              EXECNAME=$(basename ${0})
-            if [ "pgrep ${EXECNAME}" == "${PID}" ] ; then
-              kill ${PID}
-              sleep 5
+            echo -n "Stopping BOINC client daemon:  "
+            if [ -f $PIDFILE ] ; then
+                PID=`cat $PIDFILE`
+                kill ${PID}
+                sleep 5
             fi
-            if [ -z "`pgrep ${EXECNAME}`" ] ; then
-              echo_success
+            if [ -z "`pgrep boinc_client`" ] ; then
+                echo_success
             else
-              echo_failure
-              echo
+                echo_failure
+                echo
             fi
-          else
-            killproc $BOINCEXE_NAME  && echo_success  || echo_failure 
           fi
           # clean up in any case
           rm -f lockfile 2>/dev/null >/dev/null
