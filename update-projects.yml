@@ -1,4 +1,19 @@
 ---
+- name: Import project definitions
+  include_vars:
+    file: projects.yaml
+    name: farmprojs
+
+- name: Import BOINC vars
+  include_vars:
+    file: roles/boinc_client/vars/main.yml
+    name: boincvars
+
+- name: Make project modifications
+  become: yes
+  become_user: farmer
+  script: "./scripts/boinccmdcmd {{ boincvars.boinc._work_dir }} {{ item.url }} {{ item.email }} {{ item.passwd }} {{ item.status }}"
+  loop: "{{ farmprojs }}"
 
 # after the actual project update work is done, this playbook should
 # be to update the controller's boinctui config.
