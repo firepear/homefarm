@@ -81,6 +81,7 @@ After the `compute-nodes` playbook has sucessfully executed:
    `projects.yml`:
      * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
        `PROJ_PASSWORD` values for each project.
+     * Change the project `status` if you'd like.
      * Add/delete stanzas as needed.
 1. When info for all projects has been added, save the file and run
    the command `'ansible-playbook update-projects.yml'`.
