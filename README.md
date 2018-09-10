@@ -48,7 +48,7 @@ Define the projects the farm will be working on by editing
    `PROJ_PASSWORD` values for each project.
 1. Add/delete stanzas as needed.
 1. When info for all your projects has been added, save the file and
-   run the command `'ansible-playbook attach-projects.yml'`.
+   run the command `'ansible-playbook update-projects.yml'`.
 
 The controller is now ready to manage compute nodes.
 
@@ -86,4 +86,18 @@ running `'ansible -m ping [NODE_NAME]'` from the control node.
 
 # Managing the farm
 
-## Adding projects to BOINC
+## Farm status
+
+The program `boinctui` is installed on the control node, and its
+configuration is kept in sync with the farm by the `update-projects`
+playbook.
+
+Run it anytime you'd like to see what your farm is doing.
+
+It can also be used for ad-hoc management of individual compute nodes,
+and the workunits being handled by those nodes.
+
+## Adding projects
+
+Edit `projects.yml`, adding a new stanza for the new project. Then run
+`'ansible-playbook update-projects.yml'`.

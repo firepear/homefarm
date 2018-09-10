@@ -3,7 +3,14 @@
     - url: PROJ_URL
       email: PROJ_EMAIL_ADDR
       passwd: PROJ_PASSWORD
+      status: active
     - url: PROJ2_URL
       email: PROJ2_EMAIL_ADDR
       passwd: PROJ2_PASSWORD
+      status: active
 
+# project status can be one of:
+#   active (working and communicating with servers)
+#   suspended (halt work until status goes back to active)
+#   nomorework (finish current tasks, but do not request more)
+#   detached (delete current tasks and dissociate from project)
