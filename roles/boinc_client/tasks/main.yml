@@ -65,7 +65,14 @@
   args:
     chdir: "{{ boinc_src_unpack_dir }}"
   when: boinc_configured.changed
+  register: boinc_built
   notify: Restart BOINC
+
+- name: Clean BOINC staging area
+  become: true
+  command:
+    "bash -lc 'rm -rf {{ boinc_src_file }} {{ boinc_src_unpack_dir }}'"
+  when: boinc_built.changed
 
 - name: Install improved BOINC init script
   become: true
