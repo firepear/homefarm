@@ -1,5 +1,5 @@
 ---
-- import_tasks boincuser.yml
+- import_tasks: boincuser.yml
 
 - name: Install BOINC dependencies
   become: true
