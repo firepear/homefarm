@@ -13,7 +13,61 @@
     - curl-dev
     - g++
 
-- name: Install fixed init script
+- name: Ensure src destination exists
+  become: true
+  file:
+    path: "{{ boinc_src_dir }}"
+    owner: farmer
+    state: directory
+    mode: 0755
+
+- name: Check installed BOINC version
+  shell: "boinc --version | grep {{ boinc_version }}"
+  register: boinc_installed
+  changed_when: false
+  ignore_errors: true
+
+- name: Download BOINC source
+  get_url:
+    url: "{{ boinc_src_url }}"
+    dest: "{{ boinc_src_file }}"
+    sha256sum: "{{ boinc_src_sha256 }}"
+  when: boinc_installed is failed
+
+- name: Extract BOINC source
+  unarchive:
+    src: "{{ boinc_src_file }}"
+    dest: "{{ boinc_src_unpack }}"
+    remote_src: true
+    creates: "{{ boinc_src_unpack }}"
+  when: boinc_installed is failed
+
+- name: Preconfigure BOINC source tree
+  command:
+    "bash -lc './_autosetup'"
+  args:
+    chdir: "{{ boinc_src_unpack }}"
+  register: boinc_preconfigured
+  when: boinc_installed is failed
+
+- name: Configure BOINC source tree
+  command:
+    "bash -lc './configure --disable-server --disable-manager'"
+  args:
+    chdir: "{{ boinc_src_unpack }}"
+  register: boinc_configured
+  when: boinc_preconfigured.changed
+
+- name: Make and install BOINC
+  become: true
+  command:
+    "bash -lc 'make && make install'"
+  args:
+    chdir: "{{ boinc_src_unpack }}"
+  when: boinc_configured.changed
+  notify: Restart BOINC
+
+- name: Install improved BOINC init script
   become: true
   template:
     src: boinc-client-init.j2
@@ -21,12 +75,17 @@
     owner: root
     group: root
     mode: 0755
+  register: boinc_init
+  notify: Restart BOINC
+
+- name: Enable BOINC in openrc
+  become: true
+  command:
+    "bash -lc 'rc-update add boinc-client'"
+  when: boinc_init.changed
+  notify: Restart BOINC
 
 # notes for constructing the boinc build task
-#
-# pre-requisite packages:
-#   installed by setup: autoconf, m4, make, gcc, pkgconf, openssl
-#   needed by role: libtool, automake, libcurl, curl-dev, g++
 #
 # config/build steps
 #   ./_autosetup
