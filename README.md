@@ -26,31 +26,16 @@ Homefarm makes a few assumptions:
 1. Run `'cd homefarm && sudo ./control-setup'`. The Pi will reboot
    after this script completes.
 
-## Farm configuration
+## Set up the Ansible inventory
 
-All actions described in this section happen in the `homefarm`
-directory on the control node, unless otherwise noted.
-
-Set up the Ansible inventory:
-
-1. Edit `farm.cfg`.
+1. Run `'cd ~/homefarm'`.
+1. Edit `farm.cfg`:
      * Change `node00` in the `[controler]` stanza to match the name
        you've given the controller (AKA your Raspberry Pi).
      * Put the names of all machines you'll be setting up as compute
        nodes in the `[compute_nodes]` stanza.
 1. Make sure the names and IP addresses of these machines are in your
    controller's `/etc/hosts` file.
-
-Define the projects the farm will be working on by editing
-`projects.yml`:
-
-1. Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
-   `PROJ_PASSWORD` values for each project.
-1. Add/delete stanzas as needed.
-1. When info for all your projects has been added, save the file and
-   run the command `'ansible-playbook update-projects.yml'`.
-
-The controller is now ready to manage compute nodes.
 
 ## Compute node install
 
@@ -83,6 +68,21 @@ For the compute node:
 At this point the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
 running `'ansible -m ping [NODE_NAME]'` from the control node.
+
+## Set up BOINC projects
+
+1. Define the projects the farm will be working on by editing
+   `projects.yml`:
+     * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
+       `PROJ_PASSWORD` values for each project.
+     * Add/delete stanzas as needed.
+1. When info for all projects has been added, save the file and run
+   the command `'ansible-playbook update-projects.yml'`.
+
+Your compute farm should begin communicating with the servers of your
+projects, and start crunching workunits.
+
+
 
 # Managing the farm
 
