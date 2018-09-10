@@ -32,6 +32,7 @@ echo
 echo "Installing Ansible prerequisites..."
 sleep 1
 apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl1.0 libressl libressl-dev sudo shadow tar
+# we need a just plain "python" executable for ansible
 ln -s /usr/bin/python3 /usr/bin/python
 
 # install ansible
