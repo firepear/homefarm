@@ -34,10 +34,10 @@ directory unless otherwise noted.
 Set up the Ansible inventory:
 
 1. Edit `farm.cfg`.
-     * Change `node00` in the `[control]` stanza to match the name
+     * Change `node00` in the `[controler]` stanza to match the name
        you've given the controller (AKA your Raspberry Pi).
      * Put the names of all machines you'll be setting up as compute
-       nodes in the `[compute]` stanza.
+       nodes in the `[compute_nodes]` stanza.
 1. Make sure the names and IP addresses of these machines are in your
    controller's `/etc/hosts` file.
 
