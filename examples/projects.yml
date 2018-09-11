@@ -1,9 +1,11 @@
 ---
 - url: PROJ_URL
+  user: PROJ_USERNAME
   email: PROJ_EMAIL_ADDR
   passwd: PROJ_PASSWORD
   status: active
 - url: PROJ2_URL
+  user: PROJ2_USERNAME
   email: PROJ2_EMAIL_ADDR
   passwd: PROJ2_PASSWORD
   status: active
