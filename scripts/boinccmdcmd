@@ -9,9 +9,9 @@ import sys
 #   * the URL of the project we're examining
 #   * the email address associated with the project
 #   * the password of the user for this project
-#   * the desired status of the project
+#   * the desired state of the project
 sys.argv.pop(0)
-boinc_dir, proj_url, proj_user, proj_mail, proj_passwd, proj_status = sys.argv
+boinc_dir, proj_url, proj_user, proj_mail, proj_passwd, proj_state = sys.argv
 
 # chdir to the work directory, to make things easier
 os.chdir(boinc_dir)
@@ -53,10 +53,10 @@ pstate = None
 if pstate is None:
     # we don't know anything about this project. all we can do is
     # attach, if that's what we've been told to do.
-    if proj_status == "active":
+    if proj_state == "active":
         attach_to_project(proj_url, proj_user, proj_mail, proj_passwd)
         sys.exit(0)
     else:
-        print("asked to set state to '{}' for project '{}', but am not attached to that project".format(proj_status, proj_url))
+        print("asked to set state to '{}' for project '{}', but am not attached to that project".format(proj_state, proj_url))
         sys.exit(1)
 
