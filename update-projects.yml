@@ -8,13 +8,8 @@
       file: projects.yml
       name: farm
 
-  - name: Import BOINC vars
-    include_vars:
-      file: roles/boinc_client/vars/main.yml
-      name: boincvars
-
   - name: Make project modifications
-    script: "./scripts/boinccmdcmd {{ boincvars.boinc_work_dir }} {{ item.url }} {{ item.email }} {{ item.passwd }} {{ item.status }}"
+    script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.email }} {{ item.passwd }} {{ item.status }}"
     loop: "{{ farm.projects }}"
 
 # after the actual project update work is done, this playbook should
