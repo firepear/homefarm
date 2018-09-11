@@ -12,6 +12,19 @@
     script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
     loop: "{{ farm.projects }}"
 
+
+# TODOS
+#
+# - handle unknown state
+# - attaching to unknown project (properly)
+# - handle all defined states
+#   - active
+#   - suspended
+#   - nomorework
+#   - detached
+# - start boinc with --allow_remote_gui_rpc
+# - boinc log rotation
+#
 # after the actual project update work is done, this playbook should
 # be to update the controller's boinctui config.
 #
