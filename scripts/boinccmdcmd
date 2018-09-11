@@ -32,12 +32,12 @@ def get_access_key(proj_url, proj_user, proj_email, proj_password):
     # first we have to find out if we need to pass email or username
     # in order to attach. this varies by project.
     use_name = scan_output_for([boinc, pwf, pw, "--get_project_config", proj_url], "uses_username")
-    if use_name != 0 or use_name != 1:
+    if use_name != "0" or use_name != "1":
         print("couldn't get config for project '{}'".format(proj_url))
         sys.exit(1)
     # knowing that, we can get the access key
     key = None
-    if use_name == 1:
+    if use_name == "1":
         key = scan_output_for([boinc, pwf, pw, "--lookup_account", proj_url, proj_user, proj_passwd], "account key")
     else:
         key = scan_output_for([boinc, pwf, pw, "--lookup_account", proj_url, proj_mail, proj_passwd], "account key")
