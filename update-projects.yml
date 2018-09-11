@@ -10,7 +10,7 @@
 
   - name: Make project modifications
     script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
-    loop: "{{ farm.projects.{{ inventory_hostname}} }}"
+    with_items:: farm.projects.["{{ inventory_hostname }}"]
 
 
 # TODOS
