@@ -9,7 +9,7 @@
       name: farm
 
   - name: Make project modifications
-    script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
+    script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
     loop: "{{ farm.projects }}"
 
 # after the actual project update work is done, this playbook should
