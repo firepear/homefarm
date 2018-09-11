@@ -14,8 +14,9 @@ boinc_dir, proj_url, proj_user, proj_mail, proj_passwd, proj_state = sys.argv
 
 # slurp the gui access key and shorten the boinccmd command
 result = subprocess.run(["sudo", "cat", "{}/gui_rpc_auth.cfg".format(boinc_dir)], stdout=subprocess.PIPE, encoding="utf-8")
-boinc = "/usr/local/bin/boinccmd --passwd {}".format(result.stdout)
-
+pw = result.stdout
+boinc = "/usr/local/bin/boinccmd"
+pwf = "--passwd"
 
 def scan_output_for(cmd, key):
     result = subprocess.run(cmd, stdout=subprocess.PIPE, encoding="utf-8")
@@ -30,16 +31,16 @@ def scan_output_for(cmd, key):
 def get_access_key(proj_url, proj_user, proj_email, proj_password):
     # first we have to find out if we need to pass email or username
     # in order to attach. this varies by project.
-    use_name = scan_output_for([boinc, "--get_project_config", proj_url], "uses_username")
+    use_name = scan_output_for([boinc, pwf, pw, "--get_project_config", proj_url], "uses_username")
     if use_name != 0 or use_name != 1:
         print("couldn't get config for project '{}'".format(proj_url))
         sys.exit(1)
     # knowing that, we can get the access key
     key = None
     if use_name == 1:
-        key = scan_output_for([boinc, "--lookup_account", proj_url, proj_user, proj_passwd], "account key")
+        key = scan_output_for([boinc, pwf, pw, "--lookup_account", proj_url, proj_user, proj_passwd], "account key")
     else:
-        key = scan_output_for([boinc, "--lookup_account", proj_url, proj_mail, proj_passwd], "account key")
+        key = scan_output_for([boinc, pwf, pw, "--lookup_account", proj_url, proj_mail, proj_passwd], "account key")
     if key is None:
         print("couldn't get access key for project '{}'".format(proj_url))
         sys.exit(1)
@@ -49,7 +50,7 @@ def attach_to_project(proj_url, proj_user, proj_email, proj_password):
     # need account access key to attach
     key = get_access_key(proj_url, proj_user, proj_email, proj_password)
     # now we can send the attach request
-    subprocess.run([boinc, "--project_attach", proj_url, access_key], stdout=subprocess.PIPE)
+    subprocess.run([boinc, pwf, pw, "--project_attach", proj_url, access_key], stdout=subprocess.PIPE)
 
 #pstate = get_project_state(proj_url)
 pstate = None
