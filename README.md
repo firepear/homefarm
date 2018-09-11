@@ -34,7 +34,18 @@ Homefarm makes a few assumptions:
        you've given the controller (AKA your Raspberry Pi).
      * Put the names and IP addresses of all machines you'll be
        setting up as compute nodes in the `[compute_nodes]` stanza.
-1. Run `'ansible-playbook '`
+1. Run `'ansible-playbook initialize-nodes.yml'` to generate sample
+   configs for all defined compute nodes.
+1. Edit the node configs (in the `node_configs` directory) to declare
+   what BOINC projects you want each node to attach to.
+     * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
+       `PROJ_PASSWORD` values for each project.
+     * Change the project `status` if you'd like.
+     * Add/delete stanzas as needed.
+     * If you want multiple nodes with identical configurations,
+       delete the config files for the duplicate nodes and make
+       symlinks to the desired config.
+
 
 ## Compute node install
 
@@ -68,28 +79,19 @@ At this point the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
 running `'ansible -m ping [NODE_NAME]'` from the control node.
 
-When all initial compute nodes have been installed, return to the
-control node and run `'ansible-playbook compute-nodes.yml'` to install
-and start BOINC on them.
 
-## Set up BOINC projects
+## Build and initialize BOINC on the farm
 
-In the `node_config` directory you will find a file named
-`example_node.yml`. This is a boilerplate per-node configuration
-file. Its purpose is defining any per-node configuration that is
-needed by the homefarm playbooks. It is where you define which projects
+When all compute nodes have been installed, return to the control node
+and:
 
-1. Define the projects the farm will be working on by editing
-   `projects.yml`:
-     * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
-       `PROJ_PASSWORD` values for each project.
-     * Change the project `status` if you'd like.
-     * Add/delete stanzas as needed.
-1. When info for all projects has been added, save the file and run
-   the command `'ansible-playbook update-projects.yml'`.
+1. Run `'ansible-playbook compute-nodes.yml'` to build and start
+   BOINC on the compute nodes.
+1. Run `'ansible-playbook update-projects.yml'` to attach nodes to
+   projects.
 
-Your compute farm should begin communicating with the servers of your
-projects, and start crunching workunits.
+Your compute farm should then begin communicating with the servers of your
+projects, and start crunching workunits!
 
 
 
@@ -106,13 +108,27 @@ Run it anytime you'd like to see what your farm is doing.
 It can also be used for ad-hoc management of individual compute nodes,
 and the workunits being handled by those nodes.
 
-## Setting up a new node
+## Bringing up a new node
 
 Here are the condensed instructions for adding a compute node after
 initial cluster setup:
 
+On the controller:
 1. Edit `farm.cfg` and add the new node there.
-1. Run `
+1. Run `'ansible-playbook initialize-nodes.yml'` to generate a node
+   config in the `node_configs` directory, then edit it. Or symlink to
+   an existing node config in `node_configs` if you want the new node
+   to share a configuration.
+
+On the new compute node:
+1. Do the node installation
+
+On the controller:
+1. Run `'ansible-playbook compute-nodes.yml'`
+1. Run `'ansible-playbook update-projects.yml'`
+
+For full descriptions of these steps, refer back to the *Setting up
+your farm* section.
 
 ## Adding/removing/modifying BOINC projects
 
