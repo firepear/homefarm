@@ -5,7 +5,7 @@
   tasks:
   - name: Import project definitions
     include_vars:
-      file: projects.yaml
+      file: projects.yml
       name: farmprojs
 
   - name: Import BOINC vars
