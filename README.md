@@ -26,16 +26,15 @@ Homefarm makes a few assumptions:
 1. Run `'cd homefarm && sudo ./control-setup'`. The Pi will reboot
    after this script completes.
 
-## Set up the Ansible inventory
+## Set up the Ansible inventory and compute node configurations
 
 1. Run `'cd ~/homefarm'`.
 1. Edit `farm.cfg`:
      * Change `node00` in the `[controler]` stanza to match the name
        you've given the controller (AKA your Raspberry Pi).
-     * Put the names of all machines you'll be setting up as compute
-       nodes in the `[compute_nodes]` stanza.
-1. Make sure the names and IP addresses of these machines are in your
-   controller's `/etc/hosts` file.
+     * Put the names and IP addresses of all machines you'll be
+       setting up as compute nodes in the `[compute_nodes]` stanza.
+1. Run `'ansible-playbook '`
 
 ## Compute node install
 
@@ -75,7 +74,10 @@ and start BOINC on them.
 
 ## Set up BOINC projects
 
-After the `compute-nodes` playbook has sucessfully executed:
+In the `node_config` directory you will find a file named
+`example_node.yml`. This is a boilerplate per-node configuration
+file. Its purpose is defining any per-node configuration that is
+needed by the homefarm playbooks. It is where you define which projects
 
 1. Define the projects the farm will be working on by editing
    `projects.yml`:
@@ -104,7 +106,27 @@ Run it anytime you'd like to see what your farm is doing.
 It can also be used for ad-hoc management of individual compute nodes,
 and the workunits being handled by those nodes.
 
-## Adding projects
+## Setting up a new node
 
-Edit `projects.yml`, adding a new stanza for the new project. Then run
-`'ansible-playbook update-projects.yml'`.
+Here are the condensed instructions for adding a compute node after
+initial cluster setup:
+
+1. Edit `farm.cfg` and add the new node there.
+1. Run `
+
+## Adding/removing/modifying BOINC projects
+
+Edit `node_config/NODE.yml` for any nodes you wish to modify.
+
+* To define and attach to a new project, create a new stanza in the
+  `projects` dict and set the project state to `active`.
+* To suspend work on a project, set project state to `suspended`.
+* To resume work on a project, set project state to `active`.
+* To finish the workunits you have, but not request more, set project state to `nomorework`.
+* To restart work from a state of `nomorework`, set project state to `active`.
+* To detach from a project entirely, set project state to
+  `detached`. There is no reason to remove detached project stanzas
+  unless you wish to clean up the file, and leaving them in place
+  makes it easy to re-attach later.
+
+Then run `'ansible-playbook update-projects.yml'`.
