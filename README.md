@@ -132,7 +132,7 @@ your farm* section.
 
 ## Adding/removing/modifying BOINC projects
 
-Edit `node_config/NODE.yml` for any nodes you wish to modify.
+Edit `node_configs/NODE.yml` for any nodes you wish to modify.
 
 * To define and attach to a new project, create a new stanza in the
   `projects` dict and set the project state to `active`.
@@ -145,4 +145,5 @@ Edit `node_config/NODE.yml` for any nodes you wish to modify.
   unless you wish to clean up the file, and leaving them in place
   makes it easy to re-attach later.
 
-Then run `'ansible-playbook update-projects.yml'`.
+Then run `'ansible-playbook update-projects.yml'` to have the changes
+pushed out to the node(s).
