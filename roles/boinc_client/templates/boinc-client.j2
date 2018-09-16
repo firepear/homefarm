@@ -2,7 +2,7 @@
 
 name=$RC_SVCNAME
 command="/usr/local/bin/boinc"
-command_args="--dir {{ boinc_work_dir }}"
+command_args="--daemon --dir {{ boinc_work_dir }}"
 command_user="boinc"
 pidfile="{{ boinc_work_dir }}/$RC_SVCNAME.pid"
 start_stop_daemon_args=""
