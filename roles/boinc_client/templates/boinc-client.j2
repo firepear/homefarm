@@ -2,7 +2,7 @@
 
 name=$RC_SVCNAME
 command="/usr/local/bin/boinc"
-command_args="--daemon --dir {{ boinc_work_dir }}"
+command_args="--daemon --allow_remote_gui_rpc --dir {{ boinc_work_dir }}"
 command_user="boinc"
 pidfile="{{ boinc_work_dir }}/$RC_SVCNAME.pid"
 start_stop_daemon_args=""
@@ -11,8 +11,3 @@ command_background="yes"
 depend() {
         need net
 }
-
-#start_pre() {
-#        checkpath --directory --owner $command_user:$command_user --mode 0775 \
-#                /run/$RC_SVCNAME /var/log/$RC_SVCNAME
-#}
