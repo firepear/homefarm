@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+name=$RC_SVCNAME
+cfgfile="/usr/local/etc/$RC_SVCNAME.conf"
+command="/usr/local/bin/boinc"
+command_args="--daemon"
+command_user="boinc"
+pidfile="/var/run/$RC_SVCNAME.pid"
+start_stop_daemon_args=""
+command_background="yes"
+
+depend() {
+        need net
+}
+
+#start_pre() {
+#        checkpath --directory --owner $command_user:$command_user --mode 0775 \
+#                /run/$RC_SVCNAME /var/log/$RC_SVCNAME
+#}
