@@ -1,11 +1,10 @@
 #!/sbin/openrc-run
 
 name=$RC_SVCNAME
-cfgfile="/usr/local/etc/$RC_SVCNAME.conf"
 command="/usr/local/bin/boinc"
-command_args="--daemon"
+command_args="--dir {{ boinc_work_dir }}"
 command_user="boinc"
-pidfile="/var/run/$RC_SVCNAME.pid"
+pidfile="{{ boinc_work_dir }}/$RC_SVCNAME.pid"
 start_stop_daemon_args=""
 command_background="yes"
 

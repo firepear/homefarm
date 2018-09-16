@@ -77,7 +77,7 @@
 - name: Install improved BOINC init script
   become: true
   template:
-    src: boinc-client-init.j2
+    src: boinc-client.j2
     dest: /usr/local/etc/init.d/boinc-client
     owner: root
     group: root
