@@ -77,6 +77,12 @@ def get_project_state(proj_url):
                     in_project = True
     return pstate
 
+def change_project_state(proj_url, newstate):
+    r = subprocess.run([boinc, pwf, pw, "--project", proj_url, "resume"], stdout=subprocess.PIPE)
+    if r.returncode != 0:
+        print("error on state change '{}'".format(r.stderr))
+        sys.exit(1)
+
 
 ############################################################### state handlers
 def state_attach(proj_url, proj_user, proj_email, proj_password):
@@ -108,17 +114,12 @@ if len(cstate) == 0:
 if proj_state == "active":
     # we can transition from suspended or nomorework to active.
     if cstate["suspended"] is True:
-        r = subprocess.run([boinc, pwf, pw, "--project", proj_url, "resume"], stdout=subprocess.PIPE)
-        if r.returncode != 0:
-            print("error on state change '{}'".format(r.stderr))
-            sys.exit(1)
+        change_process_state(proj_url, "resume")
     elif cstate["nomorework"] is True:
-        r = subprocess.run([boinc, pwf, pw, "--project", proj_url, "allowmorework"], stdout=subprocess.PIPE)
-        if r.returncode != 0:
-            print("error on state change '{}'".format(r.stderr))
-            sys.exit(1)
+        change_process_state(proj_url, "allowmorework")
     else:
-        sys.exit(0)
+        print("{}")
+        sys.exit(1)
 elif proj_state == "nomorework":
     pass
 elif proj_state == "suspended":
