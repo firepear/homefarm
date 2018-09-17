@@ -6,7 +6,7 @@ command_args="--daemon --allow_remote_gui_rpc --dir {{ boinc_work_dir }}"
 command_user="boinc"
 pidfile="{{ boinc_work_dir }}/$RC_SVCNAME.pid"
 start_stop_daemon_args=""
-command_background="yes"
+procname="/usr/local/bin/boinc"
 
 depend() {
         need net
