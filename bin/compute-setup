@@ -54,3 +54,6 @@ mkdir /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
 wget ${1}:8000/id_farmer.pub -O /home/farmer/.ssh/authorized_keys
 chown -R farmer:farmer /home/farmer/.ssh
+
+# add vsyscall to kernel boot parameters
+sed -i -E 's/^(\s+linux\s+.*$)/\1 vsyscall=emulate/' /boot/grub/grub.cfg
