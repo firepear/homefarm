@@ -86,24 +86,39 @@ def state_attach(proj_url, proj_user, proj_email, proj_password):
 
 ######################################################################### main
 
-# first, make sure we have a valid project state
-if proj_state != "active" and proj_state != "suspended" and proj_state != "nomorework" and proj_state != "detached":
-    print("reqested project state '{}' is not valid".format(proj_state))
-    sys.exit(1)
-
 # collect current project state
 cstate = get_project_state(proj_url)
 
 # if we got a zero-length dict back, we're not attached to this
-# project. the only valid new state here is 'active', which will
-# attach.
+# project. the only valid new states here are 'active', which will
+# attach, and "detached", which will do nothing
 if len(cstate) == 0:
     if proj_state == "active":
         state_attach(proj_url, proj_user, proj_mail, proj_passwd)
         sys.exit(0)
+    elif proj_state == "detached":
+        sys.exit(0)
     else:
         print("asked to set state to '{}' for project '{}', but am not attached to that project".format(proj_state, proj_url))
         sys.exit(1)
+
+if proj_state == "active":
+    # we can transition from suspended or nomorework to active.
+    if cstate["suspended"] is True:
+        subprocess.run([boinc, pwf, pw, "--project", proj_url, "resume"], stdout=subprocess.PIPE)
+    elif cstate["nomorework"] is True:
+        subprocess.run([boinc, pwf, pw, "--project", proj_url, "allowmorework"], stdout=subprocess.PIPE)
+    else:
+        sys.exit(0)
+elif proj_state == "nomorework":
+    pass
+elif proj_state == "suspended":
+    pass
+elif proj_state == "detached":
+    pass
+else:
+    print("reqested project state '{}' is not valid".format(proj_state))
+    sys.exit(1)
 
 # TODOS
 #
