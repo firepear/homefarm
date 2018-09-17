@@ -57,7 +57,7 @@ def get_project_state(proj_url):
         try:
             k, v = line.split(": ")
         except:
-            next
+            continue
         if in_project:
             if k == "suspended via GUI":
                 if v == "yes":
