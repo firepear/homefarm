@@ -78,7 +78,8 @@ def get_project_state(proj_url):
     return pstate
 
 def change_project_state(proj_url, newstate):
-    r = subprocess.run([boinc, pwf, pw, "--project", proj_url, "resume"], stdout=subprocess.PIPE)
+    print(boinc, pwf, pw, proj_url, newstate)
+    r = subprocess.run([boinc, pwf, pw, "--project", proj_url, newstate], stdout=subprocess.PIPE)
     if r.returncode != 0:
         print("error on state change '{}'".format(r.stderr))
         sys.exit(1)
