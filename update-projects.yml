@@ -6,11 +6,11 @@
   - name: Import project definitions
     include_vars:
       file: projects.yml
-      name: farm
+      name: node
 
   - name: Make project modifications
     script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
-    loop: farm.projects.["{{ inventory_hostname }}"]
+    loop: node.projects.["{{ inventory_hostname }}"]
 
 
 # TODOS
