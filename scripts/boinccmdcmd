@@ -108,9 +108,15 @@ if len(cstate) == 0:
 if proj_state == "active":
     # we can transition from suspended or nomorework to active.
     if cstate["suspended"] is True:
-        subprocess.run([boinc, pwf, pw, "--project", proj_url, "resume"], stdout=subprocess.PIPE)
+        r = subprocess.run([boinc, pwf, pw, "--project", proj_url, "resume"], stdout=subprocess.PIPE)
+        if r.returncode != 0:
+            print("error on state change '{}'".format(r.stderr))
+            sys.exit(1)
     elif cstate["nomorework"] is True:
-        subprocess.run([boinc, pwf, pw, "--project", proj_url, "allowmorework"], stdout=subprocess.PIPE)
+        r = subprocess.run([boinc, pwf, pw, "--project", proj_url, "allowmorework"], stdout=subprocess.PIPE)
+        if r.returncode != 0:
+            print("error on state change '{}'".format(r.stderr))
+            sys.exit(1)
     else:
         sys.exit(0)
 elif proj_state == "nomorework":
@@ -120,7 +126,7 @@ elif proj_state == "suspended":
 elif proj_state == "detached":
     pass
 else:
-    print("reqested project state '{}' is not valid".format(proj_state))
+    print("requested project state '{}' is not valid".format(proj_state))
     sys.exit(1)
 
 # TODOS
