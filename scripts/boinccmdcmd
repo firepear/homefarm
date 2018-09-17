@@ -53,7 +53,7 @@ def get_project_state(proj_url):
     in_project = False
     result = subprocess.run([boinc, pwf, pw, '--get_project_status'], stdout=subprocess.PIPE, encoding="utf-8")
     for line in result.stdout.split('\n'):
-        if ! line.contains(": "):
+        if line.find(": ") == -1:
             next
         line.lstrip()
         k, v = line.split(": ")
