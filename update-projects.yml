@@ -10,7 +10,9 @@
 
   - name: Make project modifications
     script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
-    loop: node.projects.["{{ inventory_hostname }}"]
+    loop: node.projects
+
+# .["{{ inventory_hostname }}"]
 
 
 # TODOS
