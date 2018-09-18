@@ -100,6 +100,8 @@ projects, and start crunching workunits!
 
 # Managing the farm
 
+All commands are assumed to be run from `~/homefarm`.
+
 ## Farm status
 
 The program `boinctui` is installed on the control node, and its
