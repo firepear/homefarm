@@ -39,7 +39,7 @@ Homefarm makes a few assumptions:
        setting up as compute nodes in the `[compute_nodes]` stanza.
 1. Run `'ansible-playbook initialize-nodes.yml'` to generate sample
    configs for all defined compute nodes.
-1. Edit the node configs (in the `node_configs` directory) to declare
+1. Edit the node configs (in the `nodes` directory) to declare
    what BOINC projects you want each node to attach to.
      * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
        `PROJ_PASSWORD` values for each project.
@@ -121,8 +121,8 @@ initial cluster setup:
 On the controller:
 1. Edit `farm.cfg` and add the new node there.
 1. Run `'ansible-playbook initialize-nodes.yml'` to generate a node
-   config in the `node_configs` directory, then edit it. Or symlink to
-   an existing node config in `node_configs` if you want the new node
+   config in the `nodes` directory, then edit it. Or symlink to
+   an existing node config in `nodes` if you want the new node
    to share a configuration.
 
 On the new compute node:
@@ -137,7 +137,7 @@ your farm* section.
 
 ## Adding/removing/modifying BOINC projects
 
-Edit `node_configs/NODE.yml` for any nodes you wish to modify.
+Edit `nodes/NODE.yml` for any nodes you wish to modify.
 
 * To define and attach to a new project, create a new stanza in the
   `projects` dict and set the project state to `active`.
