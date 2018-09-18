@@ -13,10 +13,5 @@
       state: directory
       mode: 0755
   - name: Ensure config file for all nodes
-    file:
-      path: ./nodes/{{ item }}.yml
-      src: ./examples/node.yml
-      state: file
-      owner: pi
-      mode: 644
+    command: cp --no-clobber ./examples/node.yml ./nodes/{{ item }}.yml
     loop: "{{ groups['compute_nodes'] }}"
