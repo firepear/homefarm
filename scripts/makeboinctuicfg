@@ -25,7 +25,7 @@ for node in sys.argv:
     server.set('pwd', key)
     cfg.append(server)
 
-cfg.write("/home/farmer/.boinctui.cfg")
+tree.write("/home/farmer/.boinctui.cfg")
 
 subprocess.run(['rm', '*_auth.cfg'])
 
