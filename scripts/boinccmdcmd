@@ -119,7 +119,7 @@ if proj_state == "active":
     elif cstate["nomorework"] is True:
         change_process_state(proj_url, "allowmorework")
     else:
-        print("{}")
+        print("{}".format(cstate))
         sys.exit(1)
 elif proj_state == "nomorework":
     pass
