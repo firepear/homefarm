@@ -11,26 +11,3 @@
   - name: Make project modifications
     script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
     loop: "{{ node.projects }}"
-
-# .["{{ inventory_hostname }}"]
-
-
-# TODOS
-#
-# - [X] start boinc with --allow_remote_gui_rpc
-# - boinc log rotation
-#
-# after the actual project update work is done, this playbook should
-# be to update the controller's boinctui config.
-#
-# - task to create /etc/ansible/facts.d
-# - task to create static JSON file in that dir, containing the value of /var/lib/boinc/gui_rpc_auth.cfg
-#
-#   { "gui_auth": "HEXKEY" }
-#
-# might need dummy task like this to collect facts, depending on
-# structure
-#
-# - hosts: collectors
-#   name: Gather facts from collectors
-#   tasks: [ ]
