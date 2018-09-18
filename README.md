@@ -35,8 +35,9 @@ Homefarm makes a few assumptions:
 1. Edit `farm.cfg`:
      * Change `node00` in the `[controller]` stanza to match the name
        you've given the controller (AKA your Raspberry Pi).
-     * Put the names and IP addresses of all machines you'll be
-       setting up as compute nodes in the `[compute_nodes]` stanza.
+     * Change the names and IP addresses in the `[compute_nodes]`
+       stanza to match the machines you'll be setting up as compute
+       nodes.
 
 ## Compute node install
 
