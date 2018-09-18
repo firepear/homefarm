@@ -124,8 +124,8 @@ On the new compute node:
 
 On the controller:
 1. Run `'ansible-playbook compute-nodes.yml'`
-1. Edit the new node's config,or symlink to an existing node config in
-   the `nodes` dir.
+1. Edit the new node's config, or symlink to an existing node config
+   in the `nodes` dir.
 1. Run `'ansible-playbook update-projects.yml'`
 
 For full descriptions of these steps, refer back to the *Setting up
