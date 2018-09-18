@@ -5,7 +5,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 try:
-    tree = ET.parse("/home/farmer/.boinctui.cfg")
+    tree = ET.parse("/home/pi/.boinctui.cfg")
     cfg = tree.find("<boinctui_cfg>")
 except:
     # file doesn't exist, most likely
@@ -17,7 +17,7 @@ for server in cfg.findall('server'):
 
 sys.argv.pop(0)
 for node in sys.argv:
-    subprocess.run(['scp', '-i', '/home/farmer/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
+    subprocess.run(['scp', '-i', '/home/pi/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
     key = subprocess.run(["cat", "{}_auth.cfg".format(node)], stdout=subprocess.PIPE, encoding="utf-8").stdout
     server = ET.Element('server')
     server.set('host', node)
@@ -25,7 +25,7 @@ for node in sys.argv:
     server.set('pwd', key)
     cfg.append(server)
 
-tree.write("/home/farmer/.boinctui.cfg")
+tree.write("/home/pi/.boinctui.cfg")
 
 subprocess.run(['rm', '*_auth.cfg'])
 
