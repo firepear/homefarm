@@ -53,7 +53,7 @@ def get_project_state(proj_url):
     in_project = False
     result = subprocess.run([boinc, pwf, pw, '--get_project_status'], stdout=subprocess.PIPE, encoding="utf-8")
     for line in result.stdout.split('\n'):
-        line.lstrip()
+        line = line.lstrip()
         try:
             k, v = line.split(": ")
         except:
@@ -73,7 +73,7 @@ def get_project_state(proj_url):
                 break
         else:
             if k == "master URL":
-                if v.contains(proj_url):
+                if v.find(proj_url) != -1:
                     in_project = True
     return pstate
 
