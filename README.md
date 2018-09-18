@@ -29,7 +29,7 @@ Homefarm makes a few assumptions:
 1. Run `'cd homefarm && sudo ./control-setup'`. The Pi will reboot
    after this script completes.
 
-## Set up the Ansible inventory and compute node configurations
+## Set up the Ansible inventory
 
 1. Run `'cd ~/homefarm'`.
 1. Edit `farm.cfg`:
