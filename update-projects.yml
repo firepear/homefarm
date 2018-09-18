@@ -5,7 +5,7 @@
   tasks:
   - name: Import project definitions
     include_vars:
-      file: projects.yml
+      file: ./nodes/{{ inventory_hostname }}.yml
       name: node
 
   - name: Make project modifications
