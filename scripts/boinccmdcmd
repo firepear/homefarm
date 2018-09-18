@@ -115,17 +115,16 @@ if proj_state == "active":
     # we can transition from suspended or nomorework to active.
     if cstate["suspended"] is True:
         change_project_state(proj_url, "resume")
-    elif cstate["nomorework"] is True:
+    if cstate["nomorework"] is True:
         change_project_state(proj_url, "allowmorework")
-    else:
-        print("can't transition to state '{}' from 'active'".format(proj_state))
-        sys.exit(1)
 elif proj_state == "nomorework":
-    pass
+    if cstate["nomorework"] is False:
+        change_project_state(proj_url, "nomorework")
 elif proj_state == "suspended":
-    pass
+    if cstate["suspended"] is False:
+        change_project_state(proj_url, "suspend")
 elif proj_state == "detached":
-    pass
+    change_project_state(proj_url, "detach")
 else:
     print("requested project state '{}' is not valid".format(proj_state))
     sys.exit(1)
