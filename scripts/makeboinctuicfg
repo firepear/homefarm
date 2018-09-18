@@ -4,7 +4,7 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
-tree, cfg = None
+tree, cfg = None, None
 
 try:
     tree = ET.parse("/home/pi/.boinctui.cfg")
