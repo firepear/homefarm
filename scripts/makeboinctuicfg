@@ -4,6 +4,8 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
+tree, cfg = None
+
 try:
     tree = ET.parse("/home/pi/.boinctui.cfg")
     cfg = tree.find("<boinctui_cfg>")
