@@ -4,7 +4,7 @@
   roles:
     - boinc_client
 
-- hosts: control
+- hosts: controller
   tasks:
   - name: Ensure node config dir exists
     file:
