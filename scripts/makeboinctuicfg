@@ -5,10 +5,12 @@ import sys
 import xml.etree.ElementTree as ET
 
 try:
-    cfg = ET.parse("/home/farmer/.boinctui.cfg")
+    tree = ET.parse("/home/farmer/.boinctui.cfg")
+    cfg = tree.find("<boinctui_cfg>")
 except:
     # file doesn't exist, most likely
     cfg = ET.fromstring("<boinctui_cfg><server></server></boinctui_cfg>")
+    tree = ET.ElementTree(cfg)
 
 for server in cfg.findall('server'):
     cfg.remove(server)
