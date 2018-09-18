@@ -8,7 +8,7 @@ tree, cfg = None, None
 
 try:
     tree = ET.parse("/home/pi/.boinctui.cfg")
-    cfg = tree.find("<boinctui_cfg>")
+    cfg = tree.getroot()
 except:
     # file doesn't exist, most likely
     cfg = ET.fromstring("<boinctui_cfg><server></server></boinctui_cfg>")
