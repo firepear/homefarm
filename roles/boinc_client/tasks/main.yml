@@ -91,3 +91,5 @@
     name: boinc-client
     enabled: yes
   when: boinc_init.changed
+
+- import_tasks: copyguiauth.yml

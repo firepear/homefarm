@@ -1,0 +1,49 @@
+#!/usr/bin/python3
+
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+
+try:
+    cfg = ET.parse("/home/farmer/.boinctui.cfg")
+except:
+    # file doesn't exist, most likely
+    cfg = ET.fromstring("<boinctui_cfg><server></server></boinctui_cfg>")
+
+for server in cfg.findall('server'):
+    cfg.remove(server)
+
+sys.argv.pop(0)
+for node in sys.argv:
+    subprocess.run(['scp', '-i', '/home/farmer/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
+    key = subprocess.run(["cat", "{}_auth.cfg".format(node)], stdout=subprocess.PIPE, encoding="utf-8").stdout
+    server = ET.Element('server')
+    server.set('host', node)
+    server.set('port', 31416)
+    server.set('pwd', key)
+    cfg.append(server)
+
+cfg.write("/home/farmer/.boinctui.cfg")
+
+subprocess.run(['rm', '*_auth.cfg'])
+
+#<boinctui_cfg>
+#    <wtask_height_percent>5000
+#    </wtask_height_percent>
+#    <column_view_mask>-1
+#    </column_view_mask>
+#    <tasks_list_mode>0
+#    </tasks_list_mode>
+#    <tasks_sort_mode>2
+#    </tasks_sort_mode>
+#    <server>
+#        <host>127.0.0.1
+#        </host>
+#        <port>31416
+#        </port>
+#        <pwd>6a7436062bd4a34621334c0fd50df8e0
+#        </pwd>
+#    </server>
+#    <line_draw_mode>0
+#    </line_draw_mode>
+#</boinctui_cfg>
