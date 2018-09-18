@@ -37,18 +37,6 @@ Homefarm makes a few assumptions:
        you've given the controller (AKA your Raspberry Pi).
      * Put the names and IP addresses of all machines you'll be
        setting up as compute nodes in the `[compute_nodes]` stanza.
-1. Run `'ansible-playbook initialize-nodes.yml'` to generate sample
-   configs for all defined compute nodes.
-1. Edit the node configs (in the `nodes` directory) to declare
-   what BOINC projects you want each node to attach to.
-     * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
-       `PROJ_PASSWORD` values for each project.
-     * Change the project `status` if you'd like.
-     * Add/delete stanzas as needed.
-     * If you want multiple nodes with identical configurations,
-       delete the config files for the duplicate nodes and make
-       symlinks to the desired config.
-
 
 ## Compute node install
 
@@ -89,7 +77,17 @@ When all compute nodes have been installed, return to the control node
 and:
 
 1. Run `'ansible-playbook compute-nodes.yml'` to build and start
-   BOINC on the compute nodes.
+   BOINC on the compute nodes, and to generate sample
+   configs for all defined compute nodes.
+1. Edit the node configs (in the `nodes` directory) to declare
+   what BOINC projects you want each node to attach to.
+     * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
+       `PROJ_PASSWORD` values for each project.
+     * Change the project `status` if you'd like.
+     * Add/delete stanzas as needed.
+     * If you want multiple nodes with identical configurations,
+       delete the config files for the duplicate nodes and make
+       symlinks to the desired config.
 1. Run `'ansible-playbook update-projects.yml'` to attach nodes to
    projects.
 
@@ -120,16 +118,14 @@ initial cluster setup:
 
 On the controller:
 1. Edit `farm.cfg` and add the new node there.
-1. Run `'ansible-playbook initialize-nodes.yml'` to generate a node
-   config in the `nodes` directory, then edit it. Or symlink to
-   an existing node config in `nodes` if you want the new node
-   to share a configuration.
 
 On the new compute node:
 1. Do the node installation
 
 On the controller:
 1. Run `'ansible-playbook compute-nodes.yml'`
+1. Edit the new node's config,or symlink to an existing node config in
+   the `nodes` dir.
 1. Run `'ansible-playbook update-projects.yml'`
 
 For full descriptions of these steps, refer back to the *Setting up
