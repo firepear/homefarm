@@ -1,8 +1,8 @@
 ---
 - name: Copy GUI auth file
   become: true
-  command: cp {{ boinc_work_dir }}/gui_rpc_auth.cfg /home/farmer/{{ inventory_name }}_auth.cfg
+  command: cp {{ boinc_work_dir }}/gui_rpc_auth.cfg /home/farmer/{{ inventory_hostname }}_auth.cfg
 
 - name: Chown auth file
   become: true
-  command: chown farmer:farmer /home/farmer/{{ inventory_name }}_auth.cfg
+  command: chown farmer:farmer /home/farmer/{{ inventory_hostname }}_auth.cfg
