@@ -115,11 +115,13 @@ if len(cstate) == 0:
 if proj_state == "active":
     # we can transition from suspended or nomorework to active.
     if cstate["suspended"] is True:
+        print("can't transitioning to state {} from {}".format(proj_state, cstate))
         change_process_state(proj_url, "resume")
     elif cstate["nomorework"] is True:
+        print("can't transitioning to state {} from {}".format(proj_state, cstate))
         change_process_state(proj_url, "allowmorework")
     else:
-        print("{}".format(cstate))
+        print("can't transition to state {} from {}".format(proj_state, cstate))
         sys.exit(1)
 elif proj_state == "nomorework":
     pass
