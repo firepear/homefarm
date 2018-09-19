@@ -22,9 +22,15 @@ for node in sys.argv:
     subprocess.run(['scp', '-i', '/home/pi/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
     key = subprocess.run(["/bin/cat", "{}_auth.cfg".format(node)], stdout=subprocess.PIPE).stdout
     server = ET.Element('server')
-    server.set('host', node)
-    server.set('port', '31416')
-    server.set('pwd', key)
+    host = ET.Element('host')
+    host.text = node
+    port = ET.Element('port')
+    port.text = '31416'
+    pwd = ET.Element('pwd')
+    pwd.text = key.decode('utf-8')
+    server.append(host)
+    server.append(port)
+    server.append(pwd)
     cfg.append(server)
 
 tree.write("/home/pi/.boinctui.cfg")
