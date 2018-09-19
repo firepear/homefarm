@@ -55,7 +55,7 @@ mkdir -p /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
 wget ${1}:8000/id_farmer.pub -O /home/farmer/.ssh/authorized_keys
 chown -R farmer:farmer /home/farmer/.ssh
-sed -i -E '/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # add vsyscall to kernel boot parameters
 grep vsyscall /boot/grub/grub.cfg
