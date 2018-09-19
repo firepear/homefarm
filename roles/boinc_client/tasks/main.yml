@@ -92,4 +92,9 @@
     enabled: yes
   when: boinc_init.changed
 
+- name: BOINC startup
+  service:
+    name: BOINC
+    state: started
+
 - import_tasks: copyguiauth.yml
