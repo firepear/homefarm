@@ -49,7 +49,7 @@ echo "Creating user for Ansible..."
 sleep 1
 adduser -h /home/farmer -D farmer
 passwd=$( openssl passwd -1 -salt BOINC $(openssl rand -base64 32) )
-usermod -p ${passwd}
+usermod -p ${passwd} farmer
 echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
 mkdir -p /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
