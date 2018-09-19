@@ -20,10 +20,10 @@ for server in cfg.findall('server'):
 sys.argv.pop(0)
 for node in sys.argv:
     subprocess.run(['scp', '-i', '/home/pi/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
-    key = subprocess.run(["cat", "{}_auth.cfg".format(node)], stdout=subprocess.PIPE).stdout
+    key = subprocess.run(["/bin/cat", "{}_auth.cfg".format(node)], stdout=subprocess.PIPE).stdout
     server = ET.Element('server')
     server.set('host', node)
-    server.set('port', 31416)
+    server.set('port', '31416')
     server.set('pwd', key)
     cfg.append(server)
 
