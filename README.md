@@ -24,7 +24,7 @@ Homefarm makes a few assumptions:
    Reboot if necessary.
 1. Login as the default user and run `'sudo apt-get --yes install git'`
 1. Run `'git clone https://github.com/firepear/homefarm.git'`
-1. Run `'cd homefarm && sudo ./control-setup'`. The Pi will reboot
+1. Run `'cd homefarm && sudo ./bin/control-setup'`. The Pi will reboot
    after this script completes.
 
 ## Set up the Ansible inventory
