@@ -34,10 +34,10 @@ for node in sys.argv:
     server.append(port)
     server.append(pwd)
     cfg.append(server)
+    subprocess.run(['rm', '{}_auth.cfg'.format(node)])
 
 tree.write("/home/pi/.boinctui.cfg")
 
-subprocess.run(['rm', '*_auth.cfg'])
 
 #<boinctui_cfg>
 #    <wtask_height_percent>5000
