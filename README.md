@@ -24,8 +24,8 @@ Homefarm makes a few assumptions:
    Reboot if necessary.
 1. Login as the default user and run `'sudo apt-get --yes install git'`
 1. Run `'git clone https://github.com/firepear/homefarm.git'`
-1. Run `'cd homefarm && sudo ./bin/control-setup'`. The Pi will reboot
-   after this script completes.
+1. Run `'cd homefarm && sudo ./scripts/control-setup'`. The Pi will
+   reboot after this script completes.
 
 ## Set up the Ansible inventory
 
@@ -41,7 +41,7 @@ Homefarm makes a few assumptions:
 ## Compute node install
 
 Before installing a new compute node, login to the control node and
-run `'cd ~/homefarm && ./bin/serve'`. This will start a Python webserver
+run `'cd ~/homefarm && ./scripts/serve'`. This will start a Python webserver
 to make available the `compute-setup` script and data needed by that
 script. When done with installs, terminate the server with `Ctrl-C`.
 
