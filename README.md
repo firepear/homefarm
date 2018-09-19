@@ -36,6 +36,7 @@ Homefarm makes a few assumptions:
      * Change the names and IP addresses in the `[compute_nodes]`
        stanza to match the machines you'll be setting up as compute
        nodes.
+1. Edit `/etc/hosts` and add entries for your compute nodes.
 
 ## Compute node install
 
@@ -117,6 +118,7 @@ initial cluster setup:
 
 On the controller:
 1. Edit `farm.cfg` and add the new node there.
+1. Add the node to `/etc/hosts`
 
 On the new compute node:
 1. Do the node installation
