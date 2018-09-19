@@ -48,15 +48,17 @@ echo
 echo "Creating user for Ansible..."
 sleep 1
 adduser -h /home/farmer -D farmer
-echo "'farmer:$( openssl passwd -1 -salt BOINC $(openssl rand -base64 32) )'" | chpasswd -e
+#echo "'farmer:$( openssl passwd -1 -salt BOINC $(openssl rand -base64 32) )'" | chpasswd -e
+passwd -u farmer
 echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
 mkdir -p /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
 wget ${1}:8000/id_farmer.pub -O /home/farmer/.ssh/authorized_keys
 chown -R farmer:farmer /home/farmer/.ssh
+sed -i -E '/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # add vsyscall to kernel boot parameters
 grep vsyscall /boot/grub/grub.cfg
 if [[ "$?" ]]; then
-    sed -i -E 's/^(\s+linux\s+.*)$/\1 vsyscall=emulate/'
+    sed -i -E 's/^(\s+linux\s+.*)$/\1 vsyscall=emulate/' /boot/grub/grub.cfg
 fi
