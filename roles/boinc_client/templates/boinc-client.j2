@@ -2,7 +2,7 @@
 
 name=$RC_SVCNAME
 command="/usr/local/bin/boinc"
-command_args="--redirectio --allow_remote_gui_rpc --dir {{ boinc_work_dir }}"
+command_args="--redirectio --allow_remote_gui_rpc --gui_rpc_port 31416 --dir {{ boinc_work_dir }}"
 command_user="boinc"
 pidfile="{{ boinc_work_dir }}/$RC_SVCNAME.pid"
 start_stop_daemon_args=""
