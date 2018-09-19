@@ -94,7 +94,7 @@
 
 - name: BOINC startup
   service:
-    name: BOINC
+    name: boinc-client
     state: started
 
 - import_tasks: copyguiauth.yml
