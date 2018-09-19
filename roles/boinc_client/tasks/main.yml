@@ -93,6 +93,7 @@
   when: boinc_init.changed
 
 - name: BOINC startup
+  become: true
   service:
     name: boinc-client
     state: started
