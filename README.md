@@ -65,6 +65,7 @@ For the compute node:
    ensure all libraries are up to date.
 1. Log back after reboot and re-run `'sh ./compute-setup
    [CONTROL_NODE_IP]'` to complete bootstrapping.
+1. Reboot a final time..
 
 At this point the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
