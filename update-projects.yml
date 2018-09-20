@@ -9,5 +9,5 @@
       name: node
 
   - name: Make project modifications
-    script: "./scripts/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
+    script: "./bin/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
     loop: "{{ node.projects }}"

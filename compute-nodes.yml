@@ -16,4 +16,4 @@
     command: cp --no-clobber ./examples/node.yml ./nodes/{{ item }}.yml
     loop: "{{ groups['compute_nodes'] }}"
   - name: Assemble boinctui config file
-    script: "./scripts/makeboinctuicfg {{ groups['compute_nodes'] }}"
+    script: "./bin/makeboinctuicfg {{ groups['compute_nodes'] }}"
