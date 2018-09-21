@@ -58,7 +58,7 @@ chown -R farmer:farmer /home/farmer/.ssh
 sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # add vsyscall to kernel boot parameters
-grep vsyscall /boot/grub/grub.cfg
-if [[ "$?" ]]; then
+vsyscall_enable=$(grep vsyscall /boot/grub/grub.cfg | wc -l)
+if [[ "${vsyscall_enable}" == "0" ]]; then
     sed -i -E 's/^(\s+linux\s+.*)$/\1 vsyscall=emulate/' /boot/grub/grub.cfg
 fi
