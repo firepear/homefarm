@@ -11,6 +11,7 @@ start() {
     ebegin "Starting ${RC_SVCNAME}"
     start-stop-daemon --start --exec ${command} \
       --pidfile="{{ boinc_work_dir }}/${RC_SVCNAME}.pid" \
+      --make-pidfile \
       --background \
       --user="boinc" \
       -- \
@@ -22,6 +23,6 @@ stop() {
     ebegin "Stopping ${RC_SVCNAME}"
     start-stop-daemon --stop --exec ${command} \
       --pidfile="{{ boinc_work_dir }}/${RC_SVCNAME}.pid" \
-      --signal 9 \
+      --signal 9
     eend $?
 }
