@@ -77,7 +77,7 @@
   register: boinc_built
   notify: Restart BOINC
 
-- name: Clean BOINC staging area
+- name: Clean BOINC src dir
   become: true
   command:
     "bash -lc 'rm -rf {{ boinc_src_file }} {{ boinc_src_unpack_dir }}'"
@@ -106,5 +106,6 @@
   service:
     name: boinc-client
     state: started
+  when: boinc_version_match is failed
 
 - import_tasks: copyguiauth.yml
