@@ -1,11 +1,11 @@
 #!/sbin/openrc-run
 
 name=$RC_SVCNAME
-command="/usr/local/bin/boinc"
+command="boinc_client"
 command_args="--redirectio --allow_remote_gui_rpc --gui_rpc_port 31416 --dir {{ boinc_work_dir }}"
 command_user="boinc"
 pidfile="{{ boinc_work_dir }}/$RC_SVCNAME.pid"
-start_stop_daemon_args=""
+start_stop_daemon_args="--retry TERM/10/KILL/20"
 command_background=true
 
 depend() {

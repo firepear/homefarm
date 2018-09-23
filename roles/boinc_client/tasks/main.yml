@@ -27,6 +27,13 @@
   changed_when: false
   ignore_errors: true
 
+- name: Halt BOINC if version check failed
+  become: true
+  service:
+    name: boinc-client
+    state: stopped
+  when: boinc_installed is failed
+
 - name: Download BOINC source
   get_url:
     url: "{{ boinc_src_url }}"
@@ -67,6 +74,17 @@
   when: boinc_configured.changed
   register: boinc_built
   notify: Restart BOINC
+
+- name: Link BOINC executables
+  become: true
+  file:
+    path: /usr/bin/boinc
+    src: /usr/local/bin/boinc
+    state: link
+  file:
+    path: /usr/bin/boinc_client
+    src: /usr/local/bin/boinc_client
+    state: link
 
 - name: Clean BOINC staging area
   become: true
