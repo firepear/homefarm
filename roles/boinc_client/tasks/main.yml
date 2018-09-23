@@ -13,14 +13,6 @@
     - curl-dev
     - g++
 
-- name: Ensure src destination exists
-  become: true
-  file:
-    path: "{{ boinc_src_dir }}"
-    owner: farmer
-    state: directory
-    mode: 0755
-
 - name: Check installed BOINC version
   shell: "/usr/local/bin/boinc --version | grep {{ boinc_version }}"
   register: boinc_version_match
@@ -33,6 +25,15 @@
     name: boinc-client
     state: stopped
   ignore_errors: true
+  when: boinc_version_match is failed
+
+- name: Ensure BOINC src dir exists
+  become: true
+  file:
+    path: "{{ boinc_src_dir }}"
+    owner: farmer
+    state: directory
+    mode: 0755
   when: boinc_version_match is failed
 
 - name: Download BOINC source
