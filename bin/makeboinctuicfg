@@ -4,38 +4,65 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
-tree, cfg = None, None
+# guard against humans running this
+if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
+    print("This script should not be run by hand. It manages RPC auth keys for")
+    print("Homefarm. Nothing about its operation is configurable.")
+    sys.exit(0)
 
+tree, cfg = None, None
 try:
+    # try to source an existing config. if it works, this will give us
+    # our parsed XML as a tree, and then we'll grab the root element
+    # which is our configuration document.
     tree = ET.parse("/home/pi/.boinctui.cfg")
     cfg = tree.getroot()
 except:
-    # file doesn't exist, most likely
+    # if that doesn't work, create a bare configuration from a string,
+    # then add it to a newly instantiated tree.
     cfg = ET.fromstring("<boinctui_cfg><server></server></boinctui_cfg>")
     tree = ET.ElementTree(cfg)
 
+# ok, one way or another we have a parsed configuration. let's remove
+# all <server> elements from it to get a known starting point for
+# adding them back.
 for server in cfg.findall('server'):
     cfg.remove(server)
 
+# yank the script name off ARGV
 sys.argv.pop(0)
+# and for each remaining argument, which should be node names, do the
+# following:
 for node in sys.argv:
+    # strip square brackets, if they exist (first and last element
+    # will have one or the other)
     node = node.lstrip('[')
     node = node.rstrip(']')
+    # scp to the node and grab its gui auth keyfile
     subprocess.run(['scp', '-i', '/home/pi/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
+    # cat the local copy of the keyfile, storing the contents in the variable 'key'
     key = subprocess.run(["/bin/cat", "{}_auth.cfg".format(node)], stdout=subprocess.PIPE).stdout
+    # create a new <server> element
     server = ET.Element('server')
+    # and a <host>, whose text contents are the node name
     host = ET.Element('host')
     host.text = node
+    # and a <port>, hardcoded to 31416 for now
     port = ET.Element('port')
     port.text = '31416'
+    # and a <pwd>, containing the RPC access key (decoded from bytes to string)
     pwd = ET.Element('pwd')
     pwd.text = key.decode('utf-8')
+    # append those three elements as children of <server>
     server.append(host)
     server.append(port)
     server.append(pwd)
+    # append <server> as a child of our configuration parent
     cfg.append(server)
+    # unlink the local copy of the keyfile
     subprocess.run(['rm', '{}_auth.cfg'.format(node)])
 
+# finally, write our parsed tree back to disk
 tree.write("/home/pi/.boinctui.cfg")
 
 
