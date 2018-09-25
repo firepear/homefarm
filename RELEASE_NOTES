@@ -1,0 +1,13 @@
+1.0.0 - 2018-10-xx
+--------------------------------------------------------------------
+
+    * Init script reliably handles stop/restart now.
+
+    * Scripts not meant to be run by users say so when run with no
+      arguments, or with '-h/'--help'.
+
+
+0.9.1 - 2018-09-18
+--------------------------------------------------------------------
+
+    * Initial featureset complete. Public announcement.
