@@ -134,11 +134,3 @@ elif proj_state == "detached":
 else:
     print("requested project state '{}' is not valid".format(proj_state))
     sys.exit(1)
-
-# TODOS
-#
-# - handle all defined states
-#   - active
-#   - suspended
-#   - nomorework
-#   - detached
