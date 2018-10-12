@@ -1,10 +1,13 @@
-1.0.0 - 2018-10-xx
+0.10.0 - 2018-10-11
 --------------------------------------------------------------------
 
     * Init script reliably handles stop/restart now.
 
     * Scripts not meant to be run by users say so when run with no
       arguments, or with '-h/'--help'.
+
+    * Fixed bug in .boinctui file generation due to faulty node name
+      handling
 
 
 0.9.1 - 2018-09-18
