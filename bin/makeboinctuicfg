@@ -38,6 +38,8 @@ for node in sys.argv:
     # will have one or the other)
     node = node.lstrip('[')
     node = node.rstrip(']')
+    # ditto, commas
+    node = node.rstrip(',')
     # scp to the node and grab its gui auth keyfile
     subprocess.run(['scp', '-i', '/home/pi/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
     # cat the local copy of the keyfile, storing the contents in the variable 'key'
