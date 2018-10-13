@@ -1,0 +1,22 @@
+#!/bin/bash
+
+CURRENT_TAG="v0.10.0"
+NEWEST_TAG=$(curl -s 'https://api.github.com/repos/firepear/homefarm/tags' | python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["name"])')
+
+if [[ "${CURRENT_TAG}" == "${NEWEST_TAG}" ]]; then
+    echo "homefarm is up to date: ${NEWEST_TAG}"
+    exit 0
+else
+    echo "there is a new release: ${NEWEST_TAG}"
+fi
+
+cd /home/pi/homefarm
+
+echo "updating the homefarm repo"
+git pull
+
+echo "updating raspbian"
+apt-get -q update
+apt-get --yes -q dist-upgrade
+# this is where we add new packages, when we discover we need them
+# apt-get --yes -q install ...

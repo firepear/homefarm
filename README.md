@@ -41,9 +41,10 @@ Homefarm makes a few assumptions:
 ## Compute node install
 
 Before installing a new compute node, login to the control node and
-run `'cd ~/homefarm && ./bin/serve'`. This will start a Python webserver
-to make available the `compute-setup` script and data needed by that
-script. When done with installs, terminate the server with `Ctrl-C`.
+run `'cd ~/homefarm && ./bin/serve-config'`. This will start a Python
+webserver to make available the `compute-setup` script and data needed
+by that script. When done with installs, terminate the server with
+`Ctrl-C`.
 
 For the compute node:
 

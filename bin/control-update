@@ -1,6 +1,0 @@
-#!/bin/bash
-
-cd /home/pi/homefarm
-git pull
-apt-get update
-apt-get --yes dist-upgrade
