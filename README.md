@@ -78,9 +78,9 @@ running `'ansible -m ping [NODE_NAME]'` from the control node.
 When all compute nodes have been installed, return to the control node
 and:
 
-1. Run `'ansible-playbook compute-nodes.yml'` to build and start
-   BOINC on the compute nodes, and to generate sample
-   configs for all defined compute nodes.
+1. Run `'ansible-playbook compute-nodes-boinc.yml'` to build and start
+   BOINC on the compute nodes, and to generate sample configs for all
+   defined compute nodes.
 1. Edit the node configs (in the `nodes` directory) to declare
    what BOINC projects you want each node to attach to.
      * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
@@ -163,7 +163,7 @@ On the new compute node:
 1. Do the node installation
 
 On the controller:
-1. Run `'ansible-playbook compute-nodes.yml'`
+1. Run `'ansible-playbook compute-nodes-boinc.yml'`
 1. Edit the new node's config, or symlink to an existing node config
    in the `nodes` dir.
 1. Run `'ansible-playbook update-projects.yml'`

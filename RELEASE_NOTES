@@ -5,6 +5,8 @@
 
     * BOINC version updated to 7.14.2
 
+    * Playbooks updated to Ansible 2.7 format where needed
+
 
 0.10.0 - 2018-10-11
 --------------------------------------------------------------------
