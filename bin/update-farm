@@ -7,20 +7,25 @@ if [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
     exit 0
 fi
 
+cd /home/pi/homefarm
 
-CURRENT_TAG="v0.10.0"
+# if we have a stored latest tag, read it in as current
+if [[ -e ./.current_tag ]]; then
+    CURRENT_TAG=$(cat ./.current_tag)
+fi
+# check github for the most recent tag
 NEWEST_TAG=$(curl -s 'https://api.github.com/repos/firepear/homefarm/tags' | python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["name"])')
 
 if [[ "${1}" != "--force" ]]; then
     if [[ "${CURRENT_TAG}" == "${NEWEST_TAG}" ]]; then
+        # if tags match, do nothing
         echo "homefarm is up to date: ${NEWEST_TAG}"
         exit 0
     else
+        # otherwise proceed with upgrade
         echo "there is a new release: ${NEWEST_TAG}"
     fi
 fi
-
-cd /home/pi/homefarm
 
 echo "updating the homefarm repo"
 git pull
@@ -44,8 +49,13 @@ ansible-playbook compute-nodes-boinc.yml
 echo; echo "rebooting compute nodes"
 #ansible-playbook compute-nodes-reboot.yml
 for node in $(ls nodes/*yml); do
-    ssh -i ~/.ssh/id_farmer $(basename ${node} .yml) 'sudo reboot'
+    ssh "farmer@$(basename ${node} .yml)" 'sudo reboot'
 done
+
+# we made it down here, so cache the new tag name
+if [[ "${1}" != "--force" ]]; then
+    echo "${NEWEST_TAG}" > ./.current_tag
+fi
 
 echo; echo "rebooting control node"
 sudo reboot

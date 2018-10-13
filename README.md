@@ -132,7 +132,7 @@ a new version, then:
 
 ## Adding/removing/modifying BOINC projects
 
-Edit `nodes/NODE.yml` for any nodes you wish to modify.
+Edit `nodes/[NODE].yml` for any nodes you wish to modify.
 
 * To define and attach to a new project, create a new stanza in the
   `projects` dict and set the project state to `active`.
@@ -144,6 +144,11 @@ Edit `nodes/NODE.yml` for any nodes you wish to modify.
   `detached`. There is no reason to remove detached project stanzas
   unless you wish to clean up the file, and leaving them in place
   makes it easy to re-attach later.
+* To change the user a node is running a project as:
+  * Set project state to `detached`
+  * Run the `update-projects` playbook
+  * Update the user info and set the state to `active`
+  * Re-run the playbook.
 
 Then run `'ansible-playbook update-projects.yml'` to have the changes
 pushed out to the node(s).
