@@ -39,10 +39,10 @@ echo
 echo
 
 echo "updating compute nodes"
-ansible-playbook compute-nodes-system-update.yml
-ansible-playbook compute-nodes-boinc.yml
+sudo pi ansible-playbook compute-nodes-system-update.yml
+sudo pi ansible-playbook compute-nodes-boinc.yml
 echo; echo "rebooting compute nodes"
-ansible-playbook compute-nodes-reboot.yml
+sudo pi ansible-playbook compute-nodes-reboot.yml
 
 echo; echo "rebooting control node"
 reboot
