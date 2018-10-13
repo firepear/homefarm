@@ -116,7 +116,7 @@ and the workunits being handled by those nodes.
 
 ## Keeping the farm up to date
 
-Run `'sudo ./bin/update-farm'`
+Run `'./bin/update-farm'`
 
 This script will check github to find the current version of
 homefarm. If you are up-to-date, no action will be taken.
