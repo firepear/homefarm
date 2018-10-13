@@ -32,14 +32,14 @@ apt-get --yes -q dist-upgrade
 # apt-get --yes -q install ...
 
 echo "updating ansible (if needed)"
-pip3 -q install ansible --upgrade
+pip3 install ansible --upgrade
 
 echo "control node update complete"
 echo
 echo
 
 echo "updating compute nodes"
-ansible-playbook update-compute-nodes.yml
+ansible-playbook compute-nodes-system-update.yml
 ansible-playbook compute-nodes-boinc.yml
 echo "rebooting compute nodes"
 ansible-playbook compute-nodes-reboot.yml
