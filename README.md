@@ -100,7 +100,7 @@ projects, and start crunching workunits!
 
 # Managing the farm
 
-All commands are assumed to be run from `~/homefarm`.
+All commands are assumed to be run as user `pi` from `~/homefarm`
 
 ## Farm status
 
@@ -132,14 +132,14 @@ a new version, then:
 
 ## Adding/removing/modifying BOINC projects
 
-Edit `nodes/[NODE].yml` for any nodes you wish to modify.
+Edit `nodes/[NODE_NAME].yml` for any nodes you wish to modify.
 
 * To define and attach to a new project, create a new stanza in the
-  `projects` dict and set the project state to `active`.
-* To suspend work on a project, set project state to `suspended`.
-* To resume work on a project, set project state to `active`.
-* To finish the workunits you have, but not request more, set project state to `nomorework`.
-* To restart work from a state of `nomorework`, set project state to `active`.
+  `projects` dict and set the project state to `active`
+* To suspend work on a project, set project state to `suspended`
+* To resume work on a project, set project state to `active`
+* To finish the workunits you have, but not request more, set project state to `nomorework`
+* To restart work from a state of `nomorework`, set project state to `active`
 * To detach from a project entirely, set project state to
   `detached`. There is no reason to remove detached project stanzas
   unless you wish to clean up the file, and leaving them in place

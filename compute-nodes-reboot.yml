@@ -1,7 +1,0 @@
----
-- hosts: compute_nodes
-  remote_user: farmer
-  tasks:
-  - name: Reboot
-    become: true
-    reboot:
