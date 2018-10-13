@@ -44,7 +44,7 @@ ansible-playbook compute-nodes-boinc.yml
 echo; echo "rebooting compute nodes"
 #ansible-playbook compute-nodes-reboot.yml
 for node in $(ls nodes/*yml); do
-    ssh $(basename ${node} .yml) 'sudo reboot'
+    ssh -i ~/.ssh/id_farmer $(basename ${node} .yml) 'sudo reboot'
 done
 
 echo; echo "rebooting control node"
