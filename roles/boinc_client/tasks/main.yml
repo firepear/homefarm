@@ -34,7 +34,7 @@
   get_url:
     url: "{{ boinc_src_url }}"
     dest: "{{ boinc_src_file }}"
-    sha256sum: "{{ boinc_src_sha256 }}"
+    checksum: "{{ boinc_src_sha256 }}"
   when: boinc_version_match is failed
 
 - name: Extract BOINC source
