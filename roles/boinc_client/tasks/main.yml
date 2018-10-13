@@ -4,14 +4,8 @@
 - name: Install BOINC dependencies
   become: true
   apk:
-    name: "{{ item }}"
+    name: ['libtool', 'automake', 'libcurl', 'curl-dev', 'g++']
     update_cache: yes
-  with_items:
-    - libtool
-    - automake
-    - libcurl
-    - curl-dev
-    - g++
 
 - name: Check installed BOINC version
   shell: "/usr/local/bin/boinc --version | grep {{ boinc_version }}"
