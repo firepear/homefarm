@@ -141,17 +141,20 @@ Edit `nodes/[NODE_NAME].yml` for any nodes you wish to modify.
 * To finish the workunits you have, but not request more, set project state to `nomorework`
 * To restart work from a state of `nomorework`, set project state to `active`
 * To detach from a project entirely, set project state to
-  `detached`. There is no reason to remove detached project stanzas
-  unless you wish to clean up the file, and leaving them in place
-  makes it easy to re-attach later.
-* To change the user a node is running a project as:
-  * Set project state to `detached`
-  * Run the `update-projects` playbook
-  * Update the user info and set the state to `active`
-  * Re-run the playbook.
+  `detached`.
+  * There is no reason to remove detached project stanzas unless you
+    wish to clean up the file, and leaving them in place makes it easy
+    to re-attach later.
 
 Then run `'ansible-playbook update-projects.yml'` to have the changes
 pushed out to the node(s).
+
+To change the user a node is running a project as:
+
+* Set project state to `detached`
+* Run the `update-projects` playbook
+* Update the user info and set the state to `active`
+* Re-run the playbook
 
 
 ## Bringing up a new node
