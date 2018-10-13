@@ -119,9 +119,8 @@ and the workunits being handled by those nodes.
 Run `'./bin/update-farm'`
 
 This script will check github to find the current version of
-homefarm. If you are up-to-date, no action will be taken.
-
-If there is a new version, then:
+homefarm. If you are up-to-date, no action will be taken.  If there is
+a new version, then:
 
 * The control node's clone of homefarm will be updated
 * The control node's OS and ansible packages will be updated
