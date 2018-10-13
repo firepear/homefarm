@@ -1,0 +1,17 @@
+---
+- hosts: compute_nodes
+  remote_user: farmer
+  become: true
+  tasks:
+  - name: Upgrade system software
+    apk:
+      available: yes
+      upgrade: yes
+  #- name: Install additional software
+  #  apk:
+  #    name: x, y
+  #    state: present
+  - name: Upgrade ansible
+    pip:
+      name: ansible
+      state: latest

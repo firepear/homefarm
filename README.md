@@ -113,6 +113,43 @@ Run it anytime you'd like to see what your farm is doing.
 It can also be used for ad-hoc management of individual compute nodes,
 and the workunits being handled by those nodes.
 
+
+## Keeping the farm up to date
+
+Run `'sudo ./bin/update-farm'`
+
+This script will check github to find the current version of
+homefarm. If you are up-to-date, no action will be taken.
+
+If there is a new version, then:
+
+* The control node's clone of homefarm will be updated
+* The control node's OS and ansible packages will be updated
+* The compute nodes will have their OS and ansible packages updated
+* BOINC will be rebuilt on the compute nodes, if needed
+* The compute nodes will restart
+* The control node will restart
+
+
+## Adding/removing/modifying BOINC projects
+
+Edit `nodes/NODE.yml` for any nodes you wish to modify.
+
+* To define and attach to a new project, create a new stanza in the
+  `projects` dict and set the project state to `active`.
+* To suspend work on a project, set project state to `suspended`.
+* To resume work on a project, set project state to `active`.
+* To finish the workunits you have, but not request more, set project state to `nomorework`.
+* To restart work from a state of `nomorework`, set project state to `active`.
+* To detach from a project entirely, set project state to
+  `detached`. There is no reason to remove detached project stanzas
+  unless you wish to clean up the file, and leaving them in place
+  makes it easy to re-attach later.
+
+Then run `'ansible-playbook update-projects.yml'` to have the changes
+pushed out to the node(s).
+
+
 ## Bringing up a new node
 
 Here are the condensed instructions for adding a compute node after
@@ -134,20 +171,3 @@ On the controller:
 For full descriptions of these steps, refer back to the *Setting up
 your farm* section.
 
-## Adding/removing/modifying BOINC projects
-
-Edit `nodes/NODE.yml` for any nodes you wish to modify.
-
-* To define and attach to a new project, create a new stanza in the
-  `projects` dict and set the project state to `active`.
-* To suspend work on a project, set project state to `suspended`.
-* To resume work on a project, set project state to `active`.
-* To finish the workunits you have, but not request more, set project state to `nomorework`.
-* To restart work from a state of `nomorework`, set project state to `active`.
-* To detach from a project entirely, set project state to
-  `detached`. There is no reason to remove detached project stanzas
-  unless you wish to clean up the file, and leaving them in place
-  makes it easy to re-attach later.
-
-Then run `'ansible-playbook update-projects.yml'` to have the changes
-pushed out to the node(s).
