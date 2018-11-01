@@ -172,7 +172,7 @@ To change the user a node is running a project as:
 
 Edit `nodes/cc_[NODE_NAME].xml` for any nodes you wish to modify.
 
-Make whatever [BOINC config
+Add and/or update whatever [BOINC config
 directives](https://boinc.berkeley.edu/wiki/Client_configuration) you
 would like.
 
