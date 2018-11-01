@@ -2,8 +2,8 @@
 set -e
 
 if [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
-    echo "update the compute node and all compute nodes if an update to homefarm"
-    echo "exists. see README.md for more information."
+    echo "Update all compute nodes if an update to homefarm exists."
+    echo "See README.md for more information."
     exit 0
 fi
 
