@@ -26,6 +26,12 @@ if [[ "${1}" != "--force" ]]; then
     else
         # otherwise proceed with upgrade
         shownotice "there is a new release: ${NEWEST_TAG}"
+        echo -n "update now [y/N]? "
+        read answer
+        if [[ "${answer" != "y" ]]; then
+            echo "ok. delaying update."
+            exit 0
+        fi
     fi
 else
     shownotice "forcing update"
