@@ -5,4 +5,5 @@ shownotice () {
         echo -n '-'
     done
     echo " ${1}"
+    echo
 }
