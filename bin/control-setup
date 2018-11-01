@@ -1,34 +1,29 @@
 #!/bin/bash
 set -e
+. ./bin/util.sh
 
 # copy the example farm inventory file to the real one
 cp examples/farm.cfg farm.cfg
 chown pi:pi farm.cfg
 
 # update the system
-echo "Updating system software..."
+shownotice "Updating system software..."
 sleep 1
 apt-get update
 apt-get --yes dist-upgrade
 
 # install pip
-echo
-echo
-echo "Installing pip (the Python package manager)..."
+shownotice "Installing pip (the Python package manager)..."
 sleep 1
 apt-get --yes install python3-pip
 
 # install ansible
-echo
-echo
-echo "Installing ansible..."
+shownotice "Installing ansible..."
 sleep 1
 pip3 install ansible
 
 # generate ssh key
-echo
-echo
-echo "Generating SSH configuration for Ansible..."
+shownotice "Generating SSH configuration for Ansible..."
 sleep 1
 apt-get --yes install keychain
 ssh-keygen -t ed25519 -N "" -f id_farmer
@@ -45,9 +40,7 @@ EOF
 
 # setup dir for serving to compute nodes and do a tiny bit of
 # housekeeping
-echo
-echo
-echo "Finalizing controller setup..."
+shownotice "Finalizing controller setup..."
 sleep 1
 mkdir http
 cp /home/pi/.ssh/id_farmer.pub ./http
@@ -56,8 +49,6 @@ chown -R pi:pi http
 apt-get --yes install boinctui
 apt-get clean
 
-echo
-echo
-echo "Setup complete. Rebooting in 5 seconds!"
+shownotice "Setup complete. Rebooting in 5 seconds!"
 sleep 5
 reboot

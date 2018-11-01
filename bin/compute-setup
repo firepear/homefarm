@@ -7,9 +7,11 @@ if [[ "${1}" == "" ]]; then
     exit 1
 fi
 
+. ./bin/util.sh
+
 if [[ ! -e "./.firststage" ]]; then
     # update the system
-    echo "Updating system software..."
+    shownotice "Updating system software..."
     sleep 1
     # switch to rolling release
     apk add sed
@@ -18,34 +20,27 @@ if [[ ! -e "./.firststage" ]]; then
     sed -i -E '0,/community/{s:#(.*)/edge/community:\1/edge/community:}' /etc/apk/repositories
     apk upgrade --update-cache --available
     touch "./.firststage"
-    echo
-    echo
-    echo "Update complete. Rebooting in 5 seconds..."
+    shownotice "Update complete. Rebooting in 5 seconds..."
     sleep 5
     sync
     reboot
 fi
 
 # install preqs
-echo "Continuing setup!"
-echo
-echo "Installing Ansible prerequisites..."
+shownotice "Continuing setup!"
+shownotice "Installing Ansible prerequisites..."
 sleep 1
 apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl1.0 libressl libressl-dev sudo shadow tar
 # we need a just plain "python" executable for ansible
 ln -f -s /usr/bin/python3 /usr/bin/python
 
 # install ansible
-echo
-echo
-echo "Installing Ansible..."
+shownotice "Installing Ansible..."
 sleep 1
 pip3 install ansible
 
 # create user, set passwd, config sudo access, and setup ssh keys
-echo
-echo
-echo "Creating user for Ansible..."
+shownotice "Creating user for Ansible..."
 sleep 1
 adduser -h /home/farmer -D farmer
 passwd=$( openssl passwd -1 -salt BOINC $(openssl rand -base64 32) )
