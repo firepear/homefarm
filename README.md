@@ -135,9 +135,9 @@ This script will check github to find the current version of
 homefarm. If you are up-to-date, no action will be taken.  If there is
 a new version, then:
 
-* The control node's clone of homefarm will be updated
-* The control node's OS and ansible packages will be updated
-* The compute nodes will have their OS and ansible packages updated
+* The control node's clone of the homefarm repo, OS packages, and
+  ansible install will be updated
+* The compute nodes' OS packages and ansible install will be updated
 * BOINC will be rebuilt on the compute nodes, if needed
 * The compute nodes will restart
 * The control node will restart
