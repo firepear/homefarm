@@ -7,7 +7,9 @@ if [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
     exit 0
 fi
 
+# cd to homefarm and source util funcs
 cd /home/pi/homefarm
+. ./bin/util.sh
 
 # if we have a stored latest tag, read it in as current
 if [[ -e ./.current_tag ]]; then
@@ -19,35 +21,35 @@ NEWEST_TAG=$(curl -s 'https://api.github.com/repos/firepear/homefarm/tags' | pyt
 if [[ "${1}" != "--force" ]]; then
     if [[ "${CURRENT_TAG}" == "${NEWEST_TAG}" ]]; then
         # if tags match, do nothing
-        echo "homefarm is up to date: ${NEWEST_TAG}"
+        shownotice "homefarm is up to date: ${NEWEST_TAG}"
         exit 0
     else
         # otherwise proceed with upgrade
-        echo "there is a new release: ${NEWEST_TAG}"
+        shownotice "there is a new release: ${NEWEST_TAG}"
     fi
+else
+    shownotice "forcing update"
 fi
 
-echo "updating the homefarm repo"
+shownotice "updating the homefarm repo"
 git pull
 
-echo; echo "updating raspbian"
+shownotice "updating raspbian"
 sudo apt-get -q update
 sudo apt-get --yes -q dist-upgrade
 # this is where we add new packages, when we discover we need them
 # apt-get --yes -q install ...
 
-echo; echo "updating ansible (if needed)"
+shownotice "updating ansible (if needed)"
 sudo pip3 install ansible --upgrade
 
-echo "control node update complete"
-echo
-echo
+shownotice "control node update complete"
 
-echo "updating compute nodes"
+shownotice "updating compute nodes"
 ansible-playbook compute-nodes-system-update.yml
 ansible-playbook compute-nodes-boinc.yml
-echo; echo "rebooting compute nodes"
-#ansible-playbook compute-nodes-reboot.yml
+
+shownotice "rebooting compute nodes"
 for node in $(ls nodes/*yml); do
     ssh "farmer@$(basename ${node} .yml)" 'sudo reboot'
 done
@@ -57,5 +59,5 @@ if [[ "${1}" != "--force" ]]; then
     echo "${NEWEST_TAG}" > ./.current_tag
 fi
 
-echo; echo "rebooting control node"
+shownotice "update complete; rebooting control node"
 sudo reboot
