@@ -43,17 +43,17 @@ pip3 install ansible
 shownotice "Creating user for Ansible..."
 sleep 1
 adduser -h /home/farmer -D farmer
-passwd=$( openssl passwd -1 -salt BOINC $(openssl rand -base64 32) )
-usermod -p ${passwd} farmer
+passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
+usermod -p "${passwd}" farmer
 echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
 mkdir -p /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
-wget ${1}:8000/id_farmer.pub -O /home/farmer/.ssh/authorized_keys
+wget "${1}:8000/id_farmer.pub" -O /home/farmer/.ssh/authorized_keys
 chown -R farmer:farmer /home/farmer/.ssh
 sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # add vsyscall to kernel boot parameters
-vsyscall_enable=$(grep vsyscall /boot/grub/grub.cfg | wc -l)
+vsyscall_enable=$(grep -c vsyscall /boot/grub/grub.cfg)
 if [[ "${vsyscall_enable}" == "0" ]]; then
     sed -i -E 's/^(\s+linux\s+.*)$/\1 vsyscall=emulate/' /boot/grub/grub.cfg
 fi
