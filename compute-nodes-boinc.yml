@@ -1,9 +1,4 @@
 ---
-- hosts: compute_nodes
-  remote_user: farmer
-  roles:
-    - boinc_client
-
 - hosts: controller
   tasks:
   - name: Ensure node config dir exists
@@ -12,8 +7,19 @@
       owner: pi
       state: directory
       mode: 0755
-  - name: Ensure config file for all nodes
+  - name: Ensure project config file for all nodes
     command: cp --no-clobber ./examples/node.yml ./nodes/{{ item }}.yml
     loop: "{{ groups['compute_nodes'] }}"
+  - name: Ensure cc_config file for all nodes
+    command: cp --no-clobber ./examples/cc_config.xml ./nodes/cc_{{ item }}.xml
+    loop: "{{ groups['compute_nodes'] }}"
+
+- hosts: compute_nodes
+  remote_user: farmer
+  roles:
+    - boinc_client
+
+- hosts: controller
+  tasks:
   - name: Assemble boinctui config file
     script: "./bin/makeboinctuicfg {{ groups['compute_nodes'] }}"

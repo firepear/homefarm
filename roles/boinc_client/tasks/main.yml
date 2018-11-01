@@ -77,6 +77,15 @@
     "bash -lc 'rm -rf {{ boinc_src_file }} {{ boinc_src_unpack_dir }}'"
   when: boinc_built.changed
 
+- name: Copy cc_config to BOINC dir
+  copy:
+    src: ./nodes/cc_{{ inventory_hostname }}.xml
+    dest: "{{ boinc_work_dir }}/cc_config.xml"
+    owner: boinc
+    group: boinc
+    mode: 0644
+  notify: Restart BOINC
+
 - name: Install improved BOINC init script
   become: true
   template:
