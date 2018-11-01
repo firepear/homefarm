@@ -177,8 +177,8 @@ Make whatever [BOINC config
 directives](https://boinc.berkeley.edu/wiki/Client_configuration) you
 would like.
 
-Run `'ansible-playbook compute-nodes-boinc.yml'` again to push the
-changes out to the node(s).
+Run `'ansible-playbook compute-nodes-boinc.yml'` to push the changes
+out to the node(s).
 
 ## Bringing up a new node
 
