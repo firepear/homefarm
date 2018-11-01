@@ -1,3 +1,12 @@
+0.12.0 - 2018-11-01
+--------------------------------------------------------------------
+
+    * Compute nodes now have a cc_config.xml file deployed, enabling
+      per-node BOINC configuration
+
+    * Improved messages in scripts
+
+
 0.11.0 - 2018-10-13
 --------------------------------------------------------------------
 

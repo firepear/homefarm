@@ -81,6 +81,19 @@ and:
 1. Run `'ansible-playbook compute-nodes-boinc.yml'` to build and start
    BOINC on the compute nodes, and to generate sample configs for all
    defined compute nodes.
+1. If you want to make BOINC configuration changes, edit the
+   `cc_[NODE_NAME].xml` file (in the `nodes` directory) for the node
+   you wish to change.
+     * This file is the standard BOINC `cc_config.xml` file, and will
+       have that name when installed on the compute node.
+     * Add whatever [BOINC config
+       directives](https://boinc.berkeley.edu/wiki/Client_configuration)
+       you would like
+     * If you want multiple nodes with identical configurations,
+       delete the config files for the duplicate nodes and make
+       symlinks to the desired config.
+1. If you made BOINC configuration changes, run `'ansible-playbook
+   compute-nodes-boinc.yml'` again
 1. Edit the node configs (in the `nodes` directory) to declare
    what BOINC projects you want each node to attach to.
      * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
@@ -156,6 +169,16 @@ To change the user a node is running a project as:
 * Update the user info and set the state to `active`
 * Re-run the playbook
 
+## Configuring BOINC
+
+Edit `nodes/cc_[NODE_NAME].xml` for any nodes you wish to modify.
+
+Make whatever [BOINC config
+directives](https://boinc.berkeley.edu/wiki/Client_configuration) you
+would like.
+
+Run `'ansible-playbook compute-nodes-boinc.yml'` again to push the
+changes out to the node(s).
 
 ## Bringing up a new node
 
