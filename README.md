@@ -139,8 +139,7 @@ a new version, then:
   ansible install will be updated
 * The compute nodes' OS packages and ansible install will be updated
 * BOINC will be rebuilt on the compute nodes, if needed
-* The compute nodes will restart
-* The control node will restart
+* The compute nodes will restart, then the control node will restart
 
 
 ## Adding/removing/modifying BOINC projects
