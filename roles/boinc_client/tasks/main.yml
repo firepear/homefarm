@@ -78,6 +78,7 @@
   when: boinc_built.changed
 
 - name: Copy cc_config to BOINC dir
+  become: true
   copy:
     src: ./nodes/cc_{{ inventory_hostname }}.xml
     dest: "{{ boinc_work_dir }}/cc_config.xml"
