@@ -1,6 +1,8 @@
 # homefarm
 Tools for deploying and managing a BOINC compute farm using Ansible, Raspbian, and Alpine Linux.
 
+_Homefarm is pre-release and many things are changing. It is not yet suitable for use._
+
 Homefarm makes a few assumptions:
 
 * You have a Raspberry Pi, to act as the control node.
