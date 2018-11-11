@@ -9,13 +9,17 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
     print("Homefarm. Change node settings and run the playbook instead.")
     sys.exit(0)
 
+if sys.argv[1] == "--status":
+    checkonly = True
+    sys.argv.pop(0)
+sys.argv.pop(0)
+
 # assign our arguments to variables:
 #   * the BOINC work directory
 #   * the URL of the project we're examining
 #   * the email address associated with the project
 #   * the password of the user for this project
 #   * the desired state of the project
-sys.argv.pop(0)
 boinc_dir, proj_url, proj_user, proj_mail, proj_passwd, proj_state = sys.argv
 
 # slurp the gui access key and shorten the boinccmd command
@@ -103,6 +107,9 @@ def state_attach(proj_url, proj_user, proj_email, proj_password):
 
 # collect current project state
 cstate = get_project_state(proj_url)
+if checkonly:
+    print(cstate)
+    sys.exit(0)
 
 # if we got a zero-length dict back, we're not attached to this
 # project. the only valid new states here are 'active', which will
