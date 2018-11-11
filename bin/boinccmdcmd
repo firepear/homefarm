@@ -9,6 +9,8 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
     print("Homefarm. Change node settings and run the playbook instead.")
     sys.exit(0)
 
+# handle --status check runs
+checkonly = False
 if sys.argv[1] == "--status":
     checkonly = True
     sys.argv.pop(0)
