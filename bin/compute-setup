@@ -7,7 +7,8 @@ if [[ "${1}" == "" ]]; then
     exit 1
 fi
 
-. ./bin/util.sh
+wget "${1}:8000/util.sh"
+. ./util.sh
 
 if [[ ! -e "./.firststage" ]]; then
     # update the system

@@ -45,6 +45,7 @@ sleep 1
 mkdir http
 cp /home/pi/.ssh/id_farmer.pub ./http
 ln -s /home/pi/homefarm/bin/compute-setup ./http
+ln -s /home/pi/homefarm/bin/util.sh ./http
 chown -R pi:pi http
 apt-get --yes install boinctui
 apt-get clean
