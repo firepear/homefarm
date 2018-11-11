@@ -61,5 +61,5 @@ sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/
 # add vsyscall to kernel boot parameters
 vsyscall_enable=$(grep -c vsyscall /boot/grub/grub.cfg)
 if [[ "${vsyscall_enable}" == "0" ]]; then
-    sed -i -E 's/^(\s+linux\s+.*)$/\1 vsyscall=emulate/' /boot/grub/grub.cfg
+    sed -i -E 's/^(\s+APPEND\s+.*)$/\1 vsyscall=emulate/' /boot/extlinux.conf
 fi
