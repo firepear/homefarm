@@ -14,9 +14,9 @@ shownotice "Welcome to homefarm control node setup"
 
 # update system and install extra pkgs
 shownotice "Updating system software"
-yes | pacman -Syu 
+yes | pacman -Syu
 shownotice "Installing pre-requisites"
-yes | pacman -S sudo darkhttpd go python python-pip boinctui
+yes | pacman -S --needed sudo darkhttpd go python python-pip boinctui
 # set up sudoers file
 echo "alarm	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
