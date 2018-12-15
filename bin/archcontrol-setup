@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2017-2019 Shawn Boyette <shawn@firepear.net>. All
+# rights reserved.  Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+set -e
+source ./bin/util.sh
+
+
+clear
+echo "Welcome to the Inkubator installer!"
+printdivider
+# TODO add warning about reading the docs first
+
+
+# update system and install extra pkgs
+shownotice "Updating system software"
+yes | pacman -Syu 
+shownotice "Installing pre-requisites"
+yes | pacman -S sudo darkhttpd go python python-pip boinctui
+# set up sudoers file
+echo "alarm	ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+
+# set TZ
+shownotice "Timezone configuration"
+echo <<EOF
+Please enter your timezone (e.g. America/Mexico_City). If you don't
+know your TZ, google 'list of tz database time zones' and refer to the
+resulting Wikipedia page.
+EOF
+until [[ "${TZ}" != "" ]]; do
+    TZ=$(gutcheck "Enter your TZ")
+    if [[ ! -e /usr/share/zoneinfo/${TZ} ]]; then
+        echo "That TZ doesn't exist! Please check your TZ string."
+        TZ=""
+    fi
+done
+rm -f /etc/localtime
+ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
+hwclock --systohc
+
+
+# set/gen locales
+shownotice "Locale configuration"
+USERLOCALE=$(gutcheck "Please enter the locale you wish to use" 'en_US.UTF-8')
+echo ${USERLOCALE} > /etc/locale.gen
+locale-gen
+echo "LANG=${USERLOCALE}" > /etc/locale.conf
+
+
+shownotice "Networking setup"
+# set hostname
+MACHNAME=$(gutcheck "Please enter the machine's hostname" "node00")
+echo ${MACHNAME} > /etc/hostname
+# networking setup
+if [[ $(affirmative "Configure a wired interface") ]]; then
+    USERIF=$(gutcheck "Which interface" "eth0")
+    USERADDR=$(gutcheck "${USERIF}'s address (e.g. 192.168.1.7/24)")
+    USERGW=$(gutcheck "${USERIF}'s gateway")
+    rm /etc/systemd/network/*
+    cat > /etc/systemd/network/25-wired.network <<EOF
+[Match]
+Name=${USERIF}}
+
+[Network]
+Address=${USERADDR}
+Gateway=${USERGW}
+EOF
+    systemctl enable systemd-networkd.service
+    # add machine to hostsfile
+    echo "127.0.0.1\t${MACHNAME}.localdomain\t${MACHNAME}" >> /etc/hosts
+fi
+# enable ntpd
+systemctl enable openntpd.service
+# enable sshd
+systemctl enable sshd.socket
+
+
+# install ansible
+shownotice "Installing ansible"
+pip3 install ansible
+
+# generate ssh key
+shownotice "Generating SSH configuration for Ansible"
+apt-get --yes install keychain
+ssh-keygen -t ed25519 -N "" -f id_farmer
+mkdir -p /home/alarm/.ssh
+mv id_farmer* /home/alarm/.ssh
+chown -R alarm:alarm /home/alarm/.ssh
+chmod 700 /home/alatm/.ssh
+cat <<EOF | tee -a /home/pi/.bashrc > /dev/null
+# set up easy ssh-agent for homefarm
+/usr/bin/keychain ~/.ssh/id_farmer
+source ~/.keychain/${HOSTNAME}-sh > /dev/null
+EOF
+
+
+# create local package cache dir and darkhttpd to serve it
+mkdir /var/cache/homefarm
+chown alarm:alarm /var/cache/homefarm
+cat > /etc/rc.local <<EOF
+#!/bin/bash
+/usr/bin/darkhttpd /var/cache/homefarm &
+EOF
+cat > /usr/lib/systemd/system/rc-local.service <<EOF
+[Unit]
+Description=/etc/rc.local compatibility
+
+[Service]
+Type=oneshot
+ExecStart=/etc/rc.local
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+chmod +x /etc/rc.local
+systemctl enable rc-local.service
+
+
+# setup dir for serving to compute nodes and do a tiny bit of
+# housekeeping
+shownotice "Finalizing controller setup..."
+cp /home/pi/.ssh/id_farmer.pub /var/cache/homefarm
+ln -s /home/pi/homefarm/bin/compute-setup /var/cache/homefarm
+ln -s /home/pi/homefarm/bin/util.sh /var/cache/homefarm
+# copy the example farm inventory file to the real one
+cp examples/farm.cfg farm.cfg
+chown alarm:alarm farm.cfg
+yes | pacman -Scc
+
+
+shownotice "Install complete"
+cat <<EOF
+Please run the command 'reboot', and login as user 'alarm' when the
+system is back up.
+
+Your control node will be ready for use.
+EOF
