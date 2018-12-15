@@ -35,8 +35,7 @@ gutcheck() {
             echo "${2}"
             return
         fi
-        echo -n "You entered '${GUTCHECK}'. Is this correct (y/n)? "
-        read -r ASKAGAIN
+        read -r -p "You entered '${GUTCHECK}'. Is this correct (y/n)? " ASKAGAIN
     done
     echo "${GUTCHECK}"
 }
