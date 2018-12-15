@@ -16,7 +16,7 @@ shownotice "Welcome to homefarm control node setup"
 shownotice "Updating system software"
 yes | pacman -Syu
 shownotice "Installing pre-requisites"
-yes | pacman -S --needed sudo darkhttpd go python python-pip boinctui openntpd
+yes | pacman -S --needed sudo darkhttpd go python python-pip boinctui openntpd gcc pkg-config make
 # set up sudoers file
 echo "alarm	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
