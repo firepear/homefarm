@@ -29,20 +29,16 @@ Coming soon.
 1. Image an SD card with [Arch Linux
    ARM](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3),
    and boot the Pi. Login as root.
-1. Login as rootand do any initial network/locale/etc configuration that you
-   wish. (Recommended: enable the ssh daemon via `raspi-config`.)
-   Reboot if necessary.
-1. Login as the default user and run `'sudo apt-get --yes install git'`
-1. Run `'git clone https://github.com/firepear/homefarm.git'`
-1. Run `'cd homefarm && sudo ./bin/control-setup'`. The Pi will
-   reboot after this script completes.
+1. Run `'pacman -S git'`
+1. Run `'cd /home/alarm && git clone https://github.com/firepear/homefarm.git'`
+1. Run `'cd homefarm && sudo ./bin/control-rpi-setup'`
 
 ## Set up the Ansible inventory
 
-1. Run `'cd ~/homefarm'`.
+1. Login as user `alarm` and un `'cd ~/homefarm'`.
 1. Edit `farm.cfg`:
      * Change `node00` in the `[controller]` stanza to match the name
-       you've given the controller (AKA your Raspberry Pi).
+       you've given the control node.
      * Change the names and IP addresses in the `[compute_nodes]`
        stanza to match the machines you'll be setting up as compute
        nodes.
