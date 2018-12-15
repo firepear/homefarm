@@ -37,7 +37,6 @@ until [[ "${TZ}" != "" ]]; do
 done
 rm -f /etc/localtime
 ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
-hwclock --systohc
 
 
 # set/gen locales
