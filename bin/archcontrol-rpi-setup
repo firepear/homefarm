@@ -16,7 +16,7 @@ shownotice "Welcome to homefarm control node setup"
 shownotice "Updating system software"
 yes | pacman -Syu
 shownotice "Installing pre-requisites"
-yes | pacman -S --needed sudo darkhttpd go python python-pip boinctui
+yes | pacman -S --needed sudo darkhttpd go python python-pip boinctui openntpd
 # set up sudoers file
 echo "alarm	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
@@ -50,10 +50,13 @@ shownotice "Networking setup"
 # set hostname
 MACHNAME=$(gutcheck "Please enter the machine's hostname" "node00")
 echo ${MACHNAME} > /etc/hostname
+echo
 # networking setup
 if [[ $(affirmative "Configure a wired interface") ]]; then
     USERIF=$(gutcheck "Which interface" "eth0")
+    echo
     USERADDR=$(gutcheck "${USERIF}'s address (e.g. 192.168.1.7/24)")
+    echo
     USERGW=$(gutcheck "${USERIF}'s gateway")
     rm /etc/systemd/network/*
     cat > /etc/systemd/network/25-wired.network <<EOF
