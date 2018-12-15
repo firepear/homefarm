@@ -28,7 +28,7 @@ gutcheck() {
     ASKAGAIN="n"
     while [[ ! "${ASKAGAIN^^}" =~ ^Y ]]
     do
-        read -r -p "${PROMPT}: " GUTCHECK
+        read -r -p "${PROMPT}" GUTCHECK
         # return the default if one was provided and the user just hit
         # enter
         if [[ "${2}" != "" ]] && [[ "${GUTCHECK}" == "" ]]; then

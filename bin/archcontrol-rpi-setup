@@ -23,7 +23,7 @@ echo "alarm	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 # set TZ
 shownotice "Timezone configuration"
-echo <<EOF
+cat <<EOF
 Please enter your timezone (e.g. America/Mexico_City). If you don't
 know your TZ, google 'list of tz database time zones' and refer to the
 resulting Wikipedia page.
