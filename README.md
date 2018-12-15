@@ -29,7 +29,6 @@ Coming soon.
 1. Image an SD card with [Arch Linux
    ARM](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3),
    and boot the Pi. Login as root.
-1. Run `'pacman -S git'`
 1. Run `'cd /home/alarm && git clone https://github.com/firepear/homefarm.git'`
 1. Run `'cd homefarm && sudo ./bin/control-rpi-setup'`
 
