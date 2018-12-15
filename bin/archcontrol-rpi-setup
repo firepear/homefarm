@@ -41,10 +41,9 @@ ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
 
 # set/gen locales
 shownotice "Locale configuration"
-USERLOCALE=$(gutcheck "Please enter the locale you wish to use" 'en_US.UTF-8')
+USERLOCALE=$(gutcheck "Please enter the locale you wish to use" 'en_US.UTF-8 UTF-8')
 echo ${USERLOCALE} > /etc/locale.gen
 locale-gen
-echo "LANG=${USERLOCALE}" > /etc/locale.conf
 
 
 shownotice "Networking setup"
