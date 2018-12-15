@@ -30,7 +30,7 @@ Coming soon.
    ARM](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3),
    and boot the Pi. Login as root.
 1. Run `'cd /home/alarm && git clone https://github.com/firepear/homefarm.git'`
-1. Run `'cd homefarm && sudo ./bin/control-rpi-setup'`
+1. Run `'cd homefarm && ./bin/control-rpi-setup'`
 
 ## Set up the Ansible inventory
 

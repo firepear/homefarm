@@ -11,7 +11,7 @@ shownotice () {
 affirmative() {
     RESPONSE=""
     read -r -p "${1} (y/N)? " RESPONSE
-    if [[ "${RESPONSE^^}" ~= ^Y ]]; then
+    if [[ "${RESPONSE^^}" =~ ^Y ]]; then
         echo 0
     else
         echo 1
@@ -26,7 +26,7 @@ gutcheck() {
     fi
 
     ASKAGAIN="n"
-    while [[ "${ASKAGAIN}^^" !~ ^Y ]]
+    while [[ ! "${ASKAGAIN^^}" =~ ^Y ]]
     do
         read -r -p "${PROMPT}: " GUTCHECK
         # return the default if one was provided and the user just hit
@@ -38,7 +38,7 @@ gutcheck() {
         echo -n "You entered '${GUTCHECK}'. Is this correct (y/n)? "
         read -r ASKAGAIN
     done
-    echo ${GUTCHECK}
+    echo "${GUTCHECK}"
 }
 
 terminate() {
@@ -50,12 +50,12 @@ terminate() {
 
 findmac() {
     IFACES=( $(ls /sys/class/net) )
-    for if in $IFACES
+    for if in ${IFACES}
     do
         if [[ ${if} != "lo" ]]; then
             IFNAME=${if}
         fi
     done
-    MAC=$( cat /sys/class/net/${IFNAME}/address )
+    MAC=$( cat /sys/class/net/"${IFNAME}"/address )
     echo "${IFNAME} ${MAC}"
 }
