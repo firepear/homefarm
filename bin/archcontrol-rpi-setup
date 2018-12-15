@@ -8,8 +8,7 @@ source ./bin/util.sh
 
 
 clear
-echo "Welcome to the Inkubator installer!"
-printdivider
+shownotice "Welcome to homefarm control node setup"
 # TODO add warning about reading the docs first
 
 
