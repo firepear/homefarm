@@ -83,7 +83,7 @@ pip3 install ansible
 
 # generate ssh key
 shownotice "Generating SSH configuration for Ansible"
-apt-get --yes install keychain
+yes | pacman -S keychain
 ssh-keygen -t ed25519 -N "" -f id_farmer
 mkdir -p /home/alarm/.ssh
 mv id_farmer* /home/alarm/.ssh
@@ -121,7 +121,7 @@ systemctl enable rc-local.service
 
 # setup dir for serving to compute nodes and do a tiny bit of
 # housekeeping
-shownotice "Finalizing controller setup..."
+shownotice "Finalizing control node setup"
 cp /home/pi/.ssh/id_farmer.pub /var/cache/homefarm
 ln -s /home/pi/homefarm/bin/compute-setup /var/cache/homefarm
 ln -s /home/pi/homefarm/bin/util.sh /var/cache/homefarm
@@ -131,10 +131,12 @@ chown alarm:alarm farm.cfg
 yes | pacman -Scc
 
 
-shownotice "Install complete"
+shownotice "Setup complete"
 cat <<EOF
+
 Please run the command 'reboot', and login as user 'alarm' when the
 system is back up.
 
 Your control node will be ready for use.
+
 EOF
