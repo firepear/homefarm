@@ -59,15 +59,20 @@ if [[ $(affirmative "Configure a wired interface") ]]; then
     USERADDR=$(gutcheck "${USERIF}'s address (e.g. 192.168.1.7/24)")
     echo
     USERGW=$(gutcheck "${USERIF}'s gateway")
+    echo
+    USERDNS=$(gutcheck "${USERIF}'s DNS entries" "8.8.4.4 8.8.8.8")
     rm /etc/systemd/network/*
-    cat > /etc/systemd/network/25-wired.network <<EOF
+    cat > /etc/systemd/network/20-wired.network <<EOF
 [Match]
-Name=${USERIF}}
+Name=${USERIF}
 
 [Network]
 Address=${USERADDR}
 Gateway=${USERGW}
 EOF
+    for dns in ${USERDNS}; do
+        echo "DNS=${dns}" >> /etc/systemd/network/20-wired.network
+    done
     systemctl enable systemd-networkd.service
     # add machine to hostsfile
     echo -e "127.0.0.1\t${MACHNAME}.localdomain\t${MACHNAME}" >> /etc/hosts
