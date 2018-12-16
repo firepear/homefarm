@@ -89,7 +89,7 @@ mkdir -p /home/alarm/.ssh
 mv id_farmer* /home/alarm/.ssh
 chown -R alarm:alarm /home/alarm/.ssh
 chmod 700 /home/alarm/.ssh
-cat <<EOF | tee -a /home/pi/.bashrc > /dev/null
+cat <<EOF | tee -a /home/alarm/.bashrc > /dev/null
 # set up easy ssh-agent for homefarm
 /usr/bin/keychain ~/.ssh/id_farmer
 source ~/.keychain/${HOSTNAME}-sh > /dev/null
@@ -122,9 +122,9 @@ systemctl enable rc-local.service
 # setup dir for serving to compute nodes and do a tiny bit of
 # housekeeping
 shownotice "Finalizing control node setup"
-cp /home/pi/.ssh/id_farmer.pub /var/cache/homefarm
-ln -s /home/pi/homefarm/bin/compute-setup /var/cache/homefarm
-ln -s /home/pi/homefarm/bin/util.sh /var/cache/homefarm
+cp /home/alarm/.ssh/id_farmer.pub /var/cache/homefarm
+ln -s /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
+ln -s /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
 # copy the example farm inventory file to the real one
 cp examples/farm.cfg farm.cfg
 chown alarm:alarm farm.cfg
@@ -133,7 +133,6 @@ yes | pacman -Scc
 
 shownotice "Setup complete"
 cat <<EOF
-
 Please run the command 'reboot', and login as user 'alarm' when the
 system is back up.
 
