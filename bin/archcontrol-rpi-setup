@@ -132,9 +132,9 @@ ln -fs /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
 # copy the example farm inventory file to the real one
 cp examples/farm.cfg farm.cfg
-chown alarm:alarm farm.cfg
 yes | pacman -Scc
-
+cd /home/alarm
+chown -R alarm:alarm ./homefarm
 
 shownotice "Setup complete"
 cat <<EOF
