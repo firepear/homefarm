@@ -128,8 +128,8 @@ systemctl enable rc-local.service
 # housekeeping
 shownotice "Finalizing control node setup"
 cp /home/alarm/.ssh/id_farmer.pub /var/cache/homefarm
-ln -s /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
-ln -s /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
+ln -fs /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
+ln -fs /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
 # copy the example farm inventory file to the real one
 cp examples/farm.cfg farm.cfg
 chown alarm:alarm farm.cfg
