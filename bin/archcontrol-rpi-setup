@@ -70,7 +70,7 @@ Gateway=${USERGW}
 EOF
     systemctl enable systemd-networkd.service
     # add machine to hostsfile
-    echo "127.0.0.1\t${MACHNAME}.localdomain\t${MACHNAME}" >> /etc/hosts
+    echo -e "127.0.0.1\t${MACHNAME}.localdomain\t${MACHNAME}" >> /etc/hosts
 fi
 # enable ntpd
 systemctl enable openntpd.service
