@@ -20,10 +20,6 @@ Homefarm makes a few assumptions:
 
 ## Control node install
 
-### Standard PC
-
-Coming soon.
-
 ### Raspberry Pi
 
 1. Image an SD card with [Arch Linux
@@ -31,6 +27,10 @@ Coming soon.
    and boot the Pi. Login as root.
 1. Run `'cd /home/alarm && git clone https://github.com/firepear/homefarm.git'`
 1. Run `'cd homefarm && ./bin/control-rpi-setup'`
+
+### Standard PC
+
+Coming soon.
 
 ## Set up the Ansible inventory
 
