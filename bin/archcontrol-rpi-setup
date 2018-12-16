@@ -92,7 +92,7 @@ chmod 700 /home/alarm/.ssh
 cat <<EOF | tee -a /home/alarm/.bashrc > /dev/null
 # set up easy ssh-agent for homefarm
 /usr/bin/keychain ~/.ssh/id_farmer
-source ~/.keychain/${HOSTNAME}-sh > /dev/null
+source ~/.keychain/${MACHNAME}-sh > /dev/null
 EOF
 
 
