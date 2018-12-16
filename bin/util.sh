@@ -22,7 +22,7 @@ gutcheck() {
     if [[ "${2}" = "" ]]; then
         PROMPT="${1}: "
     else
-        PROMPT="${1} (default is '${2})': "
+        PROMPT="${1} (default is '${2}'): "
     fi
 
     ASKAGAIN="n"

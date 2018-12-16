@@ -27,6 +27,7 @@ cat <<EOF
 Please enter your timezone (e.g. America/Mexico_City). If you don't
 know your TZ, google 'list of tz database time zones' and refer to the
 resulting Wikipedia page.
+
 EOF
 until [[ "${TZ}" != "" ]]; do
     TZ=$(gutcheck "Enter your TZ")
@@ -87,7 +88,7 @@ ssh-keygen -t ed25519 -N "" -f id_farmer
 mkdir -p /home/alarm/.ssh
 mv id_farmer* /home/alarm/.ssh
 chown -R alarm:alarm /home/alarm/.ssh
-chmod 700 /home/alatm/.ssh
+chmod 700 /home/alarm/.ssh
 cat <<EOF | tee -a /home/pi/.bashrc > /dev/null
 # set up easy ssh-agent for homefarm
 /usr/bin/keychain ~/.ssh/id_farmer
