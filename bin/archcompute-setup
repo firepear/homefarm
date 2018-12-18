@@ -22,14 +22,6 @@ USERIFACE="${2}"
 USERESSID="${3}"
 USERWPAPP="${4}"
 
-# test for EFI boot mode
-EFI=$(ls /sys/firmware/efi/efivars)
-RE="No such file"
-if [[ "${EFI}" =~ ${RE} ]]; then
-    echo "error: host is not booted in EFI mode."
-    exit 1
-fi
-
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
     curl --connect-timeout 10 -s -O "${1}/util.sh"
@@ -39,6 +31,8 @@ if [[ ! -e "util.sh" ]]; then
         exit 1
     fi
 fi
+# and source
+. ./util.sh
 
 
 # set TZ
@@ -65,16 +59,12 @@ shownotice "Drive configuration"
 echo "These are the available storage devices on this machine:"
 echo
 DRIVES=( $(ls /dev/sd?) )
-I=0
-for drive in $DRIVES
+for I in $(seq 0 ${#DRIVES})
 do
-    (( I = I + 1 ))
-    PARTMAP=( "${(@f)$(parted -m -s ${DRIVES[${I}]} print 2>/dev/null)}" )
-    if [[ "$?" != "0" ]]; then
-        continue
-    fi
-    echo "${I} - ${PARTMAP[2]}"
-    for j in $( seq 3 ${#PARTMAP} )
+    PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null)
+    readarray PARTMAP <<<"${PARTMAPRAW}"
+    echo "${I} - ${PARTMAP[1]}"
+    for j in $( seq 2 ${#PARTMAP} )
     do
         echo -e "\t${PARTMAP[${j}]}"
     done
