@@ -39,6 +39,67 @@ if [[ ! -e "util.sh" ]]; then
     fi
 fi
 
+
+# set TZ
+shownotice "Timezone configuration"
+cat <<EOF
+Please enter your timezone (e.g. America/Mexico_City). If you don't
+know your TZ, google 'list of tz database time zones' and refer to the
+resulting Wikipedia page.
+
+EOF
+until [[ "${TZ}" != "" ]]; do
+    TZ=$(gutcheck "Enter your TZ")
+    if [[ ! -e /usr/share/zoneinfo/${TZ} ]]; then
+        echo "That TZ doesn't exist! Please check your TZ string."
+        TZ=""
+    fi
+done
+rm -f /etc/localtime
+ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
+
+
+# setup drive
+shownotice "Drive configuration"
+echo "These are the available storage devices on this machine:"
+echo
+DRIVES=( $(ls /dev/sd?) )
+I=0
+for drive in $DRIVES
+do
+    (( I = ${I} + 1 ))
+    PARTMAP=( "${(@f)$(parted -m -s $DRIVES[${I}] print 2>/dev/null)}" )
+    if [[ "$?" != "0" ]]; then
+        continue
+    fi
+    echo "${I} - ${PARTMAP[2]}"
+    for j in $( seq 3 ${#PARTMAP} )
+    do
+        echo "\t${PARTMAP[${j}]}"
+    done
+done
+DRIVENUM=$(gutcheck "Enter the number of the device to be used")
+if [[ "${DRIVENUM}" = "" && ! ${+DRIVES[${DRIVENUM}]} ]]; then
+    echo "Sorry, '${DRIVENUM}' is not a valid option. Terminating install."
+    exit 1
+fi
+INSTALLDEVICE=${DRIVES[${DRIVENUM}]}
+echo
+echo "WARNING! Continuing beyond this point >>WILL<< result in data loss."
+if [[ ! affirmative "Continue" ]]; then
+    echo "exiting"
+    exit 1
+fi
+echo -n "ALL DATA ON ${INSTALLDEVICE} WILL BE WIPED! ARE YOU >>SURE<<"
+if [[ ! affirmative "Continue" ]]; then
+    echo "exiting"
+    exit 1
+fi
+
+echo "OK. Preparing ${INSTALLDEVICE}"
+
+
+
 # install preqs
 shownotice "Installing Ansible prerequisites..."
 apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl openssl-dev sudo shadow tar
