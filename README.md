@@ -34,7 +34,7 @@ Coming soon.
 
 ## Set up the Ansible inventory
 
-1. Login as user `alarm` and un `'cd ~/homefarm'`.
+1. Login as user `alarm` and run `'cd ~/homefarm'`.
 1. Edit `farm.cfg`:
      * Change `node00` in the `[controller]` stanza to match the name
        you've given the control node.
@@ -45,16 +45,8 @@ Coming soon.
 
 ## Compute node install
 
-Before installing a new compute node, login to the control node and
-run `'cd ~/homefarm && ./bin/serve-config'`. This will start a Python
-webserver to make available the `compute-setup` script and data needed
-by that script. When done with installs, terminate the server with
-`Ctrl-C`.
-
-For the compute node:
-
-1. Download [Alpine Linux
-   Standard](https://alpinelinux.org/downloads/) and install it.
+1. Download the [Arch Linux
+   installer](https://alpinelinux.org/downloads/) and boot it.
 1. Login after reboot
     * If you're on a wired connection, skip to step #3.
     * If you installed via WiFi, you'll likely be surprised to learn

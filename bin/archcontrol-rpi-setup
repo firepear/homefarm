@@ -102,7 +102,7 @@ EOF
 
 
 # create local package cache dir and darkhttpd to serve it
-mkdir -p /var/cache/homefarm
+mkdir -p /var/cache/homefarm/arch
 chown alarm:alarm /var/cache/homefarm
 cat > /etc/rc.local <<EOF
 #!/bin/bash

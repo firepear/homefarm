@@ -1,0 +1,72 @@
+#!/bin/bash
+set -e
+
+if [[ "${1}" == "" ]]; then
+    echo "error: no control node IP specified"
+    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
+    exit 1
+fi
+if [[ "${2}" == "" ]]; then
+    echo "error: no network interface specified for configuration"
+    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
+    exit 1
+fi
+if [[ "${3}" != "" ]] && [[ "${4}" == "" ]]; then
+    echo "error: ESSID specified without WPA passphrase"
+    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
+    exit 1
+fi
+
+CONTROLLER="${1}"
+USERIFACE="${2}"
+USERESSID="${3}"
+USERWPAPP="${4}"
+
+# test for EFI boot mode
+EFI=$(ls /sys/firmware/efi/efivars)
+if [[ "${EFI}" =~ No such file ]]; then
+    echo "error: host is not booted in EFI mode."
+    exit 1
+fi
+
+# fetch util funcs
+if [[ ! -e "util.sh" ]]; then
+    curl --connect-timeout 10 -s -O "${1}/util.sh"
+    if [[ "$?" != "0" ]]; then
+        echo "error: can't reach control node"
+        echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
+        exit 1
+    fi
+fi
+
+# install preqs
+shownotice "Installing Ansible prerequisites..."
+apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl openssl-dev sudo shadow tar
+# upgrade pip to avoid dep problems in ansible install
+pip3 instal --upgrade pip
+# we need a just plain "python" executable for ansible
+ln -f -s /usr/bin/python3 /usr/bin/python
+
+# install ansible
+shownotice "Installing Ansible..."
+sleep 1
+pip3 install ansible
+
+# create user, set passwd, config sudo access, and setup ssh keys
+shownotice "Creating user for Ansible..."
+sleep 1
+adduser -h /home/farmer -D farmer
+passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
+usermod -p "${passwd}" farmer
+echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
+mkdir -p /home/farmer/.ssh
+chmod 700 /home/farmer/.ssh
+wget "${1}:8000/id_farmer.pub" -O /home/farmer/.ssh/authorized_keys
+chown -R farmer:farmer /home/farmer/.ssh
+sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+
+# add vsyscall to kernel boot parameters
+#vsyscall_enable=$(grep -c vsyscall /boot/grub/grub.cfg)
+#if [[ "${vsyscall_enable}" == "0" ]]; then
+#    sed -i -E 's/^(\s+APPEND\s+.*)$/\1 vsyscall=emulate/' /boot/extlinux.conf
+#fi
