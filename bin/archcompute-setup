@@ -78,12 +78,12 @@ fi
 INSTALLDEVICE=${DRIVES[${DRIVENUM}]}
 echo
 echo "WARNING! Continuing beyond this point >>WILL<< result in data loss."
-if [[ ! $(affirmative "Continue") ]]; then
+if [[ $(affirmative "Continue") == "false" ]]; then
     echo "exiting"
     exit 1
 fi
 echo -n "ALL DATA ON ${INSTALLDEVICE} WILL BE WIPED! ARE YOU >>SURE<<"
-if [[ ! $(affirmative "Continue") ]]; then
+if [[ ! $(affirmative "Continue") == "false" ]]; then
     echo "exiting"
     exit 1
 fi
@@ -91,6 +91,10 @@ fi
 echo "OK. Preparing ${INSTALLDEVICE}"
 
 
+exit
+# everything above this should be split into an install
+# script. everything following should be the actual compute-setup
+# script.
 
 # install preqs
 shownotice "Installing Ansible prerequisites..."

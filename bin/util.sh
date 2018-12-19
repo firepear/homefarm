@@ -12,9 +12,9 @@ affirmative() {
     RESPONSE=""
     read -r -p "${1} (y/N)? " RESPONSE
     if [[ "${RESPONSE^^}" =~ ^Y ]]; then
-        echo 0
+        echo "true"
     else
-        echo 1
+        echo "false"
     fi
 }
 
