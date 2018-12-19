@@ -63,14 +63,15 @@ for I in $(seq 0 ${#DRIVES})
 do
     PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null)
     readarray PARTMAP <<<"${PARTMAPRAW}"
-    echo "${I} - ${PARTMAP[1]}"
-    for j in $( seq 2 ${#PARTMAP} )
+    echo -n "${I} - ${PARTMAP[1]}"
+    for J in $( seq 2 ${#PARTMAP} )
     do
-        echo -e "\t${PARTMAP[${j}]}"
+        echo -n -e "\t${PARTMAP[${J}]}"
     done
+    echo
 done
 DRIVENUM=$(gutcheck "Enter the number of the device to be used")
-if [[ "${DRIVENUM}" = "" && ! ${+DRIVES[${DRIVENUM}]} ]]; then
+if [[ "${DRIVENUM}" = "" ]] && [[ ! ${+DRIVES[${DRIVENUM}]} ]]; then
     echo "Sorry, '${DRIVENUM}' is not a valid option. Terminating install."
     exit 1
 fi
