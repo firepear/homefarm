@@ -56,15 +56,15 @@ ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
 
 # setup drive
 shownotice "Drive configuration"
-echo "These are the available storage devices on this machine:"
+echo "These are the storage devices on this machine:"
 echo
 DRIVES=( /dev/sd? )
-for I in $(seq 0 ${#DRIVES[@]})
+for I in $( seq 0 $((${#DRIVES[@]} - 1)) )
 do
     PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null)
     readarray PARTMAP <<<"${PARTMAPRAW}"
     echo -n "${I} - ${PARTMAP[1]}"
-    for J in $( seq 2 ${#PARTMAP} )
+    for J in $( seq 2 $(( ${#PARTMAP[@]} - 1 )) )
     do
         echo -n -e "\t${PARTMAP[${J}]}"
     done
