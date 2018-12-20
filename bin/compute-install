@@ -1,0 +1,118 @@
+#!/bin/bash
+set -e
+
+if [[ "${1}" == "" ]]; then
+    echo "error: no control node IP specified"
+    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
+    exit 1
+fi
+if [[ "${2}" == "" ]]; then
+    echo "error: no network interface specified for configuration"
+    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
+    exit 1
+fi
+if [[ "${3}" != "" ]] && [[ "${4}" == "" ]]; then
+    echo "error: ESSID specified without WPA passphrase"
+    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
+    exit 1
+fi
+
+CONTROLLER="${1}"
+USERIFACE="${2}"
+USERESSID="${3}"
+USERWPAPP="${4}"
+
+# fetch util funcs
+if [[ ! -e "util.sh" ]]; then
+    curl --connect-timeout 10 -s -O "${1}/util.sh"
+    if [[ "$?" != "0" ]]; then
+        echo "error: can't reach control node"
+        echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
+        exit 1
+    fi
+fi
+# and source
+. ./util.sh
+
+
+# set TZ
+shownotice "Timezone configuration"
+cat <<EOF
+Please enter your timezone (e.g. America/Mexico_City). If you don't
+know your TZ, google 'list of tz database time zones' and refer to the
+resulting Wikipedia page.
+
+EOF
+until [[ "${TZ}" != "" ]]; do
+    TZ=$(gutcheck "Enter your TZ")
+    if [[ ! -e /usr/share/zoneinfo/${TZ} ]]; then
+        echo "That TZ doesn't exist! Please check your TZ string."
+        TZ=""
+    fi
+done
+rm -f /etc/localtime
+ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
+
+
+# setup drive
+shownotice "Drive configuration"
+echo "These are the storage devices on this machine:"
+echo
+DRIVES=( /dev/sd? )
+for I in $( seq 0 $((${#DRIVES[@]} - 1)) )
+do
+    PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null)
+    readarray PARTMAP <<<"${PARTMAPRAW}"
+    echo -n "${I} - ${PARTMAP[1]}"
+    for J in $( seq 2 $(( ${#PARTMAP[@]} - 1 )) )
+    do
+        echo -n -e "\t${PARTMAP[${J}]}"
+    done
+    echo
+done
+DRIVENUM=$(gutcheck "Enter the number of the device to be used")
+if [[ "${DRIVENUM}" = "" ]] && [[ ! ${+DRIVES[${DRIVENUM}]} ]]; then
+    echo "Sorry, '${DRIVENUM}' is not a valid option. Terminating install."
+    exit 1
+fi
+INSTALLDEVICE=${DRIVES[${DRIVENUM}]}
+echo
+echo "WARNING! Continuing beyond this point >>WILL<< result in data loss."
+if [[ $(affirmative "Continue") == "false" ]]; then
+    echo "exiting"
+    exit 1
+fi
+echo -n "ALL DATA ON ${INSTALLDEVICE} WILL BE WIPED! ARE YOU >>SURE<<"
+if [[ ! $(affirmative "Continue") == "false" ]]; then
+    echo "exiting"
+    exit 1
+fi
+echo "OK. Preparing ${INSTALLDEVICE}"
+
+# lay down new disk label
+parted -s ${INSTALLDEVICE} mklabel gpt
+# create EFI partition if we saw one earlier
+parted -s -a none ${INSTALLDEVICE} mkpart ESP fat32 1MiB 513MiB
+parted -s ${INSTALLDEVICE} name 1 "esp"
+# lay down system partition
+parted -s -a optimal ${INSTALLDEVICE} mkpart primary ext4 513MiB 10.5GiB
+parted -s ${INSTALLDEVICE} name "root"
+echo -n "Settling partitions for 5 seconds... "
+sleep 2
+udevadm settle
+partx -u ${INSTALLDEVICE}
+sleep 3
+echo "OK"
+# format and mount partitions
+mkfs.ext4 -F /dev/disk/by-partlabel/root
+mount /dev/disk/by-partlabel/ink-root /mnt
+mkdir /mnt/boot
+mkfs.fat -F32 /dev/disk/by-partlabel/esp
+mount /dev/disk/by-partlabel/ink-esp /mnt/boot
+
+
+exit
+# everything above this should be split into an install
+# script. everything following should be the actual compute-setup
+# script.
+

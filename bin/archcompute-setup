@@ -35,67 +35,6 @@ fi
 . ./util.sh
 
 
-# set TZ
-shownotice "Timezone configuration"
-cat <<EOF
-Please enter your timezone (e.g. America/Mexico_City). If you don't
-know your TZ, google 'list of tz database time zones' and refer to the
-resulting Wikipedia page.
-
-EOF
-until [[ "${TZ}" != "" ]]; do
-    TZ=$(gutcheck "Enter your TZ")
-    if [[ ! -e /usr/share/zoneinfo/${TZ} ]]; then
-        echo "That TZ doesn't exist! Please check your TZ string."
-        TZ=""
-    fi
-done
-rm -f /etc/localtime
-ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
-
-
-# setup drive
-shownotice "Drive configuration"
-echo "These are the storage devices on this machine:"
-echo
-DRIVES=( /dev/sd? )
-for I in $( seq 0 $((${#DRIVES[@]} - 1)) )
-do
-    PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null)
-    readarray PARTMAP <<<"${PARTMAPRAW}"
-    echo -n "${I} - ${PARTMAP[1]}"
-    for J in $( seq 2 $(( ${#PARTMAP[@]} - 1 )) )
-    do
-        echo -n -e "\t${PARTMAP[${J}]}"
-    done
-    echo
-done
-DRIVENUM=$(gutcheck "Enter the number of the device to be used")
-if [[ "${DRIVENUM}" = "" ]] && [[ ! ${+DRIVES[${DRIVENUM}]} ]]; then
-    echo "Sorry, '${DRIVENUM}' is not a valid option. Terminating install."
-    exit 1
-fi
-INSTALLDEVICE=${DRIVES[${DRIVENUM}]}
-echo
-echo "WARNING! Continuing beyond this point >>WILL<< result in data loss."
-if [[ $(affirmative "Continue") == "false" ]]; then
-    echo "exiting"
-    exit 1
-fi
-echo -n "ALL DATA ON ${INSTALLDEVICE} WILL BE WIPED! ARE YOU >>SURE<<"
-if [[ ! $(affirmative "Continue") == "false" ]]; then
-    echo "exiting"
-    exit 1
-fi
-
-echo "OK. Preparing ${INSTALLDEVICE}"
-
-
-exit
-# everything above this should be split into an install
-# script. everything following should be the actual compute-setup
-# script.
-
 # install preqs
 shownotice "Installing Ansible prerequisites..."
 apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl openssl-dev sudo shadow tar
