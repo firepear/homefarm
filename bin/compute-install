@@ -77,13 +77,8 @@ if [[ "${DRIVENUM}" = "" ]] && [[ ! ${+DRIVES[${DRIVENUM}]} ]]; then
 fi
 INSTALLDEVICE=${DRIVES[${DRIVENUM}]}
 echo
-echo "Continuing beyond this point will result in data loss."
-if [[ $(affirmative "Continue") == "false" ]]; then
-    echo "exiting"
-    exit 1
-fi
-echo -n "All data on ${INSTALLDEVICE} will be wiped."
-if [[ ! $(affirmative "Are you sure") == "false" ]]; then
+echo "All data on ${INSTALLDEVICE} will be wiped."
+if [[ $(affirmative "Are you sure") == "false" ]]; then
     echo "exiting"
     exit 1
 fi
