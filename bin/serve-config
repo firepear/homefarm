@@ -1,5 +1,0 @@
-#!/bin/bash
-set -e
-
-cd http
-python3 -m http.server
