@@ -191,6 +191,6 @@ EOF2
 bootctl install
 EOF
 chmod +x /mnt/root/stage1.5
-#arch-chroot /mnt /root/stage1.5
+arch-chroot /mnt /root/stage1.5
 
 shownotice "Installation complete"

@@ -30,7 +30,11 @@ Homefarm makes a few assumptions:
 
 ### Standard PC
 
-Coming soon.
+Follow the steps for _Compute node install_. After install is complete, run:
+
+`pacman -S git boinctui`
+
+Now continue on to _Set up Ansible inventory_.
 
 ## Set up the Ansible inventory
 
