@@ -1,4 +1,7 @@
 ---
+- pause:
+  seconds: 5
+
 - name: Copy GUI auth file
   become: true
   command: cp {{ boinc_work_dir }}/gui_rpc_auth.cfg /home/farmer/{{ inventory_hostname }}_auth.cfg
