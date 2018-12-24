@@ -1,0 +1,9 @@
+[Unit]
+Description=boinc-client
+
+[Service]
+ExecStart=/usr/local/bin/boinc-client --pidfile={{ boinc_work_dir}}/boinc-client.pid --make-pidfile --background --user="boinc" --redirectio --allow_remote_gui_rpc --gui_rpc_port 31416 --dir {{ boinc_work_dir }}
+PIDFile={{ boinc_work_dir}}/boinc-client.pid
+
+[Install]
+WantedBy=multi-user.target

@@ -4,7 +4,7 @@
 - name: Install BOINC dependencies
   become: true
   pacman:
-    name: ['libtool', 'automake', 'libcurl', 'curl-dev', 'g++']
+    name: ['libtool', 'automake', 'g++']
     update_cache: yes
 
 - name: Check installed BOINC version
@@ -87,14 +87,14 @@
     mode: 0644
   notify: Restart BOINC
 
-- name: Install improved BOINC init script
+- name: Install BOINC service file
   become: true
   template:
-    src: boinc-client.j2
-    dest: /usr/local/etc/init.d/boinc-client
+    src: boinc-client.service.j2
+    dest: /etc/systemd/system/boinc-client.service
     owner: root
     group: root
-    mode: 0755
+    mode: 0664
   register: boinc_init
   notify: Restart BOINC
 
