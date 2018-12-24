@@ -98,7 +98,7 @@
   register: boinc_init
   notify: Restart BOINC
 
-- name: Enable BOINC in openrc
+- name: Enable BOINC
   become: true
   service:
     name: boinc-client
