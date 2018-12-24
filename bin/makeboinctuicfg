@@ -15,7 +15,7 @@ try:
     # try to source an existing config. if it works, this will give us
     # our parsed XML as a tree, and then we'll grab the root element
     # which is our configuration document.
-    tree = ET.parse("/home/pi/.boinctui.cfg")
+    tree = ET.parse("/home/alarm/.boinctui.cfg")
     cfg = tree.getroot()
 except:
     # if that doesn't work, create a bare configuration from a string,
@@ -41,7 +41,7 @@ for node in sys.argv:
     # ditto, commas
     node = node.rstrip(',')
     # scp to the node and grab its gui auth keyfile
-    subprocess.run(['scp', '-i', '/home/pi/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
+    subprocess.run(['scp', '-i', '/home/alarm/.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
     # cat the local copy of the keyfile, storing the contents in the variable 'key'
     key = subprocess.run(["/bin/cat", "{}_auth.cfg".format(node)], stdout=subprocess.PIPE).stdout
     # create a new <server> element
@@ -65,7 +65,7 @@ for node in sys.argv:
     subprocess.run(['rm', '{}_auth.cfg'.format(node)])
 
 # finally, write our parsed tree back to disk
-tree.write("/home/pi/.boinctui.cfg")
+tree.write("/home/alarm/.boinctui.cfg")
 
 
 #<boinctui_cfg>
