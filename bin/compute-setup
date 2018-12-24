@@ -2,64 +2,54 @@
 set -e
 
 if [[ "${1}" == "" ]]; then
-    echo "error: no control IP specified"
-    echo "Usage is: ${0} [CONTROL_NODE_IP]"
+    echo "error: no control node IP specified"
+    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
     exit 1
 fi
 
+CONTROLLER="${1}"
+
+# fetch util funcs
 if [[ ! -e "util.sh" ]]; then
-    wget "${1}:8000/util.sh"
+    curl --connect-timeout 10 -s -O "${CONTROLLER}/util.sh"
+    if [[ "$?" != "0" ]]; then
+        echo "error: can't reach control node"
+        echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
+        exit 1
+    fi
 fi
+# and source
 . ./util.sh
 
-if [[ ! -e "./.firststage" ]]; then
-    # update the system
-    shownotice "Updating system software..."
-    sleep 1
-    # switch to rolling release
-    apk add sed
-    sed -i -e 's/v[[:digit:]]\.[[:digit:]]/edge/g' /etc/apk/repositories
-    # enable community repo
-    sed -i -E '0,/community/{s:#(.*)/edge/community:\1/edge/community:}' /etc/apk/repositories
-    apk upgrade --update-cache --available
-    touch "./.firststage"
-    shownotice "Update complete. Rebooting in 5 seconds..."
-    sleep 5
-    sync
-    reboot
-    exit 0
-fi
 
 # install preqs
-shownotice "Continuing setup!"
-shownotice "Installing Ansible prerequisites..."
-sleep 1
-apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl openssl-dev sudo shadow tar
+shownotice "Installing Ansible prerequisites"
+pacman -S --needed python python-pip linux-headers gcc make autoconf libffi openssl sudo tar
 # upgrade pip to avoid dep problems in ansible install
-pip3 instal --upgrade pip
+pip3 install --upgrade pip
 # we need a just plain "python" executable for ansible
 ln -f -s /usr/bin/python3 /usr/bin/python
 
 # install ansible
-shownotice "Installing Ansible..."
+shownotice "Installing Ansible"
 sleep 1
 pip3 install ansible
 
 # create user, set passwd, config sudo access, and setup ssh keys
-shownotice "Creating user for Ansible..."
+shownotice "Creating user for Ansible"
 sleep 1
-adduser -h /home/farmer -D farmer
+useradd -d /home/farmer -m -s /bin/bash farmer
 passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
 usermod -p "${passwd}" farmer
 echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
 mkdir -p /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
-wget "${1}:8000/id_farmer.pub" -O /home/farmer/.ssh/authorized_keys
+curl -o /home/farmer/.ssh/authorized_keys "${CONTROLLER}/id_farmer.pub"
 chown -R farmer:farmer /home/farmer/.ssh
 sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # add vsyscall to kernel boot parameters
-vsyscall_enable=$(grep -c vsyscall /boot/grub/grub.cfg)
-if [[ "${vsyscall_enable}" == "0" ]]; then
-    sed -i -E 's/^(\s+APPEND\s+.*)$/\1 vsyscall=emulate/' /boot/extlinux.conf
-fi
+#vsyscall_enable=$(grep -c vsyscall /boot/grub/grub.cfg)
+#if [[ "${vsyscall_enable}" == "0" ]]; then
+#    sed -i -E 's/^(\s+APPEND\s+.*)$/\1 vsyscall=emulate/' /boot/extlinux.conf
+#fi

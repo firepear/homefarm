@@ -1,55 +1,147 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Copyright (c) 2017-2019 Shawn Boyette <shawn@firepear.net>. All
+# rights reserved.  Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
 set -e
-. ./bin/util.sh
+source ./bin/util.sh
 
-# copy the example farm inventory file to the real one
-cp examples/farm.cfg farm.cfg
-chown pi:pi farm.cfg
 
-# update the system
-shownotice "Updating system software..."
-sleep 1
-apt-get update
-apt-get --yes dist-upgrade
+clear
+shownotice "Welcome to homefarm control node setup"
+# TODO add warning about reading the docs first
 
-# install pip
-shownotice "Installing pip (the Python package manager)..."
-sleep 1
-apt-get --yes install python3-pip
+
+# update system and install extra pkgs
+shownotice "Updating system software"
+yes | pacman -Syu
+shownotice "Installing pre-requisites"
+yes | pacman -S --needed sudo darkhttpd go python python-pip boinctui openntpd gcc pkg-config make keychain
+# set up sudoers file
+echo "alarm	ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+
+# set TZ
+shownotice "Timezone configuration"
+cat <<EOF
+Please enter your timezone (e.g. America/Mexico_City). If you don't
+know your TZ, google 'list of tz database time zones' and refer to the
+resulting Wikipedia page.
+
+EOF
+until [[ "${TZ}" != "" ]]; do
+    TZ=$(gutcheck "Enter your TZ")
+    if [[ ! -e /usr/share/zoneinfo/${TZ} ]]; then
+        echo "That TZ doesn't exist! Please check your TZ string."
+        TZ=""
+    fi
+done
+rm -f /etc/localtime
+ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
+
+
+# set/gen locales
+shownotice "Locale configuration"
+USERLOCALE=$(gutcheck "Please enter the locale you wish to use" 'en_US.UTF-8 UTF-8')
+echo ${USERLOCALE} > /etc/locale.gen
+locale-gen
+
+
+shownotice "Networking setup"
+# set hostname
+MACHNAME=$(gutcheck "Please enter the machine's hostname" "node00")
+echo ${MACHNAME} > /etc/hostname
+echo
+# networking setup
+if [[ $(affirmative "Configure a wired interface") ]]; then
+    USERIF=$(gutcheck "Which interface" "eth0")
+    echo
+    USERADDR=$(gutcheck "${USERIF}'s address (e.g. 192.168.1.7/24)")
+    echo
+    USERGW=$(gutcheck "${USERIF}'s gateway")
+    echo
+    USERDNS=$(gutcheck "${USERIF}'s DNS entries" "8.8.4.4 8.8.8.8")
+    rm /etc/systemd/network/*
+    cat > /etc/systemd/network/20-wired.network <<EOF
+[Match]
+Name=${USERIF}
+
+[Network]
+Address=${USERADDR}
+Gateway=${USERGW}
+EOF
+    for dns in ${USERDNS}; do
+        echo "DNS=${dns}" >> /etc/systemd/network/20-wired.network
+    done
+    systemctl enable systemd-networkd.service
+    # add machine to hostsfile
+    echo -e "127.0.0.1\t${MACHNAME}.localdomain\t${MACHNAME}" >> /etc/hosts
+fi
+# enable ntpd
+systemctl enable openntpd.service
+# enable sshd
+systemctl enable sshd.socket
+
 
 # install ansible
-shownotice "Installing ansible..."
-sleep 1
+shownotice "Installing ansible"
 pip3 install ansible
 
 # generate ssh key
-shownotice "Generating SSH configuration for Ansible..."
-sleep 1
-apt-get --yes install keychain
+shownotice "Generating SSH configuration for Ansible"
 ssh-keygen -t ed25519 -N "" -f id_farmer
-mkdir -p /home/pi/.ssh
-mv id_farmer* /home/pi/.ssh
-chown -R pi:pi /home/pi/.ssh
-chmod 700 /home/pi/.ssh
-cat <<EOF | tee -a /home/pi/.bashrc > /dev/null
-
+mkdir -p /home/alarm/.ssh
+mv id_farmer* /home/alarm/.ssh
+chown -R alarm:alarm /home/alarm/.ssh
+chmod 700 /home/alarm/.ssh
+cat <<EOF | tee -a /home/alarm/.bashrc > /dev/null
 # set up easy ssh-agent for homefarm
 /usr/bin/keychain ~/.ssh/id_farmer
-source ~/.keychain/${HOSTNAME}-sh > /dev/null
+source ~/.keychain/${MACHNAME}-sh > /dev/null
 EOF
+
+
+# create local package cache dir and darkhttpd to serve it
+mkdir -p /var/cache/homefarm/arch
+chown alarm:alarm /var/cache/homefarm
+cat > /etc/rc.local <<EOF
+#!/bin/bash
+/usr/bin/darkhttpd /var/cache/homefarm &
+EOF
+cat > /usr/lib/systemd/system/rc-local.service <<EOF
+[Unit]
+Description=/etc/rc.local compatibility
+
+[Service]
+Type=oneshot
+ExecStart=/etc/rc.local
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+chmod +x /etc/rc.local
+systemctl enable rc-local.service
+
 
 # setup dir for serving to compute nodes and do a tiny bit of
 # housekeeping
-shownotice "Finalizing controller setup..."
-sleep 1
-mkdir http
-cp /home/pi/.ssh/id_farmer.pub ./http
-ln -s /home/pi/homefarm/bin/compute-setup ./http
-ln -s /home/pi/homefarm/bin/util.sh ./http
-chown -R pi:pi http
-apt-get --yes install boinctui
-apt-get clean
+shownotice "Finalizing control node setup"
+cp /home/alarm/.ssh/id_farmer.pub /var/cache/homefarm
+ln -fs /home/alarm/homefarm/bin/compute-install /var/cache/homefarm
+ln -fs /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
+ln -fs /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
+# copy the example farm inventory file to the real one
+cp examples/farm.cfg farm.cfg
+yes | pacman -Scc
+cd /home/alarm
+chown -R alarm:alarm ./homefarm
 
-shownotice "Setup complete. Rebooting in 5 seconds!"
-sleep 5
-reboot
+shownotice "Setup complete"
+cat <<EOF
+Please run the command 'reboot', and login as user 'alarm' when the
+system is back up.
+
+Your control node will be ready for use.
+
+EOF
