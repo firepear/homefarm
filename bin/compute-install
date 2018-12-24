@@ -89,6 +89,9 @@ parted -s ${INSTALLDEVICE} mklabel gpt
 # create EFI partition if we saw one earlier
 parted -s -a none ${INSTALLDEVICE} mkpart ESP fat32 1MiB 513MiB
 parted -s ${INSTALLDEVICE} name 1 "esp"
+parted ${INSTALLDEVICE} set 1 boot on
+parted ${INSTALLDEVICE} set 1 esp on
+
 # lay down system partition
 parted -s -a optimal ${INSTALLDEVICE} mkpart primary ext4 513MiB 100%
 parted -s ${INSTALLDEVICE} name 2 "root"
