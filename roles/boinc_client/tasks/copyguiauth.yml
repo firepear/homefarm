@@ -2,7 +2,7 @@
 - name: Wait for authfile creation
   become: true
   wait_for:
-    path: {{ boinc_work_dir }}/gui_rpc_auth.cfg
+    path: "{{ boinc_work_dir }}/gui_rpc_auth.cfg"
     timeout: 10
 
 - name: Copy GUI auth file
