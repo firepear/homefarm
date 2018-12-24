@@ -108,7 +108,7 @@ mount /dev/disk/by-partlabel/esp /mnt/boot
 
 # install base preqs
 shownotice "Base install"
-pacstrap /mnt base
+pacstrap /mnt base openssh wpa_supplicant openntpd
 # generate /etc/fstab
 genfstab -L /mnt >> /mnt/etc/fstab
 # copy over resolf.conf so the system will have nameservice
@@ -140,12 +140,12 @@ shownotice "Networking setup"
 MACHNAME=\$(gutcheck "Please enter the machine's hostname" "node00")
 echo \${MACHNAME} > /etc/hostname
 echo
-USERADDR=\$(gutcheck "${USERIF}'s address (e.g. 192.168.1.7/24)")
+USERADDR=\$(gutcheck "\${USERIF}'s address (e.g. 192.168.1.7/24)")
 echo
-USERGW=\$(gutcheck "${USERIF}'s gateway")
+USERGW=\$(gutcheck "\${USERIF}'s gateway")
 echo
-USERDNS=\$(gutcheck "${USERIF}'s DNS entries" "8.8.4.4 8.8.8.8")
-rm /etc/systemd/network/*
+USERDNS=\$(gutcheck "\${USERIF}'s DNS entries" "8.8.4.4 8.8.8.8")
+rm -f /etc/systemd/network/*
 cat > /etc/systemd/network/20-wired.network <<EOF2
 [Match]
 Name=\${USERIF}
@@ -158,7 +158,8 @@ for dns in \${USERDNS}; do
     echo "DNS=\${dns}" >> /etc/systemd/network/20-wired.network
 done
 # if we have an essid, then all this needs to be wireless
-if [[ "\${USERESSID}" ! "" ]]; then
+if [[ "\${USERESSID}" != "" ]]; then
+    mkdir -p /etc/wpa_supplicant
     mv /etc/systemd/network/20-wired.network /etc/systemd/network/25-wireless.network
     /usr/bin/wpa_passphrase "\${USERESSID}" "\${USERWPAPW}" > /etc/wpa_supplicant/wpa_supplicant-\${USERIF}.conf
     systemctl enable wpa_supplicant@\${USERIF}.service
