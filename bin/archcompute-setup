@@ -23,7 +23,7 @@ fi
 
 
 # install preqs
-shownotice "Installing Ansible prerequisites..."
+shownotice "Installing Ansible prerequisites"
 pacman -S --needed python python-pip linux-headers gcc make autoconf libffi openssl sudo tar
 # upgrade pip to avoid dep problems in ansible install
 pip3 install --upgrade pip
@@ -31,14 +31,14 @@ pip3 install --upgrade pip
 ln -f -s /usr/bin/python3 /usr/bin/python
 
 # install ansible
-shownotice "Installing Ansible..."
+shownotice "Installing Ansible"
 sleep 1
 pip3 install ansible
 
 # create user, set passwd, config sudo access, and setup ssh keys
-shownotice "Creating user for Ansible..."
+shownotice "Creating user for Ansible"
 sleep 1
-adduser -h /home/farmer -D farmer
+useradd -d /home/farmer -m -s /bin/bash farmer
 passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
 usermod -p "${passwd}" farmer
 echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
