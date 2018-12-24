@@ -90,7 +90,7 @@ parted -s ${INSTALLDEVICE} mklabel gpt
 parted -s -a none ${INSTALLDEVICE} mkpart ESP fat32 1MiB 513MiB
 parted -s ${INSTALLDEVICE} name 1 "esp"
 # lay down system partition
-parted -s -a optimal ${INSTALLDEVICE} mkpart primary ext4 513MiB 10.5GiB
+parted -s -a optimal ${INSTALLDEVICE} mkpart primary ext4 513MiB 100%
 parted -s ${INSTALLDEVICE} name 2 "root"
 echo -n "Settling partitions for 5 seconds... "
 sleep 2
@@ -100,10 +100,10 @@ sleep 3
 echo "OK"
 # format and mount partitions
 mkfs.ext4 -F /dev/disk/by-partlabel/root
-mount /dev/disk/by-partlabel/ink-root /mnt
+mount /dev/disk/by-partlabel/root /mnt
 mkdir /mnt/boot
 mkfs.fat -F32 /dev/disk/by-partlabel/esp
-mount /dev/disk/by-partlabel/ink-esp /mnt/boot
+mount /dev/disk/by-partlabel/esp /mnt/boot
 
 
 # install base preqs
