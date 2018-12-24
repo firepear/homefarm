@@ -113,7 +113,7 @@ mount /dev/disk/by-partlabel/esp /mnt/boot
 shownotice "Base install"
 pacstrap /mnt base openssh wpa_supplicant openntpd
 # generate /etc/fstab
-genfstab -L /mnt >> /mnt/etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
 # copy over resolf.conf so the system will have nameservice
 rm -f /mnt/etc/resolv.conf
 cp /etc/resolv.conf /mnt/etc/resolv.conf
