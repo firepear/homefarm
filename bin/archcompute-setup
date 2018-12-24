@@ -44,7 +44,7 @@ usermod -p "${passwd}" farmer
 echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
 mkdir -p /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
-wget "${1}:8000/id_farmer.pub" -O /home/farmer/.ssh/authorized_keys
+curl -o /home/farmer/.ssh/authorized_keys "${CONTROLLER}/id_farmer.pub"
 chown -R farmer:farmer /home/farmer/.ssh
 sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
