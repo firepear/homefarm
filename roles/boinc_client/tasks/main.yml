@@ -4,7 +4,7 @@
 - name: Install BOINC dependencies
   become: true
   pacman:
-    name: ['libtool', 'automake']
+    name: ['libtool', 'automake', 'base-devel']
     update_cache: yes
 
 - name: Check installed BOINC version
