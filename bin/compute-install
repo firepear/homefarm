@@ -143,15 +143,15 @@ shownotice "Networking setup"
 MACHNAME=\$(gutcheck "Please enter the machine's hostname" "node00")
 echo \${MACHNAME} > /etc/hostname
 echo
-USERADDR=\$(gutcheck "\${USERIF}'s address (e.g. 192.168.1.7/24)")
+USERADDR=\$(gutcheck "\${USERIFACE}'s address (e.g. 192.168.1.7/24)")
 echo
-USERGW=\$(gutcheck "\${USERIF}'s gateway")
+USERGW=\$(gutcheck "\${USERIFACE}'s gateway")
 echo
-USERDNS=\$(gutcheck "\${USERIF}'s DNS entries" "8.8.4.4 8.8.8.8")
+USERDNS=\$(gutcheck "\${USERIFACE}'s DNS entries" "8.8.4.4 8.8.8.8")
 rm -f /etc/systemd/network/*
 cat > /etc/systemd/network/20-wired.network <<EOF2
 [Match]
-Name=\${USERIF}
+Name=\${USERIFACE}
 
 [Network]
 Address=\${USERADDR}
@@ -164,8 +164,8 @@ done
 if [[ "\${USERESSID}" != "" ]]; then
     mkdir -p /etc/wpa_supplicant
     mv /etc/systemd/network/20-wired.network /etc/systemd/network/25-wireless.network
-    /usr/bin/wpa_passphrase "\${USERESSID}" "\${USERWPAPW}" > /etc/wpa_supplicant/wpa_supplicant-\${USERIF}.conf
-    systemctl enable wpa_supplicant@\${USERIF}.service
+    /usr/bin/wpa_passphrase "\${USERESSID}" "\${USERWPAPW}" > /etc/wpa_supplicant/wpa_supplicant-\${USERIFACE}.conf
+    systemctl enable wpa_supplicant@\${USERIFACE}.service
 fi
 # turn on networking
 systemctl enable systemd-networkd.service
