@@ -91,7 +91,7 @@ parted -s -a none ${INSTALLDEVICE} mkpart ESP fat32 1MiB 513MiB
 parted -s ${INSTALLDEVICE} name 1 "esp"
 # lay down system partition
 parted -s -a optimal ${INSTALLDEVICE} mkpart primary ext4 513MiB 10.5GiB
-parted -s ${INSTALLDEVICE} name "root"
+parted -s ${INSTALLDEVICE} name 2 "root"
 echo -n "Settling partitions for 5 seconds... "
 sleep 2
 udevadm settle
