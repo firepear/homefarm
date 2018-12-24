@@ -20,7 +20,7 @@ fi
 CONTROLLER="${1}"
 USERIFACE="${2}"
 USERESSID="${3}"
-USERWPAPP="${4}"
+USERWPAPW="${4}"
 
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
@@ -119,10 +119,10 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 cat > /mnt/root/stage1.5 <<EOF
 #!/bin/bash
-CONTROLLER="${1}"
-USERIFACE="${2}"
-USERESSID="${3}"
-USERWPAPP="${4}"
+CONTROLLER="${CONTROLLER}"
+USERIFACE="${USERIFACE}"
+USERESSID="${USERESSID}"
+USERWPAPW="${USERWPAPW}"
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
     curl --connect-timeout 10 -s -O "\${CONTROLLER}/util.sh"
@@ -160,7 +160,7 @@ done
 # if we have an essid, then all this needs to be wireless
 if [[ "\${USERESSID}" ! "" ]]; then
     mv /etc/systemd/network/20-wired.network /etc/systemd/network/25-wireless.network
-    /usr/bin/wpa_passphrase "\${USERESSID}" "\${USERWPAPP}" > /etc/wpa_supplicant/wpa_supplicant-\${USERIF}.conf
+    /usr/bin/wpa_passphrase "\${USERESSID}" "\${USERWPAPW}" > /etc/wpa_supplicant/wpa_supplicant-\${USERIF}.conf
     systemctl enable wpa_supplicant@\${USERIF}.service
 fi
 # turn on networking
@@ -186,6 +186,7 @@ options        root=PARTUUID=\${PARTUUID} rw
 EOF2
 bootctl install
 EOF
-arch-chroot /mnt /root/stage1.5
+chmod +x /mnt/root/stage1.5
+#arch-chroot /mnt /root/stage1.5
 
 shownotice "Installation complete"
