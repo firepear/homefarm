@@ -3,7 +3,7 @@
 
 - name: Install BOINC dependencies
   become: true
-  apk:
+  pacman:
     name: ['libtool', 'automake', 'libcurl', 'curl-dev', 'g++']
     update_cache: yes
 
