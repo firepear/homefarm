@@ -37,7 +37,7 @@ fi
 
 # install preqs
 shownotice "Installing Ansible prerequisites..."
-apk add python3 python3-dev linux-headers musl-dev gcc make autoconf libffi libffi-dev openssl openssl-dev sudo shadow tar
+pacman -S python python-pip linux-headers gcc make autoconf libffi openssl sudo tar
 # upgrade pip to avoid dep problems in ansible install
 pip3 instal --upgrade pip
 # we need a just plain "python" executable for ansible

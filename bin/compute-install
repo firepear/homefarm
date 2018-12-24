@@ -77,13 +77,13 @@ if [[ "${DRIVENUM}" = "" ]] && [[ ! ${+DRIVES[${DRIVENUM}]} ]]; then
 fi
 INSTALLDEVICE=${DRIVES[${DRIVENUM}]}
 echo
-echo "WARNING! Continuing beyond this point >>WILL<< result in data loss."
+echo "Continuing beyond this point will result in data loss."
 if [[ $(affirmative "Continue") == "false" ]]; then
     echo "exiting"
     exit 1
 fi
-echo -n "ALL DATA ON ${INSTALLDEVICE} WILL BE WIPED! ARE YOU >>SURE<<"
-if [[ ! $(affirmative "Continue") == "false" ]]; then
+echo -n "All data on ${INSTALLDEVICE} will be wiped."
+if [[ ! $(affirmative "Are you sure") == "false" ]]; then
     echo "exiting"
     exit 1
 fi
@@ -111,8 +111,86 @@ mkfs.fat -F32 /dev/disk/by-partlabel/esp
 mount /dev/disk/by-partlabel/ink-esp /mnt/boot
 
 
-exit
-# everything above this should be split into an install
-# script. everything following should be the actual compute-setup
-# script.
+# install base preqs
+shownotice "Base install"
+pacstrap /mnt base
+# generate /etc/fstab
+genfstab -L /mnt >> /mnt/etc/fstab
+# copy over resolf.conf so the system will have nameservice
+rm -f /mnt/etc/resolv.conf
+cp /etc/resolv.conf /mnt/etc/resolv.conf
+# copy install mirrorlist to system
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
+cat > /mnt/root/stage1.5 <<EOF
+#!/bin/bash
+CONTROLLER="${1}"
+USERIFACE="${2}"
+USERESSID="${3}"
+USERWPAPP="${4}"
+# fetch util funcs
+if [[ ! -e "util.sh" ]]; then
+    curl --connect-timeout 10 -s -O "\${CONTROLLER}/util.sh"
+    if [[ "\$?" != "0" ]]; then
+        echo "error: can't reach control node"
+        echo "was given ip '\${CONTROLLER}' -- please double check and/or check network connectivity"
+        exit 1
+    fi
+fi
+# and source
+. ./util.sh
+
+shownotice "Networking setup"
+# set hostname
+MACHNAME=\$(gutcheck "Please enter the machine's hostname" "node00")
+echo \${MACHNAME} > /etc/hostname
+echo
+USERADDR=\$(gutcheck "${USERIF}'s address (e.g. 192.168.1.7/24)")
+echo
+USERGW=\$(gutcheck "${USERIF}'s gateway")
+echo
+USERDNS=\$(gutcheck "${USERIF}'s DNS entries" "8.8.4.4 8.8.8.8")
+rm /etc/systemd/network/*
+cat > /etc/systemd/network/20-wired.network <<EOF2
+[Match]
+Name=\${USERIF}
+
+[Network]
+Address=\${USERADDR}
+Gateway=\${USERGW}
+EOF2
+for dns in \${USERDNS}; do
+    echo "DNS=\${dns}" >> /etc/systemd/network/20-wired.network
+done
+# if we have an essid, then all this needs to be wireless
+if [[ "\${USERESSID}" ! "" ]]; then
+    mv /etc/systemd/network/20-wired.network /etc/systemd/network/25-wireless.network
+    /usr/bin/wpa_passphrase "\${USERESSID}" "\${USERWPAPP}" > /etc/wpa_supplicant/wpa_supplicant-\${USERIF}.conf
+    systemctl enable wpa_supplicant@\${USERIF}.service
+fi
+# turn on networking
+systemctl enable systemd-networkd.service
+# add machine to hostsfile
+echo -e "127.0.0.1\\t\${MACHNAME}.localdomain\\t\${MACHNAME}" >> /etc/hosts
+
+# enable ntpd
+systemctl enable openntpd.service
+
+# enable sshd
+systemctl enable sshd.socket
+
+# make the install device bootable via EFI
+shownotice "Finishing install"
+PARTUUID=\$(blkid -s PARTUUID -o value ${INSTALLDEVICE}2)
+mkdir -p /boot/loader/entries
+cat > /boot/loader/entries/arch.conf <<EOF2
+title          Arch Linux
+linux          /vmlinuz-linux
+initrd         /initramfs-linux.img
+options        root=PARTUUID=\${PARTUUID} rw
+EOF2
+bootctl install
+EOF
+arch-chroot /mnt /root/stage1.5
+
+shownotice "Installation complete"
