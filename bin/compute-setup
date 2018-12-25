@@ -44,10 +44,11 @@ usermod -p "${passwd}" farmer
 echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
 mkdir -p /home/farmer/.ssh
 chmod 700 /home/farmer/.ssh
-curl -o /home/farmer/.ssh/authorized_keys "${CONTROLLER}/id_farmer.pub"
+curl -s -o /home/farmer/.ssh/authorized_keys "${CONTROLLER}/id_farmer.pub"
 chown -R farmer:farmer /home/farmer/.ssh
 sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
+shownotice "Setting boot parameters"
 # add vsyscall to kernel boot parameters
 vsyscall_enable=$(grep -c vsyscall /boot/loader/entries/arch.conf)
 if [[ "${vsyscall_enable}" == "0" ]]; then
