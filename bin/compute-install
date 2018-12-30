@@ -61,7 +61,7 @@ echo
 DRIVES=( /dev/sd? )
 for I in $( seq 0 $((${#DRIVES[@]} - 1)) )
 do
-    PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null)
+    PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null) || true
     readarray PARTMAP <<<"${PARTMAPRAW}"
     echo -n "${I} - ${PARTMAP[1]}"
     for J in $( seq 2 $(( ${#PARTMAP[@]} - 1 )) )
