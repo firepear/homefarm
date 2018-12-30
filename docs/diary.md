@@ -36,3 +36,24 @@ The conversion isn't quite complete. The `update-farm` script needs a
 rewrite; moving to Arch brings some different assumptions. After that
 I think everything will be changed over and I'll overhaul the
 docs. Then 0.13.0 will be cut.
+
+
+## 2018-12-29
+
+Been sick most of the week. Reinstalled my personal laptop today,
+following an upgrade of the SSD. It's running Arch as well now, and
+the `compute-install` script did the heavy lifting.
+
+That resulted in a couple of bugfixes
+
+* The call to `parted` which gathered current partition maps would
+  fail if a device had no recognizable partition map
+* The `base-devel` group is now installed at pacstrap time
+
+and an idea
+
+* It's possible to use the existance of a wpa_supplicant configuration
+  file to obviate the need to supply ESSID and WPK to the installer
+  script
+
+Update script work will resume once I'm back to 100%.
