@@ -1,5 +1,11 @@
-0.13.0 - 2018-11-xx
+0.13.0 - 2019-01-xx
 --------------------------------------------------------------------
+
+    * Project migrated to Arch Linux
+
+    * GPGPU now possible under Homefarm
+
+    * Temperature sensors now work as expected on Ryzen CPUs
 
     * Multiple compute-setup fixes
 
