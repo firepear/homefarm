@@ -16,6 +16,7 @@ update_os() {
 }
 
 update_farm() {
+    shownotice "Updating homefarm, if necessary"
     # if we have a stored latest tag, read it in as current
     if [[ -e ./.current_tag ]]; then
         CURRENT_TAG=$(cat ./.current_tag)
@@ -68,9 +69,9 @@ cd ~/homefarm
 update_os
 update_farm "${2}"
 
-shownotice "rebooting compute nodes"
+shownotice "Rebooting compute nodes"
 for node in nodes/*yml; do
-    ssh "farmer@$(basename ${node} .yml)" 'sudo reboot'
+    ssh "farmer@$(basename ${node} .yml)" 'sudo reboot' || true
 done
 
 shownotice "Update complete; rebooting control node"
