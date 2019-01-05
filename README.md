@@ -1,40 +1,27 @@
 # homefarm
-Tools for deploying and managing a BOINC compute farm using Ansible, Raspbian, and Arch Linux.
-
-_Homefarm is pre-release and changing rapidly. You probably don't want to start using it right now. This notice will be removed when things calm down :)_
+Tools for deploying and managing a BOINC compute farm using Ansible and Arch Linux.
 
 Homefarm makes a few assumptions:
 
-* One machine capable of running Arch Linux, to act as the control
-  node.
+* A Raspberry Pi 3B/B+, to act as the control node.
 * One or more machines capable of running Arch Linux, to act as the
   compute nodes.
-* You are comfortable doing Linux installs. Homefarm takes care of
-  just about everything beyond the core install and network
-  configuration, but getting to that point is on you.
+* You are aware of your local network configuration, and have IPs to
+  assign to the nodes.
 * You're familiar with BOINC, projects, workunits, and so on.
-* You are on a private network, because an SSH key with no passphrase
-  will be generated for Ansible's use.
+* All nodes are on a private network, because an SSH key with no
+  passphrase will be generated for Ansible's use and the control
+  node's default passwords will be left in place.
 
 # Setting up your farm
 
 ## Control node install
-
-### Raspberry Pi
 
 1. Image an SD card with [Arch Linux
    ARM](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3),
    and boot the Pi. Login as root.
 1. Run `'cd /home/alarm && git clone https://github.com/firepear/homefarm.git'`
 1. Run `'cd homefarm && ./bin/control-rpi-setup'`
-
-### Standard PC
-
-Follow the steps for _Compute node install_. After install is complete, run:
-
-`pacman -S git boinctui`
-
-Now continue on to _Set up Ansible inventory_.
 
 ## Set up the Ansible inventory
 
@@ -51,23 +38,14 @@ Now continue on to _Set up Ansible inventory_.
 
 1. Download the [Arch Linux
    installer](https://alpinelinux.org/downloads/) and boot it.
-1. Login after reboot
-    * If you're on a wired connection, skip to step #3.
-    * If you installed via WiFi, you'll likely be surprised to learn
-      that it was not permanently enabled by the installer. Your
-      configuration is still there though. Run
-      `'/etc/init.d/wpa_supplicant start'` to bring up the networking
-      for this boot.
-    * Then run `'rc-update add wpa_supplicant boot'` to enable WiFi
-      for all future boots.
-1. Run `'wget [CONTROL_NODE_IP]:8000/compute-setup'` to fetch the
+1. Run `'curl -O [CONTROL_NODE_IP]/compute-setup'` to fetch the
    compute node setup script from your control node.
-1. Run `'sh ./compute-setup [CONTROL_NODE_IP]'`. This first run will
-   update to Alpine's rolling release distro, and then reboot to
-   ensure all libraries are up to date.
-1. Log back after reboot and re-run `'sh ./compute-setup
-   [CONTROL_NODE_IP]'` to complete bootstrapping.
-1. Reboot a final time..
+1. Run `'sh ./compute-setup [CONTROL_NODE_IP] [IFACE] ([ESSID] [WPA_PASSWD])'`
+    * `IFACE` is the interface you wish to set up during the install
+    * `ESSID` is the (optional) wireless network you with to connect to
+    * `WPA_PASSWD` is the (optional) WPA passphrase for network `ESSID`
+1. Answer the questions the installer asks.
+1. Reboot to complete the install.
 
 At this point the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
@@ -114,7 +92,8 @@ projects, and start crunching workunits!
 
 # Managing the farm
 
-All commands are assumed to be run as user `pi` from `~/homefarm`
+All commands are to be run on the control node, as user `alarm`, from
+`/home/alarm/homefarm`
 
 ## Farm status
 
@@ -130,17 +109,15 @@ and the workunits being handled by those nodes.
 
 ## Keeping the farm up to date
 
-Run `'./bin/update-farm'`
+Run `'./bin/update'`
 
-This script will check github to find the current version of
-homefarm. If you are up-to-date, no action will be taken.  If there is
-a new version, then:
+This script will update the OS packages on all nodes, and check github
+to find the current version of homefarm.
 
-* The control node's clone of the homefarm repo, OS packages, and
-  ansible install will be updated
-* The compute nodes' OS packages and ansible install will be updated
-* BOINC will be rebuilt on the compute nodes, if needed
-* The compute nodes will restart, then the control node will restart
+If any changes are made, all nodes will be rebooted after updates are complete.
+
+Since Arch is a rolling-release distro, it is recommended to run
+`update` at least once a week.
 
 
 ## Adding/removing/modifying BOINC projects
