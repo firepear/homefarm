@@ -62,7 +62,6 @@ fi
 MODE="${1}"
 
 # cd to homefarm and source util funcs
-cd ~/homefarm
 . ./bin/util.sh
 
 update_os
