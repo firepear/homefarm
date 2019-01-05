@@ -1,6 +1,8 @@
 # homefarm
 Tools for deploying and managing a BOINC compute farm using Ansible and Arch Linux.
 
+If you have a pre-v0.13 Homefarm install, please see the [upgrade doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
+
 Homefarm makes a few assumptions:
 
 * A Raspberry Pi 3B/B+, to act as the control node.
@@ -38,18 +40,19 @@ Homefarm makes a few assumptions:
 
 1. Download the [Arch Linux
    installer](https://alpinelinux.org/downloads/) and boot it.
-1. Run `'curl -O [CONTROL_NODE_IP]/compute-setup'` to fetch the
-   compute node setup script from your control node.
-1. Run `'sh ./compute-setup [CONTROL_NODE_IP] [IFACE] ([ESSID] [WPA_PASSWD])'`
+1. Run `'curl -O CONTROL_NODE_IP/compute-install'` to fetch the
+   compute node install script from your control node.
+1. Run `'/bin/bash ./compute-setup CONTROL_NODE_IP IFACE [ESSID WPA_PASSWD]'`
     * `IFACE` is the interface you wish to set up during the install
     * `ESSID` is the (optional) wireless network you with to connect to
     * `WPA_PASSWD` is the (optional) WPA passphrase for network `ESSID`
 1. Answer the questions the installer asks.
-1. Reboot to complete the install.
+1. Reboot, login, and run `'curl -O CONTROL_NODE_IP/compute-setup'`.
+1. Run `'/bin/bash compute-setup CONTROL_NODE_IP'` to complete setup.
 
 At this point the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
-running `'ansible -m ping [NODE_NAME]'` from the control node.
+running `'ansible -m ping NODE_NAME'` from the control node.
 
 
 ## Build and initialize BOINC on the farm
