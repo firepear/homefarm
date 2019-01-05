@@ -4,8 +4,8 @@
   tasks:
   - name: Upgrade system software
     become: true
-    apk:
-      available: yes
+    pacman:
+      update-cache: yes
       upgrade: yes
   #- name: Install additional software
   #  apk:
