@@ -3,7 +3,8 @@ set -e
 
 update_os() {
     shownotice "Updating the control node"
-    yes | sudo pacman -Syu
+    UPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
+    yes | sudo pacman -Syu > /dev/null
     # this is where we add new packages, when we discover we need them
 
     shownotice "Updating ansible (if needed)"
@@ -69,10 +70,11 @@ cd ~/homefarm
 update_os
 update_farm "${2}"
 
-shownotice "Rebooting compute nodes"
-for node in nodes/*yml; do
-    ssh "farmer@$(basename ${node} .yml)" 'sudo reboot' || true
-done
+echo "${UPDATES}"
+#shownotice "Rebooting compute nodes"
+#for node in nodes/*yml; do
+#    ssh "farmer@$(basename ${node} .yml)" 'sudo reboot' || true
+#done
 
-shownotice "Update complete; rebooting control node"
-sudo reboot
+#shownotice "Update complete; rebooting control node"
+#sudo reboot
