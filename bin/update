@@ -30,7 +30,7 @@ update_farm() {
             return
         else
             # otherwise proceed with upgrade
-            shownotice "there is a new release: ${NEWEST_TAG}"
+            shownotice "There is a new release: ${NEWEST_TAG}"
         fi
     else
         shownotice "Forcing update"
@@ -62,6 +62,7 @@ fi
 MODE="${1}"
 
 # cd to homefarm and source util funcs
+cd ~/homefarm
 . ./bin/util.sh
 
 update_os
