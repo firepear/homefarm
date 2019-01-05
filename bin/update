@@ -19,7 +19,6 @@ update_os() {
 }
 
 update_farm() {
-    shownotice "Updating homefarm, if necessary"
     # if we have a stored latest tag, read it in as current
     if [[ -e ./.current_tag ]]; then
         CURRENT_TAG=$(cat ./.current_tag)
@@ -34,7 +33,7 @@ update_farm() {
             return
         else
             # otherwise proceed with upgrade
-            shownotice "There is a new release: ${NEWEST_TAG}"
+            shownotice "New Homefarm release: ${NEWEST_TAG}"
             UPDATES=1
         fi
     else
