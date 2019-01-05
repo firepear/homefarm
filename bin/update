@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+UPDATES=0
+
 update_os() {
     shownotice "Updating the control node"
     UPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
@@ -33,6 +35,7 @@ update_farm() {
         else
             # otherwise proceed with upgrade
             shownotice "There is a new release: ${NEWEST_TAG}"
+            UPDATES=1
         fi
     else
         shownotice "Forcing update"
@@ -70,11 +73,14 @@ cd ~/homefarm
 update_os
 update_farm "${2}"
 
-echo "${UPDATES}"
-#shownotice "Rebooting compute nodes"
-#for node in nodes/*yml; do
-#    ssh "farmer@$(basename ${node} .yml)" 'sudo reboot' || true
-#done
+if [[ "${UPDATES}" -gt "0" ]]; then
+    shownotice "Rebooting compute nodes"
+    for node in nodes/*yml; do
+        ssh "farmer@$(basename ${node} .yml)" 'sudo reboot' || true
+    done
 
-#shownotice "Update complete; rebooting control node"
-#sudo reboot
+    shownotice "Update complete; rebooting control node"
+    sudo reboot
+else
+    shownotice "Update complete; no upgrades performed"
+fi
