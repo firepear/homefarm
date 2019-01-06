@@ -43,14 +43,14 @@ ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
 # set/gen locales
 shownotice "Locale configuration"
 USERLOCALE=$(gutcheck "Please enter the locale you wish to use" 'en_US.UTF-8 UTF-8')
-echo ${USERLOCALE} > /etc/locale.gen
+echo "${USERLOCALE}" > /etc/locale.gen
 locale-gen
 
 
 shownotice "Networking setup"
 # set hostname
 MACHNAME=$(gutcheck "Please enter the machine's hostname" "node00")
-echo ${MACHNAME} > /etc/hostname
+echo "${MACHNAME}" > /etc/hostname
 echo
 # networking setup
 if [[ $(affirmative "Configure a wired interface") ]]; then

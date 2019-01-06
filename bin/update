@@ -63,8 +63,6 @@ EOF
     exit 0
 fi
 
-MODE="${1}"
-
 # cd to homefarm and source util funcs
 cd ~/homefarm
 . ./bin/util.sh
@@ -75,7 +73,7 @@ update_farm "${2}"
 if [[ "${UPDATES}" -gt "0" ]]; then
     shownotice "Rebooting compute nodes"
     for node in nodes/*yml; do
-        ssh "farmer@$(basename ${node} .yml)" 'sudo reboot' || true
+        ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
     done
 
     shownotice "Update complete; rebooting control node"

@@ -1,3 +1,4 @@
+#!/bin/bash
 shownotice () {
     charcount=$(( 79 - ${#1} ))
     echo
@@ -48,8 +49,8 @@ terminate() {
 }
 
 findmac() {
-    IFACES=( $(ls /sys/class/net) )
-    for if in ${IFACES}
+    IFACES=( ls /sys/class/net )
+    for if in ${IFACES[*]}
     do
         if [[ ${if} != "lo" ]]; then
             IFNAME=${if}
