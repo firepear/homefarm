@@ -57,3 +57,29 @@ and an idea
   script
 
 Update script work will resume once I'm back to 100%.
+
+
+## 2019-01-06
+
+Wrapped up the Arch work yesterday and pushed v0.13.0 out the
+door. Then, late last night, tagged v0.13.1 because I made so many
+tweaks in the hours following. I should really let things sit for a
+bit before tagging releases.
+
+Used a couple of useful ansible commands to play around with some
+stuff. Got lm_sensors on all my machines after adding it to the
+`pacstrap` list with
+
+`ansible compute_nodes --become -m pacman -a "name=lm_sensors state=present"`
+
+And then checked temps on everything with
+
+`ansible compute_nodes -a "/usr/bin/sensors"`
+
+...but I have better plans for that sort of thing. That's for
+post-v1.0 though.
+
+Speaking of v1.0, I've declared issues #1, #9, and #12 the blockers
+for that release. I want to get to work on local repositories, but
+making the BOINC logs rotate is a much lower-hanging piece of fruit,
+so I'll do that next.
