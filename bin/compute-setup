@@ -3,7 +3,7 @@ set -e
 
 if [[ "${1}" == "" ]]; then
     echo "error: no control node IP specified"
-    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
+    echo "Usage is: ${0} CONTROL_NODE_IP"
     exit 1
 fi
 
@@ -12,11 +12,6 @@ CONTROLLER="${1}"
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
     curl --connect-timeout 10 -s -O "${CONTROLLER}/util.sh"
-    if [[ "$?" != "0" ]]; then
-        echo "error: can't reach control node"
-        echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
-        exit 1
-    fi
 fi
 # and source
 . ./util.sh

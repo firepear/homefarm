@@ -24,8 +24,7 @@ USERWPAPW="${4}"
 
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
-    curl --connect-timeout 10 -s -O "${1}/util.sh"
-    if [[ "$?" != "0" ]]; then
+    if ! curl --connect-timeout 10 -s -O "${1}/util.sh"; then
         echo "error: can't reach control node"
         echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
         exit 1
@@ -85,20 +84,20 @@ fi
 echo "OK. Preparing ${INSTALLDEVICE}"
 
 # lay down new disk label
-parted -s ${INSTALLDEVICE} mklabel gpt
+parted -s "${INSTALLDEVICE} mklabel gpt
 # create EFI partition if we saw one earlier
-parted -s -a none ${INSTALLDEVICE} mkpart ESP fat32 1MiB 513MiB
-parted -s ${INSTALLDEVICE} name 1 "esp"
-parted ${INSTALLDEVICE} set 1 boot on
-parted ${INSTALLDEVICE} set 1 esp on
+parted -s -a none ${INSTALLDEVICE}" mkpart ESP fat32 1MiB 513MiB
+parted -s "${INSTALLDEVICE}" name 1 "esp"
+parted "${INSTALLDEVICE}" set 1 boot on
+parted "${INSTALLDEVICE}" set 1 esp on
 
 # lay down system partition
-parted -s -a optimal ${INSTALLDEVICE} mkpart primary ext4 513MiB 100%
-parted -s ${INSTALLDEVICE} name 2 "root"
+parted -s -a optimal "${INSTALLDEVICE}" mkpart primary ext4 513MiB 100%
+parted -s "${INSTALLDEVICE}" name 2 "root"
 echo -n "Settling partitions for 5 seconds... "
 sleep 2
 udevadm settle
-partx -u ${INSTALLDEVICE}
+partx -u "${INSTALLDEVICE}"
 sleep 3
 echo "OK"
 # format and mount partitions
@@ -122,6 +121,7 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 cat > /mnt/root/stage1.5 <<EOF
 #!/bin/bash
+set -e
 CONTROLLER="${CONTROLLER}"
 USERIFACE="${USERIFACE}"
 USERESSID="${USERESSID}"
@@ -129,11 +129,6 @@ USERWPAPW="${USERWPAPW}"
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
     curl --connect-timeout 10 -s -O "\${CONTROLLER}/util.sh"
-    if [[ "\$?" != "0" ]]; then
-        echo "error: can't reach control node"
-        echo "was given ip '\${CONTROLLER}' -- please double check and/or check network connectivity"
-        exit 1
-    fi
 fi
 # and source
 . ./util.sh
@@ -189,6 +184,9 @@ initrd         /initramfs-linux.img
 options        root=PARTUUID=\${PARTUUID} rw
 EOF2
 bootctl install
+shownotice "Beginning compute node setup"
+#curl --connect-timeout 10 -s -O "\${CONTROLLER}/compute-setup"
+#/bin/bash ./compute-setup
 EOF
 chmod +x /mnt/root/stage1.5
 arch-chroot /mnt /root/stage1.5
