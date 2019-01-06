@@ -27,7 +27,7 @@ Once setup is done, copy the backed-up `farm.cfg` and `nodes`
 directory into the `homefarm` directory. Your cluster configuration
 will be ready to go.
 
-# Reinstall compute nodes
+## Reinstall compute nodes
 
 No changes here. Reinstall each node, as per the main README, and it
 will end up with its original configuration and projects.
