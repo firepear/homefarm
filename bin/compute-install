@@ -111,7 +111,7 @@ mount /dev/disk/by-partlabel/esp /mnt/boot
 
 # install base preqs
 shownotice "Base install"
-pacstrap /mnt base openssh wpa_supplicant openntpd base-devel
+pacstrap /mnt base openssh wpa_supplicant openntpd base-devel lm_sensors
 # generate /etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 # copy over resolf.conf so the system will have nameservice
