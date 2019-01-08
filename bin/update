@@ -16,17 +16,14 @@ update_repo() {
         # if tags match, do nothing
         shownotice "Homefarm is up to date: ${NEWEST_TAG}"
         return
-    else
-        # otherwise proceed with upgrade
-        shownotice "New Homefarm release: ${NEWEST_TAG}"
     fi
 
+    shownotice "New Homefarm release: ${NEWEST_TAG}"
     git pull
 
-    # we made it down here, so cache the new tag name
-    if [[ "${1}" != "--force" ]]; then
-        echo "${NEWEST_TAG}" > ./.current_tag
-    fi
+    # cache the new tag name and set repo update flag
+    echo "${NEWEST_TAG}" > ./.current_tag
+    touch ./.repoupdate
 
     shownotice "Repo updated; restarting update"
     echo; echo; echo
@@ -55,8 +52,12 @@ update_os() {
 }
 
 update_boinc() {
-    shownotice "Updating BOINC on compute nodes"
-    ansible-playbook compute-nodes-boinc.yml
+    # if repo update flag file exists, update BOINC and clear the flag
+    if [[ -e ./.repoupdate ]]; then
+        shownotice "Updating BOINC on compute nodes"
+        ansible-playbook compute-nodes-boinc.yml
+        rm ./.repoupdate
+    fi
 }
 
 
