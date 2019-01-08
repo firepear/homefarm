@@ -90,5 +90,5 @@ if [[ "${CONUPDATES}" -gt "0" ]]; then
     shownotice "Update complete; rebooting control node"
     sudo reboot
 else
-    shownotice "Update complete"
+    shownotice "Everything is up to date"
 fi
