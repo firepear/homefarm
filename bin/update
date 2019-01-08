@@ -21,7 +21,6 @@ update_repo() {
         shownotice "New Homefarm release: ${NEWEST_TAG}"
     fi
 
-    shownotice "Updating the homefarm repo"
     git pull
 
     # we made it down here, so cache the new tag name
@@ -30,6 +29,7 @@ update_repo() {
     fi
 
     shownotice "Repo updated; restarting update"
+    echo; echo; echo
     exec "${1}"
 }
 
