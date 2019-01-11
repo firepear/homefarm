@@ -31,17 +31,17 @@ update_repo() {
 }
 
 update_os() {
-    shownotice "Checking for control node updates"
+    shownotice "Checking for control node OS updates"
     CONUPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
-        shownotice "Updating the control node"
+        shownotice "Updating control node OS packages"
         yes | sudo pacman -Syu > /dev/null
 
         shownotice "Updating ansible (if needed)"
         sudo pip3 install ansible --upgrade
     fi
 
-    shownotice "Checking for compute node updates"
+    shownotice "Checking for compute node OS updates"
     NODES=( ./nodes/*yml )
     NODE=$(basename "${NODES[0]}" .yml)
     COMUPDATES=$(ssh "farmer@${NODE}" 'sudo pacman -Sy > /dev/null && pacman -Qu | wc -l')
