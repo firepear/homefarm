@@ -47,15 +47,13 @@ Homefarm makes a few assumptions:
     * `ESSID` is the (optional) wireless network you with to connect to
     * `WPA_PASSWD` is the (optional) WPA passphrase for network `ESSID`
 1. Answer the questions the installer asks.
-1. Reboot, login, and run `'curl -O CONTROL_NODE_IP/compute-setup'`.
-1. Run `'/bin/bash compute-setup CONTROL_NODE_IP'` to complete setup.
 
-At this point the compute node is ready for Ansible to take over its
+After install, the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
 running `'ansible -m ping NODE_NAME'` from the control node.
 
 
-## Build and initialize BOINC on the farm
+## Build and initialize BOINC on the node
 
 When all compute nodes have been installed, return to the control node
 and:
@@ -74,8 +72,6 @@ and:
      * If you want multiple nodes with identical configurations,
        delete the config files for the duplicate nodes and make
        symlinks to the desired config.
-1. If you made BOINC configuration changes, run `'ansible-playbook
-   compute-nodes-boinc.yml'` again
 1. Edit the node configs (in the `nodes` directory) to declare
    what BOINC projects you want each node to attach to.
      * Edit the placeholder `PROJ_URL`, `PROJ_EMAIL_ADDR`, and
