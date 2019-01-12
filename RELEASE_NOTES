@@ -1,7 +1,7 @@
 0.14.0 - 2019-01-12
 --------------------------------------------------------------------
 
-    * Installer improvements
+    * Installer fixes and improvements
 
     * lm_sensors now auto-configured on install
 
