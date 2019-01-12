@@ -41,21 +41,21 @@ gutcheck() {
     echo "${GUTCHECK}"
 }
 
-terminate() {
-    echo
-    echo "${1}. Terminating install."
-    echo
-    exit 1
-}
+#terminate() {
+#    echo
+#    echo "${1}. Terminating install."
+#    echo
+#    exit 1
+#}
 
-findmac() {
-    IFACES=( ls /sys/class/net )
-    for if in ${IFACES[*]}
-    do
-        if [[ ${if} != "lo" ]]; then
-            IFNAME=${if}
-        fi
-    done
-    MAC=$( cat /sys/class/net/"${IFNAME}"/address )
-    echo "${IFNAME} ${MAC}"
-}
+#findmac() {
+#    IFACES=( ls /sys/class/net )
+#    for if in ${IFACES[*]}
+#    do
+#        if [[ ${if} != "lo" ]]; then
+#            IFNAME=${if}
+#        fi
+#    done
+#    MAC=$( cat /sys/class/net/"${IFNAME}"/address )
+#    echo "${IFNAME} ${MAC}"
+#}

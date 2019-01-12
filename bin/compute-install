@@ -34,6 +34,20 @@ fi
 . ./util.sh
 
 
+shownotice "Hardware clock check"
+cat <<EOF
+First, the system time (hardware clock) needs to be set to
+UTC. The present time, according to the system clock, is: 
+
+EOF
+$(date '+$F $T')
+UTC=affirmative("Is this correct")
+if [[ "${UTC}" == "false" ]]; then
+    echo "Please reboot and set the hardware clock."
+    echo
+    exit 1
+fi
+
 # set TZ
 shownotice "Timezone configuration"
 cat <<EOF
@@ -49,9 +63,8 @@ until [[ "${TZ}" != "" ]]; do
         TZ=""
     fi
 done
-rm -f /etc/localtime
-ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
-
+timedatectl set-timezone "${TZ}"
+hwclock --systohc
 
 # setup drive
 shownotice "Drive configuration"
@@ -185,10 +198,12 @@ options        root=PARTUUID=\${PARTUUID} rw
 EOF2
 bootctl install
 shownotice "Beginning compute node setup"
-#curl --connect-timeout 10 -s -O "\${CONTROLLER}/compute-setup"
-#/bin/bash ./compute-setup
+curl --connect-timeout 10 -s -O "\${CONTROLLER}/compute-setup"
+/bin/bash ./compute-setup
 EOF
 chmod +x /mnt/root/stage1.5
 arch-chroot /mnt /root/stage1.5
 
 shownotice "Installation complete"
+echo "Please reboot now and continue the setup process via ansible."
+echo

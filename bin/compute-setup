@@ -43,6 +43,9 @@ curl -s -o /home/farmer/.ssh/authorized_keys "${CONTROLLER}/id_farmer.pub"
 chown -R farmer:farmer /home/farmer/.ssh
 sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
+shownotice "Configuring sensors"
+/usr/bin/sensors-detect --auto
+
 shownotice "Setting boot parameters"
 # add vsyscall to kernel boot parameters
 vsyscall_enable=$(grep -c vsyscall /boot/loader/entries/arch.conf)
