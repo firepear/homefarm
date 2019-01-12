@@ -1,21 +1,8 @@
 #!/bin/bash
 set -e
 
-if [[ "${1}" == "" ]]; then
-    echo "error: no control node IP specified"
-    echo "Usage is: ${0} CONTROL_NODE_IP"
-    exit 1
-fi
-
-CONTROLLER="${1}"
-
-# fetch util funcs
-if [[ ! -e "util.sh" ]]; then
-    curl --connect-timeout 10 -s -O "${CONTROLLER}/util.sh"
-fi
-# and source
+# source util funcs
 . ./util.sh
-
 
 # install preqs
 shownotice "Installing Ansible prerequisites"
@@ -27,7 +14,6 @@ ln -f -s /usr/bin/python3 /usr/bin/python
 
 # install ansible
 shownotice "Installing Ansible"
-sleep 1
 pip3 install ansible
 
 # create user, set passwd, config sudo access, and setup ssh keys

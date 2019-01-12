@@ -7,6 +7,7 @@ shownotice () {
     done
     echo " ${1}"
     echo
+    sleep 1
 }
 
 affirmative() {
