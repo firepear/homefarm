@@ -120,7 +120,7 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 # copy wpa configuration if we have it
 if [[ -e "${WPACONF}" ]]; then
     mkdir -p /mnt/etc/wpa_supplicant
-    cp "${WPACONF}" /mnt/"${WPACONF}"
+    cp "${WPACONF}" "/mnt/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
 fi
 
 cat > /mnt/root/stage1 <<EOF
@@ -201,6 +201,10 @@ systemctl enable openntpd.service
 # enable sshd
 systemctl enable sshd.socket
 
+# initial locale setup
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+locale-gen > /dev/null
+
 # make the install device bootable via EFI
 shownotice "Finishing install"
 PARTUUID=\$(blkid -s PARTUUID -o value ${INSTALLDEVICE}2)
@@ -214,11 +218,10 @@ EOF2
 bootctl install
 shownotice "Beginning compute node setup"
 curl --connect-timeout 10 -s -O "\${CONTROLLER}/compute-setup"
-/bin/bash ./compute-setup "${CONTROLLER}"
 EOF
 chmod +x /mnt/root/stage1
 arch-chroot /mnt /root/stage1
-rm /mnt/root/*
+rm /mnt/root/stage1
 
 shownotice "Installation complete"
 echo "Rebooting in 10 seconds."

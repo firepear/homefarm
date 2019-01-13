@@ -13,6 +13,7 @@ CONTROLLER="${1}"
 . ./util.sh
 
 # install preqs
+shownotice "Homefarm setup beginning"
 shownotice "Installing Ansible prerequisites"
 yes | pacman -S --needed python python-pip linux-headers gcc make autoconf libffi openssl sudo tar
 # upgrade pip to avoid dep problems in ansible install
@@ -45,3 +46,9 @@ vsyscall_enable=$(grep -c vsyscall /boot/loader/entries/arch.conf)
 if [[ "${vsyscall_enable}" == "0" ]]; then
     sed -i -E 's/^(options\s+.*)$/\1 vsyscall=emulate/' /boot/loader/entries/arch.conf
 fi
+
+shownotice "Setup complete"
+echo "Rebooting in 10 seconds."
+sync
+sleep 10
+reboot
