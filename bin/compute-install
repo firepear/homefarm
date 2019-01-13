@@ -132,7 +132,7 @@ CONTROLLER="${CONTROLLER}"
 USERIFACE="${USERIFACE}"
 USERESSID="${USERESSID}"
 USERWPAPW="${USERWPAPW}"
-WPACONF="${WPACONF}"
+WPACONF="etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
 
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
@@ -216,7 +216,6 @@ initrd         /initramfs-linux.img
 options        root=PARTUUID=\${PARTUUID} rw
 EOF2
 bootctl install
-shownotice "Beginning compute node setup"
 curl --connect-timeout 10 -s -O "\${CONTROLLER}/compute-setup"
 curl --connect-timeout 10 -s -O "\${CONTROLLER}/id_farmer.pub"
 EOF
