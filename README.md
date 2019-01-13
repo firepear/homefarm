@@ -57,10 +57,11 @@ Homefarm makes a few assumptions:
    compute node install script from your control node.
 1. Run `'/bin/bash ./compute-setup CONTROL_NODE_IP IFACE [ESSID WPA_PASSWD]'`
     * `IFACE` is the interface you wish to set up during the install
-    * `ESSID` is the (optional) wireless network you with to connect to
-    * `WPA_PASSWD` is the (optional) WPA passphrase for network `ESSID`
-    * `ESSID` and `WPA_PASSWD` are not needed if you followed the
-      above procedure and the supplicant configuration file exists.
+    * `ESSID` is the wireless network you with to connect to
+    * `WPA_PASSWD` is the WPA passphrase for network `ESSID`
+    * `ESSID` and `WPA_PASSWD` are not needed if you are using a wired
+      connection, or if you followed the above procedure for WiFi
+      configuration.
 1. Answer the questions the installer asks. It will handle the rest!
 
 After the installer reboots, login as root and run
