@@ -42,7 +42,7 @@ Homefarm makes a few assumptions:
    installer](https://alpinelinux.org/downloads/) and boot it.
 1. If the node uses wifi, bring it up with the following commands:
     1. `ip addr` to find the wireless interface (it will probably
-       begin with `wlp`
+       begin with `wlp`).
     1. `wpa_passphrase ESSID WPA_PASSWD > /etc/wpa_supplicant/w.conf`
        to generate a wpa_supplicant configuration file. This should
        work unless you have a very interesting WiFi setup (and in that

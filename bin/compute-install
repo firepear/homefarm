@@ -126,11 +126,14 @@ fi
 cat > /mnt/root/stage1 <<EOF
 #!/bin/bash
 set -e
+cd /root
+
 CONTROLLER="${CONTROLLER}"
 USERIFACE="${USERIFACE}"
 USERESSID="${USERESSID}"
 USERWPAPW="${USERWPAPW}"
 WPACONF="${WPACONF}"
+
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
     curl --connect-timeout 10 -s -O "\${CONTROLLER}/util.sh"
@@ -211,11 +214,11 @@ EOF2
 bootctl install
 shownotice "Beginning compute node setup"
 curl --connect-timeout 10 -s -O "\${CONTROLLER}/compute-setup"
-/bin/bash ./compute-setup
+/bin/bash ./compute-setup "${CONTROLLER}"
 EOF
 chmod +x /mnt/root/stage1
 arch-chroot /mnt /root/stage1
-rm /mnt/root/stage1
+rm /mnt/root/*
 
 shownotice "Installation complete"
 echo "Rebooting in 10 seconds."

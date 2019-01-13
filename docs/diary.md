@@ -109,3 +109,12 @@ having that data available via sysfs.
 These changes are the basis of v0.14.0, which will be cut as soon as
 one of my nodes finishes all its current tasks so I can do a reinstall
 for testing.
+
+
+## 2019-01-13
+
+Decided to make one more back-burnered improvement before testing last
+night's installer changes: if the user follows the install
+instructions and uses the `wpa_supplicant` file named there when
+configuring their wireless, then they don't have to pass the `ESSID`
+and `WPA_PASSWD` to the installer script.
