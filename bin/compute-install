@@ -45,7 +45,7 @@ time, according to the system clock, is:
 
 EOF
 date '+%F %T'
-UTC=affirmative "Is this correct"
+UTC=$(affirmative "Is this correct")
 if [[ "${UTC}" == "false" ]]; then
     echo "Please reboot and set the hardware clock."
     echo
