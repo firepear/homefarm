@@ -83,3 +83,29 @@ Speaking of v1.0, I've declared issues #1, #9, and #12 the blockers
 for that release. I want to get to work on local repositories, but
 making the BOINC logs rotate is a much lower-hanging piece of fruit,
 so I'll do that next.
+
+
+## 2019-01-12
+
+Instead of proceeding with the aforementioned work, I randomly decided
+to make some improvements to the installer. Not really randomly -- I'd
+been thinking about them, but they weren't on an issue or anything.
+
+Anyway, the installer is better now, in some minor ways.
+
+* I imported the hardware clock check from the old inkubator installer.
+
+* I moved the TZ configuration so that it actually has an effect -- it
+  had been operating on the install environment, rather than the OS
+  being installed. Oops.
+
+* I made the setup script auto-configure lm_sensors
+
+I'm not actually interested in the `sensors` binary, but the modules
+which are enabled by configuring the lm_sensors package are what gets
+a lot of temperature and fan data into sysfs. And I am interested in
+having that data available via sysfs.
+
+These changes are the basis of v0.14.0, which will be cut as soon as
+one of my nodes finishes all its current tasks so I can do a reinstall
+for testing.
