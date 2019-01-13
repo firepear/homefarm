@@ -41,7 +41,6 @@ if [[ "${vsyscall_enable}" == "0" ]]; then
 fi
 
 shownotice "Setup complete"
-echo "Rebooting in 10 seconds."
-sync
-sleep 10
+echo "Rebooting in 5 seconds."
+sleep 5
 reboot

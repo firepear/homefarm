@@ -37,7 +37,8 @@ fi
 # and source
 . ./util.sh
 
-
+clear
+shownotice "Beginning Homefarm/Arch install"
 shownotice "Hardware clock check"
 cat <<EOF
 The system time (hardware clock) needs to be set to UTC. The present
@@ -132,7 +133,7 @@ CONTROLLER="${CONTROLLER}"
 USERIFACE="${USERIFACE}"
 USERESSID="${USERESSID}"
 USERWPAPW="${USERWPAPW}"
-WPACONF="etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
+WPACONF="/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
 
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
@@ -183,11 +184,11 @@ for dns in \${USERDNS}; do
 done
 # if we have a wpa file or essid, then all this needs to be wireless
 if [[ -e "\${WPACONF}" ]] || [[ "\${USERESSID}" != "" ]]; then
-    mv /etc/systemd/network/20-wired.network /etc/systemd/network/25-wireless.network
     if [[ ! -e "\${WPACONF}" ]]; then
         mkdir -p /etc/wpa_supplicant
         /usr/bin/wpa_passphrase "\${USERESSID}" "\${USERWPAPW}" > /etc/wpa_supplicant/wpa_supplicant-\${USERIFACE}.conf
     fi
+    mv /etc/systemd/network/20-wired.network /etc/systemd/network/25-wireless.network
     systemctl enable wpa_supplicant@\${USERIFACE}.service
 fi
 # turn on networking
@@ -221,10 +222,10 @@ curl --connect-timeout 10 -s -O "\${CONTROLLER}/id_farmer.pub"
 EOF
 chmod +x /mnt/root/stage1
 arch-chroot /mnt /root/stage1
-rm /mnt/root/stage1
+umount /mnt/boot
+umount /mnt
 
 shownotice "Installation complete"
-echo "Rebooting in 10 seconds."
-sync
-sleep 10
+echo "Rebooting in 5 seconds."
+sleep 5
 reboot
