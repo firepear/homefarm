@@ -148,7 +148,7 @@ until [[ "\${TZ}" != "" ]]; do
         TZ=""
     fi
 done
-timedatectl set-timezone "\${TZ}"
+ln -sf "\${TZ}" /etc/localtime
 hwclock --systohc
 
 shownotice "Networking setup"
