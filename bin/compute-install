@@ -218,6 +218,7 @@ EOF2
 bootctl install
 shownotice "Beginning compute node setup"
 curl --connect-timeout 10 -s -O "\${CONTROLLER}/compute-setup"
+curl --connect-timeout 10 -s -O "\${CONTROLLER}/id_farmer.pub"
 EOF
 chmod +x /mnt/root/stage1
 arch-chroot /mnt /root/stage1

@@ -63,7 +63,12 @@ Homefarm makes a few assumptions:
       above procedure and the supplicant configuration file exists.
 1. Answer the questions the installer asks. It will handle the rest!
 
-After install, the compute node is ready for Ansible to take over its
+After the installer reboots, login as root and run
+
+`/bin/bash compute-setup`
+
+To complete the Homefarm-specific portions of installation. After
+this, the compute node is ready for Ansible to take over its
 configuration management. You can test that everything is working by
 running `'ansible -m ping NODE_NAME'` from the control node.
 
