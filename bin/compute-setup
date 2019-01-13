@@ -35,7 +35,7 @@ shownotice "Configuring sensors"
 
 shownotice "Setting boot parameters"
 # add vsyscall to kernel boot parameters
-vsyscall_enable=$(grep -c vsyscall /boot/loader/entries/arch.conf)
+vsyscall_enable=$(grep -c vsyscall /boot/loader/entries/arch.conf) || true
 if [[ "${vsyscall_enable}" == "0" ]]; then
     sed -i -E 's/^(options\s+.*)$/\1 vsyscall=emulate/' /boot/loader/entries/arch.conf
 fi
