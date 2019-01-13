@@ -83,9 +83,9 @@ fi
 echo "OK. Preparing ${INSTALLDEVICE}"
 
 # lay down new disk label
-parted -s "${INSTALLDEVICE} mklabel gpt
-# create EFI partition if we saw one earlier
-parted -s -a none ${INSTALLDEVICE}" mkpart ESP fat32 1MiB 513MiB
+parted -s "${INSTALLDEVICE}" mklabel gpt
+# make efi partition
+parted -s -a none "${INSTALLDEVICE}" mkpart ESP fat32 1MiB 513MiB
 parted -s "${INSTALLDEVICE}" name 1 "esp"
 parted "${INSTALLDEVICE}" set 1 boot on
 parted "${INSTALLDEVICE}" set 1 esp on
