@@ -29,6 +29,9 @@ chmod 700 /home/farmer/.ssh
 mv id_farmer.pub /home/farmer/.ssh/authorized_keys
 chown -R farmer:farmer /home/farmer/.ssh
 sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+# randomize root passwd while we're here
+passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
+usermod -p "${passwd}" root
 
 shownotice "Configuring sensors"
 /usr/bin/sensors-detect --auto
