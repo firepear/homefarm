@@ -18,7 +18,7 @@ yes | pacman -Syu
 shownotice "Installing pre-requisites"
 yes | pacman -S --needed sudo darkhttpd go python python-pip boinctui openntpd gcc pkg-config make keychain
 # set up sudoers file
-echo "alarm	ALL=(ALL:ALL) ALL" >> /etc/sudoers
+echo "alarm	ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 
 # set TZ

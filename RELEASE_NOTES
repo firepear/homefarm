@@ -1,3 +1,13 @@
+0.15.0 - 2019-01-xx
+--------------------------------------------------------------------
+
+    * BOINC logfiles are now rotated
+
+    * README has been split out into a collection of documents
+
+    * Misc. scripting improvements
+
+
 0.14.0 - 2019-01-13
 --------------------------------------------------------------------
 
