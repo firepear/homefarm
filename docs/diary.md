@@ -118,3 +118,34 @@ night's installer changes: if the user follows the install
 instructions and uses the `wpa_supplicant` file named there when
 configuring their wireless, then they don't have to pass the `ESSID`
 and `WPA_PASSWD` to the installer script.
+
+
+# 2019-01-17
+
+I'm really on a roll this week. No reason not to push on and head
+toward 1.0.0 though.
+
+I'm just about to cut v0.15.0, whose big win is logfile rotation. No
+more BOINC jobfiles and daemon logs slowly piling up forever. Those
+files grow pretty slowly, but they're still a recipe for wondering why
+everything quit working on a random day 30 months after you set up
+your cluster.
+
+This closes out the first issue I ever filed for homefarm, back on
+September 17th -- 4 months ago to the day. Nice.
+
+The smaller issues cleared up in this release are that the alarm
+account on the control node will now have passwordless sudo access
+(for new installs, anyway), and that compute nodes now get a random
+root password set on setup (previously it was left at the default of
+'root').
+
+The latter is just to make me feel less guilty. The former is to make
+update run with no prompts.
+
+There's nothing left on the punchlist for 1.0 now, except setting up a
+local repository on the control node, and pointing the compute nodes
+at it for installation and updates. This one will take a little work,
+but not too much. It will require yet another reinstall of node01 to
+fully test, though. I'll live. Luckily, I wrote this pile of scripts
+to help me install and manage compute nodes!
