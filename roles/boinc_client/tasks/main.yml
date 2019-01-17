@@ -105,7 +105,7 @@
     dest: /etc/logrotate.d/boinc
     owner: root
     group: root
-    mode: 0664
+    mode: 0644
 
 - name: Enable BOINC
   become: true
