@@ -98,6 +98,15 @@
   register: boinc_init
   notify: Restart BOINC
 
+- name: Install BOINC logrotate file
+  become: true
+  template:
+    src: boinc-logrotate.j2
+    dest: /etc/logrotate.d/boinc
+    owner: root
+    group: root
+    mode: 0664
+
 - name: Enable BOINC
   become: true
   service:
