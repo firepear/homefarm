@@ -1,9 +1,10 @@
-{{ boinc_work_dir }}/*txt
+{{ boinc_work_dir }}/*txt {
     prerotate
-        systemctl stop boinc.service
+        systemctl stop boinc-client.service
     endscript
     rotate 5
     size 10M
     postrotate
-        systemctl start boinc.service
+        systemctl start boinc-client.service
     endscript
+}
