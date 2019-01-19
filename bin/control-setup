@@ -103,7 +103,6 @@ EOF
 
 # create local package cache dir and darkhttpd to serve it
 mkdir -p /var/cache/homefarm/arch
-chown alarm:alarm /var/cache/homefarm
 cat > /etc/rc.local <<EOF
 #!/bin/bash
 /usr/bin/darkhttpd /var/cache/homefarm &
@@ -131,6 +130,7 @@ cp /home/alarm/.ssh/id_farmer.pub /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-install /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
+chown -R alarm:alarm /var/cache/homefarm
 # copy the example farm inventory file to the real one
 cp examples/farm.cfg farm.cfg
 yes | pacman -Scc
