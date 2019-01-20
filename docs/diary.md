@@ -120,7 +120,7 @@ configuring their wireless, then they don't have to pass the `ESSID`
 and `WPA_PASSWD` to the installer script.
 
 
-# 2019-01-17
+## 2019-01-17
 
 I'm really on a roll this week. No reason not to push on and head
 toward 1.0.0 though.
