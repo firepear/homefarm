@@ -35,6 +35,7 @@ update_os() {
     CONUPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
         shownotice "Updating control node OS packages"
+        echo "This may take a while..."
         yes | sudo pacman -Syu > /dev/null
 
         shownotice "Updating ansible (if needed)"
