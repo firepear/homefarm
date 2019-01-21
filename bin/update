@@ -3,8 +3,9 @@ set -e
 
 CONUPDATES=0
 COMUPDATES=0
+LOCALREPO="/var/cache/homefarm/arch"
 
-update_repo() {
+update_homefarm() {
     # if we have a stored latest tag, read it in as current
     if [[ -e ./.current_tag ]]; then
         CURRENT_TAG=$(cat ./.current_tag)
@@ -43,13 +44,29 @@ update_os() {
     fi
 
     shownotice "Checking for compute node OS updates"
-    NODES=( ./nodes/*yml )
-    NODE=$(basename "${NODES[0]}" .yml)
     COMUPDATES=$(ssh "farmer@${NODE}" 'sudo pacman -Sy > /dev/null && pacman -Qu | wc -l')
     if [[ "${COMUPDATES}" -gt "0" ]]; then
         shownotice "Updating compute nodes"
         ansible-playbook compute-nodes-system-update.yml
     fi
+}
+
+update_localrepo() {
+    shownotice "Updating local mirror"
+    # generate and grab packages list
+    ssh "farmer@${NODE}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
+    mkdir -p "${LOCALREPO}/db"
+    scp "farmer@${NODE}:pkgs.txt" "${LOCALREPO}/db/pkgs.txt"
+    # grab db files from mirror and unpack them
+
+    # parse the desc file in each dir, mapping %BASE% to [ repo,
+    # %FILENAME% ]. also build a list of filenames.
+
+    # if a filename is not in ${LOCALREPO}, download it
+
+    # if a file in ${LOCALREPO} is not in the filename list, delete it
+
+    # rebuild the localrepo's index
 }
 
 update_boinc() {
@@ -61,8 +78,10 @@ update_boinc() {
     fi
 }
 
+######################################################################
+# arg handling
 
-
+# handle help
 if [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
     cat <<EOF
 Update the cluster's OS and Homefarm install, as needed.
@@ -72,11 +91,40 @@ EOF
     exit 0
 fi
 
+# handle setting mirror
+if [[ "${1}" == "-m" ]] || [[ "${1}" == "--set-mirror" ]]; then
+    if [[ "${2}" == "" ]]; then
+        echo "error: must provide mirror URL with -m/--set-mirror"
+        exit 1
+    fi
+    echo "${2}" > ./.mirror_url
+fi
+# read in mirror; error if we don't have one
+if [[ -e ./.mirror_url ]]; then
+    MIRROR_URL=$(cat ./.mirror_url)
+else
+    cat <<EOF
+Please run '${0} --set-mirror MIRROR_URL' to set the local repo's
+upstream mirror.
+
+See README.md for more information.
+EOF
+    exit 1
+fi
+
+
+######################################################################
+# script proper begins
+
 # cd to homefarm and source util funcs
 cd ~/homefarm
 . ./bin/util.sh
 
-update_repo "${0}"
+NODES=( ./nodes/*yml )
+NODE=$(basename "${NODES[0]}" .yml)
+
+update_homefarm "${0}"
+update_localrepo
 update_os
 update_boinc
 

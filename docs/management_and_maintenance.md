@@ -13,7 +13,23 @@ Since Arch is a rolling-release distro, it is recommended to run
 `update` at least once a week. It's safe to run the update script as
 often as you'd like.
 
-This script performs the following tasks:
+### First update run
+
+Before you can run the updater as described above, you'll need to run
+it once like this:
+
+`./bin/update --set-mirror MIRROR_URL`
+
+to set the upstream repository the control node uses as its source for
+cached packages. In this case, `MIRROR_URL` should leave out the
+trailing `$repo/os/$arch` portion that you'll find in the Arch
+mirrorlist. So a concrete example would be:
+
+`./bin/update --set-mirror http://www.gtlib.gatech.edu/pub/archlinux/`
+
+### Update strategy
+
+The update script performs the following tasks:
 
 * Checks github for the latest release of Homefarm
      * If there is a new release, the local homefarm repository is
