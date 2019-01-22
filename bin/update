@@ -54,19 +54,28 @@ update_os() {
 update_localrepo() {
     shownotice "Updating local mirror"
     # generate and grab packages list
+    cd "${LOCALREPO}"
     ssh "farmer@${NODE}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
-    mkdir -p "${LOCALREPO}/db"
     scp "farmer@${NODE}:pkgs.txt" "${LOCALREPO}/db/pkgs.txt"
     # grab db files from mirror and unpack them
-
+    for repo in core extra community; do
+        mkdir -p "${LOCALREPO}/db/${repo}"
+        cd "${LOCALREPO}/db/${repo}"
+        curl -O "${MIRROR_URL}/${repo}/os/x86_64/${repo}.db.tar.gz"
+        tar zxvf "${repo}.db.tar.gz"
+        rm "${repo}.db.tar.gz"
+    done
+    cd "${LOCALREPO}"
     # parse the desc file in each dir, mapping %BASE% to [ repo,
     # %FILENAME% ]. also build a list of filenames.
-
+    #
     # if a filename is not in ${LOCALREPO}, download it
-
+    #
     # if a file in ${LOCALREPO} is not in the filename list, delete it
-
-    # rebuild the localrepo's index
+    #
+    # delete the db files
+    rm -rf "${LOCALREPO}/db"
+    # rebuild the local repo index
 }
 
 update_boinc() {
