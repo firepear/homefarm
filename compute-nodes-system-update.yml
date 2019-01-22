@@ -7,6 +7,9 @@
     pacman:
       update-cache: yes
       upgrade: yes
+  - name: Clear package cache
+    become: true
+    shell: yes | pacman -Scc
   #- name: Install additional software
   #  apk:
   #    name: x, y

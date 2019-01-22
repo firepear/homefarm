@@ -1,8 +1,11 @@
 #!/usr/bin/python3
 
+import glob
 import os
 import subprocess
 import sys
+
+from datetime import datetime
 
 # guard against humans running this
 if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
@@ -16,22 +19,23 @@ mirrorurl = sys.argv[2]
 repos = ["core", "extra", "community"]
 pkgs = []
 pkgfiles = {}
+
 log = open("update.log", 'w')
+log.write("Beginning run: {}\n".format(datetime.now()))
 
 # switch to the local repo directory
 os.chdir(localrepo)
-
 # get a list of all currently downloaded packages
-print("Getting local packages", flush=True)
-localpkgs = os.listdir(localrepo)
-
+localpkgs = glob.glob("*.pkg.tar.xz")
+log.write("Packages currently in repo: {}\n".format(len(localpkgs)))
 # and read our list of installed packages
-print("Reading installed packages", flush=True)
 with open("./db/pkgs.txt") as pkgfile:
     pkgs = [p.rstrip() for p in pkgfile.readlines()]
+    log.write("Packages installed on nodes: {}\n".format(len(pkgs)))
+
 
 # gather data on all available packages
-print("Reading package data", flush=True)
+print("Processing package databases", flush=True)
 for repo in repos:
     repopkgs = os.listdir("./db/{}".format(repo))
     # read the 'desc' file of each pkg in the repo. build a map of pkg
@@ -50,28 +54,27 @@ for repo in repos:
                 elif line == "%NAME%":
                     pkgname = desc.readline().rstrip()
         # only store data if this pkg is installed
-        log.write("'{}' '{}' '{}'\n".format(pkgname, pkgfile, repo))
         if pkgname in pkgs:
             pkgfiles[pkgfile] = repo
 
+
 # if a filename is not in ${LOCALREPO}, download it
-print("Downloading new packages", flush=True)
+print("Downloading new/updated packages", flush=True)
 for pkg in pkgfiles.keys():
     if pkg not in localpkgs:
         pkgurl = "{}/{}/os/x86_64/{}".format(mirrorurl, pkgfiles[pkg], pkg)
         pkgdest = "{}/{}".format(localrepo, pkg)
         rc = 1
         while rc != 0:
-            log.write("downloading '{}'\n".format(pkgurl))
+            log.write("Downloading '{}'\n".format(pkgurl))
             rc = subprocess.run(['curl', '-s', '--max-time', '60', pkgurl, '-o', pkgdest]).returncode
+
 
 # if a file in ${LOCALREPO} is not in the filename list, delete it
 print("Deleting old packages", flush=True)
 for pkg in localpkgs:
-    if pkg == "update.log" or pkg == "db":
-        next
     if pkg not in pkgfiles:
-        log.write("deleting '{}'\n".format(pkg))
-        #os.remove(pkg)
+        log.write("Deleting '{}'\n".format(pkg))
+        os.remove(pkg)
 
 log.close()

@@ -56,19 +56,14 @@ update_localrepo() {
     # generate and grab installed packages list
     cd "${LOCALREPO}"
     mkdir -p "${LOCALREPO}/db"
-    echo "Getting list of installed packages"
     ssh "farmer@${NODE}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
     scp -q "farmer@${NODE}:pkgs.txt" "${LOCALREPO}/db/pkgs.txt"
     # grab db files from mirror and unpack them
-    echo "Updating packages DBs"
+    echo "Updating package databases"
     for repo in core extra community; do
         mkdir -p "${LOCALREPO}/db/${repo}"
         cd "${LOCALREPO}/db/${repo}"
         curl -s --max-time 60 -O "${MIRROR_URL}/${repo}/os/x86_64/${repo}.db.tar.gz"
-        if [[ "$?" != "0" ]]; then
-            echo "couldn't get package db from mirror. exiting."
-            exit 1
-        fi
         tar zxvf "${repo}.db.tar.gz" > /dev/null
         rm "${repo}.db.tar.gz"
     done
@@ -78,7 +73,8 @@ update_localrepo() {
     # delete the db files and the installed package list
     rm -rf "${LOCALREPO}/db"
     # rebuild the local repo index
-    repo-add -q "${LOCALREPO}/arch.db.tar.gz" "${LOCALREPO}/*.pkg.tar.gz"
+    echo "Building repo index"
+    repo-add -q "${LOCALREPO}/arch.db.tar.gz" "${LOCALREPO}"/*.pkg.tar.xz
     cd ~/homefarm
 }
 
