@@ -1,0 +1,27 @@
+#!/usr/bin/python3
+
+import sys
+
+# guard against humans running this
+if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
+    print("This script should not be run by hand. It manages the local repository")
+    print("for Homefarm.")
+    sys.exit(0)
+
+localrepo = sys.argv[1]
+repos = ["core", "extra", "community"]
+
+# switch to the local repo directory and read our list of installed
+# packages
+chdir(localrepo)
+pkgfile = open("./db/pkgs.txt")
+pkgs = pkgfile.readlines()
+pkgfile.close()
+
+# parse the desc file in each dir, mapping %BASE% to [ repo,
+# %FILENAME% ]. also build a list of filenames.
+#
+# if a filename is not in ${LOCALREPO}, download it
+#
+# if a file in ${LOCALREPO} is not in the filename list, delete it
+
