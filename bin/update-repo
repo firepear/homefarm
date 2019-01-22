@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import sys
 
 # guard against humans running this
@@ -10,6 +11,7 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
 
 localrepo = sys.argv[1]
 repos = ["core", "extra", "community"]
+pkginfo = {}
 
 # switch to the local repo directory and read our list of installed
 # packages
@@ -17,6 +19,21 @@ chdir(localrepo)
 pkgfile = open("./db/pkgs.txt")
 pkgs = pkgfile.readlines()
 pkgfile.close()
+
+# gather data on all available packages
+for repo in repos:
+    pkginfo[repo] = {}
+    repopkgs = os.listdir("./db/{}".format(repo))
+    for pkg in repopkgs:
+        pkgname = ""
+        pkgfile = ""
+        with open("./db/{}/{}/desc".format(repo, pkg)) as desc:
+            line = desc.read().rstrip()
+            if line == "%FILENAME%":
+                pkgfile = desc.read().rstrip()
+            if line == "%NAME%":
+                pkgname = desc.read().rstrip()
+        pkginfo[repo][pkgname] = pkgfile
 
 # parse the desc file in each dir, mapping %BASE% to [ repo,
 # %FILENAME% ]. also build a list of filenames.
