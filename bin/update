@@ -55,14 +55,21 @@ update_localrepo() {
     shownotice "Updating local mirror"
     # generate and grab installed packages list
     cd "${LOCALREPO}"
+    mkdir -p "${LOCALREPO}/db"
+    echo "Getting list of installed packages"
     ssh "farmer@${NODE}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
-    scp "farmer@${NODE}:pkgs.txt" "${LOCALREPO}/db/pkgs.txt"
+    scp -q "farmer@${NODE}:pkgs.txt" "${LOCALREPO}/db/pkgs.txt"
     # grab db files from mirror and unpack them
+    echo "Updating packages DBs"
     for repo in core extra community; do
         mkdir -p "${LOCALREPO}/db/${repo}"
         cd "${LOCALREPO}/db/${repo}"
-        curl -O "${MIRROR_URL}/${repo}/os/x86_64/${repo}.db.tar.gz"
-        tar zxvf "${repo}.db.tar.gz"
+        curl -s --max-time 60 -O "${MIRROR_URL}/${repo}/os/x86_64/${repo}.db.tar.gz"
+        if [[ "$?" != "0" ]]; then
+            echo "couldn't get package db from mirror. exiting."
+            exit 1
+        fi
+        tar zxvf "${repo}.db.tar.gz" > /dev/null
         rm "${repo}.db.tar.gz"
     done
     cd "${LOCALREPO}"
