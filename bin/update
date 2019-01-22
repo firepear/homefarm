@@ -67,11 +67,12 @@ update_localrepo() {
     done
     cd "${LOCALREPO}"
     # call the python script which manages all the repo files
-    ~/homefarm/bin/update-repo "${LOCALREPO}"
+    ~/homefarm/bin/update-repo "${LOCALREPO}" "${MIRROR_URL}"
     # delete the db files and the installed package list
     rm -rf "${LOCALREPO}/db"
     # rebuild the local repo index
     repo-add -q "${LOCALREPO}/arch.db.tar.gz" "${LOCALREPO}/*.pkg.tar.gz"
+    cd ~/homefarm
 }
 
 update_boinc() {

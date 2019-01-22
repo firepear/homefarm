@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+import subprocess
 import sys
 
 # guard against humans running this
@@ -10,20 +11,28 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
     sys.exit(0)
 
 localrepo = sys.argv[1]
-repos = ["core", "extra", "community"]
-pkginfo = {}
+mirrorurl = sys.argv[2]
 
-# switch to the local repo directory and read our list of installed
-# packages
+repos = ["core", "extra", "community"]
+pkgfiles = {}
+
+# switch to the local repo directory
 chdir(localrepo)
+# get a list of all currently downloaded packages
+localpkgs = os.listdir(localrepo)
+# and read our list of installed packages
 pkgfile = open("./db/pkgs.txt")
 pkgs = pkgfile.readlines()
+for pkg in pkgs:
+    pkg = pkg.rstrip()
 pkgfile.close()
 
 # gather data on all available packages
 for repo in repos:
     pkginfo[repo] = {}
     repopkgs = os.listdir("./db/{}".format(repo))
+    # read the 'desc' file of each pkg in the repo. build a map of pkg
+    # filenames to repo we're pulling them from.
     for pkg in repopkgs:
         pkgname = ""
         pkgfile = ""
@@ -33,12 +42,18 @@ for repo in repos:
                 pkgfile = desc.read().rstrip()
             if line == "%NAME%":
                 pkgname = desc.read().rstrip()
-        pkginfo[repo][pkgname] = pkgfile
+        # only store data if this pkg is installed
+        if pkgname in pkgs:
+            pkgfiles[pkgfile] = repo
 
-# parse the desc file in each dir, mapping %BASE% to [ repo,
-# %FILENAME% ]. also build a list of filenames.
-#
 # if a filename is not in ${LOCALREPO}, download it
-#
-# if a file in ${LOCALREPO} is not in the filename list, delete it
+for pkg in pkgfiles.keys():
+    if not pkg in localpkgs:
+        pkgurl = "{}/{}/os/x86_64/{}".format(mirrorurl, pkgfiles[pkg], pkg)
+        pkgdest = "{}/{}".format(localrepo, pkg)
+        subprocess.run(['curl', pkgurl, '-o', pkgdest])
 
+# if a file in ${LOCALREPO} is not in the filename list, delete it
+for pkg in repopkgs:
+    if pkg not in pkgfiles:
+        os.remove(pkg)
