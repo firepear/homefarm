@@ -105,7 +105,7 @@ EOF
 mkdir -p /var/cache/homefarm/arch
 cat > /etc/rc.local <<EOF
 #!/bin/bash
-/usr/bin/darkhttpd /var/cache/homefarm &
+/usr/bin/darkhttpd /var/cache/homefarm --daemon
 EOF
 cat > /usr/lib/systemd/system/rc-local.service <<EOF
 [Unit]
@@ -130,6 +130,7 @@ cp /home/alarm/.ssh/id_farmer.pub /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-install /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
+ln -fs /home/alarm/homefarm/example/pacman.conf /var/cache/homefarm
 chown -R alarm:alarm /var/cache/homefarm
 # copy the example farm inventory file to the real one
 cp examples/farm.cfg farm.cfg
