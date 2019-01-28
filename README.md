@@ -1,6 +1,8 @@
 # homefarm
 Tools for deploying and managing a BOINC compute farm using Ansible and Arch Linux.
 
+_WARNING: TREE IS CURRENTLY UNSTABLE. DO NOT INSTALL. RELEASE SOON._
+
 If you have a pre-v0.13 Homefarm install, please see the [upgrade doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
 
 Homefarm makes a few assumptions:
