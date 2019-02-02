@@ -37,7 +37,8 @@ update_os() {
     if [[ "${CONUPDATES}" -gt "0" ]]; then
         shownotice "Updating control node OS packages"
         echo "This may take a while..."
-        yes | sudo pacman -Syu > /dev/null
+        yes | sudo pacman -Syuq > /dev/null 2>&1
+        yes | sudo pacman -Sccq > /dev/null 2>&1
 
         shownotice "Updating ansible (if needed)"
         sudo pip3 install ansible --upgrade
@@ -64,7 +65,7 @@ update_localrepo() {
         mkdir -p "${LOCALREPO}/db/${repo}"
         cd "${LOCALREPO}/db/${repo}"
         curl -s --max-time 60 -O "${MIRROR_URL}/${repo}/os/x86_64/${repo}.db.tar.gz"
-        tar zxvf "${repo}.db.tar.gz" > /dev/null
+        tar zxvf "${repo}.db.tar.gz" > /dev/null 2>&1
         rm "${repo}.db.tar.gz"
     done
     cd "${LOCALREPO}"
@@ -74,7 +75,7 @@ update_localrepo() {
     rm -rf "${LOCALREPO}/db"
     # rebuild the local repo index
     echo "Building repo index"
-    repo-add -q "${LOCALREPO}/arch.db.tar.gz" "${LOCALREPO}"/*.pkg.tar.xz
+    repo-add -q "${LOCALREPO}/arch.db.tar.gz" "${LOCALREPO}"/*.pkg.tar.xz > /dev/null 2>&1
     cd ~/homefarm
 }
 
