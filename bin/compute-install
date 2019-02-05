@@ -142,6 +142,8 @@ USERIFACE="${USERIFACE}"
 USERESSID="${USERESSID}"
 USERWPAPW="${USERWPAPW}"
 WPACONF="/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
+INSTALLDEVICE="${INSTALLDEVICE}"
+
 
 # fetch util funcs
 if [[ ! -e "util.sh" ]]; then
@@ -216,7 +218,12 @@ locale-gen > /dev/null
 
 # make the install device bootable via EFI
 shownotice "Finishing install"
-PARTUUID=\$(blkid -s PARTUUID -o value ${INSTALLDEVICE}2)
+if [[ "\${INSTALLDEVICE}" =~ ^/dev/nvme ]]; then
+    INSTALLPART="\${INSTALLDEVICE}p2"
+else
+    INSTALLPART="\${INSTALLDEVICE}2"
+fi
+PARTUUID=\$(blkid -s PARTUUID -o value \${INSTALLPART})
 mkdir -p /boot/loader/entries
 cat > /boot/loader/entries/arch.conf <<EOF2
 title          Arch Linux
