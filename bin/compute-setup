@@ -6,6 +6,7 @@ cd /root
 . ./util.sh
 
 # install preqs
+clear
 shownotice "Homefarm setup beginning"
 shownotice "Installing Ansible prerequisites"
 yes | pacman -S --needed python python-pip linux-headers libffi openssl sudo
@@ -34,7 +35,7 @@ passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
 usermod -p "${passwd}" root
 
 shownotice "Configuring sensors"
-/usr/bin/sensors-detect --auto
+/usr/bin/sensors-detect --auto > /dev/null 2&>1
 
 shownotice "Setting boot parameters"
 # add vsyscall to kernel boot parameters
