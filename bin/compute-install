@@ -110,13 +110,21 @@ mount /dev/disk/by-partlabel/esp /mnt/boot
 
 # install base preqs
 shownotice "Base install"
+# get cluster pacman.conf
+if ! curl --connect-timeout 10 -s "${1}/pacman.conf" -o /etc/pacman.conf; then
+    echo "error: can't reach control node to get pacman.conf"
+    echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
+    exit 1
+fi
+# base install via pacstrap
 pacstrap /mnt base openssh wpa_supplicant openntpd base-devel lm_sensors
 # generate /etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 # copy over resolf.conf so the system will have nameservice
 rm -f /mnt/etc/resolv.conf
 cp /etc/resolv.conf /mnt/etc/resolv.conf
-# copy install mirrorlist to system
+# install pacman.conf and mirrorlist to system
+cp /etc/pacman.conf /mnt/etc/pacman.conf
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 # copy wpa configuration if we have it
 if [[ -e "${WPACONF}" ]]; then
