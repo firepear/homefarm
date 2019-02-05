@@ -130,7 +130,7 @@ cp /home/alarm/.ssh/id_farmer.pub /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-install /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
-sed -e "'s/CONTROL_NODE_IP/${USERADDR}/'" /home/alarm/homefarm/example/pacman.conf > /var/cache/homefarm/pacman.conf
+sed -e "s/CONTROL_NODE_IP/${USERADDR}/" /home/alarm/homefarm/examples/pacman.conf > /var/cache/homefarm/pacman.conf
 chown -R alarm:alarm /var/cache/homefarm
 # copy the example farm inventory file to the real one
 cp examples/farm.cfg farm.cfg
