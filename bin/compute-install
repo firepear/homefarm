@@ -57,7 +57,7 @@ fi
 shownotice "Drive configuration"
 echo "These are the storage devices on this machine:"
 echo
-DRIVES=( /dev/sd? )
+DRIVES=( /dev/sd? /dev/nvme? )
 for I in $( seq 0 $((${#DRIVES[@]} - 1)) )
 do
     PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null) || true
