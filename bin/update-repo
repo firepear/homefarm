@@ -16,19 +16,20 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
 localrepo = sys.argv[1]
 mirrorurl = sys.argv[2]
 
-repos = ["core", "extra", "community"]
-pkgs = []
-pkgfiles = {}
-
-log = open("update.log", 'w')
-log.write("Beginning run: {}\n".format(datetime.now()))
-
 # switch to the local repo directory
 os.chdir(localrepo)
-# get a list of all currently downloaded packages
-localpkgs = glob.glob("*.pkg.tar.xz")
+# open log
+log = open("update.log", 'w', buffering=1)
+log.write("Beginning run: {}\n".format(datetime.now()))
+
+repos = ["core", "extra", "community"]
+pkgs = []     # installed packages
+pkgfiles = {} # package filename-to-repo map
+localpkgs = glob.glob("*.pkg.tar.xz") # currently downloaded packages
 log.write("Packages currently in repo: {}\n".format(len(localpkgs)))
-# and read our list of installed packages
+
+
+# read our list of installed packages
 with open("./db/pkgs.txt") as pkgfile:
     pkgs = [p.rstrip() for p in pkgfile.readlines()]
     log.write("Packages installed on nodes: {}\n".format(len(pkgs)))
