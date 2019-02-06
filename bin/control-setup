@@ -98,6 +98,8 @@ cat <<EOF | tee -a /home/alarm/.bashrc > /dev/null
 # set up easy ssh-agent for homefarm
 /usr/bin/keychain ~/.ssh/id_farmer
 source ~/.keychain/${MACHNAME}-sh > /dev/null
+# force update time
+sudo ntpd -s > /dev/null 2&>1
 EOF
 
 
