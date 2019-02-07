@@ -1,5 +1,21 @@
 # Dev diary
 
+## 2019-02-06
+
+Added NVMe support yesterday, pretty much by accident.
+
+I had picked up some HP Enterprise M.2 drives on clearance. They were
+cheap because they were only 128G, and who in enterprise wants a
+storage device that small? They work fine for my purposes though.
+
+Turned out that they were NVMe rather than SATA. Also turns out that
+NVMe uses a completely different naming scheme for devices.
+
+Anyway, that's fixed now, and you can put NVMe devices in Homefarm
+compute nodes, free from care or trouble.
+
+
+
 ## 2019-01-28
 
 Much work done in the background over the past week. It's in an
