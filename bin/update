@@ -32,40 +32,54 @@ update_homefarm() {
 }
 
 update_os() {
-    shownotice "Checking for control node OS updates"
+    shownotice "Checking for OS updates"
     CONUPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
-        shownotice "Updating control node OS packages"
-        echo "This may take a while..."
+        echo "Updating control node OS packages"
         yes | sudo pacman -Syuq > /dev/null 2>&1
         yes | sudo pacman -Sccq > /dev/null 2>&1
 
-        shownotice "Updating ansible (if needed)"
-        sudo pip3 install ansible --upgrade
+        echo "Updating control node Ansible install"
+        sudo pip3 install ansible --upgrade > /dev/null
     fi
 
-    shownotice "Checking for compute node OS updates"
-    COMUPDATES=$(ssh "farmer@${NODE}" 'sudo pacman -Sy > /dev/null && pacman -Qu | wc -l')
-    if [[ "${COMUPDATES}" -gt "0" ]]; then
-        shownotice "Updating compute nodes"
+    if [[ "${localrepo_updated}" == "true" ]]; then
+        echo "Updating compute node OS packages and Ansible install"
         ansible-playbook compute-nodes-system-update.yml
     fi
 }
 
 update_localrepo() {
+    cd "${LOCALREPO}"
+    # grab core db file from mirror and test it against the last
+    # hash. do nothing if they match.
+    curl -s --max-time 60 -O "${MIRROR_URL}/${repo}/os/x86_64/core.db.tar.gz"
+    coremd5=$(md5sum core.db.tar.gz)
+    if [[ -e "prevmd5" ]]; then
+        prevmd5=$(cat prevmd5)
+        if [[ "${prevmd5}" == "${coremd5}" ]]; then
+            return
+        else
+            localrepo_updated="true"
+        fi
+    fi
+    echo "${coremd5}" > prevmd5
+
     shownotice "Updating local mirror"
     # generate and grab installed packages list
-    cd "${LOCALREPO}"
     mkdir -p "${LOCALREPO}/db"
     ssh "farmer@${NODE}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
     scp -q "farmer@${NODE}:pkgs.txt" "${LOCALREPO}/db/pkgs.txt"
-    # grab db files from mirror and unpack them
+    # grab remaining db files from mirror, and unpack all of them
     echo "Updating package databases"
     for repo in core extra community; do
+        if [[ ! -e "${repo}.db.tar.gz" ]]; then
+            curl -s --max-time 60 -O "${MIRROR_URL}/${repo}/os/x86_64/${repo}.db.tar.gz"
+        fi
         mkdir -p "${LOCALREPO}/db/${repo}"
+        mv "${repo}.db.tar.gz" "${LOCALREPO}/db/${repo}"
         cd "${LOCALREPO}/db/${repo}"
-        curl -s --max-time 60 -O "${MIRROR_URL}/${repo}/os/x86_64/${repo}.db.tar.gz"
-        tar zxvf "${repo}.db.tar.gz" > /dev/null 2>&1
+            tar zxvf "${repo}.db.tar.gz" > /dev/null 2>&1
         rm "${repo}.db.tar.gz"
     done
     cd "${LOCALREPO}"
@@ -74,7 +88,7 @@ update_localrepo() {
     # delete the db files and the installed package list
     rm -rf "${LOCALREPO}/db"
     # rebuild the local repo index
-    echo "Building repo index"
+    echo "Building repo index (this will take a while)"
     repo-add -q "${LOCALREPO}/arch.db.tar.gz" "${LOCALREPO}"/*.pkg.tar.xz > /dev/null 2>&1
     cd ~/homefarm
 }
