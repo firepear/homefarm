@@ -54,6 +54,7 @@ update_localrepo() {
     if [[ -e "prevmd5" ]]; then
         prevmd5=$(cat prevmd5)
         if [[ "${prevmd5}" == "${coremd5}" ]]; then
+            rm core.db.tar.gz
             return
         else
             localrepo_updated="true"
