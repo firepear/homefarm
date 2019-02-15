@@ -5,6 +5,8 @@
       compute nodes, so updates are faster and update bandwidth is
       O(2) instead of O(n+1)
 
+    * Update efficiency and output improvements
+
     * NVMe devices now supported as install targets
 
 

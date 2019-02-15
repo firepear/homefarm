@@ -49,50 +49,6 @@ update_os() {
     fi
 }
 
-update_localrepo() {
-    cd "${LOCALREPO}"
-    # grab core db file from mirror and test it against the last
-    # hash. do nothing if they match.
-    curl -s --max-time 60 -O "${MIRROR_URL}/${repo}/os/x86_64/core.db.tar.gz"
-    coremd5=$(md5sum core.db.tar.gz)
-    if [[ -e "prevmd5" ]]; then
-        prevmd5=$(cat prevmd5)
-        if [[ "${prevmd5}" == "${coremd5}" ]]; then
-            return
-        else
-            localrepo_updated="true"
-        fi
-    fi
-    echo "${coremd5}" > prevmd5
-
-    shownotice "Updating local mirror"
-    # generate and grab installed packages list
-    mkdir -p "${LOCALREPO}/db"
-    ssh "farmer@${NODE}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
-    scp -q "farmer@${NODE}:pkgs.txt" "${LOCALREPO}/db/pkgs.txt"
-    # grab remaining db files from mirror, and unpack all of them
-    echo "Updating package databases"
-    for repo in core extra community; do
-        if [[ ! -e "${repo}.db.tar.gz" ]]; then
-            curl -s --max-time 60 -O "${MIRROR_URL}/${repo}/os/x86_64/${repo}.db.tar.gz"
-        fi
-        mkdir -p "${LOCALREPO}/db/${repo}"
-        mv "${repo}.db.tar.gz" "${LOCALREPO}/db/${repo}"
-        cd "${LOCALREPO}/db/${repo}"
-            tar zxvf "${repo}.db.tar.gz" > /dev/null 2>&1
-        rm "${repo}.db.tar.gz"
-    done
-    cd "${LOCALREPO}"
-    # call the python script which manages all the repo files
-    ~/homefarm/bin/update-repo "${LOCALREPO}" "${MIRROR_URL}"
-    # delete the db files and the installed package list
-    rm -rf "${LOCALREPO}/db"
-    # rebuild the local repo index
-    echo "Building repo index (this will take a while)"
-    repo-add -q "${LOCALREPO}/arch.db.tar.gz" "${LOCALREPO}"/*.pkg.tar.xz > /dev/null 2>&1
-    cd ~/homefarm
-}
-
 update_boinc() {
     # if repo update flag file exists, update BOINC and clear the flag
     if [[ -e ./.repoupdate ]]; then
@@ -101,6 +57,9 @@ update_boinc() {
         rm ./.repoupdate
     fi
 }
+
+
+
 
 ######################################################################
 # arg handling
@@ -148,7 +107,7 @@ NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)
 
 update_homefarm "${0}"
-update_localrepo
+update_localrepo ${LOCALREPO} ${MIRROR_URL} ${NODE}
 update_os
 update_boinc
 

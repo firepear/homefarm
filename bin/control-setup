@@ -99,7 +99,7 @@ cat <<EOF | tee -a /home/alarm/.bashrc > /dev/null
 /usr/bin/keychain ~/.ssh/id_farmer
 source ~/.keychain/${MACHNAME}-sh > /dev/null
 # force update time
-sudo ntpd -s > /dev/null 2&>1
+sudo ntpd -s > /dev/null 2>&1
 EOF
 
 
