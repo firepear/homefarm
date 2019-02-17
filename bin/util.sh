@@ -48,8 +48,8 @@ update_localrepo() {
     firstnode=${3}
     # grab core db file from mirror and test it against the last
     # hash. do nothing if they match.
+    cd "${repodir}" || exit
     curl -s --max-time 60 -O "${mirrorurl}/core/os/x86_64/core.db.tar.gz"
-    ls -l core.db.tar.gz
     coremd5=$(md5sum core.db.tar.gz)
     if [[ -e "prevmd5" ]]; then
         prevmd5=$(cat prevmd5)
