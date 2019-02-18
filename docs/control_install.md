@@ -1,5 +1,7 @@
 # Control node install
 
+These first steps will get Arch linux running on your control node.
+
 1. Image an SD card with [Arch Linux
    ARM](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3),
    and boot the Pi
@@ -7,9 +9,32 @@
 1. Run `'cd /home/alarm && git clone https://github.com/firepear/homefarm.git'`
 1. Run `'cd homefarm && ./bin/control-setup'`
 
+## Setup mirrorlists for compute nodes
+
+Compute nodes will install almost all their packages from the control
+node's local mirror, but new packages will initially be sourced from
+the Arch mirrors. To make this a fast process, an geographically
+appropriate mirrorlist is needed.
+
+On a machine with a browser:
+
+1. Go to `https://www.archlinux.org/mirrorlist/`
+1. Generate a custom userlist for your location (use defaults unless
+   you know you need something specific)
+1. Copy the generated URL, for use on the control node
+
+On the control node:
+
+1. Login as user `alarm` if you aren't already
+1. Run `curl '[MIRRORLIST_URL]' -o mirrorlist`
+1. Edit `mirrorlist` to uncomment the hosts you want to use as mirrors
+1. Run `mv mirrorlist /var/cache/homefarm`
+
 ## Set up the Ansible inventory
 
-1. Login as user `alarm`
+Now it's time to define the machines which will be part if your farm.
+
+1. Login as user `alarm` if you aren't already
 1. Run `'cd ~/homefarm'`
 1. Edit `farm.cfg`:
      * Change `node00` in the `[controller]` stanza to match the name
@@ -18,6 +43,8 @@
        stanza to match the machines you'll be setting up as compute
        nodes
 1. Edit `/etc/hosts` and add entries for your compute nodes
+
+## Conclusion
 
 The control node is now ready.
 

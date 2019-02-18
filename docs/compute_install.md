@@ -1,4 +1,4 @@
-## Compute node install
+# Compute node install
 
 1. Download the [Arch Linux
    installer](https://alpinelinux.org/downloads/) and boot it.
