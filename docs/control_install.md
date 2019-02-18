@@ -46,8 +46,8 @@ Now it's time to define the machines which will be part if your farm.
 
 ## Finishing up
 
-The control node is now ready. You can proceed to installing compute
-nodes.
+The control node is now ready. You can begin [installing compute
+nodes](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md).
 
 Default passwords for both `root` and `alarm` accounts are left in
 place by the installer. You may change them if you wish; it will not
