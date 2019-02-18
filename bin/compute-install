@@ -110,12 +110,19 @@ mount /dev/disk/by-partlabel/esp /mnt/boot
 
 # install base preqs
 shownotice "Base install"
-# get cluster pacman.conf
+# get cluster pacman.conf and mirrorlist
 if ! curl --connect-timeout 10 -s "${1}/pacman.conf" -o /etc/pacman.conf; then
     echo "error: can't reach control node to get pacman.conf"
     echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
     exit 1
 fi
+if ! curl --connect-timeout 10 -s "${1}/mirrorlist" -o /etc/pacman.d/mirrorlist; then
+    echo "error: can't reach control node"
+    echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
+    exit 1
+fi
+
+
 # base install via pacstrap
 pacstrap /mnt base openssh wpa_supplicant openntpd base-devel lm_sensors
 # generate /etc/fstab

@@ -2,6 +2,14 @@
 - hosts: compute_nodes
   remote_user: farmer
   tasks:
+  - name: Copy mirrorlist
+    become: true
+    copy:
+      src: /var/cache/homefarm/mirrorlist
+      dest: /etc/pacman.d/mirrorlist
+      owner: root
+      group: root
+      mode: 0644
   - name: Upgrade system software
     become: true
     pacman:
