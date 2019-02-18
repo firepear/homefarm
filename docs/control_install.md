@@ -26,9 +26,9 @@ On a machine with a browser:
 On the control node:
 
 1. Login as user `alarm` if you aren't already
-1. Run `curl '[MIRRORLIST_URL]' -o mirrorlist`
+1. Run `'curl '[MIRRORLIST_URL]' -o mirrorlist'`
 1. Edit `mirrorlist` to uncomment the hosts you want to use as mirrors
-1. Run `mv mirrorlist /var/cache/homefarm`
+1. Run `'mv mirrorlist /var/cache/homefarm'`
 
 ## Set up the Ansible inventory
 
@@ -44,9 +44,10 @@ Now it's time to define the machines which will be part if your farm.
        nodes
 1. Edit `/etc/hosts` and add entries for your compute nodes
 
-## Conclusion
+## Finishing up
 
-The control node is now ready.
+The control node is now ready. You can proceed to installing compute
+nodes.
 
 Default passwords for both `root` and `alarm` accounts are left in
 place by the installer. You may change them if you wish; it will not
