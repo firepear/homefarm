@@ -26,13 +26,12 @@
       configuration
 1. Answer the questions the installer asks. It will handle the rest
 
-After the installer reboots, login as root and run
+After the installer reboots, login as root and run `'/bin/bash
+compute-setup'` to complete the Homefarm-specific portions of
+installation. When `compute-setup` completes, the node is ready for
+Ansible to take over its configuration management.
 
-`/bin/bash compute-setup`
-
-To complete the Homefarm-specific portions of installation. After
-this, the compute node is ready for Ansible to take over its
-configuration management. You can test that everything is working by
-running `'ansible -m ping NODE_NAME'` from the control node.
-
-
+You can test that everything is working by running `'ansible -m ping
+NODE_NAME'` from the control node. If it all looks good, continue to
+[BOINC
+initialization](https://github.com/firepear/homefarm/blob/master/docs/boinc_setup.md)

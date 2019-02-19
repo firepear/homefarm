@@ -1,9 +1,11 @@
 # homefarm
-Tools for deploying and managing a BOINC compute farm using Ansible and Arch Linux.
+Tools for deploying and managing a BOINC compute farm using Ansible
+and Arch Linux.
 
 _WARNING: TREE IS CURRENTLY UNSTABLE. DO NOT INSTALL. RELEASE SOON._
 
-If you have a pre-v0.13 Homefarm install, please see the [upgrade doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
+If you have a pre-v0.13 Homefarm install, please see the [upgrade
+doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
 
 Homefarm makes a few assumptions:
 
@@ -13,9 +15,9 @@ Homefarm makes a few assumptions:
 * You are aware of your local network configuration, and have IPs to
   assign to the nodes.
 * You're familiar with BOINC, projects, workunits, and so on.
-* All nodes are on a private network, because an SSH key with no
-  passphrase will be generated for Ansible's use and the control
-  node's default passwords will be left in place.
+* All nodes are on a private network -- an SSH key with no passphrase
+  will be generated for Ansible's use, and the control node's default
+  passwords will be left in place.
 
 # Documentation
 
