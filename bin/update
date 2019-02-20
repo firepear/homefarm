@@ -2,7 +2,6 @@
 set -e
 
 CONUPDATES=0
-COMUPDATES=0
 LOCALREPO="/var/cache/homefarm/arch"
 
 update_homefarm() {
@@ -111,7 +110,7 @@ update_localrepo ${LOCALREPO} ${MIRROR_URL} ${NODE}
 update_os
 update_boinc
 
-if [[ "${COMUPDATES}" -gt "0" ]]; then
+if [[ "${localrepo_updated}" == "true" ]]; then
     shownotice "Rebooting compute nodes"
     for node in nodes/*yml; do
         ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
