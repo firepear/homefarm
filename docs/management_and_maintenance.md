@@ -7,32 +7,19 @@ run on the control node, as user `alarm`, from `/home/alarm/homefarm`
 
 ## Keeping the farm up to date
 
-Run `'./bin/update'`
+Just run `'./bin/update'`
+
+This will, as appropriate, update
+
+* Homefarm itself
+* The local Arch mirror
+* OS packages and Ansible on the control node
+* OS packages, Ansible, and/or BOINC on the compute nodes
 
 Since Arch is a rolling-release distro, it is recommended to run
 `update` at least once a week. It's safe to run the update script as
-often as you'd like.
-
-### Update strategy
-
-The update script performs the following tasks:
-
-* Checks github for the latest release of Homefarm
-     * If there is a new release, the local homefarm repository is
-       sync'd with github, and the update process restarts in case
-       there have been changes to the `update` script itself
-* Checks for new packages on the control node and updates the OS and
-  Ansible if necessary
-* Checks for new packages on the compute nodes and updates the OS and
-  Ansible if necessary
-* If Homefarm was updated, a BOINC rebuild attempt is made on the
-  compute nodes. (If the version of BOINC has not changed, this will
-  mostly be a no-op)
-* If there were OS updates on the compute nodes, they will reboot
-* If there were OS updates on the control node, it will reboot
-
-This makes it very easy to keep all aspects of your cluster up to
-date.
+often as you'd like. This makes it very easy to keep all aspects of
+your cluster up to date.
 
 
 
