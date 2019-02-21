@@ -155,11 +155,12 @@ configuration for your farm. (Assuming you've been following the
 directions in these docs! If you go off piste, you're on your own!)
 
 Move this tarball somewhere safe, like another server, or an S3
-bucket, or dropbox.
-
-After a control node reinstall, get the tarball back on the control
-node and run:
+bucket, or dropbox. Update it whenever you'd like. After a control
+node reinstall, get the tarball back on the control node and run:
 
 `./bin/backup TARBALL_NAME`
 
-It will unpack the archive and move things to their correct locations.
+It will unpack the archive and move things to their correct
+locations. You'll still be able to ssh into all your compute nodes,
+you won't have to generate a new mirrorlist, and so on. You _will_
+need to build the local mirror.
