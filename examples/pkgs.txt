@@ -90,7 +90,6 @@ libsasl
 libseccomp
 libsecret
 libssh2
-libsystemd
 libtasn1
 libtirpc
 libtool
@@ -173,6 +172,7 @@ sqlite
 sudo
 sysfsutils
 systemd
+systemd-libs
 systemd-sysvcompat
 tar
 texinfo
