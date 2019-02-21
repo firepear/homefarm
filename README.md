@@ -2,7 +2,7 @@
 Tools for deploying and managing a BOINC compute farm using Ansible
 and Arch Linux.
 
-Homefarm makes it easier -- or at the least _faster_ -- to install,
+Homefarm makes it easier -- or at least _faster_ -- to install,
 reinstall, configure, and update all your BOINC crunchboxes. It also
 makes your a better netizen: all your compute nodes will install and
 update from a local repository that lives on the control node.

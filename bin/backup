@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+
+ARCHIVE="homefarm.backup.tar.gz"
+cd /home/alarm
+
+if [[ "${1}" == "" ]]; then
+    tar zcvf "${ARCHIVE}" ./.boinctui.cfg ./.ssh \
+        homefarm/.mirror_url homefarm/.current_tag \
+        homefarm/farm.cfg homefarm/nodes/ \
+        /var/cache/homefarm/pacman.conf \
+        /var/cache/homefarm/mirrorlist
+    echo "Farm configuration archived to ${ARCHIVE}"
+    exit
+fi
+
+if [[ ! -e "${1}" ]]; then
+    echo "error: can't find archive file: '${1}'"
+    exit 1
+fi
+tar zxvf "${1}"
+cp ./.ssh/id_farmer.pub /var/cache/homefarm
+mv var/cache/homefarm/pacman.conf /var/cache/homefarm/pacman.conf
+mv var/cache/homefarm/mirrorlist /var/cache/homefarm/mirrorlist
+rm -rf var
+echo "Farm configuration restored"

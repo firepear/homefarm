@@ -7,6 +7,8 @@
 
     * Update efficiency and output formatting improvements
 
+    * Added farm configuration archive/restore utility
+
     * NVMe devices now supported as install targets
 
     * Ansible SSH timeout upped to 30s

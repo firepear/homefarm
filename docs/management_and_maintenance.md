@@ -138,3 +138,28 @@ run the `update-projects` playbook.
 
 The update script will keep the GPGPU packages up to date along with
 everything else.
+
+
+
+## Reinstalling a control node
+
+Under Homefarm, compute nodes are fungible. We don't care about them;
+only about their workunits. The control node is different though,
+since it stores the unique configuration of our farm. The `backup`
+utility helps with this.
+
+`./bin/backup`
+
+will create a tarball containing every piece of irreplacable local
+configuration for your farm. (Assuming you've been following the
+directions in these docs! If you go off piste, you're on your own!)
+
+Move this tarball somewhere safe, like another server, or an S3
+bucket, or dropbox.
+
+After a control node reinstall, get the tarball back on the control
+node and run:
+
+`./bin/backup TARBALL_NAME`
+
+It will unpack the archive and move things to their correct locations.
