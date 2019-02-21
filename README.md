@@ -2,11 +2,6 @@
 Tools for deploying and managing a BOINC compute farm using Ansible
 and Arch Linux.
 
-_WARNING: TREE IS CURRENTLY UNSTABLE. DO NOT INSTALL. RELEASE SOON._
-
-If you have a pre-v0.13 Homefarm install, please see the [upgrade
-doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
-
 Homefarm makes a few assumptions:
 
 * A Raspberry Pi 3B/B+, to act as the control node.
@@ -28,4 +23,6 @@ Homefarm makes a few assumptions:
     * [Compute node install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
     * [BOINC initialization](https://github.com/firepear/homefarm/blob/master/docs/boinc_setup.md)
 * [Managing and maintaining your farm](https://github.com/firepear/homefarm/blob/master/docs/management_and_maintenance.md).
+* If you have a pre-v0.13 Homefarm install, please see the [upgrade
+doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
 
