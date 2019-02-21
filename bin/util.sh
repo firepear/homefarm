@@ -67,7 +67,7 @@ update_localrepo() {
     mkdir -p "${repodir}/db"
     if [[ "${firstnode}" == "" ]]; then
         # this branch runs during control node install
-        ls # TODO add real code here
+        cp ~/homefarm/examples/pkgs.txt ./db
     else
         # this branch runs during normal update
         ssh "farmer@${firstnode}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'

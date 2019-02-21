@@ -1,13 +1,15 @@
-0.16.0 - 2019-02-??
+0.16.0 - 2019-02-21
 --------------------------------------------------------------------
 
     * Homefarm now maintains a local repository of packages for
       compute nodes, so updates are faster and update bandwidth is
       O(2) instead of O(n+1)
 
-    * Update efficiency and output improvements
+    * Update efficiency and output formatting improvements
 
     * NVMe devices now supported as install targets
+
+    * Ansible SSH timeout upped to 30s
 
 
 0.15.0 - 2019-01-17

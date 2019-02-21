@@ -9,7 +9,9 @@ These first steps will get Arch linux running on your control node.
 1. Run `'cd /home/alarm && git clone https://github.com/firepear/homefarm.git'`
 1. Run `'cd homefarm && ./bin/control-setup'`
 
-## Setup mirrorlists for compute nodes
+
+
+## Setup mirrorlists and build localrepo
 
 Compute nodes will install almost all their packages from the control
 node's local mirror, but new packages will initially be sourced from
@@ -30,6 +32,20 @@ On the control node:
 1. Edit `mirrorlist` to uncomment the hosts you want to use as mirrors
 1. Run `'mv mirrorlist /var/cache/homefarm'`
 
+Speaking of the local mirror, it's time to create it. Run the cluster
+update script as follows:
+
+`./bin/update --set-mirror MIRROR_URL`
+
+...where `MIRROR_URL` is the base URL of whichever Arch linux mirror you
+want the control node to use to build the local mirror. It should be
+one of the mirrors from the list you just generated in the previous
+step. Here's a concrete example:
+
+`./bin/update --set-mirror http://www.gtlib.gatech.edu/pub/archlinux/`
+
+
+
 ## Set up the Ansible inventory
 
 Now it's time to define the machines which will be part if your farm.
@@ -43,6 +59,8 @@ Now it's time to define the machines which will be part if your farm.
        stanza to match the machines you'll be setting up as compute
        nodes
 1. Edit `/etc/hosts` and add entries for your compute nodes
+
+
 
 ## Finishing up
 

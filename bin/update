@@ -80,6 +80,8 @@ if [[ "${1}" == "-m" ]] || [[ "${1}" == "--set-mirror" ]]; then
         exit 1
     fi
     echo "${2}" > ./.mirror_url
+    update_localrepo "${LOCALREPO}" "${2}"
+    exit 0
 fi
 # read in mirror; error if we don't have one
 if [[ -e ./.mirror_url ]]; then
@@ -106,7 +108,7 @@ NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)
 
 update_homefarm "${0}"
-update_localrepo ${LOCALREPO} ${MIRROR_URL} ${NODE}
+update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
 update_os
 update_boinc
 

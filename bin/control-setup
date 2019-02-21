@@ -125,8 +125,7 @@ chmod +x /etc/rc.local
 systemctl enable rc-local.service
 
 
-# setup dir for serving to compute nodes and do a tiny bit of
-# housekeeping
+# do a tiny bit of housekeeping
 shownotice "Finalizing control node setup"
 cp /home/alarm/.ssh/id_farmer.pub /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-install /var/cache/homefarm
