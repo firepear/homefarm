@@ -31,7 +31,7 @@ if [[ ! -e ${ARCHIVE} ]]; then
     exit 1
 fi
 echo "Unpacking tarball"
-tar zxvf ${ARCHIVE}
+tar zxvf ${ARCHIVE} > /dev/null
 echo "Restoring SSH key"
 sudo cp ./.ssh/id_farmer.pub /var/cache/homefarm
 echo "Restoring /etc/hosts"
