@@ -5,7 +5,7 @@ ARCHIVE="~/homefarm/homefarm.backup.tar.gz"
 cd /home/alarm
 
 if [[ "${1}" == "" ]]; then
-    tar zcvf "${ARCHIVE}" ./.boinctui.cfg ./.ssh \
+    tar zcvf ${ARCHIVE} ./.boinctui.cfg ./.ssh \
         homefarm/.mirror_url homefarm/.current_tag \
         homefarm/farm.cfg homefarm/nodes/ \
         /etc/hosts \
@@ -20,7 +20,7 @@ if [[ ! -e "--restore" ]]; then
     exit 1
 fi
 echo "Unpacking tarball"
-tar zxvf "${ARCHIVE}"
+tar zxvf ${ARCHIVE}
 echo "Restoring SSH key"
 cp ./.ssh/id_farmer.pub /var/cache/homefarm
 echo "Restoring /etc/hosts"
