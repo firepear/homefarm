@@ -33,7 +33,7 @@ fi
 echo "Unpacking tarball"
 tar zxvf ${ARCHIVE}
 echo "Restoring SSH key"
-cp ./.ssh/id_farmer.pub /var/cache/homefarm
+sudo cp ./.ssh/id_farmer.pub /var/cache/homefarm
 echo "Restoring /etc/hosts"
 sudo mv etc/hosts /etc/hosts
 echo "Restoring pacman config and mirrorlist"
