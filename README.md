@@ -36,6 +36,18 @@ Homefarm makes a few assumptions:
     * [Add/reinstall a compute node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
     * [Backup/reinstall the control node](https://github.com/firepear/homefarm/blob/master/docs/backup.md)
     * [Using GPUs](https://github.com/firepear/homefarm/blob/master/docs/gpgpu.md)
-* If you have a pre-v0.13 Homefarm install, please see the [upgrade
+* Problems and troubleshooting
+    * If you've found a bug or have a suggestion, please [create a new
+      issue](https://github.com/firepear/homefarm/issues) on Github.
+    * Sometimes Arch renames packages and other such things, and this
+      will cause the update script to break. If this happens to you,
+      check out [our Twitter feed](https://twitter.com/firepear) for
+      up-to-date workarounds.
+    * Older known update problems will be documented here: [update
+      issue
+      archive](https://github.com/firepear/homefarm/blob/master/docs/known_issues.md)
+
+
+If you have a pre-v0.13 Homefarm install, please see the [upgrade
 doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
 
