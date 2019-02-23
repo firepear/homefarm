@@ -24,6 +24,7 @@ usage is:
     ./bin/backup --restore # unpack archive and restore farm state
 
 EOF
+    exit 1
 fi
 if [[ ! -e ${ARCHIVE} ]]; then
     echo "error: can't find archive file: '${ARCHIVE}'"
