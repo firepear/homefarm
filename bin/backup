@@ -15,7 +15,17 @@ if [[ "${1}" == "" ]]; then
     exit
 fi
 
-if [[ ! -e "--restore" ]]; then
+if [[ "${1}" != "--restore" ]]; then
+    cat <<EOF
+usage is:
+
+    ./bin/backup # create archive tarball
+
+    ./bin/backup --restore # unpack archive and restore farm state
+
+EOF
+fi
+if [[ ! -e ${ARCHIVE} ]]; then
     echo "error: can't find archive file: '${ARCHIVE}'"
     exit 1
 fi
