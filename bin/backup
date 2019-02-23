@@ -8,6 +8,7 @@ if [[ "${1}" == "" ]]; then
     tar zcvf "${ARCHIVE}" ./.boinctui.cfg ./.ssh \
         homefarm/.mirror_url homefarm/.current_tag \
         homefarm/farm.cfg homefarm/nodes/ \
+        /etc/hosts \
         /var/cache/homefarm/pacman.conf \
         /var/cache/homefarm/mirrorlist > /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
@@ -18,9 +19,14 @@ if [[ ! -e "${1}" ]]; then
     echo "error: can't find archive file: '${1}'"
     exit 1
 fi
+echo "Unpacking tarball"
 tar zxvf "${1}"
+echo "Restoring SSH key"
 cp ./.ssh/id_farmer.pub /var/cache/homefarm
+echo "Restoring /etc/hosts"
+sudo mv etc/hosts /etc/hosts
+echo "Restoring pacman config and mirrorlist"
 mv var/cache/homefarm/pacman.conf /var/cache/homefarm/pacman.conf
 mv var/cache/homefarm/mirrorlist /var/cache/homefarm/mirrorlist
-rm -rf var
+rm -rf var etc
 echo "Farm configuration restored"
