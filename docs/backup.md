@@ -26,3 +26,7 @@ won't have to generate a new mirrorlist, and so on.
 The local mirror will need to rebuild itself, though, so the first
 time you run `./bin/update` after reinstalling the control node will
 take much longer than usual.
+
+Alternatively, you can force the rebuild by running: `'./bin/update
+--set-mirror MIRROR_URL'`. If you don't remember which mirror you
+used, just do `'cat .mirror_url'`

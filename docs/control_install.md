@@ -35,14 +35,14 @@ On the control node:
 Speaking of the local mirror, it's time to create it. Run the cluster
 update script as follows:
 
-`./bin/update --set-mirror MIRROR_URL`
+`'./bin/update --set-mirror MIRROR_URL'`
 
 ...where `MIRROR_URL` is the base URL of whichever Arch linux mirror you
 want the control node to use to build the local mirror. It should be
 one of the mirrors from the list you just generated in the previous
 step. Here's a concrete example:
 
-`./bin/update --set-mirror http://www.gtlib.gatech.edu/pub/archlinux/`
+`'./bin/update --set-mirror http://www.gtlib.gatech.edu/pub/archlinux/'`
 
 
 
