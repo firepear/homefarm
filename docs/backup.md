@@ -7,6 +7,8 @@ we only care about their workunits. The control node is different
 though, since it stores the unique configuration of our farm. The
 `backup` utility helps with this.
 
+## Backup the farm
+
 `'./bin/backup'`
 
 This will create a tarball containing every piece of local
@@ -14,19 +16,21 @@ configuration for your farm. (Assuming you've been following the
 directions in these docs! If you go off piste, you're on your own!)
 
 Move this tarball somewhere safe, like another server, or an S3
-bucket, or dropbox. Update it whenever you'd like. After a control
-node reinstall, get the tarball back on the control node and run:
+bucket, or dropbox. Update it whenever you'd like.
+
+## Recovering a control node
+
+Do the first four steps detailed in the [control node install
+doc](https://github.com/firepear/homefarm/blob/master/docs/control_install.md).
+
+After that, cd to `~/homefarm` and copy the archive file into the
+directory. Restore the farm configuration from the archive:
 
 `'./bin/backup --restore'`
 
-It will unpack the archive and move things to their correct
-locations. You'll be able to ssh into all your compute nodes, you
-won't have to generate a new mirrorlist, and so on.
+And rebuild the local Arch repository:
 
-The local mirror will need to rebuild itself, though, so the first
-time you run `./bin/update` after reinstalling the control node will
-take much longer than usual.
+`'export MIRROR_URL=$(cat .mirror_url) && ./bin/update --set-mirror "${MIRROR_URL}"'`
 
-Alternatively, you can force the rebuild by running: `'./bin/update
---set-mirror MIRROR_URL'`. If you don't remember which mirror you
-used, just do `'cat .mirror_url'`
+The control node should now be back to the state it was in before the
+reinstall.
