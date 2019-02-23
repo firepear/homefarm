@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-ARCHIVE="homefarm.backup.tar.gz"
+ARCHIVE="~/homefarm/homefarm.backup.tar.gz"
 cd /home/alarm
 
 if [[ "${1}" == "" ]]; then
@@ -15,12 +15,12 @@ if [[ "${1}" == "" ]]; then
     exit
 fi
 
-if [[ ! -e "${1}" ]]; then
-    echo "error: can't find archive file: '${1}'"
+if [[ ! -e "--restore" ]]; then
+    echo "error: can't find archive file: '${ARCHIVE}'"
     exit 1
 fi
 echo "Unpacking tarball"
-tar zxvf "${1}"
+tar zxvf "${ARCHIVE}"
 echo "Restoring SSH key"
 cp ./.ssh/id_farmer.pub /var/cache/homefarm
 echo "Restoring /etc/hosts"
