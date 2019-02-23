@@ -28,7 +28,14 @@ Homefarm makes a few assumptions:
     * [Control node install](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
     * [Compute node install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
     * [BOINC initialization](https://github.com/firepear/homefarm/blob/master/docs/boinc_setup.md)
-* [Managing and maintaining your farm](https://github.com/firepear/homefarm/blob/master/docs/management_and_maintenance.md).
+* Managing and maintaining your farm
+    * [Keep the farm up to date](https://github.com/firepear/homefarm/blob/master/docs/update.md)
+    * [Check farm status](https://github.com/firepear/homefarm/blob/master/docs/status.md)
+    * [Connect to compute nodes](https://github.com/firepear/homefarm/blob/master/docs/ssh.md)
+    * [Managing BOINC](https://github.com/firepear/homefarm/blob/master/docs/boinc.md)
+    * [Add/reinstall a compute node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
+    * [Backup/reinstall the control node](https://github.com/firepear/homefarm/blob/master/docs/backup.md)
+    * [Using GPUs](https://github.com/firepear/homefarm/blob/master/docs/gpgpu.md)
 * If you have a pre-v0.13 Homefarm install, please see the [upgrade
 doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
 
