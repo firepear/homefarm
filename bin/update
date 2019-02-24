@@ -74,6 +74,9 @@ EOF
 fi
 
 # handle setting mirror
+cd ~/homefarm
+. ./bin/util.sh
+
 if [[ "${1}" == "-m" ]] || [[ "${1}" == "--set-mirror" ]]; then
     if [[ "${2}" == "" ]]; then
         echo "error: must provide mirror URL with -m/--set-mirror"
@@ -99,10 +102,6 @@ fi
 
 ######################################################################
 # script proper begins
-
-# cd to homefarm and source util funcs
-cd ~/homefarm
-. ./bin/util.sh
 
 NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)

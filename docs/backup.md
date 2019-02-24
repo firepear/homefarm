@@ -20,11 +20,12 @@ bucket, or dropbox. Update it whenever you'd like.
 
 ## Recovering a control node
 
-Do the first four steps detailed in the [control node install
+Do the first five steps detailed in the [control node install
 doc](https://github.com/firepear/homefarm/blob/master/docs/control_install.md).
 
-After that, cd to `~/homefarm` and copy the archive file into the
-directory. Restore the farm configuration from the archive:
+After that, reboot the Pi, login, and cd to `~/homefarm`.  Copy the
+archive file onto the control node and into `~/homefarm`. Then restore
+the farm configuration from the archive:
 
 `'./bin/backup --restore'`
 
