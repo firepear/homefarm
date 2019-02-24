@@ -31,7 +31,7 @@ the farm configuration from the archive:
 
 And rebuild the local Arch repository:
 
-`'export MIRROR_URL=$(cat .mirror_url) && ./bin/update --set-mirror "${MIRROR_URL}"'`
+`'./bin/update --set-mirror "$(cat .mirror_url)"'`
 
 The control node should now be back to the state it was in before the
 reinstall.
