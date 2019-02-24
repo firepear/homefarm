@@ -31,6 +31,7 @@ update_homefarm() {
 }
 
 update_os() {
+    cd ~/homefarm
     shownotice "Checking for OS updates"
     CONUPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
@@ -49,6 +50,7 @@ update_os() {
 }
 
 update_boinc() {
+    cd ~/homefarm
     # if repo update flag file exists, update BOINC and clear the flag
     if [[ -e ./.repoupdate ]]; then
         shownotice "Updating BOINC on compute nodes"
