@@ -72,7 +72,7 @@ for pkg in pkgfiles.keys():
 
 
 # if a file in ${LOCALREPO} is not in the filename list, delete it
-print("Deleting old packages", flush=True)
+print("Deleting outdated/unused packages", flush=True)
 for pkg in localpkgs:
     if pkg not in pkgfiles:
         log.write("Deleting '{}'\n".format(pkg))
