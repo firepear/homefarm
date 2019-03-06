@@ -10,6 +10,12 @@
       owner: root
       group: root
       mode: 0644
+  - name: Halt BOINC
+    become: true
+    service:
+      name: boinc-client
+      state: stopped
+    ignore_errors: true
   - name: Upgrade system software
     become: true
     pacman:
@@ -27,3 +33,8 @@
     pip:
       name: ansible
       state: latest
+  - name: Restart BOINC
+    become: true
+    service:
+      name: boinc-client
+      state: started
