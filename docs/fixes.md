@@ -5,9 +5,9 @@ you need to do a fix to unbreak an OS update. This is how to do those.
 
 ## 2019-03-09 pip ansible update breakage
 
-This was the impetus for moving Homefarm to the Arch asible
-package. To get things in line, run the following commands from the
-control node, as usual.
+This was the impetus for moving Homefarm to the Arch ansible
+package. To get things in line, run the following commands on the
+control node, from `~/homefarm`, as usual.
 
 ```
 export sshcmd='pip uninstall ansible'; for node in nodes/node*yml; \
