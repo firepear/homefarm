@@ -36,6 +36,7 @@ Homefarm makes a few assumptions:
     * [Add/reinstall a compute node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
     * [Backup/reinstall the control node](https://github.com/firepear/homefarm/blob/master/docs/backup.md)
     * [Using GPUs](https://github.com/firepear/homefarm/blob/master/docs/gpgpu.md)
+    * [Fixes and Unbreaks](https://github.com/firepear/homefarm/blob/master/docs/fixes.md)
 * Problems and troubleshooting
     * If you've found a bug or have a suggestion, please [create a new
       issue](https://github.com/firepear/homefarm/issues) on Github.
