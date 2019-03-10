@@ -8,16 +8,6 @@ cd /root
 # install preqs
 clear
 shownotice "Homefarm setup beginning"
-shownotice "Installing Ansible prerequisites"
-yes | pacman -S --needed python python-pip linux-headers libffi openssl sudo
-# upgrade pip to avoid dep problems in ansible install
-pip3 install --upgrade pip
-# we need a just plain "python" executable for ansible
-ln -f -s /usr/bin/python3 /usr/bin/python
-
-# install ansible
-shownotice "Installing Ansible"
-pip3 install ansible
 
 # create user, set passwd, config sudo access, and setup ssh keys
 shownotice "Creating user for Ansible"
@@ -33,6 +23,9 @@ sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/
 # randomize root passwd while we're here
 passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
 usermod -p "${passwd}" root
+
+shownotice "Installing Ansible and prerequisites"
+yes | pacman -S --needed python openssl sudo ansible
 
 shownotice "Configuring sensors"
 /usr/bin/sensors-detect --auto > /dev/null

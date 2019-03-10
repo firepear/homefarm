@@ -28,11 +28,6 @@
   #  apk:
   #    name: x, y
   #    state: present
-  - name: Upgrade ansible
-    become: true
-    pip:
-      name: ansible
-      state: latest
   - name: Restart BOINC
     become: true
     service:

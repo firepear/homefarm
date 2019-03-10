@@ -16,7 +16,7 @@ shownotice "Welcome to homefarm control node setup"
 shownotice "Updating system software"
 yes | pacman -Syu
 shownotice "Installing pre-requisites"
-yes | pacman -S --needed sudo darkhttpd go python python-pip boinctui openntpd gcc pkg-config make keychain
+yes | pacman -S --needed sudo darkhttpd go python boinctui openntpd gcc pkg-config make keychain ansible
 # set up sudoers file
 echo "alarm	ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 
@@ -82,10 +82,6 @@ systemctl enable openntpd.service
 # enable sshd
 systemctl enable sshd.socket
 
-
-# install ansible
-shownotice "Installing ansible"
-pip3 install ansible
 
 # generate ssh key
 shownotice "Generating SSH configuration for Ansible"
