@@ -1,4 +1,5 @@
 acl
+ansible
 archlinux-keyring
 argon2
 attr
