@@ -38,9 +38,6 @@ update_os() {
         echo "Updating control node OS packages"
         yes | sudo pacman -Syuq > /dev/null 2>&1
         yes | sudo pacman -Sccq > /dev/null 2>&1
-
-        echo "Updating control node Ansible install"
-        sudo pip3 install ansible --upgrade > /dev/null
     fi
 
     if [[ "${localrepo_updated}" == "true" ]]; then
