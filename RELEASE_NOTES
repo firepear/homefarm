@@ -1,3 +1,14 @@
+1.1.2 - 2019-03-22
+--------------------------------------------------------------------
+
+    * A reference to pip-installed Ansible was missed in v1.1.0, in
+      the control node update process. This has been removed.
+
+    * pip removed from initial packages list for localrepo
+
+    * Fix for bad TZ symlinks in compute-install
+
+
 1.1.1 - 2019-03-16
 --------------------------------------------------------------------
 

@@ -47,8 +47,11 @@ Homefarm makes a few assumptions:
     * Older known update problems will be documented here: [update
       issue
       archive](https://github.com/firepear/homefarm/blob/master/docs/known_issues.md)
-
-
-If you have a pre-v0.13 Homefarm install, please see the [upgrade
-doc](https://github.com/firepear/homefarm/blob/master/docs/upgrade-to-0.13.0.md).
+* Other
+    * Have homefarm? Want to set up an Arch-based workstation or
+      server that _isn't_ part of the farm? Follow the compute node
+      install process, but don't run `compute-setup` after rebooting
+      from `compute-install`. You'll have a core install with a
+      working network connection, ready for user creation and install
+      of whatever packages you need. (Give root a password though!)
 
