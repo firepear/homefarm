@@ -174,7 +174,7 @@ until [[ "\${TZ}" != "" ]]; do
         TZ=""
     fi
 done
-ln -sf "\${TZ}" /etc/localtime
+ln -sf "/usr/share/zoneinfo/\${TZ}" /etc/localtime
 hwclock --systohc
 
 shownotice "Networking setup"
