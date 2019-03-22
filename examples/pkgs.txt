@@ -161,7 +161,6 @@ python-msgpack
 python-packaging
 python-paramiko
 python-pep517
-python-pip
 python-ply
 python-progress
 python-pyasn1
