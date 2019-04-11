@@ -28,8 +28,3 @@
   #  apk:
   #    name: x, y
   #    state: present
-  - name: Restart BOINC
-    become: true
-    service:
-      name: boinc-client
-      state: started

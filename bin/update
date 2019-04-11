@@ -41,7 +41,7 @@ update_os() {
     fi
 
     if [[ "${localrepo_updated}" == "true" ]]; then
-        echo "Updating compute node OS packages and Ansible install"
+        echo "Updating compute node OS packages"
         ansible-playbook compute-nodes-system-update.yml
     fi
 }
