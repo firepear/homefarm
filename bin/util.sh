@@ -56,11 +56,10 @@ update_localrepo() {
         if [[ "${prevmd5}" == "${coremd5}" ]]; then
             rm core.db.tar.gz
             return
-        else
-            export localrepo_updated="true"
         fi
     fi
     echo "${coremd5}" > prevmd5
+    export localrepo_updated="true"
 
     shownotice "Updating local mirror"
     # generate and grab installed packages list
@@ -88,12 +87,12 @@ update_localrepo() {
     done
     cd "${repodir}" || exit
     # call the python script which manages all the repo files
-    ~/homefarm/bin/update-repo "${repodir}" "${mirrorurl}"
+    ~/homefarm/bin/update-repo "${repodir}" "${mirrorurl}" "${VERBOSE}"
     # delete the db files and the installed package list
     rm -rf "${repodir}/db"
     # rebuild the local repo index
     echo "Building repo index (this will take a while)"
-    repo-add -q "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.tar.xz > /dev/null 2>&1
+    repo-add -q -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.tar.xz >> update.log 2>&1 || /bin/true
     cd ~/homefarm || exit
 }
 

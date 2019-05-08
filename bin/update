@@ -40,6 +40,8 @@ update_os() {
         yes | sudo pacman -Sccq > /dev/null 2>&1
     fi
 
+    # future me running shellcheck: this variable is exported from
+    # util.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
         echo "Updating compute node OS packages"
         ansible-playbook compute-nodes-system-update.yml
@@ -72,16 +74,24 @@ EOF
     exit 0
 fi
 
-# handle setting mirror
+# read in utility code (includes update_localrepo)
 cd ~/homefarm
 . ./bin/util.sh
 
+# set verbose mode (or not)
+if [[ "${1}" == "-v" ]] || [[ "${1}" == "--verbose" ]]; then
+    export VERBOSE="true"
+    shift
+fi
+
+# handle setting mirror
 if [[ "${1}" == "-m" ]] || [[ "${1}" == "--set-mirror" ]]; then
-    if [[ "${2}" == "" ]]; then
+    if [[ ! "${2}" =~ ^http ]]; then
         echo "error: must provide mirror URL with -m/--set-mirror"
         exit 1
     fi
     echo "${2}" > ./.mirror_url
+    echo "Mirror url set to '${MIRROR_URL}'"
     update_localrepo "${LOCALREPO}" "${2}"
     exit 0
 fi
@@ -98,6 +108,15 @@ EOF
     exit 1
 fi
 
+# handle unknown args
+if [[ "${1}" != "" ]]; then
+    cat <<EOF
+error: unknown argument: "${1}"
+
+See README.md for more information.
+EOF
+    exit 1
+fi
 
 ######################################################################
 # script proper begins

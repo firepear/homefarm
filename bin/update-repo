@@ -15,6 +15,9 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
 
 localrepo = sys.argv[1]
 mirrorurl = sys.argv[2]
+verbose   = False
+if len(sys.argv) == 4:
+    verbose = True
 
 # switch to the local repo directory
 os.chdir(localrepo)
@@ -32,7 +35,7 @@ log.write("Packages currently in repo: {}\n".format(len(localpkgs)))
 # read our list of installed packages
 with open("./db/pkgs.txt") as pkgfile:
     pkgs = [p.rstrip() for p in pkgfile.readlines()]
-    log.write("Packages installed on nodes: {}\n".format(len(pkgs)))
+    log.write("Packages installed on nodes: {}\n".format(len(pkgs) - 1))
 
 
 # gather data on all available packages
@@ -68,7 +71,9 @@ for pkg in pkgfiles.keys():
         rc = 1
         while rc != 0:
             log.write("Downloading '{}'\n".format(pkgurl))
-            rc = subprocess.run(['curl', '-s', '--max-time', '60', pkgurl, '-o', pkgdest]).returncode
+            rc = subprocess.run(['curl', '-s', '--max-time', '60', pkgurl, '-o', pkgdest], check=True).returncode
+            if verbose is True:
+                print("\t{}".format(pkg), flush=True)
 
 
 # if a file in ${LOCALREPO} is not in the filename list, delete it
@@ -77,5 +82,7 @@ for pkg in localpkgs:
     if pkg not in pkgfiles:
         log.write("Deleting '{}'\n".format(pkg))
         os.remove(pkg)
+        if verbose is True:
+            print("\t{}".format(pkg), flush=True)
 
 log.close()
