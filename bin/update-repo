@@ -66,14 +66,26 @@ for repo in repos:
 print("Downloading new/updated packages", flush=True)
 for pkg in pkgfiles.keys():
     if pkg not in localpkgs:
-        pkgurl = "{}/{}/os/x86_64/{}".format(mirrorurl, pkgfiles[pkg], pkg)
-        pkgdest = "{}/{}".format(localrepo, pkg)
-        rc = 1
-        while rc != 0:
-            log.write("Downloading '{}'\n".format(pkgurl))
-            rc = subprocess.run(['curl', '-s', '--max-time', '60', pkgurl, '-o', pkgdest], check=True).returncode
-            if verbose is True:
-                print("\t{}".format(pkg), flush=True)
+        fetch_count = 0
+        filetype = ""
+        # try to fetch until we get "XZ compressed" or 5 tries
+        while "XZ compressed" not in filetype and fetch_count < 5:
+            pkgurl = "{}/{}/os/x86_64/{}".format(mirrorurl, pkgfiles[pkg], pkg)
+            pkgdest = "{}/{}".format(localrepo, pkg)
+            fetch_count += 1
+            rc = 1
+            while rc != 0:
+                log.write("Downloading '{}' (try {})\n".format(pkgurl, fetch_count))
+                rc = subprocess.run(['curl', '-s', '--max-time', '60', pkgurl, '-o', pkgdest], check=True).returncode
+            filetype = subprocess.check_output(['file', pkgdest], text=True)
+        # delete the file and fail if we hit 5 fetch attempts
+        if fetch_count == 5:
+            os.remove(pkgdest)
+            log.write("ERROR: could not fetch {}\n".format(pkgurl))
+            sys.exit(2)
+        # all good; carry on
+        if verbose is True:
+            print("\t{}".format(pkg), flush=True)
 
 
 # if a file in ${LOCALREPO} is not in the filename list, delete it

@@ -56,10 +56,11 @@ update_localrepo() {
         if [[ "${prevmd5}" == "${coremd5}" ]]; then
             rm core.db.tar.gz
             return
+        else
+            export localrepo_updated="true"
         fi
     fi
     echo "${coremd5}" > prevmd5
-    export localrepo_updated="true"
 
     shownotice "Updating local mirror"
     # generate and grab installed packages list
@@ -92,17 +93,9 @@ update_localrepo() {
     rm -rf "${repodir}/db"
     # rebuild the local repo index
     echo "Building repo index (this will take a while)"
-    repo-add -q -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.tar.xz >> update.log 2>&1 || /bin/true
+    repo-add -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.tar.xz >> update.log 2>&1
     cd ~/homefarm || exit
 }
-
-
-#terminate() {
-#    echo
-#    echo "${1}. Terminating install."
-#    echo
-#    exit 1
-#}
 
 #findmac() {
 #    IFACES=( ls /sys/class/net )
