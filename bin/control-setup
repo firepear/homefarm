@@ -4,7 +4,7 @@
 # rights reserved.  Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 set -e
-source ./bin/util.sh
+source ./bin/common.sh
 
 
 clear
@@ -126,7 +126,7 @@ shownotice "Finalizing control node setup"
 cp /home/alarm/.ssh/id_farmer.pub /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-install /var/cache/homefarm
 ln -fs /home/alarm/homefarm/bin/compute-setup /var/cache/homefarm
-ln -fs /home/alarm/homefarm/bin/util.sh /var/cache/homefarm
+ln -fs /home/alarm/homefarm/bin/common.sh /var/cache/homefarm
 sedexpr="s/CONTROL_NODE_IP/${USERADDR}/"
 sed -e "${sedexpr}" /home/alarm/homefarm/examples/pacman.conf > /var/cache/homefarm/pacman.conf
 chown -R alarm:alarm /var/cache/homefarm

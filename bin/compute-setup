@@ -3,7 +3,7 @@ set -e
 cd /root
 
 # source util funcs
-. ./util.sh
+. ./common.sh
 
 # install preqs
 clear

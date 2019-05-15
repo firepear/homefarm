@@ -27,15 +27,15 @@ USERESSID="${3}"
 USERWPAPW="${4}"
 
 # fetch util funcs
-if [[ ! -e "util.sh" ]]; then
-    if ! curl --connect-timeout 10 -s -O "${1}/util.sh"; then
+if [[ ! -e "common.sh" ]]; then
+    if ! curl --connect-timeout 10 -s -O "${1}/common.sh"; then
         echo "error: can't reach control node"
         echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
         exit 1
     fi
 fi
 # and source
-. ./util.sh
+. ./common.sh
 
 clear
 shownotice "Beginning Homefarm/Arch install"
@@ -153,11 +153,11 @@ INSTALLDEVICE="${INSTALLDEVICE}"
 
 
 # fetch util funcs
-if [[ ! -e "util.sh" ]]; then
-    curl --connect-timeout 10 -s -O "\${CONTROLLER}/util.sh"
+if [[ ! -e "common.sh" ]]; then
+    curl --connect-timeout 10 -s -O "\${CONTROLLER}/common.sh"
 fi
 # and source
-. ./util.sh
+. ./common.sh
 
 # set TZ
 shownotice "Timezone configuration"
