@@ -18,8 +18,6 @@ It's safe to run the update script as often as you'd like. If there's
 nothing to do, it will simply do nothing! This makes it very easy to
 keep all aspects of your cluster up to date.
 
-If you'd like to see the packages being updated in the local repo, run
-`'./bin/update -v'`
 
 # Troubleshooting
 
