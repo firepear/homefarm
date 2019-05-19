@@ -78,12 +78,6 @@ fi
 cd ~/homefarm
 . ./bin/common.sh
 
-# set verbose mode (or not)
-if [[ "${1}" == "-v" ]] || [[ "${1}" == "--verbose" ]]; then
-    export VERBOSE="true"
-    shift
-fi
-
 # handle setting mirror
 if [[ "${1}" == "-m" ]] || [[ "${1}" == "--set-mirror" ]]; then
     if [[ ! "${2}" =~ ^http ]]; then

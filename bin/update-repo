@@ -15,9 +15,6 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
 
 localrepo = sys.argv[1]
 mirrorurl = sys.argv[2]
-verbose   = False
-if len(sys.argv) == 4:
-    verbose = True
 
 # switch to the local repo directory
 os.chdir(localrepo)
@@ -84,8 +81,7 @@ for pkg in pkgfiles.keys():
             log.write("ERROR: could not fetch {}\n".format(pkgurl))
             sys.exit(2)
         # all good; carry on
-        if verbose is True:
-            print("\t{}".format(pkg), flush=True)
+        print("\t{}".format(pkg), flush=True)
 
 
 # if a file in ${LOCALREPO} is not in the filename list, delete it
@@ -94,7 +90,6 @@ for pkg in localpkgs:
     if pkg not in pkgfiles:
         log.write("Deleting '{}'\n".format(pkg))
         os.remove(pkg)
-        if verbose is True:
-            print("\t{}".format(pkg), flush=True)
+        print("\t{}".format(pkg), flush=True)
 
 log.close()
