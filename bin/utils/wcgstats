@@ -1,0 +1,67 @@
+#!/bin/bash
+
+teamid="" # 0CG2LSD992
+window=30
+
+while [[ "${1}" != "" ]]; do
+    case "${1}" in
+        "-h")
+            echo "usage is: ${0} -t TEAMID -d DAYS"
+            echo "          (DAYS defaults to 30)"
+            exit 1
+            ;;
+        "-t")
+            shift && teamid="${1}" && shift
+            ;;
+        "-d")
+            shift && window="${1}" && shift
+            ;;
+        *)
+            echo "error: unrecognized option '${1}'. see '${0} -h'"
+            exit 1
+            ;;
+    esac
+done
+
+i=1
+thours=0
+twus=0
+tpoints=0
+
+curl -s -o stats.txt "https://www.worldcommunitygrid.org/team/viewTeamStatHistory.do?teamId=${teamid}&numRecordsPerPage=${window}"
+grep 'td align="center"' stats.txt | grep -v height | cut -d '>' -f 3 | cut -d '<' -f 1 > stats2.txt
+
+while read -r line; do
+    # example lines
+    # 0:059:20:42:03
+    # 350,179
+    # 554
+    if [[ "${i}" == "1" ]]; then
+        days=$(echo "${line}" | cut -d':' -f2)
+        days=${days#0} # remove leading zero
+        thours=$((days*24+thours))
+        hours=$(echo "${line}" | cut -d':' -f3)
+        hours=${hours#0} # remove leading zero
+        thours=$((hours+thours))
+    fi
+    if [[ "${i}" == "2" ]]; then
+        points=$(sed -e 's/,//g' <<< "${line}")
+        tpoints=$((tpoints+points))
+    fi
+    if [[ "${i}" == "3" ]]; then
+        wus=$(sed -e 's/,//g' <<< "${line}")
+        twus=$((twus+wus))
+    fi
+    i=$((i+1))
+    if [[ "${i}" == "4" ]]; then
+        i=1
+    fi
+done < "stats2.txt"
+
+echo
+echo "Avg points last ${window}d: $((tpoints/30))/d"
+echo "Avg CPU last ${window}d: $((thours/30/24))d/d ($((thours/30))h/d)"
+echo "Avg WUs last ${window}d: $((twus/30))/d"
+echo
+
+rm stats.txt stats2.txt

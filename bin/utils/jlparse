@@ -1,0 +1,17 @@
+#!/bin/env python3
+
+#
+# jlparse - parse and operate on BOINC job logs
+#
+#
+# ops: count :: Tally number of WUs crunched
+#      time  :: Report min/max/avg runtime of WUs
+#
+# args: -p PROJECT  :: Which project's jobfile to use (default: all)
+#       -t WUTYPE   :: Which workunits to use (default: all)
+#       -s TIMESPAN :: How far back to analyze, in hours (default: all)
+#
+
+import argparse
+import paramiko
+
