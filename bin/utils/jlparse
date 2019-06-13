@@ -44,10 +44,13 @@ parser.add_argument('-i', '--keyfile', metavar='SSH_KEY', dest="key", default=".
                     help="which SSH keyfile to use for connection")
 args = parser.parse_args()
 
+# fixup projurl
 if args.projurl != 'job_log_*':
     args.projurl = "job_log_{}.txt".format(args.projurl)
+# and nodes
 if args.nodes == "999ALL":
     args.nodes = glob.glob('./nodes/*.yml')
     args.nodes = [x.replace('./nodes/', '') for x in nodes]
     args.nodes = [x.replace('.yml', '') for x in nodes]
+# and the key
 args.key = paramiko.ed25519key.Ed25519Key.from_private_key_file(args.key)
