@@ -1,4 +1,12 @@
-1.1.4 - 2019-05-XX
+1.1.5 - 2019-06-xx
+--------------------------------------------------------------------
+
+    * New utility scripts (see docs)
+
+    * BOINC work directory now world-readable
+
+
+1.1.4 - 2019-05-12
 --------------------------------------------------------------------
 
     * More robust package download handling in update script

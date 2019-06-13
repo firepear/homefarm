@@ -9,9 +9,45 @@
 #
 # args: -p PROJECT  :: Which project's jobfile to use (default: all)
 #       -t WUTYPE   :: Which workunits to use (default: all)
-#       -s TIMESPAN :: How far back to analyze, in hours (default: all)
+#       -n NODE     :: Which node to pull jobfiles from (default: all)
+#       -s TIMESPAN :: How far back to analyze, in hours (default: 24)
+#       -i KEYFILE  :: Which SSH key to use for connection
 #
 
+# > The first column is the log time (Unix style -- milliseconds since 1/1/1970 UTC)
+# > ue: estimated run time of the work unit
+# > ct: actual CPU time
+# > fe: estimated flops
+# > nm: work unit name
+# > et: elapsed time (work unit wall clock time)
+
 import argparse
+import glob
+import os
 import paramiko
 
+
+########################################################################
+# main script begins
+
+# set up and handle arguments
+parser = argparse.ArgumentParser(description='parse BOINC job logs')
+parser.add_argument('-p', '--project', metavar='PROJECT_URL', dest="projurl", default='job_log_*',
+                    help="project URL of the joblog to parse (e.g. www.gpugrid.net; default: all)")
+parser.add_argument('-t', '--type', metavar='WU_TYPE', dest="wutype", default="999ALL",
+                    help="the workunit type/name to filter by (e.g. MCM1)")
+parser.add_argument('-n', '--node', metavar='NODE_NAME', dest="nodes", default="999ALL",
+                    help="which node to check logs of (default: all)")
+parser.add_argument('-s', '--timespan', metavar='HOURS', dest="span", default="24",
+                    help="how many hours of logs to parse (default: 24)")
+parser.add_argument('-i', '--keyfile', metavar='SSH_KEY', dest="key", default="../.ssh/id_farmer.pub",
+                    help="which SSH keyfile to use for connection")
+args = parser.parse_args()
+
+if args.projurl != 'job_log_*':
+    args.projurl = "job_log_{}.txt".format(args.projurl)
+if args.nodes == "999ALL":
+    args.nodes = glob.glob('./nodes/*.yml')
+    args.nodes = [x.replace('./nodes/', '') for x in nodes]
+    args.nodes = [x.replace('.yml', '') for x in nodes]
+args.key = paramiko.ed25519key.Ed25519Key.from_private_key_file(args.key)

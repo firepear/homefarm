@@ -77,6 +77,12 @@
     "bash -lc 'rm -rf {{ boinc_src_file }} {{ boinc_src_unpack_dir }}'"
   when: boinc_built.changed
 
+- name: Set perms of BOINC work dir
+  become: true
+  file:
+    path: "{{ boinc_work_dir }}"
+    mode: 0755
+
 - name: Copy cc_config to BOINC dir
   become: true
   copy:
