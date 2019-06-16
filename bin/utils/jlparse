@@ -25,6 +25,22 @@ import argparse
 import glob
 import os
 import paramiko
+import time
+
+
+def strtime(time):
+    hours = 0
+    mins = 0
+    timestr = ""
+    if time > 3600:
+        hours = int(time / 3600)
+        time = time - (3600 * hours)
+        timestr = "{}h ".format(hours)
+    if time > 60:
+        mins = int(time / 60)
+        time = time - (60 * mins)
+        timestr = "{}{}min ".format(timestr, mins)
+    return "{}{}s".format(timestr, int(time))
 
 
 ########################################################################
@@ -34,23 +50,74 @@ import paramiko
 parser = argparse.ArgumentParser(description='parse BOINC job logs')
 parser.add_argument('-p', '--project', metavar='PROJECT_URL', dest="projurl", default='job_log_*',
                     help="project URL of the joblog to parse (e.g. www.gpugrid.net; default: all)")
-parser.add_argument('-t', '--type', metavar='WU_TYPE', dest="wutype", default="999ALL",
+parser.add_argument('-t', '--type', metavar='WU_TYPE', dest="wutype", default=None,
                     help="the workunit type/name to filter by (e.g. MCM1)")
 parser.add_argument('-n', '--node', metavar='NODE_NAME', dest="nodes", default="999ALL",
                     help="which node to check logs of (default: all)")
-parser.add_argument('-s', '--timespan', metavar='HOURS', dest="span", default="24",
+parser.add_argument('-s', '--timespan', metavar='HOURS', dest="span", type=int, default=24,
                     help="how many hours of logs to parse (default: 24)")
 parser.add_argument('-i', '--keyfile', metavar='SSH_KEY', dest="key", default="../.ssh/id_farmer.pub",
                     help="which SSH keyfile to use for connection")
 args = parser.parse_args()
 
 # fixup projurl
+# TODO handling multiple joblogs doesn't work yet
 if args.projurl != 'job_log_*':
     args.projurl = "job_log_{}.txt".format(args.projurl)
+args.projurl = "/var/lib/boinc/{}".format(args.projurl)
+# and the timespan
+timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))
 # and nodes
-if args.nodes == "999ALL":
-    args.nodes = glob.glob('./nodes/*.yml')
-    args.nodes = [x.replace('./nodes/', '') for x in nodes]
-    args.nodes = [x.replace('.yml', '') for x in nodes]
+# TODO this doesn't matter until remote work is in
+#if args.nodes == "999ALL":
+#    args.nodes = glob.glob('./nodes/*.yml')
+#    args.nodes = [x.replace('./nodes/', '') for x in nodes]
+#    args.nodes = [x.replace('.yml', '') for x in nodes]
 # and the key
-args.key = paramiko.ed25519key.Ed25519Key.from_private_key_file(args.key)
+# TODO skipping this for now; operate locally
+#args.key = paramiko.ed25519key.Ed25519Key.from_private_key_file(args.key)
+
+matches = []
+
+with open(args.projurl) as f:
+    for line in f:
+        line = line.rstrip("\n")
+        # split line into fields:
+        # 0:timestamp 2:est_runtime 4:runtime 6:est_flops 8:name 10:credit 12:status
+        fields = line.split()
+        # skip this line if it's not within our timespan
+        if int(fields[0]) < timelimit:
+            continue
+        # skip line if it's not the type/name we're looking for
+        if args.wutype != None:
+            if args.wutype not in fields[8]:
+                continue
+        matches.append(int(float(fields[4])))
+
+print("WUs in past {} hours: {}".format(args.span, len(matches)))
+mintime = strtime(min(matches))
+maxtime = strtime(max(matches))
+avgtime = strtime(sum(matches)/len(matches))
+print("\tMin runtime: {}".format(mintime))
+print("\tMax runtime: {}".format(maxtime))
+print("\tAvg runtime: {}".format(avgtime))
+
+print("WUs by quintile:")
+qspan = int((max(matches) -  min(matches)) / 5)
+q = [ min(matches) + qspan, min(matches) + qspan * 2, min(matches) + qspan * 3,
+      min(matches) + qspan * 4, max(matches) ]
+qcounts = [0, 0, 0, 0, 0]
+for m in matches:
+    if m >= min(matches) and m < q[0]:
+        qcounts[0] += 1
+    elif m >= q[0] and m < q[1]:
+        qcounts[1] += 1
+    elif m >= q[1] and m < q[2]:
+        qcounts[2] += 1
+    elif m >= q[2] and m < q[3]:
+        qcounts[3] += 1
+    else:
+        qcounts[4] += 1
+for i in range(5):
+    print("\t<= {}\t {}\t ({}%)".format(strtime(q[i]), qcounts[i],
+                                        int(qcounts[i] / len(matches) * 100)))
