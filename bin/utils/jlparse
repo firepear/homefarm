@@ -25,6 +25,7 @@ import argparse
 import glob
 import os
 import paramiko
+import sys
 import time
 
 
@@ -92,7 +93,10 @@ with open(args.projurl) as f:
                 continue
         matches.append(int(float(fields[4])))
 
+
 print("WUs in past {} hours: {}".format(args.span, len(matches)))
+if len(matches) == 0:
+    sys.exit(0)
 mintime = strtime(min(matches))
 maxtime = strtime(max(matches))
 avgtime = strtime(sum(matches)/len(matches))
