@@ -39,7 +39,7 @@ def strtime(time):
     if time > 60:
         mins = int(time / 60)
         time = time - (60 * mins)
-    return "{:02d}h {:02d} {:02d}s".format(hours, mins, int(time))
+    return "{:02d}h {:02d}min {:02d}s".format(hours, mins, int(time))
 
 
 ########################################################################
@@ -97,12 +97,15 @@ with open(args.projurl) as f:
 print("WUs in past {} hours: {}".format(args.span, len(matches)))
 if len(matches) == 0:
     sys.exit(0)
+
 mintime = strtime(min(matches))
 maxtime = strtime(max(matches))
 avgtime = strtime(sum(matches)/len(matches))
 print("\tMin runtime: {}".format(mintime))
 print("\tMax runtime: {}".format(maxtime))
 print("\tAvg runtime: {}".format(avgtime))
+if len(matches) < 2:
+    sys.exit(0)
 
 print("WUs by quintile:")
 qspan = int((max(matches) -  min(matches)) / 5)
