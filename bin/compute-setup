@@ -21,7 +21,11 @@ mv id_farmer.pub /home/farmer/.ssh/authorized_keys
 chown -R farmer:farmer /home/farmer/.ssh
 sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 # randomize root passwd while we're here
-passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
+shownotice "Set root password"
+passwd=$(gutcheck "Enter a password for root", "Randomize")
+if [[ "${passwd}" == "Randomize" ]]; then
+    passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
+fi
 usermod -p "${passwd}" root
 
 shownotice "Installing Ansible and prerequisites"
@@ -31,11 +35,10 @@ shownotice "Configuring sensors"
 /usr/bin/sensors-detect --auto > /dev/null
 
 shownotice "Setting boot parameters"
-# add vsyscall to kernel boot parameters
-vsyscall_enable=$(grep -c vsyscall /boot/loader/entries/arch.conf) || true
-if [[ "${vsyscall_enable}" == "0" ]]; then
-    sed -i -E 's/^(options\s+.*)$/\1 vsyscall=emulate/' /boot/loader/entries/arch.conf
-fi
+bootparams=$(gutcheck "Enter desired boot parameters" "vsyscall=emulate mitigations=off")
+# add vsyscall to kernel boot parameters; needed for FAH2
+sedcmd="'s/^(options\s+.*)\$/\1 ${bootparams}/'"
+sed -i -E "${sedcmd}" /boot/loader/entries/arch.conf
 
 shownotice "Setup complete"
 echo "Rebooting in 5 seconds."

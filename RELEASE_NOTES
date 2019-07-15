@@ -1,9 +1,13 @@
-1.1.5 - 2019-06-xx
+1.2.0 - 2019-07-15
 --------------------------------------------------------------------
 
-    * New utility scripts (see docs)
+    * Root password can now be set on compute nodes at install time
+
+    * Boot parameters can now be set on compute nodes at install time
 
     * BOINC work directory now world-readable
+
+    * New utility scripts
 
 
 1.1.4 - 2019-05-12
