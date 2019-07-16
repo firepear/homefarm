@@ -59,9 +59,9 @@ while read -r line; do
 done < "stats2.txt"
 
 echo
-echo "Avg points last ${window}d: $((tpoints/30))/d"
-echo "Avg CPU last ${window}d: $((thours/30/24))d/d ($((thours/30))h/d)"
-echo "Avg WUs last ${window}d: $((twus/30))/d"
+echo "Avg points last ${window}d: $((tpoints/${window}))/d"
+echo "Avg CPU last ${window}d: $((thours/${window}/24))d/d ($((thours/${window}))h/d)"
+echo "Avg WUs last ${window}d: $((twus/${window}))/d"
 echo
 
 rm stats.txt stats2.txt
