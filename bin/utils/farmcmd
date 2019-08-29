@@ -1,0 +1,8 @@
+#!/bin/bash
+cd ~/homefarm
+
+for node in nodes/node*yml; do
+    node=$(basename "${node}" .yml)
+    echo "${node}"
+    ssh farmer@${node} "sudo ${@:2}"
+done
