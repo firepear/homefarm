@@ -1,8 +1,21 @@
 #!/bin/bash
-cd ~/homefarm
+cd ~/homefarm || exit
+
+if [[ "${1}" == "" || "${1}" == "-h" || "${1}" == "--help" ]]; then
+    cat <<EOF
+usage: farmcmd [CMD]
+
+Runs CMD on each node of the farm and displays the output. CMD should
+be a single argument, so use quotes as appropriate for complex things.
+
+Example: ./bin/utils/farmcmd 'cat /proc/cpuinfo | grep MHz | sort -r | uniq'
+EOF
+    exit
+fi
 
 for node in nodes/node*yml; do
     node=$(basename "${node}" .yml)
     echo "${node}"
-    ssh farmer@${node} "sudo ${@:2}"
+    ssh "farmer@${node}" "sudo ${1}"
+    echo
 done
