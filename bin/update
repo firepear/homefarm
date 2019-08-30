@@ -2,7 +2,7 @@
 set -e
 
 CONUPDATES=0
-LOCALREPO="/var/cache/homefarm/arch"
+LOCALREPO="/homefarm/srv/arch"
 
 update_homefarm() {
     # if we have a stored latest tag, read it in as current
