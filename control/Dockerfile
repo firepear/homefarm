@@ -6,8 +6,6 @@
 #
 
 FROM archlinux/base
-RUN yes | pacman -Syu
-RUN yes | pacman -S --needed darkhttpd python boinctui ansible
-EXPOSE 80
+RUN yes | pacman -Syu --needed darkhttpd python boinctui ansible
 VOLUME ["/homefarm"]
 WORKDIR /homefarm
