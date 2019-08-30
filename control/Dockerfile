@@ -6,6 +6,6 @@
 #
 
 FROM archlinux/base
-RUN yes | pacman -Syu --needed darkhttpd python boinctui ansible
+RUN yes | pacman -Syu --needed darkhttpd python boinctui ansible git openssh
 VOLUME ["/homefarm"]
 WORKDIR /homefarm

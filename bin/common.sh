@@ -96,15 +96,3 @@ update_localrepo() {
     repo-add -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.tar.xz >> update.log 2>&1
     cd ~/homefarm || exit
 }
-
-#findmac() {
-#    IFACES=( ls /sys/class/net )
-#    for if in ${IFACES[*]}
-#    do
-#        if [[ ${if} != "lo" ]]; then
-#            IFNAME=${if}
-#        fi
-#    done
-#    MAC=$( cat /sys/class/net/"${IFNAME}"/address )
-#    echo "${IFNAME} ${MAC}"
-#}
