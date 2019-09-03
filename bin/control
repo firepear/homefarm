@@ -47,7 +47,7 @@ function hf_init() {
     if [[ -e /homefarm/.mirror_url ]]; then
         echo "Skipping; already configured"
     else
-        MIRROR_URL=$(gutcheck "URL of remote repo (e.g. http://mirrors.ocf.berkeley.edu/archlinux/")
+        MIRROR_URL=$(gutcheck "URL of remote repo (e.g. http://mirrors.ocf.berkeley.edu/archlinux/)")
         echo "${MIRROR_URL}" > ./.mirror_url
         LOCALREPO="/homefarm/srv/arch"
         update_localrepo "${LOCALREPO}" "${MIRROR_URL}"

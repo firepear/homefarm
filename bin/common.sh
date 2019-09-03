@@ -67,7 +67,7 @@ update_localrepo() {
     mkdir -p "${repodir}/db"
     if [[ "${firstnode}" == "" ]]; then
         # this branch runs during control node install
-        cp ~/homefarm/examples/pkgs.txt ./db
+        cp /homefarm/examples/pkgs.txt ./db
     else
         # this branch runs during normal update
         ssh "farmer@${firstnode}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
@@ -88,11 +88,11 @@ update_localrepo() {
     done
     cd "${repodir}" || exit
     # call the python script which manages all the repo files
-    ~/homefarm/bin/update-repo "${repodir}" "${mirrorurl}"
+    /homefarm/bin/update-repo "${repodir}" "${mirrorurl}"
     # delete the db files and the installed package list
     rm -rf "${repodir}/db"
     # rebuild the local repo index
     echo "Building repo index (this will take a while)"
     repo-add -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.tar.xz >> update.log 2>&1
-    cd ~/homefarm || exit
+    cd /homefarm || exit
 }
