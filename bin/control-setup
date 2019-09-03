@@ -35,9 +35,11 @@ ln -fs /homefarm/bin/node-install /homefarm/srv
 ln -fs /homefarm/bin/node-setup /homefarm/srv
 ln -fs /homefarm/bin/common.sh /homefarm/srv
 sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
-sed -i -e "${sedexpr}" /homefarm/srv/pacman.conf
+sed -e "${sedexpr}" /homefarm/examples/pacman.conf > /homefarm/srv/pacman.conf
 # copy the example farm inventory file to the real one
-cp ./examples/farm.cfg ./ofarm.cfg
+cp ./examples/farm.cfg ./farm.cfg
+
+shownotice "Cleaning up package repo"
 yes | pacman -Scc
 
 shownotice "Setup complete"
