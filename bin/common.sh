@@ -82,7 +82,7 @@ update_localrepo() {
         fi
         mkdir -p "${repodir}/db/${repo}"
         mv "${repo}.db.tar.gz" "${repodir}/db/${repo}"
-        cd "${repodir}/db/${repo}" || exit
+        cd "${repodir}/db/${repo}"
         tar zxvf "${repo}.db.tar.gz" > /dev/null 2>&1
         rm "${repo}.db.tar.gz"
     done

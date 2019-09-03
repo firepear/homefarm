@@ -25,8 +25,6 @@ function hf_init() {
     shownotice "Configuring Homefarm installer webserver"
     HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
 
-    # do a tiny bit of housekeeping
-    shownotice "Finalizing control node setup"
     # create local package cache dir
     mkdir -p /homefarm/srv/arch
     # copy ssh pubkey for distribution to nodes
