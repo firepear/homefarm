@@ -88,7 +88,7 @@ update_localrepo() {
     done
     cd "${repodir}" || exit
     # call the python script which manages all the repo files
-    /homefarm/bin/update-repo "${repodir}" "${mirrorurl}"
+    /homefarm/bin/repo-update "${repodir}" "${mirrorurl}"
     # delete the db files and the installed package list
     rm -rf "${repodir}/db"
     # rebuild the local repo index
