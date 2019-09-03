@@ -38,9 +38,6 @@ function hf_init() {
     # copy the example farm inventory file to the real one
     cp ./examples/farm.cfg ./farm.cfg
 
-    shownotice "Cleaning up initial install"
-    yes | pacman -Scc
-
     shownotice "Initializing local package mirror"
     if [[ -e /homefarm/.mirror_url ]]; then
         echo "Skipping; already configured"
