@@ -9,15 +9,17 @@ source ./bin/common.sh
 
 clear
 shownotice "Welcome to homefarm control node setup"
-# TODO add warning about reading the docs first
-
 
 # generate ssh key
 shownotice "Generating SSH configuration for Ansible"
-ssh-keygen -t ed25519 -N "" -f id_farmer
-mkdir -p /homefarm/.ssh
-mv id_farmer* /homefarm/.ssh
-chmod 700 /homefarm/.ssh
+if [[ -e /homefarm/.ssh/id_farmer ]]; then
+    echo "Skipping; already configured"
+else
+    ssh-keygen -t ed25519 -N "" -f id_farmer
+    mkdir -p /homefarm/.ssh
+    mv id_farmer* /homefarm/.ssh
+    chmod 700 /homefarm/.ssh
+fi
 
 # get host address
 HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
@@ -29,11 +31,11 @@ mkdir -p /homefarm/srv/arch
 # copy ssh pubkey for distribution to nodes
 cp /homefarm/.ssh/id_farmer.pub /homefarm/srv
 # symlink install/setup scripts
-ln -fs /homefarm/bin/compute-install /homefarm/srv
-ln -fs /homefarm/bin/compute-setup /homefarm/srv
+ln -fs /homefarm/bin/node-install /homefarm/srv
+ln -fs /homefarm/bin/node-setup /homefarm/srv
 ln -fs /homefarm/bin/common.sh /homefarm/srv
 sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
-sed -i -e "${sedexpr}" /homefarm//srv/pacman.conf
+sed -i -e "${sedexpr}" /homefarm/srv/pacman.conf
 # copy the example farm inventory file to the real one
 cp ./examples/farm.cfg ./ofarm.cfg
 yes | pacman -Scc
