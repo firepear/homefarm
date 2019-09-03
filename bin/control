@@ -59,12 +59,12 @@ case "${1}" in
         ;;
     *)
         cat <<EOF
-error: unknown argument '"${1}"'
+error: unknown argument '${1}'
 
-usage: "${0}" init
+usage: ${0} init
        Initialize the control image
 
-       "${0}" installer
+       ${0} installer
        Start httpd for compute node installations (on port 9099)
 EOF
 esac
