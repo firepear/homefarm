@@ -44,11 +44,11 @@ function hf_init() {
     yes | pacman -Scc
 
     shownotice "Initializing local package mirror"
-    if [[ -e /homefarm/.mirror_url]]; then
+    if [[ -e /homefarm/.mirror_url ]]; then
         echo "Skipping; already configured"
     else
-        MIRRORURL=$(gutcheck "URL of remote repo (e.g. http://mirrors.ocf.berkeley.edu/archlinux/")
-        echo "${MIRRORURL}" > ./.mirror_url
+        MIRROR_URL=$(gutcheck "URL of remote repo (e.g. http://mirrors.ocf.berkeley.edu/archlinux/")
+        echo "${MIRROR_URL}" > ./.mirror_url
         LOCALREPO="/homefarm/srv/arch"
         update_localrepo "${LOCALREPO}" "${MIRROR_URL}"
     fi
