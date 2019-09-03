@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2017-2019 Shawn Boyette <shawn@firepear.net>. All
+# rights reserved.  Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+set -e
+source ./bin/common.sh
+
+function hf_init() {
+    clear
+    shownotice "Welcome to homefarm control node setup"
+
+    # generate ssh key
+    shownotice "Generating SSH configuration for Ansible"
+    if [[ -e /homefarm/.ssh/id_farmer ]]; then
+        echo "Skipping; already configured"
+    else
+        ssh-keygen -t ed25519 -N "" -f id_farmer
+        mkdir -p /homefarm/.ssh
+        mv id_farmer* /homefarm/.ssh
+        chmod 700 /homefarm/.ssh
+    fi
+
+    # get host address
+    shownotice "Configuring Homefarm installer webserver"
+    HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
+
+    # do a tiny bit of housekeeping
+    shownotice "Finalizing control node setup"
+    # create local package cache dir
+    mkdir -p /homefarm/srv/arch
+    # copy ssh pubkey for distribution to nodes
+    cp /homefarm/.ssh/id_farmer.pub /homefarm/srv
+    # symlink install/setup scripts
+    ln -fs /homefarm/bin/node-install /homefarm/srv
+    ln -fs /homefarm/bin/node-setup /homefarm/srv
+    ln -fs /homefarm/bin/common.sh /homefarm/srv
+    sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
+    sed -e "${sedexpr}" /homefarm/examples/pacman.conf > /homefarm/srv/pacman.conf
+    # copy the example farm inventory file to the real one
+    cp ./examples/farm.cfg ./farm.cfg
+
+    shownotice "Cleaning up package repo"
+    yes | pacman -Scc
+
+    shownotice "Setup complete"
+}
+
+function hf_installer() {
+    /usr/bin/darkhttpd /homefarm/srv --port 9099 --daemon
+}
+
+case "${1}" in
+    init)
+        hf_init
+        ;;
+    installer)
+        hf_installer
+        ;;
+    *)
+        cat <<EOF
+error: unknown argument '"${1}"'
+
+usage: "${0}" init
+       Initialize the control image
+
+       "${0}" installer
+       Start httpd for compute node installations (on port 9099)
+EOF
+esac
