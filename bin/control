@@ -40,8 +40,18 @@ function hf_init() {
     # copy the example farm inventory file to the real one
     cp ./examples/farm.cfg ./farm.cfg
 
-    shownotice "Cleaning up package repo"
+    shownotice "Cleaning up packages"
     yes | pacman -Scc
+
+    shownotice "Initializing local package mirror"
+    if [[ -e /homefarm/.mirror_url]]; then
+        echo "Skipping; already configured"
+    else
+        MIRRORURL=$(gutcheck "URL of remote repo (e.g. http://mirrors.ocf.berkeley.edu/archlinux/")
+        echo "${MIRRORURL}" > ./.mirror_url
+        LOCALREPO="/homefarm/srv/arch"
+        update_localrepo "${LOCALREPO}" "${MIRROR_URL}"
+    fi
 
     shownotice "Setup complete"
 }

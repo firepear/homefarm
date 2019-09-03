@@ -69,35 +69,22 @@ if [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
     cat <<EOF
 Update the cluster's OS and Homefarm install, as needed.
 
-See README.md for more information.
+See docs/update.md for more information.
 EOF
     exit 0
 fi
 
 # read in utility code (includes update_localrepo)
-cd ~/homefarm
+cd /homefarm
 . ./bin/common.sh
 
-# handle setting mirror
-if [[ "${1}" == "-m" ]] || [[ "${1}" == "--set-mirror" ]]; then
-    if [[ ! "${2}" =~ ^http ]]; then
-        echo "error: must provide mirror URL with -m/--set-mirror"
-        exit 1
-    fi
-    echo "${2}" > ./.mirror_url
-    echo "Mirror url set to '${MIRROR_URL}'"
-    update_localrepo "${LOCALREPO}" "${2}"
-    exit 0
-fi
 # read in mirror; error if we don't have one
 if [[ -e ./.mirror_url ]]; then
     MIRROR_URL=$(cat ./.mirror_url)
 else
     cat <<EOF
-Please run '${0} --set-mirror MIRROR_URL' to set the local repo's
-upstream mirror.
-
-See README.md for more information.
+There is no mirror URL set for the local repo. Has `control init` been
+run successfully?
 EOF
     exit 1
 fi
@@ -107,7 +94,7 @@ if [[ "${1}" != "" ]]; then
     cat <<EOF
 error: unknown argument: "${1}"
 
-See README.md for more information.
+See docs/update.md for more information.
 EOF
     exit 1
 fi
