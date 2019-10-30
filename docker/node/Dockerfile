@@ -7,5 +7,5 @@
 # This is intended to be used for testing of Homefarm deployment scripts.
 
 FROM archlinux/base
-RUN yes | pacman -Syu --needed ansible openssh boinc-nox && yes | pacman -Scc
+RUN yes | pacman -Syu --needed ansible grep awk openssh boinc-nox && yes | pacman -Scc
 

@@ -239,7 +239,7 @@ initrd         /initramfs-linux.img
 options        root=PARTUUID=\${PARTUUID} rw
 EOF2
 bootctl install
-curl --connect-timeout 10 -s -O "\${CONTROLLER}/compute-setup"
+curl --connect-timeout 10 -s -O "\${CONTROLLER}/node-setup"
 curl --connect-timeout 10 -s -O "\${CONTROLLER}/id_farmer.pub"
 EOF
 chmod +x /mnt/root/stage1
