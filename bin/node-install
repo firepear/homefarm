@@ -217,7 +217,7 @@ echo -e "127.0.0.1\\t\${MACHNAME}.localdomain\\t\${MACHNAME}" >> /etc/hosts
 systemctl enable openntpd.service
 
 # enable sshd
-systemctl enable sshd.socket
+systemctl enable sshd
 
 # initial locale setup
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
