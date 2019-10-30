@@ -50,8 +50,6 @@ parser.add_argument('-p', '--project', metavar='PROJECT_URL', dest="projurl", de
                     help="project URL of the joblog to parse (e.g. www.gpugrid.net; default: all)")
 parser.add_argument('-t', '--type', metavar='WU_TYPE', dest="wutype", default=None,
                     help="the workunit type/name to filter by (e.g. MCM1)")
-parser.add_argument('-n', '--node', metavar='NODE_NAME', dest="nodes", default="999ALL",
-                    help="which node to check logs of (default: all)")
 parser.add_argument('-s', '--timespan', metavar='HOURS', dest="span", type=int, default=24,
                     help="how many hours of logs to parse (default: 24)")
 args = parser.parse_args()

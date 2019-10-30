@@ -15,6 +15,7 @@ fi
 
 for node in nodes/node*yml; do
     node=$(basename "${node}" .yml)
+    echo "--------------------------------------------------------------"
     echo "${node}"
     ssh "farmer@${node}" "sudo ${1}"
     echo
