@@ -24,7 +24,6 @@
 import argparse
 import glob
 import os
-import paramiko
 import sys
 import time
 
@@ -55,8 +54,6 @@ parser.add_argument('-n', '--node', metavar='NODE_NAME', dest="nodes", default="
                     help="which node to check logs of (default: all)")
 parser.add_argument('-s', '--timespan', metavar='HOURS', dest="span", type=int, default=24,
                     help="how many hours of logs to parse (default: 24)")
-parser.add_argument('-i', '--keyfile', metavar='SSH_KEY', dest="key", default="../.ssh/id_farmer.pub",
-                    help="which SSH keyfile to use for connection")
 args = parser.parse_args()
 
 # fixup projurl
@@ -66,15 +63,6 @@ if args.projurl != 'job_log_*':
 args.projurl = "/var/lib/boinc/{}".format(args.projurl)
 # and the timespan
 timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))
-# and nodes
-# TODO this doesn't matter until remote work is in
-#if args.nodes == "999ALL":
-#    args.nodes = glob.glob('./nodes/*.yml')
-#    args.nodes = [x.replace('./nodes/', '') for x in nodes]
-#    args.nodes = [x.replace('.yml', '') for x in nodes]
-# and the key
-# TODO skipping this for now; operate locally
-#args.key = paramiko.ed25519key.Ed25519Key.from_private_key_file(args.key)
 
 matches = []
 
