@@ -3,16 +3,6 @@
 #
 # jlparse - parse and operate on BOINC job logs
 #
-#
-# ops: count :: Tally number of WUs crunched
-#      time  :: Report min/max/avg runtime of WUs
-#
-# args: -p PROJECT  :: Which project's jobfile to use (default: all)
-#       -t WUTYPE   :: Which workunits to use (default: all)
-#       -n NODE     :: Which node to pull jobfiles from (default: all)
-#       -s TIMESPAN :: How far back to analyze, in hours (default: 24)
-#       -i KEYFILE  :: Which SSH key to use for connection
-#
 
 # > The first column is the log time (Unix style -- milliseconds since 1/1/1970 UTC)
 # > ue: estimated run time of the work unit
@@ -52,6 +42,8 @@ parser.add_argument('-t', '--type', metavar='WU_TYPE', dest="wutype", default=No
                     help="the workunit type/name to filter by (e.g. MCM1)")
 parser.add_argument('-s', '--timespan', metavar='HOURS', dest="span", type=int, default=24,
                     help="how many hours of logs to parse (default: 24)")
+parser.add_argument('-c', '--count-only', dest="count", action="store_true",
+                    help="show WU counts only; do not print min/max/quintile times")
 args = parser.parse_args()
 
 # fixup projurl
@@ -83,6 +75,8 @@ with open(args.projurl) as f:
 print("WUs in past {} hours: {}".format(args.span, len(matches)))
 if len(matches) == 0:
     sys.exit(0)
+if args.count:
+    sys.exit(0)
 
 mintime = strtime(min(matches))
 maxtime = strtime(max(matches))
@@ -111,4 +105,4 @@ for m in matches:
         qcounts[4] += 1
 for i in range(5):
     print("\t<= {}\t {}\t ({:04.1f}%)".format(strtime(q[i]), qcounts[i],
-                                        qcounts[i] / len(matches) * 100))
+                                              qcounts[i] / len(matches) * 100))
