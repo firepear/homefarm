@@ -46,7 +46,7 @@ def strtime(time):
 
 # set up and handle arguments
 parser = argparse.ArgumentParser(description='parse BOINC job logs')
-parser.add_argument('-p', '--project', metavar='PROJECT_URL', dest="projurl", default='job_log_*',
+parser.add_argument('-p', '--project', metavar='PROJECT_URL', dest="projurl", required=True,
                     help="project URL of the joblog to parse (e.g. www.gpugrid.net; default: all)")
 parser.add_argument('-t', '--type', metavar='WU_TYPE', dest="wutype", default=None,
                     help="the workunit type/name to filter by (e.g. MCM1)")
