@@ -59,14 +59,19 @@ case "${1}" in
         hf_init
         ;;
     on-up)
+        localip=$(awk 'END{print $1}' /etc/hosts)
         /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
         echo "Welcome to homefarm"
-        echo "    Installer httpd is listening on localhost:9099"
+        echo "    Local IP is ${localip}"
+        echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run ./bin/control to see options, or refer to the docs"
         exec /bin/bash
         ;;
     os-update)
         exec ./bin/update "${2}"
+        ;;
+    sync-nodes)
+        exec /bin/ansible-playbook update-projects.yml
         ;;
     up)
         if [[ "${2}" == "" ]]; then
@@ -86,6 +91,9 @@ usage: ${0} init
 
        ${0} os-update
        Update the control image and compute nodes
+
+       ${0} sync-nodes
+       Sync project statuses to compute nodes
 
        ${0} up /PATH/TO/homefarm
        Bring up an instance of the control container

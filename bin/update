@@ -31,7 +31,7 @@ update_homefarm() {
 }
 
 update_os() {
-    cd ~/homefarm
+    cd /homefarm
     shownotice "Checking for OS updates"
     CONUPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
@@ -49,7 +49,7 @@ update_os() {
 }
 
 update_boinc() {
-    cd ~/homefarm
+    cd /homefarm
     # if repo update flag file exists, update BOINC and clear the flag
     if [[ -e ./.repoupdate ]]; then
         shownotice "Updating BOINC on compute nodes"
@@ -118,7 +118,7 @@ if [[ ${repo_only} ]]; then
 fi
 
 update_os
-update_boinc
+#update_boinc
 
 if [[ "${localrepo_updated}" == "true" ]]; then
     shownotice "Rebooting compute nodes"
@@ -127,9 +127,4 @@ if [[ "${localrepo_updated}" == "true" ]]; then
     done
 fi
 
-if [[ "${CONUPDATES}" -gt "0" ]]; then
-    shownotice "Update complete; rebooting control node"
-    sudo reboot
-else
-    shownotice "Everything is up to date"
-fi
+echo "Everything is up to date"
