@@ -20,7 +20,7 @@ function hf_init() {
         chmod 700 /homefarm/.ssh
     fi
 
-    # get host address
+    # do local files and httpd setup
     shownotice "Configuring Homefarm installer webserver"
     if [[ -e /homefarm/srv/pacman.conf ]]; then
         echo "Skipping; already configured"
@@ -38,6 +38,8 @@ function hf_init() {
         sed -e "${sedexpr}" /homefarm/examples/pacman.conf > /homefarm/srv/pacman.conf
         # copy the example farm inventory file to the real one
         cp ./examples/farm.cfg ./farm.cfg
+        # make the nodes directory for user convenience
+        mkdir -p /homefarm/nodes
     fi
 
     shownotice "Initializing local package mirror"
