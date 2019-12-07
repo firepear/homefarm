@@ -109,11 +109,7 @@ fi
 # script proper begins
 
 NODES=( ./nodes/*yml )
-if [[ "${#NODES[@]}" == "0" ]]; then
-    NODE=""
-else
-    NODE=$(basename "${NODES[0]}" .yml)
-fi
+NODE=$(basename "${NODES[0]}" .yml)
 
 if [[ ${repo_only} ]]; then
     update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"

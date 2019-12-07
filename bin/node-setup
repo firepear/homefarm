@@ -28,9 +28,6 @@ if [[ "${passwd}" == "Randomize" ]]; then
 fi
 usermod -p "${passwd}" root
 
-shownotice "Installing Ansible and prerequisites"
-yes | pacman -S --needed python openssl sudo ansible
-
 shownotice "Configuring sensors"
 /usr/bin/sensors-detect --auto > /dev/null
 
