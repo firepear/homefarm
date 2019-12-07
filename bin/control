@@ -55,6 +55,12 @@ function hf_init() {
 }
 
 function hf_installer() {
+echo <<EOF
+-----------------------------------------------------------
+Starting local httpd for node installs. Ctrl-C to terminate
+-----------------------------------------------------------
+
+EOF
     /usr/bin/darkhttpd /homefarm/srv --port 9099 --daemon
 }
 
@@ -62,23 +68,30 @@ case "${1}" in
     init)
         hf_init
         ;;
-    installer)
+    installer-mode)
         hf_installer
         ;;
-    update)
+    os-update)
         exec ./bin/update "${2}"
+        ;;
+    up)
+        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control /bin/bash
         ;;
     *)
         cat <<EOF
 error: unknown argument '${1}'
 
 usage: ${0} init
-       Initialize the control image
+       Initialize the control instance (only needs to be run once, after
+       container creation)
 
-       ${0} installer
+       ${0} installer-mode
        Start httpd for compute node installations (on port 9099)
 
-       ${0} update
+       ${0} os-update
        Update the control image and compute nodes
+
+       ${0} up /PATH/TO/homefarm
+       Bring up an instance of the control container
 EOF
 esac
