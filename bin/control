@@ -7,7 +7,6 @@ set -e
 source ./bin/common.sh
 
 function hf_init() {
-    clear
     shownotice "Welcome to homefarm control node setup"
 
     # generate ssh key
@@ -81,9 +80,6 @@ error: unknown argument '${1}'
 usage: ${0} init
        Initialize the control instance (only needs to be run once, after
        container creation)
-
-       ${0} installer-mode
-       Start httpd for compute node installations (on port 9099)
 
        ${0} os-update
        Update the control image and compute nodes

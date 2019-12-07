@@ -75,8 +75,9 @@ EOF
 fi
 
 # set repo update only mode, if requested
-if [[ "${1}" == "repoonly" ]]; then
+if [[ "${1}" == "repo-only" ]]; then
     repo_only=0
+    shift
 fi
 
 # read in utility code (includes update_localrepo)
