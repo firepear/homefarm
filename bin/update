@@ -89,7 +89,7 @@ if [[ -e ./.mirror_url ]]; then
     MIRROR_URL=$(cat ./.mirror_url)
 else
     cat <<EOF
-There is no mirror URL set for the local repo. Has `control init` been
+There is no mirror URL set for the local repo. Has 'control init' been
 run successfully?
 EOF
     exit 1
@@ -109,7 +109,11 @@ fi
 # script proper begins
 
 NODES=( ./nodes/*yml )
-NODE=$(basename "${NODES[0]}" .yml)
+if [[ "${#NODES[@]}" == "0" ]]; then
+    NODE=""
+else
+    NODE=$(basename "${NODES[0]}" .yml)
+fi
 
 if [[ ${repo_only} ]]; then
     update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"

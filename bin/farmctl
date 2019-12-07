@@ -64,7 +64,7 @@ case "${1}" in
         echo "Welcome to homefarm"
         echo "    Local IP is ${localip}"
         echo "    Installer httpd is listening on DOCKERHOST:9099"
-        echo "    Run ./bin/control to see options, or refer to the docs"
+        echo "    Run 'farmctl' to see options, or refer to the docs"
         exec /bin/bash
         ;;
     os-update)
@@ -78,7 +78,7 @@ case "${1}" in
             echo "'${0} up' requires the path to your homefarm dir as an argument; exiting"
             exit 1
         fi
-        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control ./bin/control on-up
+        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control "${0}" on-up
         ;;
     *)
         if [[ "${1}" != "" ]]; then
