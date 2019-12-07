@@ -43,6 +43,8 @@ shownotice "Set root password"
 passwd=$(gutcheck "Enter a password for root", "Randomize")
 if [[ "${passwd}" == "Randomize" ]]; then
     passwd=$( openssl passwd -1 -salt BOINC "$(openssl rand -base64 32)" )
+else
+    passwd=$( openssl passwd -1 -salt BOINC "${passwd}" )
 fi
 usermod -p "${passwd}" root
 
