@@ -4,7 +4,7 @@ cd /root
 
 if [[ "${1}" == "" ]]; then
     echo "error: no control node IP specified"
-    echo "Usage is: ${0} CONTROL_NODE_IP INTERFACE_NAME [ESSID WPA_PASSPHRASE]"
+    echo "Usage is: ${0} CONTROL_NODE_IP"
     exit 1
 fi
 
@@ -21,7 +21,7 @@ fi
 # and source
 . ./common.sh
 
-curl --connect-timeout 10 -s -O "\${CONTROLLER}/id_farmer.pub"
+curl --connect-timeout 10 -s -O "${CONTROLLER}/id_farmer.pub"
 
 # install preqs
 clear
