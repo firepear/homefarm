@@ -60,7 +60,9 @@ case "${1}" in
         ;;
     on-up)
         /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
-        echo "Welcome to homefarm. httpd is listening on port 9099."
+        echo "Welcome to homefarm"
+        echo "    Installer httpd is listening on localhost:9099"
+        echo "    Run ./bin/control to see options, or refer to the docs"
         exec /bin/bash
         ;;
     os-update)
@@ -74,9 +76,10 @@ case "${1}" in
         exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control ./bin/control on-up
         ;;
     *)
+        if [[ "${1}" != "" ]]; then
+            echo "error: unknown argument '${1}'"
+        fi
         cat <<EOF
-error: unknown argument '${1}'
-
 usage: ${0} init
        Initialize the control instance (only needs to be run once, after
        container creation)
