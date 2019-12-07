@@ -75,6 +75,10 @@ case "${1}" in
         exec ./bin/update "${2}"
         ;;
     up)
+        if [[ "${2}" == "" ]]; then
+            echo "'${0} up' requires the path to your homefarm dir as an argument; exiting"
+            exit 1
+        fi
         exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control /bin/bash
         ;;
     *)
