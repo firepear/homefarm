@@ -8,5 +8,5 @@
 
 FROM archlinux/base
 ARG pkglist="base openssh wpa_supplicant lm_sensors python ansible sudo grep awk boinc-nox linux logrotate"
-RUN yes | pacman -Syu --needed $(echo "${pkglist}") && yes | pacman -Scc
+RUN yes | eval pacman -Syu --needed "${pkglist}" && yes | pacman -Scc
 
