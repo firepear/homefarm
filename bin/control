@@ -71,7 +71,7 @@ case "${1}" in
             echo "'${0} up' requires the path to your homefarm dir as an argument; exiting"
             exit 1
         fi
-        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control './bin/control on-up'
+        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control ./bin/control on-up
         ;;
     *)
         cat <<EOF
