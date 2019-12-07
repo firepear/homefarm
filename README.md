@@ -1,4 +1,7 @@
 # homefarm
+
+WARNING: homefarm is currently in a broken state as I work out a major upgrade. Thank you for your understanding.
+
 Tools for deploying and managing a BOINC compute farm using Ansible
 and Arch Linux.
 
