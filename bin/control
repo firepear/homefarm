@@ -62,6 +62,9 @@ case "${1}" in
     installer)
         hf_installer
         ;;
+    update)
+        exec ./bin/update "${2}"
+        ;;
     *)
         cat <<EOF
 error: unknown argument '${1}'
@@ -71,5 +74,8 @@ usage: ${0} init
 
        ${0} installer
        Start httpd for compute node installations (on port 9099)
+
+       ${0} update
+       Update the control image and compute nodes
 EOF
 esac
