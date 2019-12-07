@@ -54,22 +54,14 @@ function hf_init() {
     shownotice "Setup complete"
 }
 
-function hf_installer() {
-echo <<EOF
------------------------------------------------------------
-Starting local httpd for node installs. Ctrl-C to terminate
------------------------------------------------------------
-
-EOF
-    /usr/bin/darkhttpd /homefarm/srv --port 9099 --daemon
-}
 
 case "${1}" in
     init)
         hf_init
         ;;
-    installer-mode)
-        hf_installer
+    on-up)
+        /usr/bin/darkhttpd /homefarm/srv --port 9099 --daemon >> /dev/null
+        exec /bin/bash
         ;;
     os-update)
         exec ./bin/update "${2}"
@@ -79,7 +71,7 @@ case "${1}" in
             echo "'${0} up' requires the path to your homefarm dir as an argument; exiting"
             exit 1
         fi
-        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control /bin/bash
+        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control './bin/control on-up'
         ;;
     *)
         cat <<EOF
