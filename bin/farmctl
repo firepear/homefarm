@@ -65,7 +65,7 @@ case "${1}" in
         echo "    Local IP is ${localip}"
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
-        exec PATH="${PATH}:/homefarm/bin" /bin/bash
+        exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     os-update)
         exec ./bin/update "${2}"
