@@ -111,12 +111,13 @@ fi
 NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)
 
-update_homefarm "${0}"
-update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
 if [[ ${repo_only} ]]; then
+    update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
     exit 0
 fi
 
+update_homefarm "${0}"
+update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
 update_os
 #update_boinc
 
