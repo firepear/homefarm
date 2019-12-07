@@ -124,8 +124,8 @@ fi
 
 
 # base install via pacstrap
-pkgs="base openssh wpa_supplicant openntpd lm_sensors python ansible sudo grep awk boinc-nox linux"
-pacstrap /mnt "${pkgs}"
+pkglist="base openssh wpa_supplicant lm_sensors python ansible sudo grep awk boinc-nox linux logrotate"
+pacstrap /mnt "${pkglist}"
 # generate /etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 # copy over resolf.conf so the system will have nameservice

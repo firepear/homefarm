@@ -7,6 +7,6 @@
 # This is intended to be used for testing of Homefarm deployment scripts.
 
 FROM archlinux/base
-ARG pkgs="base openssh wpa_supplicant openntpd lm_sensors python ansible sudo grep awk boinc-nox linux"
-RUN yes | pacman -Syu --needed ${pkgs} && yes | pacman -Scc
+ARG pkglist="base openssh wpa_supplicant lm_sensors python ansible sudo grep awk boinc-nox linux logrotate"
+RUN yes | pacman -Syu --needed ${pkglist} && yes | pacman -Scc
 
