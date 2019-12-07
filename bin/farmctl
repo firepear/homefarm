@@ -4,6 +4,7 @@
 # rights reserved.  Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 set -e
+cd /homefarm
 source ./bin/common.sh
 
 function hf_init() {
@@ -65,7 +66,7 @@ case "${1}" in
         echo "    Local IP is ${localip}"
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
-        exec /bin/bash
+        exec PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     os-update)
         exec ./bin/update "${2}"
