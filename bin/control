@@ -60,7 +60,8 @@ case "${1}" in
         hf_init
         ;;
     on-up)
-        /usr/bin/darkhttpd /homefarm/srv --port 9099 --daemon >> /dev/null
+        /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
+        echo "Welcome to homefarm. httpd is listening on port 9099."
         exec /bin/bash
         ;;
     os-update)
