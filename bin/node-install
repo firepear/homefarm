@@ -214,8 +214,12 @@ systemctl enable systemd-networkd.service
 # add machine to hostsfile
 echo -e "127.0.0.1\\t\${MACHNAME}.localdomain\\t\${MACHNAME}" >> /etc/hosts
 
-# enable ntpd
-systemctl enable openntpd.service
+# enable ntp
+sed -i -e 's/^#NTP=/NTP=0.arch.pool.ntp.org 1.arch.pool.ntp.org 2.arch.pool.ntp.org 3.arch.pool.ntp.org/' /etc/systemd/timesyncd.conf
+sed -i -e 's/^#Fallback/Fallback/' /etc/systemd/timesyncd.conf
+systemctl enable systemd-timesyncd.service
+systemctl start systemd-timesyncd.service
+timedatectl set-ntp true
 
 # enable sshd
 systemctl enable sshd
