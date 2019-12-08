@@ -21,7 +21,7 @@ if [[ ! -e "${WPACONF}" ]]; then
     fi
 fi
 
-CONTROLLER="${1}"
+CONTROLLER="${1}:9099"
 USERIFACE="${2}"
 USERESSID="${3}"
 USERWPAPW="${4}"

@@ -87,17 +87,26 @@ case "${1}" in
             echo "error: unknown argument '${1}'"
         fi
         cat <<EOF
-usage: ${0} init
-       Initialize the control instance (only needs to be run once, after
-       container creation)
+usage: ${0} COMMAND [ARGS]
+where COMMAND may be:
 
-       ${0} os-update
-       Update the control image and compute nodes
+  cmd <'COMMAND_LINE'>
+    Run a command on all nodes and display output
 
-       ${0} sync-nodes
-       Sync project statuses to compute nodes
+  init
+    Initialize the controller (only needs to be run once, after creation)
 
-       ${0} up /PATH/TO/homefarm
-       Bring up an instance of the control container
+  os-update
+    Update the controller and compute node OS packages
+
+  stats <PROJECT_URL> [-t WU_TYPE] [-s TIMESPAN]
+    Generate counts and runtime stats for WUs completed on a project in a
+    given time. Default: all WUs, 24h
+
+  sync-nodes
+    Sync project statuses to compute nodes
+
+  up <HOMEFARM_DIR>
+    Bring up an instance of the controller
 EOF
 esac

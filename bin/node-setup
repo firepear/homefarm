@@ -8,7 +8,7 @@ if [[ "${1}" == "" ]]; then
     exit 1
 fi
 
-CONTROLLER="${1}"
+CONTROLLER="${1}:9099"
 
 # fetch util funcs
 if [[ ! -e "common.sh" ]]; then

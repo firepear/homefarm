@@ -12,8 +12,7 @@ local repository that lives on the control node.
 
 Homefarm makes a few assumptions:
 
-* A Raspberry Pi 3B/B+, to act as the control node.
-  * The Pi's OS is on a 32GB+ SD card
+* One machine capable of running Docker, to host the control container
 * One or more x86_64 machines capable of running Arch Linux, to act as
   the compute nodes.
   * These machines will be used for no other purpose, and it is okay
@@ -28,7 +27,7 @@ Homefarm makes a few assumptions:
 # Documentation
 
 * Setting up a farm
-    * [Control node install](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
+    * [Control container install](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
     * [Compute node install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
     * [BOINC initialization](https://github.com/firepear/homefarm/blob/master/docs/boinc_setup.md)
 * Managing and maintaining your farm
