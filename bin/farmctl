@@ -11,13 +11,18 @@ function hf_init() {
 
     # generate ssh key
     shownotice "Generating SSH configuration for Ansible"
-    if [[ -e /homefarm/.ssh/id_farmer ]]; then
+    if [[ -e /root/.ssh/id_farmer ]]; then
         echo "Skipping; already configured"
     else
         ssh-keygen -t ed25519 -N "" -f id_farmer
-        mkdir -p /homefarm/.ssh
-        mv id_farmer* /homefarm/.ssh
-        chmod 700 /homefarm/.ssh
+        mkdir -p /root/.ssh
+        mv id_farmer* /root/.ssh
+        chmod 700 /root/.ssh
+        cat <<EOF | tee -a /root/.bashrc > /dev/null
+        # set up easy ssh-agent for homefarm
+        /usr/bin/keychain ~/.ssh/id_farmer
+        source ~/.keychain/${MACHNAME}-sh > /dev/null
+EOF
     fi
 
     # do local files and httpd setup
@@ -29,7 +34,7 @@ function hf_init() {
         # create local package cache dir
         mkdir -p /homefarm/srv/arch
         # copy ssh pubkey for distribution to nodes
-        cp /homefarm/.ssh/id_farmer.pub /homefarm/srv
+        cp /root/.ssh/id_farmer.pub /homefarm/srv
         # symlink install/setup scripts
         ln -fs /homefarm/bin/node-install /homefarm/srv
         ln -fs /homefarm/bin/node-setup /homefarm/srv
