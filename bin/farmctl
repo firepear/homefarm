@@ -93,18 +93,25 @@ where COMMAND may be:
   cmd <'COMMAND_LINE'>
     Run a command on all nodes and display output
 
-  init
-    Initialize the controller (only needs to be run once, after creation)
-
   os-update
     Update the controller and compute node OS packages
 
-  stats <PROJECT_URL> [-t WU_TYPE] [-s TIMESPAN]
+  stats <PROJECT_URL> [-t <WU_TYPE>] [-s <TIMESPAN>]
     Generate counts and runtime stats for WUs completed on a project in a
-    given time. Default: all WUs, 24h
+    given time. Defaults: all WUs; 24h
 
   sync-nodes
     Sync project statuses to compute nodes
+
+  backup
+    Create tarball with all farm-specific files
+
+  init
+    Initialize the controller (only needs to be run once, after creation)
+
+  restore
+    Restore farm state from a tarball created by 'farmctl backup'. Tarball
+    must be in HOMEFARM_DIR
 
   up <HOMEFARM_DIR>
     Bring up an instance of the controller

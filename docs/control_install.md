@@ -3,7 +3,7 @@
 First, create the controller image
 
 1. Install docker, if you haven't already :)
-1. In the directory of your choosing, run `'cd /home/alarm && git clone https://github.com/firepear/homefarm.git'`
+1. In the directory of your choosing, run `'git clone https://github.com/firepear/homefarm.git'`
     * This git clone will also hold your cluster configuration and act
       as the non-volatile storage for the container you're about to
       create, so put it somewhere reasonably stable.
@@ -14,7 +14,7 @@ First, create the controller image
       you, if needed. This is also the only docker incantation you'll
       need; everything else happens through scripts.
 
-# Bring up the controller
+## Bring up the controller
 
 In the previous version of Homefarm, the controller was a separate
 machine -- a Raspberry Pi -- and it was dedicated to doing nothing but

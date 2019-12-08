@@ -1,21 +1,22 @@
 #!/bin/bash
 set -e
 
-ARCHIVE="/home/alarm/homefarm/homefarm.backup.tar.gz"
-cd /home/alarm
+ARCHIVE="/homefarm/homefarm.backup.tar.gz"
+cd /homefarm
 
+# no arguments: create tarball
 if [[ "${1}" == "" ]]; then
     tar zcvf ${ARCHIVE} ./.boinctui.cfg ./.ssh \
         homefarm/.mirror_url homefarm/.current_tag \
         homefarm/farm.cfg homefarm/nodes/ \
         /etc/hosts \
-        /var/cache/homefarm/pacman.conf \
-        /var/cache/homefarm/mirrorlist > /dev/null
+        ./srv/homefarm/pacman.conf >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
     exit
 fi
 
-if [[ "${1}" != "--restore" ]]; then
+# any argument other than "restore": print out the help message
+if [[ "${1}" != "restore" ]]; then
     cat <<EOF
 usage is:
 
@@ -26,18 +27,16 @@ usage is:
 EOF
     exit 1
 fi
+
+# if we're down here, then we're restoring a tarball. unpack it, and
+# move everything that belongs somewhere else to that location.
 if [[ ! -e ${ARCHIVE} ]]; then
     echo "error: can't find archive file: '${ARCHIVE}'"
     exit 1
 fi
 echo "Unpacking tarball"
-tar zxvf ${ARCHIVE} > /dev/null
-echo "Restoring SSH key"
-sudo cp ./.ssh/id_farmer.pub /var/cache/homefarm
-echo "Restoring /etc/hosts"
-sudo mv etc/hosts /etc/hosts
-echo "Restoring pacman config and mirrorlist"
-mv var/cache/homefarm/pacman.conf /var/cache/homefarm/pacman.conf
-mv var/cache/homefarm/mirrorlist /var/cache/homefarm/mirrorlist
-rm -rf var etc
+tar zxvf ${ARCHIVE} >> /dev/null
+cp ./.ssh/id_farmer.pub ./srv/homefarm
+mv etc/hosts /etc/hosts
+rmdir etc
 echo "Farm configuration restored"
