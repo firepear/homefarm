@@ -15,9 +15,11 @@ function hf_init() {
         echo "Skipping; already configured"
     else
         ssh-keygen -t ed25519 -N "" -f id_farmer
-        mkdir -p /root/.ssh
-        mv id_farmer* /root/.ssh
-        chmod 700 /root/.ssh
+        mkdir -p /homefarm/.ssh
+        mv id_farmer* /homefarm/.ssh
+        chmod 700 /homefarm/.ssh
+        /usr/bin/keychain -q --host control /homefarm/.ssh/id_farmer >> /dev/null 2>&1
+        source /root/.keychain/control-sh >> /dev/null 2>&1
     fi
 
     # do local files and httpd setup
@@ -63,8 +65,9 @@ case "${1}" in
     on-up)
         localip=$(awk 'END{print $1}' /etc/hosts)
         /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
-        /usr/bin/keychain --host control /root/id_farmer
-        source /root/.keychain/control-sh >> /dev/null
+        /bin/ln -s /homefarm/.ssh /root/.ssh
+        /usr/bin/keychain -q --host control /homefarm/.ssh/id_farmer >> /dev/null 2>&1
+        source /root/.keychain/control-sh >> /dev/null 2>&1
         echo
         echo "Welcome to homefarm"
         echo "    Local IP is ${localip}"
