@@ -52,25 +52,11 @@ On a machine with a browser:
    you know you need something specific)
 1. Copy the generated URL, for use on the control node
 
-On the control node:
+On the controller:
 
-1. Login as user `alarm` if you aren't already
-1. Run `'curl '[MIRRORLIST_URL]' -o ./srv/mirrorlist'`
+1. Run `curl -o ./srv/mirrorlist' '[MIRRORLIST_URL]'`
 1. Edit `mirrorlist` to uncomment the hosts you want to use as mirrors
    (`vi` and `mg` are available).
-
-Speaking of the local mirror, it's time to create it. Run the cluster
-update script as follows:
-
-`'./bin/update --set-mirror MIRROR_URL'`
-
-...where `MIRROR_URL` is the base URL of whichever Arch linux mirror you
-want the control node to use to build the local mirror. It should be
-one of the mirrors from the list you just generated in the previous
-step. Here's a concrete example:
-
-`'./bin/update --set-mirror http://www.gtlib.gatech.edu/pub/archlinux/'`
-
 
 
 ## Set up the Ansible inventory
@@ -85,7 +71,6 @@ Now it's time to define the machines which will be part if your farm.
      * Change the names and IP addresses in the `[compute_nodes]`
        stanza to match the machines you'll be setting up as compute
        nodes
-1. Edit `/etc/hosts` and add entries for your compute nodes
 
 
 
