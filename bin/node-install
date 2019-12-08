@@ -218,11 +218,11 @@ echo -e "127.0.0.1\\t\${MACHNAME}.localdomain\\t\${MACHNAME}" >> /etc/hosts
 sed -i -e 's/^#NTP=/NTP=0.arch.pool.ntp.org 1.arch.pool.ntp.org 2.arch.pool.ntp.org 3.arch.pool.ntp.org/' /etc/systemd/timesyncd.conf
 sed -i -e 's/^#Fallback/Fallback/' /etc/systemd/timesyncd.conf
 systemctl enable systemd-timesyncd.service
-systemctl start systemd-timesyncd.service
-timedatectl set-ntp true
 
 # enable sshd
 systemctl enable sshd
+
+# enable boinc-client
 
 # initial locale setup
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
