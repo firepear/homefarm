@@ -124,7 +124,7 @@ fi
 
 
 # base install via pacstrap
-pkglist="base openssh wpa_supplicant lm_sensors python ansible sudo grep awk boinc-nox linux logrotate"
+pkglist="base openssh wpa_supplicant lm_sensors python ansible sudo grep awk boinc-nox linux logrotate vi mg"
 pacstrap /mnt "${pkglist}"
 # generate /etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
