@@ -63,10 +63,12 @@ case "${1}" in
     on-up)
         localip=$(awk 'END{print $1}' /etc/hosts)
         /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
+        echo
         echo "Welcome to homefarm"
         echo "    Local IP is ${localip}"
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
+        echo
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     os-update)
@@ -88,8 +90,8 @@ case "${1}" in
         fi
         cat <<EOF
 usage: ${0} COMMAND [ARGS]
-where COMMAND may be:
 
+Compute node commands:
   cmd <'COMMAND_LINE'>
     Run a command on all nodes and display output
 
@@ -103,6 +105,7 @@ where COMMAND may be:
   sync-nodes
     Sync project statuses to compute nodes
 
+Controller commands:
   backup
     Create tarball with all farm-specific files
 
