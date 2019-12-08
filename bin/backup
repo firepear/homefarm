@@ -10,7 +10,8 @@ if [[ "${1}" == "" ]]; then
         homefarm/.mirror_url homefarm/.current_tag \
         homefarm/farm.cfg homefarm/nodes/ \
         /etc/hosts \
-        ./srv/homefarm/pacman.conf >> /dev/null
+        ./srv/pacman.conf \
+        ./srv/mirrorlist >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
     exit
 fi

@@ -55,9 +55,9 @@ On a machine with a browser:
 On the control node:
 
 1. Login as user `alarm` if you aren't already
-1. Run `'curl '[MIRRORLIST_URL]' -o mirrorlist'`
+1. Run `'curl '[MIRRORLIST_URL]' -o ./srv/mirrorlist'`
 1. Edit `mirrorlist` to uncomment the hosts you want to use as mirrors
-1. Run `'mv mirrorlist /var/cache/homefarm'`
+   (`vi` and `mg` are available).
 
 Speaking of the local mirror, it's time to create it. Run the cluster
 update script as follows:
