@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 WPACONF="/etc/wpa_supplicant/w.conf"
 
@@ -117,7 +116,7 @@ if ! curl --connect-timeout 10 -s "${CONTROLLER}/pacman.conf" -o /etc/pacman.con
     exit 1
 fi
 if ! curl --connect-timeout 10 -s "${CONTROLLER}/mirrorlist" -o /etc/pacman.d/mirrorlist; then
-    echo "error: can't reach control node"
+    echo "error: can't reach control node to get mirrorlist"
     echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
     exit 1
 fi

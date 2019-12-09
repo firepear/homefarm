@@ -42,6 +42,16 @@ gutcheck() {
     echo "${GUTCHECK}"
 }
 
+hf_fetch() {
+    err=$(curl --connect-timeout 10 --max-time 60 -O "'${1}'")
+    rc=${?}
+    if [[ ! ${rc} ]]; then
+        echo "error: couldn't fetch '${1}'. problem was:"
+        echo "${err}"
+        exit ${rc}
+    fi
+}
+
 update_localrepo() {
     repodir=${1}
     mirrorurl=${2}
@@ -49,7 +59,7 @@ update_localrepo() {
     # grab core db file from mirror and test it against the last
     # hash. do nothing if they match.
     cd "${repodir}" || exit
-    curl -s --max-time 60 -O "${mirrorurl}/core/os/x86_64/core.db.tar.gz"
+    hf_fetch "${mirrorurl}/core/os/x86_64/core.db.tar.gz"
     coremd5=$(md5sum core.db.tar.gz)
     if [[ -e "prevmd5" ]]; then
         prevmd5=$(cat prevmd5)
@@ -78,7 +88,7 @@ update_localrepo() {
     for repo in core extra community; do
         cd "${repodir}" || exit
         if [[ ! -e "${repo}.db.tar.gz" ]]; then
-            curl -s --max-time 60 -O "${mirrorurl}/${repo}/os/x86_64/${repo}.db.tar.gz"
+            hf_fetch "${mirrorurl}/${repo}/os/x86_64/${repo}.db.tar.gz"
         fi
         mkdir -p "${repodir}/db/${repo}"
         mv "${repo}.db.tar.gz" "${repodir}/db/${repo}"

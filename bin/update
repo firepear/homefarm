@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 CONUPDATES=0
 LOCALREPO="/homefarm/srv/arch"

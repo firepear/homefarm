@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+
 cd /root
 
 if [[ "${1}" == "" ]]; then
@@ -21,6 +21,7 @@ fi
 # and source
 . ./common.sh
 
+# grab the controller's ssh key, for later
 curl --connect-timeout 10 -s -O "${CONTROLLER}/id_farmer.pub"
 
 # install preqs
