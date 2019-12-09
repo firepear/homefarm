@@ -89,6 +89,10 @@ case "${1}" in
         fi
         exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control "${0}" on-up
         ;;
+    version)
+        echo "Homefarm v2.0.0"
+        exit 0
+        ;;
     *)
         if [[ "${1}" != "" ]]; then
             echo "error: unknown argument '${1}'"
@@ -97,31 +101,34 @@ case "${1}" in
 usage: ${0} COMMAND [ARGS]
 
 Compute node commands:
-  cmd <'COMMAND_LINE'>
-    Run a command on all nodes and display output
+    cmd <'COMMAND_LINE'>
+      Run a command on all nodes and display output
 
-  os-update
-    Update the controller and compute node OS packages
+    os-update
+      Update the controller and compute node OS packages
 
-  stats <PROJECT_URL> [-t <WU_TYPE>] [-s <TIMESPAN>]
-    Generate counts and runtime stats for WUs completed on a project in a
-    given time. Defaults: all WUs; 24h
+    stats <PROJECT_URL> [-t <WU_TYPE>] [-s <TIMESPAN>]
+      Generate counts and runtime stats for WUs completed on a project in a given
+      time. Defaults: all WUs; 24h
 
-  sync-nodes
-    Sync project statuses to compute nodes
+    sync-nodes
+      Sync project statuses to compute nodes
 
 Controller commands:
-  backup
-    Create tarball with all farm-specific files
+    backup
+      Create tarball with all farm-specific files
 
-  init
-    Initialize the controller (only needs to be run once, after creation)
+    init
+      Initialize the controller (only needs to be run once, after creation)
 
-  restore
-    Restore farm state from a tarball created by 'farmctl backup'. Tarball
-    must be in HOMEFARM_DIR
+    restore
+      Restore farm state from a tarball created by 'farmctl backup'. Tarball must
+      be in HOMEFARM_DIR
 
-  up <HOMEFARM_DIR>
-    Bring up an instance of the controller
+    up <HOMEFARM_DIR>
+      Bring up an instance of the controller
+
+    version
+      Display version information
 EOF
 esac
