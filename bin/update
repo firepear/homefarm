@@ -8,8 +8,16 @@ update_homefarm() {
     if [[ -e ./.current_tag ]]; then
         CURRENT_TAG=$(cat ./.current_tag)
     fi
+
     # check github for the most recent tag
-    NEWEST_TAG=$(curl -s 'https://api.github.com/repos/firepear/homefarm/tags' | python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["name"])')
+    resp=$(curl --connect-timeout 10 --max-time 60 -S 'https://api.github.com/repos/firepear/homefarm/tags')
+    rc=${?}
+    if [[ ! ${rc} ]]; then
+        echo "error: couldn't fetch tags list from github. problem was:"
+        echo "${resp}"
+        exit ${rc}
+    fi
+    NEWEST_TAG=$(echo ${resp} | python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["name"])')
 
     if [[ "${CURRENT_TAG}" == "${NEWEST_TAG}" ]]; then
         # if tags match, do nothing
@@ -33,7 +41,7 @@ update_homefarm() {
 }
 
 update_os() {
-    cd /homefarm
+    cd /homefarm || echo "couldn't cd to /homefarm" && exit
     shownotice "Checking for OS updates"
     CONUPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
@@ -73,7 +81,7 @@ if [[ "${1}" == "repo-only" ]]; then
 fi
 
 # read in utility code (includes update_localrepo)
-cd /homefarm
+cd /homefarm || echo "couldn't cd to /homefarm" && exit
 . ./bin/common.sh
 
 # read in mirror; error if we don't have one

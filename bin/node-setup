@@ -12,17 +12,13 @@ CONTROLLER="${1}:9099"
 
 # fetch util funcs
 if [[ ! -e "common.sh" ]]; then
-    if ! curl --connect-timeout 10 -s -O "${CONTROLLER}/common.sh"; then
-        echo "error: can't reach control node"
-        echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
-        exit 1
-    fi
+    hf_fetch  "${CONTROLLER}/common.sh"
 fi
 # and source
 . ./common.sh
 
 # grab the controller's ssh key, for later
-curl --connect-timeout 10 -s -O "${CONTROLLER}/id_farmer.pub"
+hf_fetch "${CONTROLLER}/id_farmer.pub"
 
 # install preqs
 clear

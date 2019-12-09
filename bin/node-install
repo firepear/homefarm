@@ -27,11 +27,7 @@ USERWPAPW="${4}"
 
 # fetch util funcs
 if [[ ! -e "common.sh" ]]; then
-    if ! curl --connect-timeout 10 -s -O "${CONTROLLER}/common.sh"; then
-        echo "error: can't reach control node"
-        echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
-        exit 1
-    fi
+    hf_fetch "${CONTROLLER}/common.sh"
 fi
 # and source
 . ./common.sh
@@ -110,16 +106,10 @@ mount /dev/disk/by-partlabel/esp /mnt/boot
 # install base preqs
 shownotice "Base install"
 # get cluster pacman.conf and mirrorlist
-if ! curl --connect-timeout 10 -s "${CONTROLLER}/pacman.conf" -o /etc/pacman.conf; then
-    echo "error: can't reach control node to get pacman.conf"
-    echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
-    exit 1
-fi
-if ! curl --connect-timeout 10 -s "${CONTROLLER}/mirrorlist" -o /etc/pacman.d/mirrorlist; then
-    echo "error: can't reach control node to get mirrorlist"
-    echo "was given ip '${CONTROLLER}' -- please double check and/or check network connectivity"
-    exit 1
-fi
+hf_fetch "${CONTROLLER}/pacman.conf"
+mv pacman.conf /etc/pacman.conf
+hf_fetch  "${CONTROLLER}/mirrorlist"
+mv mirrorlist /etc/pacman.d/mirrorlist
 
 
 # base install via pacstrap
@@ -154,7 +144,7 @@ INSTALLDEVICE="${INSTALLDEVICE}"
 
 # fetch util funcs
 if [[ ! -e "common.sh" ]]; then
-    curl --connect-timeout 10 -s -O "\${CONTROLLER}/common.sh"
+    hf_fetch "\${CONTROLLER}/common.sh"
 fi
 # and source
 . ./common.sh
@@ -244,7 +234,7 @@ initrd         /initramfs-linux.img
 options        root=PARTUUID=\${PARTUUID} rw
 EOF2
 bootctl install
-curl --connect-timeout 10 -s -O "\${CONTROLLER}/node-setup"
+hf_fetch "\${CONTROLLER}/node-setup"
 EOF
 chmod +x /mnt/root/stage1
 arch-chroot /mnt /root/stage1
