@@ -223,6 +223,7 @@ systemctl enable systemd-timesyncd.service
 systemctl enable sshd
 
 # enable boinc-client
+systemctl enable boinc-client
 
 # initial locale setup
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
