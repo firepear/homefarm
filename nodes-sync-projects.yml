@@ -1,0 +1,40 @@
+---
+---
+- hosts: controller
+  tasks:
+  - name: Ensure node config dir exists
+    file:
+      path: ./nodes
+      owner: alarm
+      state: directory
+      mode: 0755
+  - name: Ensure project config file for all nodes
+    command: cp --no-clobber ./examples/node.yml ./nodes/{{ item }}.yml
+    loop: "{{ groups['compute_nodes'] }}"
+  - name: Ensure cc_config file for all nodes
+    command: cp --no-clobber ./examples/cc_config.xml ./nodes/cc_{{ item }}.xml
+    loop: "{{ groups['compute_nodes'] }}"
+
+- hosts: compute_nodes
+  remote_user: farmer
+  tasks:
+  - name: Import project definitions
+    include_vars:
+      file: ./nodes/{{ inventory_hostname }}.yml
+      name: node
+  - name: Make project modifications
+    script: "./bin/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
+    loop: "{{ node.projects }}"
+  - name: Copy GUI auth file
+    become: true
+    command: cp {{ boinc_work_dir }}/gui_rpc_auth.cfg /home/farmer/{{ inventory_hostname }}_auth.cfg
+  - name: Chown auth file
+    become: true
+    command: chown farmer:farmer /home/farmer/{{ inventory_hostname }}_auth.cfg
+    args:
+      warn: false
+
+- hosts: controller
+  tasks:
+  - name: Assemble boinctui config file
+    script: "./bin/makeboinctuicfg {{ groups['compute_nodes'] }}"
