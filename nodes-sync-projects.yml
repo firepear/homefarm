@@ -1,5 +1,4 @@
 ---
----
 - hosts: controller
   tasks:
   - name: Ensure node config dir exists
