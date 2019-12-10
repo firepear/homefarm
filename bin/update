@@ -10,9 +10,9 @@ update_homefarm() {
     fi
 
     # check github for the most recent tag
-    resp=$(curl --connect-timeout 10 --max-time 60 -S 'https://api.github.com/repos/firepear/homefarm/tags')
+    resp=$(curl --connect-timeout 10 --max-time 60 -s -S 'https://api.github.com/repos/firepear/homefarm/tags')
     rc=${?}
-    if [[ ! ${rc} ]]; then
+    if [[ ${rc} -ne 0 ]]; then
         echo "error: couldn't fetch tags list from github. problem was:"
         echo "${resp}"
         exit ${rc}
@@ -43,11 +43,11 @@ update_homefarm() {
 update_os() {
     cd /homefarm
     shownotice "Checking for OS updates"
-    CONUPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
+    CONUPDATES=$(pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
         echo "Updating controller packages..."
-        yes | sudo pacman -Syuq > /dev/null 2>&1
-        yes | sudo pacman -Sccq > /dev/null 2>&1
+        yes | pacman -Syuq > /dev/null 2>&1
+        yes | pacman -Sccq > /dev/null 2>&1
     fi
 
     # future me running shellcheck: this variable is exported from
