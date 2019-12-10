@@ -66,8 +66,6 @@ update_localrepo() {
         if [[ "${prevmd5}" == "${coremd5}" ]]; then
             rm core.db.tar.gz
             return
-        else
-            export localrepo_updated="true"
         fi
     fi
     echo "${coremd5}" > prevmd5
@@ -76,12 +74,16 @@ update_localrepo() {
     # generate and grab installed packages list
     mkdir -p "${repodir}/db"
     if [[ "${firstnode}" == "" ]]; then
-        # this branch runs during control node install
+        # this branch runs during control node install and uses the
+        # initial packages list
         cp /homefarm/examples/pkgs.txt ./db
     else
-        # this branch runs during normal update
-        ssh "farmer@${firstnode}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
+        # this branch runs during normal update. it grabs a package
+        # list from the first node and sets localrepo_updated to true,
+        # which will trigger OS updates on the compute nodes
+        ssh -o StrictHostKeyChecking=accept-new "farmer@${firstnode}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
         scp -q "farmer@${firstnode}:pkgs.txt" "${repodir}/db/pkgs.txt"
+        export localrepo_updated="true"
     fi
     # grab remaining db files from mirror, and unpack all of them
     echo "Updating package databases"
@@ -102,7 +104,7 @@ update_localrepo() {
     # delete the db files and the installed package list
     rm -rf "${repodir}/db"
     # rebuild the local repo index
-    echo "Building repo index (this will take a while)"
+    echo "Building repo index (this may take a moment)"
     repo-add -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.tar.xz >> update.log 2>&1
     cd /homefarm || exit
 }

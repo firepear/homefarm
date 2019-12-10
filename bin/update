@@ -46,12 +46,13 @@ update_os() {
     CONUPDATES=$(pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
         echo "Updating controller packages..."
-        yes | pacman -Syuq > /dev/null 2>&1
-        yes | pacman -Sccq > /dev/null 2>&1
+        yes | pacman -Syu
+        yes | pacman -Sccq >> /dev/null 2>&1
     fi
 
     # future me running shellcheck: this variable is exported from
     # common.sh, in the update_localrepo function
+    echo "localrepo_updated '${localrepo_updated}'"
     if [[ "${localrepo_updated}" == "true" ]]; then
         echo "Updating compute node packages..."
         ansible-playbook compute-nodes-system-update.yml
@@ -76,7 +77,7 @@ fi
 
 # set dev mode, if requested
 if [[ "${1}" == "devmode" ]]; then
-    devmode=0
+    devmode="true"
     shift
 fi
 
@@ -111,7 +112,7 @@ fi
 NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)
 
-if [[ ! ${devmode} ]]; then
+if [[ "${devmode}" == "true" ]]; then
     update_homefarm "${0}"
 fi
 update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"

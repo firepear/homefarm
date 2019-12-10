@@ -57,6 +57,19 @@ function hf_init() {
     shownotice "Setup complete"
 }
 
+function hf_buildhosts() {
+    found_nodes="false"
+    while read -r line; do
+        if [[ "${found_nodes}" == "true" ]]; then
+            nodename=$(echo "${line}" | cut -d' ' -f1)
+            nodeip=$(echo "${line}" | awk '{print $2}' | cut -d'=' -f2)
+            echo "${nodeip} ${nodename}" >> /etc/hosts
+        fi
+        if [[ "${line}" =~ compute_nodes ]]; then
+            found_nodes="true"
+        fi
+    done < ./farm.cfg
+}
 
 case "${1}" in
     init)
@@ -74,6 +87,7 @@ case "${1}" in
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
         echo
+        hf_buildhosts
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     os-update)
