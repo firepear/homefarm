@@ -100,7 +100,7 @@ case "${1}" in
         exec ./bin/update "${2}"
         ;;
     sync-nodes)
-        exec /bin/ansible-playbook node-sync-projects.yml
+        exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
     up)
         if [[ "${2}" == "" ]]; then
