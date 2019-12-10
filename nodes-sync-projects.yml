@@ -17,6 +17,14 @@
 - hosts: compute_nodes
   remote_user: farmer
   tasks:
+  - name: Copy boinccmdcmd
+    become: true
+    copy:
+      src: ./bin/boinccmdcmd
+      dest: /usr/local/bin/boinccmdcmd
+      owner: root
+      group: root
+      mode: 0755
   - name: Import project definitions
     include_vars:
       file: ./nodes/{{ inventory_hostname }}.yml

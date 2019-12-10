@@ -27,7 +27,7 @@ boinc_dir, proj_url, proj_user, proj_mail, proj_passwd, proj_state = sys.argv
 # slurp the gui access key and shorten the boinccmd command
 result = subprocess.run(["sudo", "cat", "{}/gui_rpc_auth.cfg".format(boinc_dir)], stdout=subprocess.PIPE, encoding="utf-8")
 pw = result.stdout
-boinc = "/usr/local/bin/boinccmd"
+boinc = "/usr/bin/boinccmd"
 pwf = "--passwd"
 
 
