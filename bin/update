@@ -41,7 +41,7 @@ update_homefarm() {
 }
 
 update_os() {
-    cd /homefarm || echo "couldn't cd to /homefarm" && exit
+    cd /homefarm
     shownotice "Checking for OS updates"
     CONUPDATES=$(sudo pacman -Sy > /dev/null && pacman -Qu | wc -l)
     if [[ "${CONUPDATES}" -gt "0" ]]; then
@@ -81,7 +81,7 @@ if [[ "${1}" == "repo-only" ]]; then
 fi
 
 # read in utility code (includes update_localrepo)
-cd /homefarm || echo "couldn't cd to /homefarm" && exit
+cd /homefarm
 . ./bin/common.sh
 
 # read in mirror; error if we don't have one

@@ -43,7 +43,7 @@ gutcheck() {
 }
 
 hf_fetch() {
-    err=$(curl --connect-timeout 10 --max-time 60 -S -O "'${1}'")
+    err=$(curl --connect-timeout 10 --max-time 60 -s -S -O "'${1}'")
     rc=${?}
     if [[ ! ${rc} ]]; then
         echo "error: couldn't fetch '${1}'. problem was:"
