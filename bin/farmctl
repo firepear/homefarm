@@ -10,8 +10,6 @@ source ./bin/common.sh
 # handles the initial node setup, other than package install (which is
 # done by the docker build)
 function hf_init() {
-    shownotice "Welcome to homefarm control node setup"
-
     # generate ssh key
     shownotice "Generating SSH configuration for Ansible"
     if [[ -e /root/.ssh/id_farmer ]]; then
@@ -87,6 +85,7 @@ case "${1}" in
         /bin/ln -s /homefarm/.ssh /root/.ssh
         /usr/bin/keychain -q --host control /homefarm/.ssh/id_farmer >> /dev/null 2>&1
         source /root/.keychain/control-sh >> /dev/null 2>&1
+        /bin/ln -s /homefarm/.boinctui.cfg /root/.boinctui.cfg
         echo
         echo "Welcome to homefarm"
         echo "    Local IP is ${localip}"

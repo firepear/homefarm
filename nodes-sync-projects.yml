@@ -4,7 +4,7 @@
   - name: Ensure node config dir exists
     file:
       path: ./nodes
-      owner: alarm
+      owner: root
       state: directory
       mode: 0755
   - name: Ensure project config file for all nodes
