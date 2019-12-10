@@ -112,7 +112,7 @@ NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)
 
 if [[ ${repo_only} ]]; then
-    update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
+    update_localrepo "${LOCALREPO}" "${MIRROR_URL}" ""
     exit 0
 fi
 
