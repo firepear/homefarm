@@ -74,9 +74,9 @@ EOF
     exit 0
 fi
 
-# set repo update only mode, if requested
-if [[ "${1}" == "repo-only" ]]; then
-    repo_only=0
+# set dev mode, if requested
+if [[ "${1}" == "devmode" ]]; then
+    devmode=0
     shift
 fi
 
@@ -111,12 +111,9 @@ fi
 NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)
 
-if [[ ${repo_only} ]]; then
-    update_localrepo "${LOCALREPO}" "${MIRROR_URL}" ""
-    exit 0
+if [[ ! ${devmode} ]]; then
+    update_homefarm "${0}"
 fi
-
-update_homefarm "${0}"
 update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
 update_os
 
