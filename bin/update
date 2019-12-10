@@ -112,7 +112,7 @@ fi
 NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)
 
-if [[ "${devmode}" == "true" ]]; then
+if [[ "${devmode}" != "true" ]]; then
     update_homefarm "${0}"
 fi
 update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
