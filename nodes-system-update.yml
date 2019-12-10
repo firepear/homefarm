@@ -5,7 +5,7 @@
   - name: Copy mirrorlist
     become: true
     copy:
-      src: /var/cache/homefarm/mirrorlist
+      src: ./srv/mirrorlist
       dest: /etc/pacman.d/mirrorlist
       owner: root
       group: root
