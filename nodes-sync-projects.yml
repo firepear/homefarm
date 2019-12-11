@@ -8,23 +8,15 @@
       state: directory
       mode: 0755
   - name: Ensure project config file for all nodes
-    command: cp --no-clobber ./examples/node.yml ./nodes/{{ item }}.yml
+    command: cp --no-clobber ./files/node.yml ./nodes/{{ item }}.yml
     loop: "{{ groups['compute_nodes'] }}"
   - name: Ensure cc_config file for all nodes
-    command: cp --no-clobber ./examples/cc_config.xml ./nodes/cc_{{ item }}.xml
+    command: cp --no-clobber ./files/cc_config.xml ./nodes/cc_{{ item }}.xml
     loop: "{{ groups['compute_nodes'] }}"
 
 - hosts: compute_nodes
   remote_user: farmer
   tasks:
-  - name: Copy boinccmdcmd
-    become: true
-    copy:
-      src: ./bin/boinccmdcmd
-      dest: /usr/local/bin/boinccmdcmd
-      owner: root
-      group: root
-      mode: 0755
   - name: Import project definitions
     include_vars:
       file: ./nodes/{{ inventory_hostname }}.yml

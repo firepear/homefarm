@@ -1,0 +1,33 @@
+---
+- hosts: compute_nodes
+  remote_user: farmer
+  tasks:
+  - name: Copy boinc unit file
+    become: true
+    copy:
+      src: ./files/boinc-client.service
+      dest: /usr/lib/systemd/system/boinc-client.service
+      owner: root
+      group: root
+      mode: 0644
+  - name: Copy jlparse
+    become: true
+    copy:
+      src: ./bin/utils/jlparse
+      dest: /usr/local/bin/jlparse
+      owner: root
+      group: root
+      mode: 0755
+  - name: Copy boinccmdcmd
+    become: true
+    copy:
+      src: ./bin/boinccmdcmd
+      dest: /usr/local/bin/boinccmdcmd
+      owner: root
+      group: root
+      mode: 0755
+  - name: Restart boinc
+    become: true
+    service:
+      name: boinc-client
+      state: restart

@@ -76,7 +76,7 @@ update_localrepo() {
     if [[ "${firstnode}" == "" ]]; then
         # this branch runs during control node install and uses the
         # initial packages list
-        cp /homefarm/examples/pkgs.txt ./db
+        cp /homefarm/files/pkgs.txt ./db
     else
         # this branch runs during normal update. it grabs a package
         # list from the first node and sets localrepo_updated to true,
