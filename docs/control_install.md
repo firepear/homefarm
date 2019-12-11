@@ -8,8 +8,8 @@ First, create the controller image
       as the non-volatile storage for the container you're about to
       create, so put it somewhere reasonably stable.
     * For the purposes of this document, we will assume it is at `~/homefarm`
-1. `'cd ~/homefarm'`
-1. Build the controler: `'cd docker/control/ && docker build --tag control . && cd ../..'`
+1. Build the controler:
+    * `'cd ~/homefarm/files/docker/controller/ && docker build --tag control . && cd ~/homefarm'`
     * This will automatically pull the Arch Linux base container for
       you, if needed. This is also the only docker incantation you'll
       need; everything else happens through scripts.

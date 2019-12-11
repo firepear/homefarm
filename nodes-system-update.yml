@@ -10,14 +10,6 @@
       owner: root
       group: root
       mode: 0644
-  - name: Copy jlparse
-    become: true
-    copy:
-      src: ./bin/utils/jlparse
-      dest: /usr/local/bin/jlparse
-      owner: root
-      group: root
-      mode: 0755
   - name: Halt BOINC
     become: true
     service:
