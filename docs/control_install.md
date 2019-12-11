@@ -35,15 +35,12 @@ Welcome to homefarm
 [root@77c3fe3f72ba homefarm]# 
 ```
 
-From this point, you can issue `farmctl` commands to manage your
-compute farm. First there's a little bit of setup to do.
-
 ## Initialize the controller environment and local repo
 
-Compute nodes will install almost all their packages from the control
-node's local mirror, but new packages will initially be sourced from
-the Arch mirrors. To make this a fast process, an geographically
-appropriate mirrorlist is needed.
+Compute nodes will install their initial packages from the control
+node's local mirror (which will be built in the next step), but an
+Arch mirrorlist should still be generated so that the standard repos
+will also be available.
 
 On a machine with a browser:
 
@@ -52,33 +49,26 @@ On a machine with a browser:
    you know you need something specific)
 1. Copy the generated URL, for use on the control node
 
-On the controller:
+In the controller container:
 
 1. Run `curl -o ./srv/mirrorlist' '[MIRRORLIST_URL]'`
 1. Edit `mirrorlist` to uncomment the hosts you want to use as mirrors
    (`vi` and `mg` are available).
+
+And complete setup of the controller by initializing its environment:
+
+`farmctl init`
 
 
 ## Set up the Ansible inventory
 
 Now it's time to define the machines which will be part if your farm.
 
-1. Login as user `alarm` if you aren't already
-1. Run `'cd ~/homefarm'`
-1. Edit `farm.cfg`:
-     * Change `node00` in the `[controller]` stanza to match the name
-       you've given the control node
-     * Change the names and IP addresses in the `[compute_nodes]`
-       stanza to match the machines you'll be setting up as compute
-       nodes
+1. Edit `farm.cfg` and change the names and IP addresses in the
+   `[compute_nodes]` stanza to match the machines you'll be setting up
+   as compute nodes
+2. Exit from the controller container, then bring it back up.
 
-
-
-## Finishing up
 
 The control node is now ready. You can begin [installing compute
 nodes](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md).
-
-Default passwords for both `root` and `alarm` accounts are left in
-place by the installer. You may change them if you wish; it will not
-affect cluster operations.

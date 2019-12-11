@@ -83,6 +83,7 @@ case "${1}" in
         localip=$(awk 'END{print $1}' /etc/hosts)
         /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
         /bin/ln -s /homefarm/.ssh /root/.ssh
+        /bin/ln -s /homefarm/bin/complete /root/.bashrc
         /usr/bin/keychain -q --host control /homefarm/.ssh/id_farmer >> /dev/null 2>&1
         source /root/.keychain/control-sh >> /dev/null 2>&1
         /bin/ln -s /homefarm/.boinctui.cfg /root/.boinctui.cfg
@@ -95,10 +96,13 @@ case "${1}" in
         hf_buildhosts
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
+    node-init)
+        exec /bin/ansible-playbook nodes-boinc-setup.yml
+        ;;
     os-update)
         exec ./bin/update "${2}"
         ;;
-    sync-nodes)
+    project-sync)
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
     up)
@@ -112,6 +116,7 @@ case "${1}" in
         echo "Homefarm v2.0.0"
         exit 0
         ;;
+    help)
     *)
         if [[ "${1}" != "" ]]; then
             echo "error: unknown argument '${1}'"
@@ -123,6 +128,8 @@ Compute node commands:
     cmd <'COMMAND_LINE'>
       Run a command on all nodes and display output
 
+    node-init
+
     os-update
       Update the controller and compute node OS packages
 
@@ -130,7 +137,7 @@ Compute node commands:
       Generate counts and runtime stats for WUs completed on a project in a given
       time. Defaults: all WUs; 24h
 
-    sync-nodes
+    project-sync
       Sync project statuses to compute nodes
 
 Controller commands:

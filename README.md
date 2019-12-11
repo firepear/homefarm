@@ -20,8 +20,7 @@ Homefarm makes a few assumptions:
 * You are aware of your local network configuration, and have IPs to
   assign to the nodes.
 * All nodes are on a private network -- an SSH key with no passphrase
-  will be generated for Ansible's use, and the control node's default
-  passwords will be left in place.
+  will be generated for Ansible's use.
 * You're familiar with BOINC, projects, workunits, and so on.
 
 # Documentation
