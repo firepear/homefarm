@@ -1,3 +1,31 @@
+2.0.0 - 2019-12-1x
+--------------------------------------------------------------------
+
+    * As indicated by the major version number change, this release
+      has incompatibilities with previous releases. Specifically,
+      Raspberry Pi computers are no longer (directly) supported as
+      control nodes. The controller is now a Docker container, run on
+      any machine
+
+    * There is a new, unified, cluster management tool: farmctl, with
+      tab-completion support for its sub-commands
+
+    * boinctui is no longer available on the controller. It is
+      replaced by 'farmctl status'. This tool is under active
+      development, and will gain capabilities in future releases
+
+    * BOINC is no longer built on compute nodes
+
+    * Many simplifications and refactorings across the Ansible
+      playbooks and project organization
+
+    * root passwords on compute nodes are now set correctly on install
+
+    * Long-standing sed bug in compute node setup is fixed
+
+    *
+
+
 1.2.0 - 2019-07-15
 --------------------------------------------------------------------
 
