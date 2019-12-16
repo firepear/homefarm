@@ -130,6 +130,7 @@ Compute node commands:
       Run a command on all nodes and display output
 
     node-init
+      Do initial BOINC configuration on compute nodes
 
     os-update
       Update the controller and compute node OS packages
