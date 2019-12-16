@@ -30,4 +30,4 @@
     become: true
     service:
       name: boinc-client
-      state: restart
+      state: restarted
