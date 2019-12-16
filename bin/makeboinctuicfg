@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
+import json
 import subprocess
 import sys
-import xml.etree.ElementTree as ET
 
 # guard against humans running this
 if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
@@ -10,24 +10,8 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
     print("Homefarm. Nothing about its operation is configurable.")
     sys.exit(0)
 
-tree, cfg = None, None
-try:
-    # try to source an existing config. if it works, this will give us
-    # our parsed XML as a tree, and then we'll grab the root element
-    # which is our configuration document.
-    tree = ET.parse("/homefarm/.boinctui.cfg")
-    cfg = tree.getroot()
-except:
-    # if that doesn't work, create a bare configuration from a string,
-    # then add it to a newly instantiated tree.
-    cfg = ET.fromstring("<boinctui_cfg><server></server></boinctui_cfg>")
-    tree = ET.ElementTree(cfg)
-
-# ok, one way or another we have a parsed configuration. let's remove
-# all <server> elements from it to get a known starting point for
-# adding them back.
-for server in cfg.findall('server'):
-    cfg.remove(server)
+# empty dict to hold node RPC keys
+nodes = {}
 
 # yank the script name off ARGV
 sys.argv.pop(0)
@@ -44,47 +28,13 @@ for node in sys.argv:
     subprocess.run(['scp', '-i', '.ssh/id_farmer', 'farmer@{}:{}_auth.cfg'.format(node, node), '.'])
     # cat the local copy of the keyfile, storing the contents in the variable 'key'
     key = subprocess.run(["/bin/cat", "{}_auth.cfg".format(node)], stdout=subprocess.PIPE).stdout
-    # create a new <server> element
-    server = ET.Element('server')
-    # and a <host>, whose text contents are the node name
-    host = ET.Element('host')
-    host.text = node
-    # and a <port>, hardcoded to 31416 for now
-    port = ET.Element('port')
-    port.text = '31416'
-    # and a <pwd>, containing the RPC access key (decoded from bytes to string)
-    pwd = ET.Element('pwd')
-    pwd.text = key.decode('utf-8')
-    # append those three elements as children of <server>
-    server.append(host)
-    server.append(port)
-    server.append(pwd)
-    # append <server> as a child of our configuration parent
-    cfg.append(server)
+    # turn those bytes into a string
+    pwd = key.decode('utf-8')
+    # stash it in our dict
+    nodes[node] = pwd
     # unlink the local copy of the keyfile
     subprocess.run(['rm', '{}_auth.cfg'.format(node)])
 
 # finally, write our parsed tree back to disk
-tree.write("/homefarm/.boinctui.cfg")
-
-
-#<boinctui_cfg>
-#    <wtask_height_percent>5000
-#    </wtask_height_percent>
-#    <column_view_mask>-1
-#    </column_view_mask>
-#    <tasks_list_mode>0
-#    </tasks_list_mode>
-#    <tasks_sort_mode>2
-#    </tasks_sort_mode>
-#    <server>
-#        <host>127.0.0.1
-#        </host>
-#        <port>31416
-#        </port>
-#        <pwd>6a7436062bd4a34621334c0fd50df8e0
-#        </pwd>
-#    </server>
-#    <line_draw_mode>0
-#    </line_draw_mode>
-#</boinctui_cfg>
+with open("/homefarm/.boincguikeys.json", 'w') as f:
+    json.dump(nodes, f)
