@@ -2,10 +2,8 @@
 
 import socket
 
-PORT=31416
-
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect(("node05", PORT))
+    s.connect(("10.1.10.205", 31416))
     s.sendall(b'<auth1/>\003')
     data = s.recv(1024)
 print('Received', repr(data))
