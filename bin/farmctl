@@ -86,7 +86,6 @@ case "${1}" in
         /bin/ln -s /homefarm/bin/complete /root/.bashrc
         /usr/bin/keychain -q --host control /homefarm/.ssh/id_farmer >> /dev/null 2>&1
         source /root/.keychain/control-sh >> /dev/null 2>&1
-        /bin/ln -s /homefarm/.boinctui.cfg /root/.boinctui.cfg
         echo
         echo "Welcome to homefarm"
         echo "    Local IP is ${localip}"
@@ -116,8 +115,6 @@ case "${1}" in
         echo "Homefarm v2.0.0"
         exit 0
         ;;
-    help)
-        ;&
     *)
         if [[ "${1}" != "" && "${1}" != "help" ]]; then
             echo "error: unknown argument '${1}'"
