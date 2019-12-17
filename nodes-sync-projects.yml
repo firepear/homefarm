@@ -36,4 +36,4 @@
 - hosts: controller
   tasks:
   - name: Assemble boinctui config file
-    script: "./bin/makeboinctuicfg {{ groups['compute_nodes'] }}"
+    script: "./bin/makeboincguikeyfile {{ groups['compute_nodes'] }}"
