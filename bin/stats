@@ -1,9 +1,30 @@
 #!/usr/bin/python
 
+import hashlib
+import json
 import socket
+import xml.etree.ElementTree as ET
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect(("10.1.10.205", 31416))
-    s.sendall(b'<auth1/>\003')
-    data = s.recv(1024)
-print('Received', repr(data))
+hosts = {}
+with open("/homefarm/.boincguikeys.json", 'r') as f:
+    hosts = json.load(f)
+
+for host, key in hosts.items():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((host, 31416))
+        # send the initial authorization request
+        s.sendall(b'<auth1/>\003')
+        # get the reply, stringify it from bytes, strip the trailing
+        # ETX, and turn that into a tree
+        reply = ET.fromstring(s.recv(1024).decode('utf-8').strip('\003'))
+        # hash the nonce contained in the reply with our password
+        m = hashlib.md5()
+        m.update(bytearray(reply[0].text, 'utf-8'))
+        m.update(bytearray(key, 'utf-8'))
+        nonce_hash = m.hexdigest()
+        # then send it
+        req = "<boinc_gui_rpc_request><auth2><nonce_hash>" + nonce_hash + "</nonce_hash></auth2></boinc_gui_rpc_request>\003"
+        s.sendall(req.encode('utf-8'))
+        reply = (s.recv(1024).decode('utf-8').strip('\003'))
+        print(reply)
+
