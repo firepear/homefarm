@@ -109,10 +109,11 @@ case "${1}" in
         ;;
     up)
         if [[ "${2}" == "" ]]; then
-            echo "'${0} up' requires the path to your homefarm dir as an argument; exiting"
-            exit 1
+            HOMEFARM_DIR=~/homefarm
+        else
+            HOMEFARM_DIR="${2}"
         fi
-        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control "${0}" on-up
+        exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control "${0}" on-up
         ;;
     version)
         echo "Homefarm v2.0.0"
@@ -157,7 +158,7 @@ Controller commands:
       be in HOMEFARM_DIR
 
     up <HOMEFARM_DIR>
-      Bring up an instance of the controller
+      Bring up an instance of the controller. Default is ~/homefarm
 
     version
       Display version information
