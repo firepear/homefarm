@@ -104,6 +104,9 @@ case "${1}" in
     project-sync)
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
+    status)
+        exec ./bin/stats
+        ;;
     up)
         if [[ "${2}" == "" ]]; then
             echo "'${0} up' requires the path to your homefarm dir as an argument; exiting"
@@ -132,9 +135,12 @@ Compute node commands:
     os-update
       Update the controller and compute node OS packages
 
-    stats <PROJECT_URL> [-t <WU_TYPE>] [-s <TIMESPAN>]
-      Generate counts and runtime stats for WUs completed on a project in a given
+    query <PROJECT_URL> [-t <WU_TYPE>] [-s <TIMESPAN>]
+      Generate counts and runtime data for WUs completed on a project in a given
       time. Defaults: all WUs; 24h
+
+    status
+      Display info on current tasks
 
     project-sync
       Sync project statuses to compute nodes
