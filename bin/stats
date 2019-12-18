@@ -28,6 +28,17 @@ def boinc_auth_conn(s, key):
     else:
         return False
 
+def recv_msg(s):
+    chunks = []
+    msgend = False
+    while not msgend:
+        chunk = s.recv(4096)
+        if chunk == b'':
+            raise RuntimeError("socket connection broken")
+        if chunk[-1] == 3:
+            msgend = True
+        chunks.append(chunk)
+    return b''.join(chunks).decode('utf-8').strip('\003')
 
 
 hosts = {}
@@ -35,7 +46,6 @@ with open("/homefarm/.boincguikeys.json", 'r') as f:
     hosts = json.load(f)
 
 for host, key in hosts.items():
-    print(host, key)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((host, 31416))
         # try to auth
@@ -45,7 +55,7 @@ for host, key in hosts.items():
             sys.exit(1)
 
         # ok; let's get some data
-        req = "<boinc_gui_rpc_request><get_results/></boinc_gui_rpc_request>\003"
+        req = "<boinc_gui_rpc_request><get_simple_gui_info/></boinc_gui_rpc_request>\003"
         s.sendall(req.encode('utf-8'))
-        reply = s.recv(2097152).decode('utf-8').strip('\003')
+        reply = recv_msg(s)
         print(reply)
