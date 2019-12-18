@@ -35,5 +35,5 @@
 
 - hosts: controller
   tasks:
-  - name: Assemble boinctui config file
+  - name: Assemble RPC keyfile
     script: "./bin/makeboincguikeyfile {{ groups['compute_nodes'] }}"

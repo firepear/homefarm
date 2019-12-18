@@ -19,7 +19,7 @@ def boinc_auth_conn(s, key):
     m.update(bytearray(key, 'utf-8'))
     nonce_hash = m.hexdigest()
     # then send it
-    req = "<boinc_gui_rpc_request><auth2><nonce_hash>" + nonce_hash + "</nonce_hash></auth2></boinc_gui_rpc_request>\003"
+    req = "<auth2><nonce_hash>" + nonce_hash + "</nonce_hash></auth2>\003"
     s.sendall(req.encode('utf-8'))
     # repeat the receive-and-decode dance. check answer.
     reply = ET.fromstring(s.recv(1024).decode('utf-8').strip('\003'))
@@ -35,10 +35,17 @@ with open("/homefarm/.boincguikeys.json", 'r') as f:
     hosts = json.load(f)
 
 for host, key in hosts.items():
+    print(host, key)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((host, 31416))
+        # try to auth
         authed = boinc_auth_conn(s, key)
         if not authed:
             print("could not auth; exiting")
             sys.exit(1)
-        print("ok")
+
+        # ok; let's get some data
+        req = "<boinc_gui_rpc_request><get_results/></boinc_gui_rpc_request>\003"
+        s.sendall(req.encode('utf-8'))
+        reply = s.recv(2097152).decode('utf-8').strip('\003')
+        print(reply)
