@@ -3,7 +3,32 @@
 import hashlib
 import json
 import socket
+import sys
 import xml.etree.ElementTree as ET
+
+
+def boinc_auth_conn(s, key):
+    # send the initial authorization request
+    s.sendall(b'<auth1/>\003')
+    # get the reply, stringify it from bytes, strip the trailing
+    # ETX, and turn that into a tree
+    reply = ET.fromstring(s.recv(1024).decode('utf-8').strip('\003'))
+    # hash the nonce contained in the reply with our password
+    m = hashlib.md5()
+    m.update(bytearray(reply[0].text, 'utf-8'))
+    m.update(bytearray(key, 'utf-8'))
+    nonce_hash = m.hexdigest()
+    # then send it
+    req = "<boinc_gui_rpc_request><auth2><nonce_hash>" + nonce_hash + "</nonce_hash></auth2></boinc_gui_rpc_request>\003"
+    s.sendall(req.encode('utf-8'))
+    # repeat the receive-and-decode dance. check answer.
+    reply = ET.fromstring(s.recv(1024).decode('utf-8').strip('\003'))
+    if reply[0].tag == "authorized":
+        return True
+    else:
+        return False
+
+
 
 hosts = {}
 with open("/homefarm/.boincguikeys.json", 'r') as f:
@@ -12,19 +37,8 @@ with open("/homefarm/.boincguikeys.json", 'r') as f:
 for host, key in hosts.items():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((host, 31416))
-        # send the initial authorization request
-        s.sendall(b'<auth1/>\003')
-        # get the reply, stringify it from bytes, strip the trailing
-        # ETX, and turn that into a tree
-        reply = ET.fromstring(s.recv(1024).decode('utf-8').strip('\003'))
-        # hash the nonce contained in the reply with our password
-        m = hashlib.md5()
-        m.update(bytearray(reply[0].text, 'utf-8'))
-        m.update(bytearray(key, 'utf-8'))
-        nonce_hash = m.hexdigest()
-        # then send it
-        req = "<boinc_gui_rpc_request><auth2><nonce_hash>" + nonce_hash + "</nonce_hash></auth2></boinc_gui_rpc_request>\003"
-        s.sendall(req.encode('utf-8'))
-        reply = (s.recv(1024).decode('utf-8').strip('\003'))
-        print(reply)
-
+        authed = boinc_auth_conn(s, key)
+        if not authed:
+            print("could not auth; exiting")
+            sys.exit(1)
+        print("ok")
