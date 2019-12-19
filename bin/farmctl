@@ -79,6 +79,9 @@ case "${1}" in
     init)
         hf_init
         ;;
+    backup)
+        exec ./bin/backup
+        ;;
     on-up)
         localip=$(awk 'END{print $1}' /etc/hosts)
         /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
