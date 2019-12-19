@@ -6,8 +6,8 @@ cd /homefarm
 
 # no arguments: create tarball
 if [[ "${1}" == "" ]]; then
-    tar zcvf ${ARCHIVE} ./.ssh \
-        homefarm/.current_tag homefarm/farm.cfg homefarm/nodes/ \
+    tar zcvf ${ARCHIVE} ./.ssh ./.boincguikeys.json \
+        ./.current_tag ./farm.cfg ./nodes/ \
         ./srv/pacman.conf \
         ./srv/mirrorlist >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
