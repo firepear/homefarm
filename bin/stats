@@ -126,9 +126,9 @@ for host, key in hosts.items():
         s.sendall(req.encode('utf-8'))
         tasks = ET.fromstring(recv_msg(s))
 
-    print("=============================================================================")
+    print("==============================================================================")
     print(host)
-    print("=============================================================================")
+    print("==============================================================================")
     for projname in sorted(projects):
         task_count = 0
         task_active = 0
@@ -164,12 +164,12 @@ for host, key in hosts.items():
         p = projects[projname]
         print("{} ({})".format(projname, p['state']))
         print("Tasks: {}\tActive: {}\tCredit/RAC: {}/{}".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
-        print("-----------------------------------------------------------------------------")
-        print("\tWU\t\t\t%Done\tETA\tDeadline")
-        print("-----------------------------------------------------------------------------")
+        print("------------------------------------------------------------------------------")
+        print("     Workunit                                         Status   ETA      Dline")
+        print("------------------------------------------------------------------------------")
         i = 1
         for name, t in {k: v for k, v in sorted(ptasks.items(), reverse=True, key=lambda item: item[1]['done'])}.items():
             if not t['active']:
                 continue
-            print("{:4d}\t{}\t{:.2%}\t{}\t{}".format(i, name, t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
+            print("{:3d}  {:47}  {:6.2%}  {}  {}".format(i, name[:47], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
             i += 1
