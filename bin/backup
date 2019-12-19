@@ -6,10 +6,8 @@ cd /homefarm
 
 # no arguments: create tarball
 if [[ "${1}" == "" ]]; then
-    tar zcvf ${ARCHIVE} ./.boinctui.cfg ./.ssh \
-        homefarm/.mirror_url homefarm/.current_tag \
-        homefarm/farm.cfg homefarm/nodes/ \
-        /etc/hosts \
+    tar zcvf ${ARCHIVE} ./.ssh \
+        homefarm/.current_tag homefarm/farm.cfg homefarm/nodes/ \
         ./srv/pacman.conf \
         ./srv/mirrorlist >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
@@ -32,7 +30,7 @@ fi
 # if we're down here, then we're restoring a tarball. unpack it, and
 # move everything that belongs somewhere else to that location.
 if [[ ! -e ${ARCHIVE} ]]; then
-    echo "error: can't find archive file: '${ARCHIVE}'"
+    echo "error: can't find archive file ${ARCHIVE}"
     exit 1
 fi
 echo "Unpacking tarball"
