@@ -82,6 +82,9 @@ case "${1}" in
     backup)
         exec ./bin/backup
         ;;
+    cmd)
+        exec ./bin/utils/farmcmd "${2}"
+        ;;
     on-up)
         localip=$(awk 'END{print $1}' /etc/hosts)
         /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
