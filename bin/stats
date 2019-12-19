@@ -41,7 +41,23 @@ def recv_msg(s):
     return b''.join(chunks).decode('utf-8').strip('\003')
 
 
+def format_eta(eta):
+    eta = float(eta)
+    if eta > 3600:
+        h = int(eta / 3600)
+        m = int((eta - 3600 * h) / 60)
+        return "{:3d}h{:02d}m".format(h, m)
+    else:
+        m = int(eta / 60)
+        s = int(eta - 60 * m)
+        return "{:3d}m{:02d}s".format(m, s)
+
+
+
 hosts = {}
+projects = {}
+tasks = None
+
 with open("/homefarm/.boincguikeys.json", 'r') as f:
     hosts = json.load(f)
 
@@ -54,8 +70,81 @@ for host, key in hosts.items():
             print("could not auth; exiting")
             sys.exit(1)
 
-        # ok; let's get some data
-        req = "<boinc_gui_rpc_request><get_simple_gui_info/></boinc_gui_rpc_request>\003"
+        # first, get projects data
+        req = "<boinc_gui_rpc_request><get_project_status/></boinc_gui_rpc_request>\003"
         s.sendall(req.encode('utf-8'))
-        reply = recv_msg(s)
-        print(reply)
+        reply = ET.fromstring(recv_msg(s))
+        for project in reply.iter('project'):
+            # and extract a few bits on a per-project basis. some of
+            # this is trivia, but some of it will let us process the
+            # tasks meaningfully
+            p = {}
+            name = project.find('project_name').text
+            p['url'] = project.find('master_url').text
+            p['usercred'] = int(float(project.find('user_total_credit').text))
+            p['userrac'] = int(float(project.find('user_expavg_credit').text))
+            p['hostcred'] = int(float(project.find('host_total_credit').text))
+            p['hostrac'] = int(float(project.find('host_expavg_credit').text))
+            try:
+                state = project.find('suspended_via_gui')
+                if state is not None:
+                    p['state'] = "Suspended"
+            except:
+                pass
+            try:
+                state = project.find('dont_request_more_work')
+                if state is not None:
+                    p['state'] = "Nomorework"
+            except:
+                pass
+            if 'state' not in p:
+                p['state'] = "Active"
+            projects[name] = p
+
+        # now just grab the task data and stow it. we'll process it
+        # later on
+        req = "<boinc_gui_rpc_request><get_results/></boinc_gui_rpc_request>\003"
+        s.sendall(req.encode('utf-8'))
+        tasks = ET.fromstring(recv_msg(s))
+
+    print(host)
+    for projname in sorted(projects):
+        task_count = 0
+        task_active = 0
+        ptasks = {}
+
+        # loop over the tasks, extracting interesting info
+        for task in tasks.iter('result'):
+            # only process tasks belonging to the current project
+            if projects[projname]['url'] != task.find('project_url').text:
+                continue
+            task_count += 1
+            t = {}
+
+            # stuff
+            t['cpu_eta'] = task.find('estimated_cpu_time_remaining').text
+            t['state'] =  task.find('state').text
+            t['deadline'] = task.find('report_deadline').text
+            # if the task is active
+            try:
+                active_data = task.find('active_task')
+                if active_data is None:
+                    raise
+                task_active += 1
+                t['active'] = True
+                t['done'] = float(active_data.find('fraction_done').text)
+                t['cpu_elapsed'] = active_data.find('current_cpu_time').text
+            except:
+                t['active'] = False
+                t['done'] = 0
+            ptasks[task.find('name').text] = t
+
+        # print a summary for the project
+        p = projects[projname]
+        print("=============================================================================")
+        print("{} ({})\tTasks: {}\tActive: {}\tCredit/RAC: {}/{}".format(projname, p['state'], task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
+        print("=============================================================================")
+        for name, t in {k: v for k, v in sorted(ptasks.items(), reverse=True, key=lambda item: item[1]['done'])}.items():
+            if not t['active']:
+                continue
+            print("{}\t{:.2%}\t{}".format(name, t['done'], format_eta(t['cpu_eta'])))
