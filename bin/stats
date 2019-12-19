@@ -4,6 +4,7 @@ import hashlib
 import json
 import socket
 import sys
+import time
 import xml.etree.ElementTree as ET
 
 
@@ -50,6 +51,24 @@ def format_eta(eta):
     else:
         m = int(eta / 60)
         s = int(eta - 60 * m)
+        return "{:3d}m{:02d}s".format(m, s)
+
+
+def format_dl(dl):
+    dl = int(float(dl))
+    t = int(time.time())
+    dl = dl - t
+    if dl > 86400:
+        d = int(dl / 86400)
+        h = int((dl - 86400 * d) / 3600)
+        return "{:3d}d{:02d}h".format(d, h)
+    elif dl > 3600:
+        h = int(dl / 3600)
+        m = int((dl - 3600 * h) / 60)
+        return "{:3d}h{:02d}m".format(h, m)
+    else:
+        m = int(dl / 60)
+        s = int(dl - 60 * m)
         return "{:3d}m{:02d}s".format(m, s)
 
 
@@ -107,7 +126,9 @@ for host, key in hosts.items():
         s.sendall(req.encode('utf-8'))
         tasks = ET.fromstring(recv_msg(s))
 
+    print("=============================================================================")
     print(host)
+    print("=============================================================================")
     for projname in sorted(projects):
         task_count = 0
         task_active = 0
@@ -141,10 +162,14 @@ for host, key in hosts.items():
 
         # print a summary for the project
         p = projects[projname]
-        print("=============================================================================")
-        print("{} ({})\tTasks: {}\tActive: {}\tCredit/RAC: {}/{}".format(projname, p['state'], task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
-        print("=============================================================================")
+        print("{} ({})".format(projname, p['state']))
+        print("Tasks: {}\tActive: {}\tCredit/RAC: {}/{}".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
+        print("-----------------------------------------------------------------------------")
+        print("\tWU\t\t\t%Done\tETA\tDeadline")
+        print("-----------------------------------------------------------------------------")
+        i = 1
         for name, t in {k: v for k, v in sorted(ptasks.items(), reverse=True, key=lambda item: item[1]['done'])}.items():
             if not t['active']:
                 continue
-            print("{}\t{:.2%}\t{}".format(name, t['done'], format_eta(t['cpu_eta'])))
+            print("{:4d}\t{}\t{:.2%}\t{}\t{}".format(i, name, t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
+            i += 1
