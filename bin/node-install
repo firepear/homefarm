@@ -143,11 +143,7 @@ WPACONF="/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
 INSTALLDEVICE="${INSTALLDEVICE}"
 
 
-# fetch util funcs
-if [[ ! -e "common.sh" ]]; then
-    curl --connect-timeout 10 --max-time 60 -s -S -O "${CONTROLLER}/common.sh"
-fi
-# and source
+# source util funcs
 . ./common.sh
 
 # set TZ

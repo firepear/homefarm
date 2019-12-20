@@ -1,4 +1,4 @@
-2.0.0 - 2019-12-1x
+2.0.0 - 2019-12-2x
 --------------------------------------------------------------------
 
     * As indicated by the major version number change, this release
@@ -7,14 +7,15 @@
       control nodes. The controller is now a Docker container, run on
       any machine
 
-    * There is a new, unified, cluster management tool: farmctl, with
+    * There is a new, unified, cluster management tool, farmctl, with
       tab-completion support for its sub-commands
 
     * boinctui is no longer available on the controller. It is
       replaced by 'farmctl status'. This tool is under active
       development, and will gain capabilities in future releases
 
-    * BOINC is no longer built on compute nodes
+    * BOINC is no longer built on compute nodes; stock Arch packages
+      are now used
 
     * Many simplifications and refactorings across the Ansible
       playbooks and project organization

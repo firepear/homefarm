@@ -1,6 +1,6 @@
 # Compute node install
 
-This process is much faster than the control node install.
+## Arch install
 
 1. Download the [Arch Linux
    installer](https://alpinelinux.org/downloads/) and boot it.
@@ -16,9 +16,9 @@ This process is much faster than the control node install.
        attach to WiFi
     1. `'dhcpcd IFACE'` to obtain an IP address. This may take a few
        seconds to complete.
-1. Run `'curl -O CONTROL_NODE_IP/compute-install'` to fetch the
+1. Run `'curl -O CONTROL_NODE_IP/node-install'` to fetch the
    compute node install script from your control node
-1. Run `'/bin/bash ./compute-setup CONTROL_NODE_IP IFACE [ESSID WPA_PASSWD]'`
+1. Run `'/bin/bash ./node-install CONTROL_NODE_IP IFACE [ESSID WPA_PASSWD]'`
     * `IFACE` is the interface you wish to set up during the install
     * `ESSID` and `WPA_PASSWD` are not needed if you are using a wired
       connection, or if you followed the above procedure for WiFi
@@ -27,14 +27,27 @@ This process is much faster than the control node install.
         * `WPA_PASSWD` is the WPA passphrase for network `ESSID`
 1. Answer the questions the installer asks. It will handle the rest
 
-After the first reboot, login as root and run `'/bin/bash
-compute-setup'` to complete the Homefarm-specific portions of
-installation. When `compute-setup` completes, the node is ready for
-Ansible to take over its configuration management.
+## Homefarm setup
+
+After the reboot, login as root and run `'/bin/bash node-setup'` to
+complete the Homefarm-specific portions of installation. When
+`node-setup` completes, the node is ready for Homefarm to take over
+its management.
 
 You can test that everything is working by running `'ansible -m ping
 NODE_NAME'` from the control node.
 
-Repeat this procedure for all other compute nodes in the cluster. When
-all looks good, continue to [BOINC
-initialization](https://github.com/firepear/homefarm/blob/master/docs/boinc_setup.md)
+Repeat the install-and-setup procedure for all other nodes which need
+to be installed.
+
+## Putting nodes into service
+
+These steps happen on the controller.
+
+1. Ensure that all the nodes you've added have entries in `farm.cfg`.
+1. For each node, create (or symlink if the new node will be sharing a
+   configuration with an existing node) a config file in the
+   `/homefarm/nodes` directory. The file(s) should be named
+   `[HOSTNAME].yml`.
+1. Run `'farmctl node-init` to handle initial BOINC
+

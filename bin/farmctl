@@ -134,7 +134,8 @@ usage: ${0} COMMAND [ARGS]
 
 Compute node commands:
     cmd <'COMMAND_LINE'>
-      Run a command on all nodes and display output
+      Run a command on all nodes. COMMAND_LINE be a single argument, so use
+      quotes as appropriate
 
     node-init
       Do initial BOINC configuration on compute nodes
