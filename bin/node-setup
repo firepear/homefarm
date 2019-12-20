@@ -1,6 +1,5 @@
 #!/bin/bash
-
-cd /root
+set -e
 
 if [[ "${1}" == "" ]]; then
     echo "error: no control node IP specified"
@@ -10,10 +9,6 @@ fi
 
 CONTROLLER="${1}:9099"
 
-# fetch util funcs
-if [[ ! -e "common.sh" ]]; then
-    hf_fetch  "${CONTROLLER}/common.sh"
-fi
 # and source
 . ./common.sh
 
