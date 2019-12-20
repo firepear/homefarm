@@ -163,9 +163,24 @@ for host, key in hosts.items():
                 t['active'] = True
                 t['done'] = float(active_data.find('fraction_done').text)
                 t['cpu_elapsed'] = active_data.find('current_cpu_time').text
+                astate = float(active_data.find('active_task_state').text)
+                # set a human-readable active state
+                if astate == 0:
+                    t['astate'] = "Paus"
+                elif astate == 1:
+                    t['astate'] = "Run"
+                elif astate == 5:
+                    t['astate'] = "Abrt"
+                elif astate == 8:
+                    t['astate'] = "Quit"
+                elif astate == 9:
+                    t['astate'] = "Susp"
+                else: # 10
+                    t['astate'] = "Copy"
             except:
                 t['active'] = False
                 t['done'] = 0
+            # add the task to the list
             ptasks[task.find('name').text] = t
 
         # print a summary for the project
@@ -175,13 +190,13 @@ for host, key in hosts.items():
         print("{} ({})".format(projname, p['state']))
         print("Tasks: {}\tActive: {}\tCredit/RAC: {}/{}".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
         print("--------------------------------------------------------------------------------")
-        print("     Workunit                                           Status   ETA      Dline")
+        print("     Workunit                                     Stat  Prog     ETA      Dline")
         print("--------------------------------------------------------------------------------")
         i = 1
         for name, t in {k: v for k, v in sorted(ptasks.items(), reverse=True, key=lambda item: item[1]['done'])}.items():
             if not t['active']:
                 continue
-            print("{:3d}  {:49}  {:6.2%}  {}  {}".format(i, name[:49], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
+            print("{:3d}  {:43}  {:4}  {:6.2%}  {}  {}".format(i, name[:43], t['astate'], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
             i += 1
         projcount += 1
     hostcount += 1
