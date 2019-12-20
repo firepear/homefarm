@@ -32,7 +32,7 @@ function hf_init() {
         # create local package cache dir
         mkdir -p /homefarm/srv/arch
         # copy ssh pubkey for distribution to nodes
-        cp /root/.ssh/id_farmer.pub /homefarm/srv
+        ln -sf /homefarm/.ssh/id_farmer.pub /homefarm/srv
         # symlink install/setup scripts
         ln -fs /homefarm/bin/node-install /homefarm/srv
         ln -fs /homefarm/bin/node-setup /homefarm/srv
