@@ -145,7 +145,7 @@ INSTALLDEVICE="${INSTALLDEVICE}"
 
 # fetch util funcs
 if [[ ! -e "common.sh" ]]; then
-    hf_fetch "\${CONTROLLER}/common.sh"
+    curl --connect-timeout 10 --max-time 60 -s -S -O "${CONTROLLER}/common.sh"
 fi
 # and source
 . ./common.sh
@@ -238,6 +238,7 @@ bootctl install
 hf_fetch "\${CONTROLLER}/node-setup"
 EOF
 chmod +x /mnt/root/stage1
+cp ./common.sh /mnt/root
 arch-chroot /mnt /root/stage1
 umount /mnt/boot
 umount /mnt
