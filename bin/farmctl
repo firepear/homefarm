@@ -4,8 +4,7 @@
 # rights reserved.  Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-cd /homefarm
-source ./bin/common.sh
+
 
 # hf_init takes the place of the old control-install script. it
 # handles the initial node setup, other than package install (which is
@@ -76,6 +75,17 @@ function hf_buildhosts() {
     done < ./farm.cfg
 }
 
+
+################################################################################
+
+# if we're not starting up the container, then put ourselves in a
+# known location
+if [[ "${1}" != "up" ]]; then
+    cd /homefarm
+    source ./bin/common.sh
+fi
+
+
 case "${1}" in
     init)
         hf_init
@@ -120,7 +130,7 @@ case "${1}" in
         else
             HOMEFARM_DIR="${2}"
         fi
-        exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control "${0}" on-up
+        exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/farmctl on-up
         ;;
     version)
         echo "Homefarm v2.0.0"
