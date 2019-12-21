@@ -73,7 +73,7 @@ for pkg in pkgfiles.keys():
             rc = 1
             while rc != 0:
                 log.write("Downloading '{}' (try {})\n".format(pkgurl, fetch_count))
-                rc = subprocess.run(['curl', '-s', '--max-time', '60', pkgurl, '-o', pkgdest], check=True).returncode
+                rc = subprocess.run(['curl', '-f', '-s', '-S', '--max-time', '60', pkgurl, '-o', pkgdest], check=True).returncode
             filetype = subprocess.check_output(['file', pkgdest], text=True)
         # delete the file and fail if we hit 5 fetch attempts
         if fetch_count == 5:

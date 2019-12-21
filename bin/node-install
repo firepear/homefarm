@@ -28,7 +28,7 @@ USERWPAPW="${4}"
 
 # fetch util funcs
 if [[ ! -e "common.sh" ]]; then
-    curl --connect-timeout 10 --max-time 60 -s -S -O "${CONTROLLER}/common.sh"
+    curl --connect-timeout 10 --max-time 60 -f -s -S -O "${CONTROLLER}/common.sh"
 fi
 # and source
 . ./common.sh
