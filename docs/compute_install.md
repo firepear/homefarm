@@ -34,8 +34,9 @@ complete the Homefarm-specific portions of installation. When
 `node-setup` completes, the node is ready for Homefarm to take over
 its management.
 
-You can test that everything is working by running `'ansible -m ping
-NODE_NAME'` from the control node.
+You can test the inital install by running `'ssh farmer@[NODENAME]'`
+from the controller. If you can login, then everything should be good
+for the next steps.
 
 Repeat the install-and-setup procedure for all other nodes which need
 to be installed.
@@ -49,5 +50,10 @@ These steps happen on the controller.
    configuration with an existing node) a config file in the
    `/homefarm/nodes` directory. The file(s) should be named
    `[HOSTNAME].yml`.
-1. Run `'farmctl node-init` to handle initial BOINC
+   * See the file `./files/node.yml` as an example, or copy it as a
+     starting point
+1. Run `'farmctl node-init'` to handle initial BOINC configuration and
+   some script setups.
+1. Run `'farmctl project-sync'` to attach the nodes to their projects,
+   as defined in the `HOSTNAME.yml` files.
 

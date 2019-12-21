@@ -10,7 +10,7 @@ update_homefarm() {
     fi
 
     # check github for the most recent tag
-    resp=$(curl --connect-timeout 10 --max-time 60 -s -S 'https://api.github.com/repos/firepear/homefarm/tags')
+    resp=$(curl --connect-timeout 10 --max-time 60 -f -s -S 'https://api.github.com/repos/firepear/homefarm/tags')
     rc=${?}
     if [[ ${rc} -ne 0 ]]; then
         echo "error: couldn't fetch tags list from github. problem was:"
