@@ -101,7 +101,7 @@ for host, key in hosts.items():
             p = {}
             name = project.find('project_name').text
             p['url'] = project.find('master_url').text
-            p['username'] = int(float(project.find('user_name').text))
+            p['username'] = project.find('user_name').text
             p['usercred'] = int(float(project.find('user_total_credit').text))
             p['userrac'] = int(float(project.find('user_expavg_credit').text))
             p['hostcred'] = int(float(project.find('host_total_credit').text))
@@ -188,8 +188,8 @@ for host, key in hosts.items():
         p = projects[projname]
         if projcount > 0:
             print("--------------------------------------------------------------------------------")
-        print("{} ({}/{})".format(projname, p['username'], p['state']))
-        print("Tasks: {}\tActive: {}\tCredit/RAC: {}/{}".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
+        print("{}\t  User: {}\t  State: {}".format(projname, p['username'], p['state']))
+        print("Tasks: {}\t  Active: {}\t  Credit/RAC: {}/{}".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
         print("--------------------------------------------------------------------------------")
         print("     Workunit                                     Stat  Prog     ETA      Dline")
         print("--------------------------------------------------------------------------------")
