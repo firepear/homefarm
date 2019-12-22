@@ -37,6 +37,7 @@ function hf_init() {
         ln -fs /homefarm/bin/node-install /homefarm/srv
         ln -fs /homefarm/bin/node-setup /homefarm/srv
         ln -fs /homefarm/bin/common.sh /homefarm/srv
+        ln -fs /homefarm/bin/util/fix-wlan0 /homefarm/srv
         sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
         sed -e "${sedexpr}" ./files/pacman.conf > ./srv/pacman.conf
         # copy the example farm inventory file to the real one
