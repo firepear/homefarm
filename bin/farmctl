@@ -123,7 +123,15 @@ case "${1}" in
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
     status)
-        exec ./bin/stats
+        tmpfile=$(mktemp)
+        ./bin/stats "${mktemp}"
+        tmplines=$(wc -l ${tmpfile})
+        if [[ ${tmplines} -gt ${LINES} ]]; then
+            less ${tmpfile}
+        else
+            cat ${tmpfile}
+        fi
+        rm ${tmpfile}
         ;;
     up)
         if [[ "${2}" == "" ]]; then

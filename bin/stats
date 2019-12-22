@@ -11,6 +11,7 @@ hosts = {}
 projects = {}
 tasks = None
 hostcount = 0
+tmpfile = sys.argv[1]
 
 def boinc_auth_conn(s, key):
     # send the initial authorization request
@@ -77,6 +78,8 @@ def format_dl(dl):
 
 
 
+of = open(tmpfile, 'w')
+
 with open("/homefarm/.boincguikeys.json", 'r') as f:
     hosts = json.load(f)
 
@@ -129,12 +132,12 @@ for host, key in hosts.items():
         tasks = ET.fromstring(recv_msg(s))
 
     if hostcount > 0:
-        print("\n\n")
-    print("================================================================================")
-    print(host)
-    print("================================================================================")
+        of.write("\n\n\n")
+    of.write("================================================================================\n")
+    of.write("{}\n".format(host))
+    of.write("================================================================================\n")
     if len(projects) == 0:
-        print("No work from this project (yet?)")
+        of.write("No work from this project (yet?)")
         continue
 
     projcount = 0
@@ -187,17 +190,17 @@ for host, key in hosts.items():
         # print a summary for the project
         p = projects[projname]
         if projcount > 0:
-            print("--------------------------------------------------------------------------------")
-        print("{}\t  User: {}\t  State: {}".format(projname, p['username'], p['state']))
-        print("Tasks: {}\t  Active: {}\t  Credit/RAC: {}/{}".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
-        print("--------------------------------------------------------------------------------")
-        print("     Workunit                                     Stat  Prog     ETA      Dline")
-        print("--------------------------------------------------------------------------------")
+            of.write("--------------------------------------------------------------------------------\n")
+        of.write("{}\t  User: {}\t  State: {}\n".format(projname, p['username'], p['state']))
+        of.write("Tasks: {}\t  Active: {}\t  Credit/RAC: {}/{}\n".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
+        of.write("--------------------------------------------------------------------------------\n")
+        of.write("     Workunit                                     Stat  Prog     ETA      Dline\n")
+        of.write("--------------------------------------------------------------------------------\n")
         i = 1
         for name, t in {k: v for k, v in sorted(ptasks.items(), reverse=True, key=lambda item: item[1]['done'])}.items():
             if not t['active']:
                 continue
-            print("{:3d}  {:43}  {:4}  {:6.2%}  {}  {}".format(i, name[:43], t['astate'], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
+            of.write("{:3d}  {:43}  {:4}  {:6.2%}  {}  {}\n".format(i, name[:43], t['astate'], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
             i += 1
         projcount += 1
     hostcount += 1

@@ -42,7 +42,7 @@ If you'd like to execute an ad hoc command across the entire farm, use
 Example:
 
 ```
-$ farmctl cmd 'sensors | grep Tdie'
+# farmctl cmd 'sensors | grep Tdie'
 --------------------------------------------------------------
 node01
 Tdie:         +57.0 C  (high = +70.0 C)
