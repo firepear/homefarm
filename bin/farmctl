@@ -29,22 +29,23 @@ function hf_init() {
         echo "Skipping; already configured"
     else
         HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
-        # create local package cache dir
-        mkdir -p /homefarm/srv/arch
-        # copy ssh pubkey for distribution to nodes
-        cp /homefarm/.ssh/id_farmer.pub /homefarm/srv
-        # symlink install/setup scripts
-        ln -fs /homefarm/bin/node-install /homefarm/srv
-        ln -fs /homefarm/bin/node-setup /homefarm/srv
-        ln -fs /homefarm/bin/common.sh /homefarm/srv
-        ln -fs /homefarm/bin/util/fix-wlan0 /homefarm/srv
         sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
         sed -e "${sedexpr}" ./files/pacman.conf > ./srv/pacman.conf
         # copy the example farm inventory file to the real one
         cp ./files/farm.cfg ./farm.cfg
         # make the nodes directory for user convenience
         mkdir -p /homefarm/nodes
+        # create local package cache dir
+        mkdir -p /homefarm/srv/arch
     fi
+
+    # copy ssh pubkey for distribution to nodes
+    cp /homefarm/.ssh/id_farmer.pub /homefarm/srv
+    # symlink install/setup scripts
+    ln -fs /homefarm/bin/node-install /homefarm/srv
+    ln -fs /homefarm/bin/node-setup /homefarm/srv
+    ln -fs /homefarm/bin/common.sh /homefarm/srv
+    ln -fs /homefarm/bin/util/fix-wlan0 /homefarm/srv
 
     shownotice "Initializing local package mirror"
     if [[ -e /homefarm/.mirror_url ]]; then

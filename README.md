@@ -5,23 +5,23 @@ WARNING: homefarm is currently in a broken state as I work out a major upgrade. 
 Tools for deploying and managing a BOINC compute farm using Ansible
 and Arch Linux.
 
-Homefarm makes it easier -- and _faster_ -- to install, reinstall,
-configure, and update all your BOINC crunchboxes. It also makes you a
-better netizen: all your compute nodes will install and update from a
-local repository that lives on the control node.
+Homefarm makes it easier and faster to install, reinstall, configure,
+and update all your BOINC crunchboxes. It also saves your bandwidth:
+all your compute nodes will install and update from a local repository
+that lives on the control node.
 
-Homefarm makes a few assumptions:
+There are a few assumptions:
 
 * One machine capable of running Docker, to host the control container
 * One or more x86_64 machines capable of running Arch Linux, to act as
-  the compute nodes.
+  the compute nodes
   * These machines will be used for no other purpose, and it is okay
-    to wipe their drives -- Homefarm does not do custom partitioning.
+    to wipe their drives
 * You are aware of your local network configuration, and have IPs to
   assign to the nodes.
 * All nodes are on a private network -- an SSH key with no passphrase
-  will be generated for Ansible's use.
-* You're familiar with BOINC, projects, workunits, and so on.
+  will be generated for Ansible's use
+* You're familiar with BOINC, projects, workunits, and so on
 
 # Documentation
 

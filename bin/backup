@@ -6,8 +6,12 @@ cd /homefarm
 
 # no arguments: create tarball
 if [[ "${1}" == "" ]]; then
-    tar zcvf ${ARCHIVE} ./.ssh ./.boincguikeys.json \
-        ./.current_tag ./farm.cfg ./nodes/ \
+    tar zcvf ${ARCHIVE} ./.ssh \
+        ./.boincguikeys.json \
+        ./.current_tag \
+        ./.mirror_url \
+        ./farm.cfg \
+        ./nodes/ \
         ./srv/pacman.conf \
         ./srv/mirrorlist >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
@@ -35,7 +39,10 @@ if [[ ! -e ${ARCHIVE} ]]; then
 fi
 echo "Unpacking tarball"
 tar zxvf ${ARCHIVE} >> /dev/null
-cp ./.ssh/id_farmer.pub ./srv/homefarm
-mv etc/hosts /etc/hosts
-rmdir etc
-echo "Farm configuration restored"
+echo "Restoring local package mirror"
+. ./bin/common.sh
+mkdir -p /homefarm/srv/arch
+MIRROR_URL=$(cat ./.mirror_url)
+LOCALREPO="/homefarm/srv/arch"
+update_localrepo "${LOCALREPO}" "${MIRROR_URL}"
+echo "Farm configuration restored. Run 'farmctl init'."
