@@ -29,10 +29,7 @@ Homefarm makes a few assumptions:
     * [Controller setup](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
     * [Compute node install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
 * Managing and maintaining your farm
-    * [Keep the farm up to date](https://github.com/firepear/homefarm/blob/master/docs/update.md)
-    * [Check farm status](https://github.com/firepear/homefarm/blob/master/docs/status.md)
-    * [Connect to compute nodes](https://github.com/firepear/homefarm/blob/master/docs/ssh.md)
-    * [Managing BOINC](https://github.com/firepear/homefarm/blob/master/docs/boinc.md)
+    * [Everyday farm ops](https://github.com/firepear/homefarm/blob/master/docs/ssh.md)
     * [Add/reinstall a compute node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
     * [Backup/reinstall the control node](https://github.com/firepear/homefarm/blob/master/docs/backup.md)
     * [Using GPUs](https://github.com/firepear/homefarm/blob/master/docs/gpgpu.md)
@@ -48,10 +45,9 @@ Homefarm makes a few assumptions:
       issue
       archive](https://github.com/firepear/homefarm/blob/master/docs/known_issues.md)
 * Other
-    * Have homefarm? Want to set up an Arch-based workstation or
-      server that _isn't_ part of the farm? Follow the compute node
-      install process, but don't run `compute-setup` after rebooting
-      from `compute-install`. You'll have a core install with a
-      working network connection, ready for user creation and install
-      of whatever packages you need. (Give root a password though!)
+    * Have homefarm? Want to install Arch on a machine that _isn't_
+      part of the farm? Follow the compute node install process, but
+      don't run `compute-setup` after the first reboot. You'll have a
+      core install with a working network connection, ready for user
+      creation and install of whatever packages you need.
 
