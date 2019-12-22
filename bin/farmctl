@@ -125,7 +125,7 @@ case "${1}" in
     status)
         tmpfile=$(mktemp)
         ./bin/stats "${mktemp}"
-        tmplines=$(wc -l ${tmpfile})
+        tmplines=$(wc -l ${tmpfile} | cut -d' ' -f1)
         if [[ ${tmplines} -gt ${LINES} ]]; then
             less ${tmpfile}
         else
