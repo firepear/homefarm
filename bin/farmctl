@@ -4,7 +4,7 @@
 # rights reserved.  Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-
+set -e
 
 # hf_init takes the place of the old control-install script. it
 # handles the initial node setup, other than package install (which is
@@ -82,7 +82,7 @@ function hf_buildhosts() {
 
 # if we're not starting up the container, then put ourselves in a
 # known location
-if [[ "${1}" != "up" ]]; then
+if [[ "${1}" != "up" ]] && [[ "${1}" != "restore" ]]; then
     cd /homefarm
     source ./bin/common.sh
 fi
@@ -124,6 +124,11 @@ case "${1}" in
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
     restore)
+        if [[ "${2}" == "" ]]; then
+            echo "restore: homefarm directory must be specified"
+        fi
+        cd ${2}
+        source ./bin/common.sh
         exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control ./bin/backup restore
         ;;
     status)
