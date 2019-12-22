@@ -29,7 +29,7 @@ Homefarm makes a few assumptions:
     * [Controller setup](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
     * [Compute node install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
 * Managing and maintaining your farm
-    * [Everyday farm ops](https://github.com/firepear/homefarm/blob/master/docs/ssh.md)
+    * [Everyday farm ops](https://github.com/firepear/homefarm/blob/master/docs/management.md)
     * [Add/reinstall a compute node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
     * [Backup/reinstall the control node](https://github.com/firepear/homefarm/blob/master/docs/backup.md)
     * [Using GPUs](https://github.com/firepear/homefarm/blob/master/docs/gpgpu.md)
