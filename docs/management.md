@@ -71,7 +71,7 @@ quoting skills to handle complex requests.
 
 ### Adding/removing/modifying BOINC projects
 
-Edit `nodes/[NODE_NAME].yml` for any nodes you wish to modify.
+Edit `nodes/<NODE_NAME>.yml` for any nodes you wish to modify.
 
 * To define and attach to a new project, create a new stanza in the
   `projects` dict and set the project state to `active`
@@ -96,14 +96,12 @@ To change the user a node is running a project as:
 
 ### Configuring BOINC itself
 
-Edit `nodes/cc_[NODE_NAME].xml` for any nodes you wish to modify.
-
-Add and/or update whatever [BOINC config
+Edit `nodes/cc_<NODE_NAME>.xml` for any nodes you wish to modify. Add
+and/or update whatever [BOINC config
 directives](https://boinc.berkeley.edu/wiki/Client_configuration) you
 would like.
 
-Run `'farmctl project-sync'` to push the changes
-out to the node(s).
+Run `'farmctl project-sync'` to push the changes out to the nodes.
 
 
 ## Connecting to compute nodes

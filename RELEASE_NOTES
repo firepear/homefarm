@@ -1,18 +1,18 @@
-2.0.0 - 2019-12-2x
+2.0.0 - 2019-12-22
 --------------------------------------------------------------------
 
     * As indicated by the major version number change, this release
       has incompatibilities with previous releases. Specifically,
       Raspberry Pi computers are no longer (directly) supported as
       control nodes. The controller is now a Docker container, run on
-      any machine
+      any machine. A new controller instance will be required, and all
+      compute nodes should be drained of WUs and reinstalled.
 
     * There is a new, unified, cluster management tool, farmctl, with
       tab-completion support for its sub-commands
 
     * boinctui is no longer available on the controller. It is
-      replaced by 'farmctl status'. This tool is under active
-      development, and will gain capabilities in future releases
+      replaced by 'farmctl status'
 
     * BOINC is no longer built on compute nodes; stock Arch packages
       are now used
@@ -22,9 +22,9 @@
 
     * root passwords on compute nodes are now set correctly on install
 
-    * Long-standing sed bug in compute node setup is fixed
+    * Long-standing 'sed' bug in compute node setup is fixed
 
-    *
+    * Many smaller changes and fixes
 
 
 1.2.0 - 2019-07-15
