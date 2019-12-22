@@ -23,7 +23,11 @@ can pop it in and out of existance whenever we need it.
 
 To bring it up, go into your homefarm directory and run:
 
-`./bin/farmctl up ~/homefarm`
+`~/homefarm/bin/farmctl up`
+
+If you put homefarm somewhere else, you'll need to specify its location:
+
+`/PATH/TO/HOMEFARM/bin/farmctl up /PATH/TO/HOMEFARM`
 
 And you should see something like the following:
 
@@ -67,8 +71,9 @@ Now it's time to define the machines which will be part if your farm.
 1. Edit `farm.cfg` and change the names and IP addresses in the
    `[compute_nodes]` stanza to match the machines you'll be setting up
    as compute nodes
-2. Exit from the controller container, then bring it back up.
-
+2. Exit from the controller container, then bring it back up:
+   * `'exit'`
+   * `'~/homefarm/bin/farmctl up'`
 
 The control node is now ready. You can begin [installing compute
 nodes](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md).
