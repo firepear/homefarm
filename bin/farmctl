@@ -124,7 +124,7 @@ case "${1}" in
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
     restore)
-        exec ./bin/backup restore
+        exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/backup restore
         ;;
     status)
         tmpfile=$(mktemp)
