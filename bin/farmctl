@@ -123,6 +123,9 @@ case "${1}" in
     project-sync)
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
+    restore)
+        exec ./bin/backup restore
+        ;;
     status)
         tmpfile=$(mktemp)
         ./bin/stats "${tmpfile}"
@@ -164,10 +167,6 @@ Compute node commands:
     os-update
       Update the controller and compute node OS packages
 
-    query <PROJECT_URL> [-t <WU_TYPE>] [-s <TIMESPAN>]
-      Generate counts and runtime data for WUs completed on a project in a given
-      time. Defaults: all WUs; 24h
-
     status
       Display info on current tasks
 
@@ -192,3 +191,8 @@ Controller commands:
       Display version information
 EOF
 esac
+
+#    query <PROJECT_URL> [-t <WU_TYPE>] [-s <TIMESPAN>]
+#      Generate counts and runtime data for WUs completed on a project in a given
+#      time. Defaults: all WUs; 24h
+
