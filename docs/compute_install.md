@@ -59,10 +59,10 @@ to be installed.
 
 ## Putting nodes into service
 
-These steps happen on the controller:
+Once you have all nodes installed, return to the controller and
+perform these steps.
 
-1. Ensure that all the nodes you've added have entries in `farm.cfg`.
-1. For each node:
+1. Ensure that all the nodes you've added have entries in `farm.cfg`
    * Create (or symlink if the new node will be sharing a
      configuration with an existing node) a config file in the
      `/homefarm/nodes` directory
