@@ -4,20 +4,22 @@ Homefarm itself doesn't know anything about GPGPU computing, or your
 video card. But it also doesn't care -- so just manually install a few
 packages to enable OpenCL/CUDA support, and you'll be good to go.
 
-On each machine you wish to be GPGPU-enabled, run:
+For each machine you wish to be GPGPU-enabled, login as
+`farmer`. Then, for Nvidia GPUs, run:
 
 `'sudo pacman -S nvidia opencl-nvidia ocl-icd'`
 
-if you have an Nvidia card, or:
+Or for AMD GPUs:
 
 `'sudo pacman -S opencl-mesa ocl-icd'`
 
-for AMD GPUs.
+And reboot. BOINC should see the GPU as usable.
 
-After a reboot, BOINC should see the GPU as usable. Once it does, just
-define the project like any other in
-`/home/alarm/homefarm/nodes/[NODE_NAME].yml` on the controller, then
-run the `update-projects` playbook.
+If you're adding GPU capablity to a project the machines are already
+attached to, you don't need to do anything on the controller side. The
+machines should start picking up GPGPU work on the next project
+update.
 
-The update script will keep the GPGPU packages up to date along with
-everything else.
+If you're adding a new project, there's nothing special about it. Just
+edit the `<NODE>.yml` file as you normally would to add the project,
+and then run `farmctl project-sync`.

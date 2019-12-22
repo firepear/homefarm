@@ -1,6 +1,4 @@
-# homefarm
-
-WARNING: homefarm is currently in a broken state as I work out a major upgrade. Thank you for your understanding.
+# Homefarm
 
 Tools for deploying and managing a BOINC compute farm using Ansible
 and Arch Linux.
@@ -12,11 +10,11 @@ that lives on the control node.
 
 There are a few assumptions:
 
-* One machine capable of running Docker, to host the control container
-* One or more x86_64 machines capable of running Arch Linux, to act as
-  the compute nodes
-  * These machines will be used for no other purpose, and it is okay
-    to wipe their drives
+* One machine capable of running Docker, to host the controller
+* One or more x86_64 machines capable of running Arch Linux, to become
+  compute nodes
+  * It's further assumed that these machines will be used for no other
+    purpose, and it is okay to wipe their drives
 * You are aware of your local network configuration, and have IPs to
   assign to the nodes.
 * All nodes are on a private network -- an SSH key with no passphrase
@@ -41,9 +39,6 @@ There are a few assumptions:
       will cause the update script to break. If this happens to you,
       check out [our Twitter feed](https://twitter.com/firepear) for
       up-to-date workarounds.
-    * Older known update problems will be documented here: [update
-      issue
-      archive](https://github.com/firepear/homefarm/blob/master/docs/known_issues.md)
 * Other
     * Have homefarm? Want to install Arch on a machine that _isn't_
       part of the farm? Follow the compute node install process, but
