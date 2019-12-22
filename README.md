@@ -28,7 +28,6 @@ Homefarm makes a few assumptions:
 * Setting up a farm
     * [Controller setup](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
     * [Compute node install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
-    * [BOINC initialization](https://github.com/firepear/homefarm/blob/master/docs/boinc_setup.md)
 * Managing and maintaining your farm
     * [Keep the farm up to date](https://github.com/firepear/homefarm/blob/master/docs/update.md)
     * [Check farm status](https://github.com/firepear/homefarm/blob/master/docs/status.md)
