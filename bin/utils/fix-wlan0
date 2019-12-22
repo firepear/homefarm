@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ "${1}" == "" ]]; then
+    echo "usage: fix-wlan0 IFACE"
+    exit 1
+fi
+
+IFACE="${1}"
+
+mv /etc/wpa_supplicant/wpa_supplicant-wlan0.conf /etc/wpa_supplicant/wpa_supplicant-${IFACE}.conf
+sed -i -e "s/wlan0/${IFACE}/" /etc/systemd/network/25-wireless.network
+systemctl disable wpa_supplicant@wlan0
+systemctl disable wpa_supplicant@${IFACE}
