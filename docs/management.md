@@ -11,8 +11,10 @@ This document assumes that you are in the controller container.
 ## Checking farm status
 
 Use `farmctl status`. Run it anytime you'd like to see what the
-machines in your farm are doing. It can generate a lot of output, so
-you might want to pipe it to a pager.
+machines in your farm are doing.
+
+If too much output is generated to fit onscreen, `less` will be
+invoked.
 
 
 
