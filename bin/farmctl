@@ -124,7 +124,7 @@ case "${1}" in
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
     restore)
-        exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/backup restore
+        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control ./bin/backup restore
         ;;
     status)
         tmpfile=$(mktemp)
@@ -180,7 +180,7 @@ Controller commands:
     init
       Initialize the controller (only needs to be run once, after creation)
 
-    restore
+    restore <HOMEFARM_DIR>
       Restore farm state from a tarball created by 'farmctl backup'. Tarball must
       be in HOMEFARM_DIR
 
