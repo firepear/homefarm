@@ -45,4 +45,4 @@ mkdir -p /homefarm/srv/arch
 MIRROR_URL=$(cat ./.mirror_url)
 LOCALREPO="/homefarm/srv/arch"
 update_localrepo "${LOCALREPO}" "${MIRROR_URL}"
-echo "Farm configuration restored. Run 'farmctl init'."
+echo "Farm backup and repo restored."
