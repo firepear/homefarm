@@ -1,3 +1,17 @@
+2.1.0 - 2020-01-05
+--------------------------------------------------------------------
+
+    * 'status-only' subcommand allows getting compute node status
+      without bringing up an interactive controller session
+
+    * 'status' now takes an optional argument, 'nopage' which inhibits
+      autopaging
+
+    * Shell history now retained between sessions
+
+    * Version number now reported on startup
+
+
 2.0.1 - 2020-01-04
 --------------------------------------------------------------------
 
