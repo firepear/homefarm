@@ -1,3 +1,16 @@
+2.0.1 - 2020-01-04
+--------------------------------------------------------------------
+
+    * Fixes for Arch adding zstd-compressed packages
+
+    * 'os-update' now warns about failure to download individual
+      packages, rather than erroring out of downloading any further
+      packages
+
+    * 'status' now reports that it can't connect to a node, rather
+      than erroring out when any node is unreachable
+
+
 2.0.0 - 2019-12-22
 --------------------------------------------------------------------
 

@@ -151,7 +151,7 @@ case "${1}" in
         exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/farmctl on-up
         ;;
     version)
-        echo "Homefarm v2.0.0"
+        echo "Homefarm v2.0.1"
         exit 0
         ;;
     *)
