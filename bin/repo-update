@@ -66,7 +66,7 @@ for pkg in pkgfiles.keys():
         fetch_count = 0
         filetype = ""
         # try to fetch until we get "XZ compressed" or 5 tries
-        while ("XZ compressed" not in filetype or "Zstandard" not in filetype) and fetch_count < 5:
+        while ("XZ compressed" not in filetype and "Zstandard" not in filetype) and fetch_count < 5:
             pkgurl = "{}/{}/os/x86_64/{}".format(mirrorurl, pkgfiles[pkg], pkg)
             pkgdest = "{}/{}".format(localrepo, pkg)
             fetch_count += 1
