@@ -21,6 +21,12 @@ There are a few assumptions:
   will be generated for Ansible's use
 * You're familiar with BOINC, projects, workunits, and so on
 
+# News
+
+* 2020-01-04: v2.0.1 is released. Fix for local repo issues due to
+  Arch's migration to Zstd compression beginning
+* 2019-12-22: v2.0.0. See the [release notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
+
 # Documentation
 
 * Setting up a farm
