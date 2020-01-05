@@ -26,6 +26,7 @@ repos = ["core", "extra", "community"]
 pkgs = []     # installed packages
 pkgfiles = {} # package filename-to-repo map
 localpkgs = glob.glob("*.pkg.tar.xz") # currently downloaded packages
+localpkgs.extend(glob.glob("*.pkg.tar.zst"))
 log.write("Packages currently in repo: {}\n".format(len(localpkgs)))
 
 

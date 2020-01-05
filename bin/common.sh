@@ -105,6 +105,6 @@ update_localrepo() {
     rm -rf "${repodir}/db"
     # rebuild the local repo index
     echo "Building repo index (this may take a moment)"
-    repo-add -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.tar.xz >> update.log 2>&1
+    repo-add -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.* >> update.log 2>&1
     cd /homefarm || exit
 }
