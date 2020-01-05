@@ -6,6 +6,8 @@
 
 set -e
 
+VERSION="v2.1.0"
+
 # hf_init takes the place of the old control-install script. it
 # handles the initial node setup, other than package install (which is
 # done by the docker build)
@@ -77,12 +79,23 @@ function hf_buildhosts() {
     done < ./farm.cfg
 }
 
+# to support one-shot commands, we need to do environment
+# initialization without starting bash. so it lives here.
+function hf_envinit() {
+    /bin/ln -s /homefarm/.ssh /root/.ssh
+    /bin/ln -s /homefarm/bin/complete /root/.bashrc
+    touch ./.bash_history
+    /bin/ln -s /homefarm/.bash_history /root/.bash_history
+    /usr/bin/keychain -q --host control /homefarm/.ssh/id_farmer >> /dev/null 2>&1
+    source /root/.keychain/control-sh >> /dev/null 2>&1
+}
+
 
 ################################################################################
 
 # if we're not starting up the container, then put ourselves in a
 # known location
-if [[ "${1}" != "up" ]] && [[ "${1}" != "restore" ]]; then
+if [[ "${1}" != "up" ]] && [[ "${1}" != "restore" ]] && [[ "${1}" != "status-only" ]] && [[ "${1}" != "help" ]] && [[ "${1}" != "" ]]; then
     cd /homefarm
     source ./bin/common.sh
 fi
@@ -100,18 +113,15 @@ case "${1}" in
         ;;
     on-up)
         localip=$(awk 'END{print $1}' /etc/hosts)
-        /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
-        /bin/ln -s /homefarm/.ssh /root/.ssh
-        /bin/ln -s /homefarm/bin/complete /root/.bashrc
-        /usr/bin/keychain -q --host control /homefarm/.ssh/id_farmer >> /dev/null 2>&1
-        source /root/.keychain/control-sh >> /dev/null 2>&1
         echo
-        echo "Welcome to homefarm"
+        echo "Welcome to homefarm ${VERSION}"
         echo "    Local IP is ${localip}"
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
         echo
+        hf_envinit
         hf_buildhosts
+        /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     node-init)
@@ -135,12 +145,31 @@ case "${1}" in
         tmpfile=$(mktemp)
         ./bin/stats "${tmpfile}"
         tmplines=$(wc -l ${tmpfile} | cut -d' ' -f1)
-        if [[ ${tmplines} -gt ${LINES} ]]; then
-            less ${tmpfile}
+        if [[ "${2}" != "nopage" ]]; then
+            if [[ ${tmplines} -gt ${LINES} ]]; then
+                less ${tmpfile}
+            fi
         else
             cat ${tmpfile}
         fi
         rm ${tmpfile}
+        ;;
+    status-only)
+        if [[ -e /root/.bashrc ]]; then
+            echo "This command cannot be run within an interactive environment."
+            exit 0
+        fi
+        if [[ "${2}" == "" ]]; then
+            HOMEFARM_DIR=~/homefarm
+        else
+            HOMEFARM_DIR="${2}"
+        fi
+        exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/farmctl status-only2
+        ;;
+    status-only2)
+        hf_envinit
+        hf_buildhosts
+        ./bin/farmctl status nopage
         ;;
     up)
         if [[ "${2}" == "" ]]; then
@@ -151,7 +180,7 @@ case "${1}" in
         exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/farmctl on-up
         ;;
     version)
-        echo "Homefarm v2.0.1"
+        echo "Homefarm ${VERSION}"
         exit 0
         ;;
     *)
@@ -172,8 +201,8 @@ Compute node commands:
     os-update
       Update the controller and compute node OS packages
 
-    status
-      Display info on current tasks
+    status [nopage]
+      Display info on current tasks. Specifying 'nopage' inhibits autopaging
 
     project-sync
       Sync project statuses to compute nodes
