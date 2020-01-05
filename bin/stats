@@ -90,7 +90,7 @@ for host, key in hosts.items():
         # try to auth
         authed = boinc_auth_conn(s, key)
         if not authed:
-            print("error: could not auth: {}, {}; exiting".format(host, key))
+            print("error: could not auth: '{}', '{}'; exiting".format(host, key))
             continue
 
         # first, get projects data
