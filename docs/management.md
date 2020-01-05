@@ -11,10 +11,17 @@ This document assumes that you are in the controller container.
 ## Checking farm status
 
 Use `farmctl status`. Run it anytime you'd like to see what the
-machines in your farm are doing.
+machines in your farm are doing. If too much output is generated to
+fit onscreen, `less` will be invoked.
 
-If too much output is generated to fit onscreen, `less` will be
-invoked.
+If you don't want paging, invoke it with `farmctl status nopage`.
+
+To quickly check on your nodes without starting up an interactive
+farmctl session, you can run `/HOMEFARM_PATH/bin/farmctl
+status-only`. The usual status output will be printed to stdout and
+you'll be returned to your regular command line. If your Homefarm
+install is not at `~/homefarm`, you'll need to pass the location as an
+argument.
 
 
 
