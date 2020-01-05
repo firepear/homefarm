@@ -90,8 +90,8 @@ for host, key in hosts.items():
         # try to auth
         authed = boinc_auth_conn(s, key)
         if not authed:
-            print("could not auth; exiting")
-            sys.exit(1)
+            print("error: could not auth: {}, {}; exiting".format(host, key))
+            continue
 
         # first, get projects data
         req = "<boinc_gui_rpc_request><get_project_status/></boinc_gui_rpc_request>\003"
