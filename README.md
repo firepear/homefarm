@@ -23,11 +23,16 @@ There are a few assumptions:
 
 # News
 
-* 2020-01-05: v2.1.0: Added `status-once` subcmd; enabled history for
-  interactive sessions
+* 2020-01-05: v2.1.0: Added `status-once` subcmd (see
+  [Management](https://github.com/firepear/homefarm/blob/master/docs/management.md)
+  for more); enabled history for interactive sessions
 * 2020-01-04: v2.0.1 is released. Fix for local repo issues due to
   Arch's migration to Zstd compression beginning
-* 2019-12-22: v2.0.0. See the [release notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
+* 2019-12-22: v2.0.0. See the [release
+  notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
+  and the [Reddit
+  post](https://www.reddit.com/r/BOINC/comments/ee9dlp/homefarm_2_released/)
+  for more details
 
 # Documentation
 
