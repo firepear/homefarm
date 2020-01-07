@@ -1,6 +1,5 @@
 #!/bin/bash
 
-CONUPDATES=0
 LOCALREPO="/homefarm/srv/arch"
 
 update_homefarm() {
@@ -42,14 +41,6 @@ update_homefarm() {
 
 update_os() {
     cd /homefarm
-    shownotice "Checking for OS updates"
-    CONUPDATES=$(pacman -Sy > /dev/null && pacman -Qu | wc -l)
-    if [[ "${CONUPDATES}" -gt "0" ]]; then
-        echo "Updating controller packages..."
-        yes | pacman -Syu
-        yes | pacman -Sccq >> /dev/null 2>&1
-    fi
-
     # future me running shellcheck: this variable is exported from
     # common.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
