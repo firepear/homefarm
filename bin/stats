@@ -7,12 +7,6 @@ import sys
 import time
 import xml.etree.ElementTree as ET
 
-hosts = {}
-projects = {}
-tasks = None
-hostcount = 0
-tmpfile = sys.argv[1]
-
 def boinc_auth_conn(s, key):
     # send the initial authorization request
     s.sendall(b'<auth1/>\003')
@@ -78,19 +72,31 @@ def format_dl(dl):
 
 
 
-of = open(tmpfile, 'w')
+hosts = {}
+projects = {}
+tasks = None
+hostcount = 0
+wanthost = ""
+tmpfile = sys.argv[1]
 
+if len(sys.argv) == 3:
+    wanthost = sys.argv[2]
+
+of = open(tmpfile, 'w')
 with open("/homefarm/.boincguikeys.json", 'r') as f:
     hosts = json.load(f)
 
 for host, key in hosts.items():
+    if wanthost != "" and host != wanthost:
+        continue
+
     projects = {}
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((host, 31416))
         # try to auth
         authed = boinc_auth_conn(s, key)
         if not authed:
-            print("error: could not auth: '{}', '{}'; exiting".format(host, key))
+            of.write("warning: could not auth on '{}' with key '{}': no output".format(host, key))
             continue
 
         # first, get projects data

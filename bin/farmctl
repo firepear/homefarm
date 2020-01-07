@@ -143,14 +143,21 @@ case "${1}" in
         ;;
     status)
         tmpfile=$(mktemp)
-        ./bin/stats "${tmpfile}"
+        statsarg="${2}"
+        wantnode=""
+        if [[ "${statsarg}" != "nopage" ]]; then
+            wantnode="${statsarg}"
+        fi
+        ./bin/stats "${tmpfile}" "${wantnode}"
         tmplines=$(wc -l ${tmpfile} | cut -d' ' -f1)
-        if [[ "${2}" != "nopage" ]]; then
+        if [[ "${statsarg}" == "nopage" ]]; then
+            cat ${tmpfile}
+        else
             if [[ ${tmplines} -gt ${LINES} ]]; then
                 less ${tmpfile}
+            else
+                cat ${tmpfile}
             fi
-        else
-            cat ${tmpfile}
         fi
         rm ${tmpfile}
         ;;
