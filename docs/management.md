@@ -100,10 +100,6 @@ Tdie:         +59.5 C  (high = +70.0 C)
 --------------------------------------------------------------
 node03
 Tdie:         +56.5 C  (high = +70.0 C)
-
---------------------------------------------------------------
-node04
-Tdie:         +53.8 C  (high = +70.0 C)
 ```
 
 `COMMAND` is expected to be a single argument, so use your bash
