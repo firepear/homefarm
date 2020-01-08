@@ -44,7 +44,7 @@ update_os() {
     # future me running shellcheck: this variable is exported from
     # common.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
-        echo "Updating compute node packages..."
+        shownotice "Updating compute nodes"
         ansible-playbook nodes-system-update.yml
     fi
 }
