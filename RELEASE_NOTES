@@ -1,3 +1,13 @@
+2.2.0 - 2020-01-08
+--------------------------------------------------------------------
+
+    * OS package updates no longer happen on the controller. This is
+      in preparation for a tool which will assist in (re)builds of
+      controller containers to make them easy to update
+
+    * 'status' can now be run against a specific node
+
+
 2.1.0 - 2020-01-05
 --------------------------------------------------------------------
 

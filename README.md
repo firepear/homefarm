@@ -23,6 +23,8 @@ There are a few assumptions:
 
 # News
 
+* 2020-01-08: v2.2.0: Added `status <NODE>` usage. pacman no longer
+  updates the controller
 * 2020-01-05: v2.1.0: Added `status-once` subcmd (see
   [Management](https://github.com/firepear/homefarm/blob/master/docs/management.md)
   for more); enabled history for interactive sessions

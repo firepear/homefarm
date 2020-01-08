@@ -14,14 +14,16 @@ Use `farmctl status`. Run it anytime you'd like to see what the
 machines in your farm are doing. If too much output is generated to
 fit onscreen, `less` will be invoked.
 
-If you don't want paging, invoke it with `farmctl status nopage`.
+If you don't want paging, invoke it with `farmctl status nopage`
+
+You can also get the status of a single node with `farmctl status <NODENAME>`
 
 To quickly check on your nodes without starting up an interactive
 farmctl session, you can run `/HOMEFARM_PATH/bin/farmctl
-status-only`. The usual status output will be printed to stdout and
-you'll be returned to your regular command line. If your Homefarm
-install is not at `~/homefarm`, you'll need to pass the location as an
-argument.
+status-only`. The output will go to to stdout and you'll be returned
+to your command line. If your Homefarm install is not at `~/homefarm`,
+you'll need to pass the location as an argument. `status-only` does
+not support single-node reporting.
 
 
 
