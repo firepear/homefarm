@@ -207,8 +207,8 @@ for host, key in hosts.items():
             continue
         # ok, we have active tasks. print details.
         of.write("\n")
-        of.write("     Workunit                                     Stat  Prog     ETA     Dline\n")
-        of.write("     -------------------------------------------  ----  -------  ------  -------\n")
+        of.write("     Workunit                                     Stat  Prog    ETA      Dline\n")
+        of.write("     -------------------------------------------  ----  ------  -------  -------\n")
         # sort tasks by completion percentage and iterate over them,
         # printing details for active ones
         for name, t in {k: v for k, v in sorted(ptasks.items(), reverse=True, key=lambda item: item[1]['done'])}.items():
