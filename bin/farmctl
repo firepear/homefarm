@@ -127,9 +127,6 @@ case "${1}" in
     node-init)
         exec /bin/ansible-playbook nodes-boinc-setup.yml
         ;;
-    os-update)
-        exec ./bin/update "${2}"
-        ;;
     project-sync)
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
@@ -186,6 +183,9 @@ case "${1}" in
         fi
         exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/farmctl on-up
         ;;
+    update)
+        exec ./bin/update "${2}"
+        ;;
     version)
         echo "Homefarm ${VERSION}"
         exit 0
@@ -195,40 +195,32 @@ case "${1}" in
             echo "error: unknown argument '${1}'"
         fi
         cat <<EOF
-usage: ${0} COMMAND [ARGS]
+usage: ${0} SUBCOMMAND [ARGS]
 
-Compute node commands:
-    cmd <'COMMAND_LINE'>
+  backup
+      Create tarball with all farm-specific files
+
+  cmd <COMMAND_LINE>
       Run a command on all nodes. COMMAND_LINE be a single argument, so use
       quotes as appropriate
 
-    node-init
+  node-init
       Do initial BOINC configuration on compute nodes
 
-    os-update
-      Update the controller and compute node OS packages
-
-    status [nopage]
+  status [nopage]
       Display info on current tasks. Specifying 'nopage' inhibits autopaging
 
-    project-sync
+  project-sync
       Sync project statuses to compute nodes
 
-Controller commands:
-    backup
-      Create tarball with all farm-specific files
-
-    init
-      Initialize the controller (only needs to be run once, after creation)
-
-    restore <HOMEFARM_DIR>
+  restore <HOMEFARM_DIR>
       Restore farm state from a tarball created by 'farmctl backup'. Tarball must
       be in HOMEFARM_DIR
 
-    up <HOMEFARM_DIR>
-      Bring up an instance of the controller. Default is ~/homefarm
+  update
+      Update Homefarm, the local repository, and OS packages on compute nodes
 
-    version
+  version
       Display version information
 EOF
 esac
