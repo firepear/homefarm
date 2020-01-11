@@ -148,9 +148,10 @@ for host, key in hosts.items():
 
     projcount = 0
     for projname in sorted(projects):
-        task_count = 0
-        task_active = 0
-        ptasks = {}
+        task_count = 0  # how many tasks in this project
+        task_active = 0 # how many active tasks
+        wunum = 1       # counter for printing task details
+        ptasks = {}     # dict of tasks for this project
 
         # loop over the tasks, extracting interesting info
         for task in tasks.iter('result'):
@@ -199,14 +200,20 @@ for host, key in hosts.items():
             of.write("--------------------------------------------------------------------------------\n")
         of.write("{}\t  User: {}\t  State: {}\n".format(projname, p['username'], p['state']))
         of.write("Tasks: {}\t  Active: {}\t  Credit/RAC: {}/{}\n".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
-        of.write("--------------------------------------------------------------------------------\n")
-        of.write("     Workunit                                     Stat  Prog     ETA      Dline\n")
-        of.write("--------------------------------------------------------------------------------\n")
-        i = 1
+        projcount += 1
+        # if there are no active tasks for this project, don't do
+        # detail reporting
+        if task_active == 0:
+            continue
+        # ok, we have active tasks. print details.
+        of.write("\n")
+        of.write("     Workunit                                     Stat  Prog     ETA     Dline\n")
+        of.write("     -------------------------------------------  ----  -------  ------  -------\n")
+        # sort tasks by completion percentage and iterate over them,
+        # printing details for active ones
         for name, t in {k: v for k, v in sorted(ptasks.items(), reverse=True, key=lambda item: item[1]['done'])}.items():
             if not t['active']:
                 continue
-            of.write("{:3d}  {:43}  {:4}  {:6.2%}  {}  {}\n".format(i, name[:43], t['astate'], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
-            i += 1
-        projcount += 1
+            of.write("{:3d}  {:43}  {:4}  {:6.2%}  {}  {}\n".format(wunum, name[:43], t['astate'], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
+            wunum += 1
     hostcount += 1
