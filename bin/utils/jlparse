@@ -55,21 +55,27 @@ args.projurl = "/var/lib/boinc/{}".format(args.projurl)
 timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))
 
 matches = []
+f = None
 
-with open(args.projurl) as f:
-    for line in f:
-        line = line.rstrip("\n")
-        # split line into fields:
-        # 0:timestamp 2:est_runtime 4:runtime 6:est_flops 8:name 10:credit 12:status
-        fields = line.split()
-        # skip this line if it's not within our timespan
-        if int(fields[0]) < timelimit:
+try:
+    f = open(args.projurl, 'r')
+except:
+    print("\tNot attached")
+    sys.exit(0)
+
+for line in f:
+    line = line.rstrip("\n")
+    # split line into fields:
+    # 0:timestamp 2:est_runtime 4:runtime 6:est_flops 8:name 10:credit 12:status
+    fields = line.split()
+    # skip this line if it's not within our timespan
+    if int(fields[0]) < timelimit:
+        continue
+    # skip line if it's not the type/name we're looking for
+    if args.wutype != None:
+        if args.wutype not in fields[8]:
             continue
-        # skip line if it's not the type/name we're looking for
-        if args.wutype != None:
-            if args.wutype not in fields[8]:
-                continue
-        matches.append(int(float(fields[4])))
+    matches.append(int(float(fields[4])))
 
 
 print("WUs in past {} hours: {}".format(args.span, len(matches)))
