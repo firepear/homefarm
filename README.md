@@ -23,6 +23,8 @@ There are a few assumptions:
 
 # News
 
+* 2020-01-25: v2.3.0: Renamed `os-update` to `update`. Various
+  formatting improvements
 * 2020-01-08: v2.2.0: Added `status <NODE>` usage. pacman no longer
   updates the controller
 * 2020-01-05: v2.1.0: Added `status-once` subcmd (see

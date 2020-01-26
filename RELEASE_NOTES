@@ -1,3 +1,13 @@
+2.3.0 - 2020-01-25
+--------------------------------------------------------------------
+
+    * 'os-update' subcommand has been renamed to 'update'
+
+    * Improvements to 'status' formatting
+
+    * Improved error reporting on 'project-sync'
+
+
 2.2.0 - 2020-01-08
 --------------------------------------------------------------------
 
