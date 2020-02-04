@@ -3,6 +3,17 @@
 Sometimes Arch breaks packages. Sometimes Homefarm has bugs. Sometimes
 you need to do a fix to unbreak an OS update. This is how to do those.
 
+## `farmctl status` can't connect after `farmctl update`
+
+BOINC was probably upgraded, and the custom Homefarm service file was
+overwritten.
+
+Run `farmctl node-init` and see if `status` works afterward. If it
+doesn't, please file an issue.
+
+
+
+
 ## 2019-12-21 Arch linux uses `wlan0` during install
 
 If this happes to you, don't fret. A few simple fixes will take care
@@ -33,6 +44,9 @@ continue with "Homefarm setup". If not, here's the manual fix:
 1. Reboot
 
 Now pick back up where you left off in the previous doc, with "Homefarm setup".
+
+
+
 
 ## 2019-03-09 pip ansible update breakage
 

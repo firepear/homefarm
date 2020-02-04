@@ -6,7 +6,7 @@
 
 set -e
 
-VERSION="v2.3.0"
+VERSION="v2.3.1"
 
 # hf_init takes the place of the old control-install script. it
 # handles the initial node setup, other than package install (which is

@@ -92,11 +92,15 @@ for host, key in hosts.items():
 
     projects = {}
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((host, 31416))
+        try:
+            s.connect((host, 31416))
+        except:
+            of.write("warning: could not connect to '{}' with key '{}'\n".format(host, key))
+            continue
         # try to auth
         authed = boinc_auth_conn(s, key)
         if not authed:
-            of.write("warning: could not auth on '{}' with key '{}': no output".format(host, key))
+            of.write("warning: could not auth on '{}' with key '{}'\n".format(host, key))
             continue
 
         # first, get projects data
@@ -143,7 +147,7 @@ for host, key in hosts.items():
     of.write("{}\n".format(host))
     of.write("================================================================================\n")
     if len(projects) == 0:
-        of.write("No work from this project (yet?)")
+        of.write("No work from this project (yet?)\n")
         continue
 
     projcount = 0
