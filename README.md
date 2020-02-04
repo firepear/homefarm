@@ -23,6 +23,7 @@ There are a few assumptions:
 
 # News
 
+* 2020-02-04: v2.3.1: Improvements to `status` connection handling
 * 2020-01-25: v2.3.0: Renamed `os-update` to `update`. Various
   formatting improvements
 * 2020-01-08: v2.2.0: Added `status <NODE>` usage. pacman no longer
@@ -32,11 +33,6 @@ There are a few assumptions:
   for more); enabled history for interactive sessions
 * 2020-01-04: v2.0.1 is released. Fix for local repo issues due to
   Arch's migration to Zstd compression beginning
-* 2019-12-22: v2.0.0. See the [release
-  notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
-  and the [Reddit
-  post](https://www.reddit.com/r/BOINC/comments/ee9dlp/homefarm_2_released/)
-  for more details
 
 # Documentation
 
