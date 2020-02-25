@@ -54,19 +54,24 @@ def format_eta(eta):
 
 
 def format_dl(dl):
+    od = 1
     dl = int(float(dl))
     t = int(time.time())
     dl = dl - t
+    if dl < 0:
+        od = -1
+        dl = abs(dl)
+
     if dl > 86400:
-        d = int(dl / 86400)
+        d = int(dl / 86400) * od
         h = int((dl - 86400 * d) / 3600)
         return "{:3d}d{:02d}h".format(d, h)
     elif dl > 3600:
-        h = int(dl / 3600)
+        h = int(dl / 3600) * od
         m = int((dl - 3600 * h) / 60)
         return "{:3d}h{:02d}m".format(h, m)
     else:
-        m = int(dl / 60)
+        m = int(dl / 60) * od
         s = int(dl - 60 * m)
         return "{:3d}m{:02d}s".format(m, s)
 
