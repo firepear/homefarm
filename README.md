@@ -23,6 +23,7 @@ There are a few assumptions:
 
 # News
 
+* 2020-02-25: v2.3.2: Overdue deadlines handled correctly in `status`
 * 2020-02-04: v2.3.1: Improvements to `status` connection handling
 * 2020-01-25: v2.3.0: Renamed `os-update` to `update`. Various
   formatting improvements
@@ -31,8 +32,6 @@ There are a few assumptions:
 * 2020-01-05: v2.1.0: Added `status-once` subcmd (see
   [Management](https://github.com/firepear/homefarm/blob/master/docs/management.md)
   for more); enabled history for interactive sessions
-* 2020-01-04: v2.0.1 is released. Fix for local repo issues due to
-  Arch's migration to Zstd compression beginning
 
 # Documentation
 
