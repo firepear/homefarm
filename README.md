@@ -23,15 +23,17 @@ There are a few assumptions:
 
 # News
 
+* 2020-03-18: v2.3.2: Minor bugfix for version reporting
 * 2020-02-25: v2.3.2: Overdue deadlines handled correctly in `status`
 * 2020-02-04: v2.3.1: Improvements to `status` connection handling
 * 2020-01-25: v2.3.0: Renamed `os-update` to `update`. Various
   formatting improvements
 * 2020-01-08: v2.2.0: Added `status <NODE>` usage. pacman no longer
   updates the controller
-* 2020-01-05: v2.1.0: Added `status-once` subcmd (see
-  [Management](https://github.com/firepear/homefarm/blob/master/docs/management.md)
-  for more); enabled history for interactive sessions
+
+See the [Release
+notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES))
+for all updates.
 
 # Documentation
 

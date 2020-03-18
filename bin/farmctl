@@ -6,8 +6,6 @@
 
 set -e
 
-VERSION=$(git tag | tail -1)
-
 # hf_init takes the place of the old control-install script. it
 # handles the initial node setup, other than package install (which is
 # done by the docker build)
@@ -98,6 +96,7 @@ function hf_envinit() {
 if [[ "${1}" != "up" ]] && [[ "${1}" != "restore" ]] && [[ "${1}" != "status-only" ]] && [[ "${1}" != "help" ]] && [[ "${1}" != "" ]]; then
     cd /homefarm
     source ./bin/common.sh
+    VERSION=$(git tag | tail -1)
 fi
 
 
