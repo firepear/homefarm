@@ -1,0 +1,2 @@
+#!/bin/bash
+complete -W "cmd backup help init node-init query update project-sync status restore version" farmctl
