@@ -23,8 +23,8 @@ There are a few assumptions:
 
 # News
 
-* 2020-03-19: v2.4.1: Changed playbook semantics to fix bug cause by
-  file move
+* 2020-03-19: v2.4.2: Changed playbook semantics to fix bug cause by
+  file move. Scripts now pushed to nodes with every update.
 * 2020-03-19: v2.4.0: Added the `query` subcommand (See "Everyday farm
   ops", below, for more info). Also, Homefarm scripts/utils are now
   pushed to nodes when Homefarm itself updates, ensuring that they
