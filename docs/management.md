@@ -113,11 +113,10 @@ WUs in past 96 hours: 543
 
 ## Keeping the farm up to date
 
-Run `'farmctl os-update'`. This will:
+Run `'farmctl update'`. This will:
 
 * Update Homefarm itself
 * Update the controller's Arch package mirror
-* Update packages and/or Ansible on the controller
 * Update packages on all compute nodes
 
 Since Arch is a rolling-release distro, it is recommended to do an
