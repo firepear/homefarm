@@ -1,13 +1,9 @@
-2.4.2 - 2020-03-19
---------------------------------------------------------------------
-
-    * Run nodes-boinc-setup playbook with every update
-
-
 2.4.1 - 2020-03-19
 --------------------------------------------------------------------
 
     * Use 'command' instead of 'script' in project sync playbook
+
+    * Run nodes-boinc-setup playbook with every update
 
 
 2.4.0 - 2020-03-19

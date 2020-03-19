@@ -32,6 +32,7 @@ update_homefarm() {
 
     # cache the new tag name and set repo update flag
     echo "${NEWEST_TAG}" > ./.current_tag
+    touch ./.repoupdate
 
     shownotice "Repo updated; restarting update"
     echo; echo; echo
@@ -107,8 +108,17 @@ fi
 
 update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
 update_os
-shownotice "Pushing updated scripts to nodes"
-ansible-playbook nodes-boinc-setup.yml
+
+# run this playbook here, because it sets the custom BOINC unit file,
+# and pushes jlparse and boinccmdcmd to nodes. Those things need to be
+# refreshed every time there is an update, of any sort.
+if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
+    shownotice "Pushing updated scripts to nodes"
+    ansible-playbook nodes-boinc-setup.yml
+    if [[ -e ./.repoupdate ]]
+       rm ./.repoupdate
+    fi
+fi
 
 if [[ "${localrepo_updated}" == "true" ]]; then
     shownotice "Rebooting compute nodes"
