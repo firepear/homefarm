@@ -60,6 +60,55 @@ to your command line. If your Homefarm install is not at `~/homefarm`,
 you'll need to pass the location as an argument. `status-only` does
 not support single-node reporting.
 
+### Getting project statistics
+
+If you'd like to get basic statistics on how your farm is performing
+on a certain project (or even workunit type), the `query` subcommand
+can be of use. The simplest form of the command is
+
+`farmctl query PROJECT_NAME`
+
+Where `PROJECT_NAME` is a unique fragment of the project's URL. If
+there are no matches, you'll see an error message, and the same will
+happen if there's more than one match. For instance, if I'm attached
+to both World Community Grid and GPUGrid, then `grid` isn't unique. I
+should use something like `community` for one and `gpu` for the other.
+
+In any case, in this form, `query` will report the number of WUs
+crunched for that project in the past 24 hours; minimum, maximum, and
+average runtimes; and counts of WUs bucketed into quintiles by
+runtime:
+
+```
+# farmctl query community
+--------------------------------------------------------------
+node01
+WUs in past 24 hours: 202
+        Min runtime: 00h 21min 18s
+        Max runtime: 03h 18min 03s
+        Avg runtime: 02h 18min 48s
+WUs by quintile:
+        <= 00h 56min 39s         31      (15.3%)
+        <= 01h 32min 00s         23      (11.4%)
+        <= 02h 07min 21s         47      (23.3%)
+        <= 02h 42min 42s         6       (03.0%)
+        <= 03h 18min 03s         95      (47.0%)
+```
+
+This behavior can be modified with the following arguments:
+
+- `-t WU_TYPE` -- Filters by searching only for WUs whose name matches
+  `WU_TYPE`
+- `-s TIMESPAN` -- Specify a number of hours to include, rather than
+  the default 24
+- `-c` -- Show only WU count and no other stats
+
+```
+# farmctl query community -t MCM -s 96 -c
+--------------------------------------------------------------
+node01
+WUs in past 96 hours: 543
+```
 
 
 ## Keeping the farm up to date

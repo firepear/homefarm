@@ -1,3 +1,12 @@
+2.4.0 - 2020-03-19
+--------------------------------------------------------------------
+
+    * Added the `query` subcommand
+
+    * `node-init` is now called when Homefarm itself is updated. This
+      ensures that utils are pushed to the nodes if needed
+
+
 2.3.3 - 2020-03-18
 --------------------------------------------------------------------
 
