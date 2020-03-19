@@ -23,7 +23,7 @@ There are a few assumptions:
 
 # News
 
-* 2020-03-18: v2.4.0: Added the `query` subcommand (See "Everyday farm
+* 2020-03-19: v2.4.0: Added the `query` subcommand (See "Everyday farm
   ops", below, for more info). Also, Homefarm scripts/utils are now
   pushed to nodes when Homefarm itself updates, ensuring that they
   stay in sync
