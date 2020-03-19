@@ -23,6 +23,8 @@ There are a few assumptions:
 
 # News
 
+* 2020-03-19: v2.4.1: Changed playbook semantics to fix bug cause by
+  file move
 * 2020-03-19: v2.4.0: Added the `query` subcommand (See "Everyday farm
   ops", below, for more info). Also, Homefarm scripts/utils are now
   pushed to nodes when Homefarm itself updates, ensuring that they
@@ -30,8 +32,6 @@ There are a few assumptions:
 * 2020-03-18: v2.3.3: Minor bugfix for version reporting
 * 2020-02-25: v2.3.2: Overdue deadlines handled correctly in `status`
 * 2020-02-04: v2.3.1: Improvements to `status` connection handling
-* 2020-01-25: v2.3.0: Renamed `os-update` to `update`. Various
-  formatting improvements
 
 See the [Release
 notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES))

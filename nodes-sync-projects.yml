@@ -22,7 +22,7 @@
       file: ./nodes/{{ inventory_hostname }}.yml
       name: node
   - name: Make project modifications
-    script: "./bin/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}"
+    command: /usr/local/bin/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}
     loop: "{{ node.projects }}"
   - name: Copy GUI auth file
     become: true
@@ -36,4 +36,4 @@
 - hosts: controller
   tasks:
   - name: Assemble RPC keyfile
-    script: "./bin/makeboincguikeyfile {{ groups['compute_nodes'] }}"
+    script: "./bin/utils/makeboincguikeyfile {{ groups['compute_nodes'] }}"
