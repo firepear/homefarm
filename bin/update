@@ -105,6 +105,12 @@ NODE=$(basename "${NODES[0]}" .yml)
 if [[ "${devmode}" != "true" ]]; then
     update_homefarm "${0}"
 fi
+if [[ -e ./.repoupdate ]]; then
+    shownotice "Pushing updated scripts to nodes"
+    ansible-playbook nodes-boinc-setup.yml
+    rm ./.repoupdate
+fi
+
 update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
 update_os
 

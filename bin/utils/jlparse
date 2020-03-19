@@ -36,8 +36,8 @@ def strtime(time):
 
 # set up and handle arguments
 parser = argparse.ArgumentParser(description='parse BOINC job logs')
-parser.add_argument('-p', '--project', metavar='PROJECT_URL', dest="projurl", required=True,
-                    help="project URL of the joblog to parse (e.g. www.gpugrid.net; default: all)")
+parser.add_argument('-p', '--project', metavar='PROJECT_NAME', dest="projurl", required=True,
+                    help="partial name of the joblog to be parsed. must be unique")
 parser.add_argument('-t', '--type', metavar='WU_TYPE', dest="wutype", default=None,
                     help="the workunit type/name to filter by (e.g. MCM1)")
 parser.add_argument('-s', '--timespan', metavar='HOURS', dest="span", type=int, default=24,
@@ -46,11 +46,16 @@ parser.add_argument('-c', '--count-only', dest="count", action="store_true",
                     help="show WU counts only; do not print min/max/quintile times")
 args = parser.parse_args()
 
-# fixup projurl
-# TODO handling multiple joblogs doesn't work yet
-if args.projurl != 'job_log_*':
-    args.projurl = "job_log_{}.txt".format(args.projurl)
-args.projurl = "/var/lib/boinc/{}".format(args.projurl)
+# turn args.projurl into a joblog filepath
+globpath = "/var/lib/boinc/job_log_*{}*.txt".format(args.projurl)
+joblogs = glob.glob(globpath)
+if len(joblogs) == 0:
+    print("Can't find any attached projects matching '{}'".format(args.projurl))
+    sys.exit(2)
+if len(joblogs) > 1:
+    print("Found multiple projects matching '{}'; must have exactly one match".format(args.projurl))
+    sys.exit(2)
+args.projurl = joblogs[0]
 # and the timespan
 timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))
 

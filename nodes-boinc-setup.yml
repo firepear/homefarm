@@ -25,7 +25,7 @@
   - name: Copy boinccmdcmd
     become: true
     copy:
-      src: ./bin/boinccmdcmd
+      src: ./bin/utils/boinccmdcmd
       dest: /usr/local/bin/boinccmdcmd
       owner: root
       group: root
