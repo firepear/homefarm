@@ -95,7 +95,10 @@ WUs by quintile:
         <= 03h 18min 03s         95      (47.0%)
 ```
 
-This behavior can be modified with the following arguments:
+If `PROJECT_NAME` is the special value `ALL` (in all caps), then data
+for all of a node's attached projects will be evaluated.
+
+The behavior of `query` can be modified with the following arguments:
 
 - `-t WU_TYPE` -- Filters by searching only for WUs whose name matches
   `WU_TYPE`

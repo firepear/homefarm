@@ -23,6 +23,7 @@ There are a few assumptions:
 
 # News
 
+* 2020-03-21: v2.4.2: `query` can operate across all projects
 * 2020-03-19: v2.4.1: Changed playbook semantics to fix bug cause by
   file move. Scripts now pushed to nodes with every update.
 * 2020-03-19: v2.4.0: Added the `query` subcommand (See "Everyday farm
@@ -31,10 +32,9 @@ There are a few assumptions:
   stay in sync
 * 2020-03-18: v2.3.3: Minor bugfix for version reporting
 * 2020-02-25: v2.3.2: Overdue deadlines handled correctly in `status`
-* 2020-02-04: v2.3.1: Improvements to `status` connection handling
 
 See the [Release
-notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES))
+notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
 for all updates.
 
 # Documentation
