@@ -115,7 +115,7 @@ update_os
 if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
     shownotice "Pushing updated scripts to nodes"
     ansible-playbook nodes-boinc-setup.yml
-    if [[ -e ./.repoupdate ]]
+    if [[ -e ./.repoupdate ]]; then
        rm ./.repoupdate
     fi
 fi
