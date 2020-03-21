@@ -131,7 +131,7 @@ case "${1}" in
         ;;
     query)
         shift
-        exec ./bin/utils/farmcmd "jlparse -p ${*}"
+        exec ./bin/utils/farmcmd "query -p ${*}"
         ;;
     restore)
         if [[ "${2}" == "" ]]; then

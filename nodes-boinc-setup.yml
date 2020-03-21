@@ -14,11 +14,11 @@
     become: true
     systemd:
       daemon_reload: yes
-  - name: Copy jlparse
+  - name: Copy query
     become: true
     copy:
-      src: ./bin/utils/jlparse
-      dest: /usr/local/bin/jlparse
+      src: ./bin/utils/query
+      dest: /usr/local/bin/query
       owner: root
       group: root
       mode: 0755
