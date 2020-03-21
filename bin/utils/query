@@ -1,7 +1,7 @@
 #!/bin/env python3
 
 #
-# jlparse - parse and operate on BOINC job logs
+# query - parse and operate on BOINC job logs
 #
 
 # > The first column is the log time (Unix style -- milliseconds since 1/1/1970 UTC)
