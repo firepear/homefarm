@@ -97,7 +97,7 @@ for joblog in joblogs:
         if args.wutype != None:
             if args.wutype not in fields[8]:
                 continue
-        time = int(float(fields[4]))
+        time = round(float(fields[4]))
         matches.append(time)
         cputime += time
 
