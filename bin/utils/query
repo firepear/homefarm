@@ -4,13 +4,6 @@
 # query - parse and operate on BOINC job logs
 #
 
-# > The first column is the log time (Unix style -- milliseconds since 1/1/1970 UTC)
-# > ue: estimated run time of the work unit
-# > ct: actual CPU time
-# > fe: estimated flops
-# > nm: work unit name
-# > et: elapsed time (work unit wall clock time)
-
 import argparse
 import glob
 import os
@@ -19,15 +12,21 @@ import time
 
 
 def strtime(time):
+    days = 0
     hours = 0
     mins = 0
     timestr = ""
+    if time > 86400:
+        days = int(time / 86400)
+        time = time - (86400 * days)
     if time > 3600:
         hours = int(time / 3600)
         time = time - (3600 * hours)
     if time > 60:
         mins = int(time / 60)
         time = time - (60 * mins)
+    if days > 0:
+        return "{}d {:02d}h {:02d}min {:02d}s".format(days, hours, mins, int(time))
     return "{:02d}h {:02d}min {:02d}s".format(hours, mins, int(time))
 
 
@@ -64,8 +63,22 @@ else:
 timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))
 
 matches = []
+cputime = 0
 f = None
 
+# The zeroth column is the log time (Unix style -- milliseconds since 1/1/1970 UTC)
+# 1  2
+# ue estimated run time of the work unit
+# 3  4
+# ct actual CPU time
+# 5  6
+# fe estimated flops
+# 7  8
+# nm work unit name
+# 9  10
+# et elapsed time (work unit wall clock time)
+# 11 12
+# es status (rc)
 for joblog in joblogs:
     try:
         f = open(joblog, 'r')
@@ -75,8 +88,7 @@ for joblog in joblogs:
 
     for line in f:
         line = line.rstrip("\n")
-        # split line into fields:
-        # 0:timestamp 2:est_runtime 4:runtime 6:est_flops 8:name 10:credit 12:status
+        # split line into fields: see above
         fields = line.split()
         # skip this line if it's not within our timespan
         if int(fields[0]) < timelimit:
@@ -85,10 +97,12 @@ for joblog in joblogs:
         if args.wutype != None:
             if args.wutype not in fields[8]:
                 continue
-        matches.append(int(float(fields[4])))
-
+        time = int(float(fields[4]))
+        matches.append(time)
+        cputime += time
 
 print("WUs in past {} hours: {}".format(args.span, len(matches)))
+print("Total CPU time used:  {}".format(strtime(cputime)))
 if len(matches) == 0:
     sys.exit(0)
 if args.count:

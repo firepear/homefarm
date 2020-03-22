@@ -83,20 +83,18 @@ runtime:
 # farmctl query community
 --------------------------------------------------------------
 node01
-WUs in past 24 hours: 202
-        Min runtime: 00h 21min 18s
-        Max runtime: 03h 18min 03s
-        Avg runtime: 02h 18min 48s
+WUs in past 24 hours: 157
+Total CPU time used:  14d 01h 34min 59s
+        Min runtime: 00h 15min 06s
+        Max runtime: 11h 32min 13s
+        Avg runtime: 02h 09min 00s
 WUs by quintile:
-        <= 00h 56min 39s         31      (15.3%)
-        <= 01h 32min 00s         23      (11.4%)
-        <= 02h 07min 21s         47      (23.3%)
-        <= 02h 42min 42s         6       (03.0%)
-        <= 03h 18min 03s         95      (47.0%)
+        <= 02h 30min 31s         74      (47.1%)
+        <= 04h 45min 56s         82      (52.2%)
+        <= 07h 01min 21s         0       (00.0%)
+        <= 09h 16min 46s         0       (00.0%)
+        <= 11h 32min 13s         1       (00.6%)
 ```
-
-If `PROJECT_NAME` is the special value `ALL` (in all caps), then data
-for all of a node's attached projects will be evaluated.
 
 The behavior of `query` can be modified with the following arguments:
 
@@ -110,8 +108,21 @@ The behavior of `query` can be modified with the following arguments:
 # farmctl query community -t MCM -s 96 -c
 --------------------------------------------------------------
 node01
-WUs in past 96 hours: 543
+WUs in past 96 hours: 480
+Total CPU time used:  57d 20h 47min 41s
 ```
+
+If `PROJECT_NAME` is the special value `ALL` (in all caps), then data
+for all of a node's attached projects will be evaluated.
+
+```
+# farmctl query ALL -c
+--------------------------------------------------------------
+node01
+WUs in past 24 hours: 186
+Total CPU time: 23d 08h 02min 32s
+```
+
 
 
 ## Keeping the farm up to date
