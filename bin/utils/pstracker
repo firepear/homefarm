@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+# accumulates project statistics
+
+import sys
+
+total = { 'wu': 0, 'y': 0, 'd': 0, 'h': 0, 'm': 0, 's': 0 }
+proj = ""
+
+while True:
+    line = input('> ')
+    if line == "q":
+        break
+
+    node, wus, days, hours, mins, secs, proj = line.split()
+    days = days.rstrip('d')
+    hours = hours.rstrip('h')
+    mins = mins.rstrip('min')
+    secs = secs.rstrip('s')
+
+    total['wu'] += int(wus)
+    total['d'] += int(days)
+    total['h'] += int(hours)
+    total['m'] += int(mins)
+    total['s'] += int(secs)
+
+    oflow_mins = total['s'] // 60
+    total['s'] = total['s'] % 60
+
+    total['m'] += oflow_mins
+    oflow_hours = total['m'] // 60
+    total['m'] = total['m'] % 60
+
+    total['h'] += oflow_hours
+    oflow_days = total['h'] // 24
+    total['h'] = total['h'] % 24
+
+    total['d'] += oflow_days
+    oflow_years = total['d'] // 365
+    total['d'] = total['d'] % 365
+
+
+    total['y'] += oflow_years
+
+print("WUs for {}: {}".format(proj, total['wu']))
+print("Total time: {}y {:03d}d {:02d}h {:02d}min {:02d}s".format(total['y'], total['d'], total['h'], total['m'], total['s']))
