@@ -10,10 +10,12 @@
       owner: root
       group: root
       mode: 0644
+    register: unitfile
   - name: Reload unit files
     become: true
     systemd:
       daemon_reload: yes
+    when: unitfile.changed
   - name: Copy query
     become: true
     copy:
@@ -35,3 +37,4 @@
     service:
       name: boinc-client
       state: restarted
+    when: unitfile.changed
