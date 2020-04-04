@@ -1,3 +1,13 @@
+2.5.0 - 2020-04-04
+--------------------------------------------------------------------
+
+    * `query` now returns JSON when invoked with `-j`
+
+    * `status` now returns JSON when invoked with `json`
+
+    * `node-init` now only restarts BOINC if the unit file has changed
+
+
 2.4.3 - 2020-03-22
 --------------------------------------------------------------------
 

@@ -123,7 +123,7 @@ if len(matches) == 0 or args.count:
 mintime = min(matches)
 maxtime = max(matches)
 avgtime = sum(matches)/len(matches)
-jsondata['times'] = { 'min': mintime, 'max': maxtime, 'avg': avgtime }
+jsondata['times'] = [ mintime, maxtime, avgtime ]
 report.append("\tMin runtime: {}".format(strtime(mintime)))
 report.append("\tMax runtime: {}".format(strtime(maxtime)))
 report.append("\tAvg runtime: {}".format(strtime(avgtime)))
@@ -149,7 +149,7 @@ for m in matches:
     else:
         qcounts[4] += 1
 for i in range(5):
-    jsondata['quints'].append(q[i], qcounts[i],  qcounts[i] / len(matches) * 100)
+    jsondata['quints'].append([q[i], qcounts[i],  qcounts[i] / len(matches) * 100])
     report.append("\t<= {}\t {}\t ({:04.1f}%)".format(strtime(q[i]), qcounts[i],
                                                       qcounts[i] / len(matches) * 100))
 printout()
