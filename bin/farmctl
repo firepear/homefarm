@@ -143,14 +143,12 @@ case "${1}" in
         ;;
     status)
         tmpfile=$(mktemp)
-        statsarg="${2}"
-        wantnode=""
-        if [[ "${statsarg}" != "nopage" ]]; then
-            wantnode="${statsarg}"
+        if [[ "${*}" =~ "nopage" ]]; then
+            nopage="true"
         fi
-        ./bin/stats "${tmpfile}" "${wantnode}"
+        ./bin/stats "${tmpfile}" "${*}"
         tmplines=$(wc -l ${tmpfile} | cut -d' ' -f1)
-        if [[ "${statsarg}" == "nopage" ]]; then
+        if [[ "${nopage}" != "" ]]; then
             cat ${tmpfile}
         else
             if [[ ${tmplines} -gt ${LINES} ]]; then
@@ -176,7 +174,7 @@ case "${1}" in
     status-only2)
         hf_envinit
         hf_buildhosts
-        ./bin/farmctl status nopage
+        ./bin/farmctl status nopage json
         ;;
     up)
         if [[ "${2}" == "" ]]; then
@@ -221,8 +219,9 @@ usage: ${0} SUBCOMMAND [ARGS]
       Restore farm state from a tarball created by 'farmctl backup'. Tarball must
       be in HOMEFARM_DIR
 
-  status [nopage]
-      Display info on current tasks. Specifying 'nopage' inhibits autopaging
+  status [json] [nopage]
+      Display info on current tasks. Specifying 'nopage' inhibits autopaging.
+      Specifying 'json' implies 'nopage', and outputs JSON
 
   update
       Update Homefarm, the local repository, and OS packages on compute nodes
