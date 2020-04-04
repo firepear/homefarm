@@ -82,10 +82,17 @@ projects = {}
 tasks = None
 hostcount = 0
 wanthost = ""
-tmpfile = sys.argv[1]
+wantjson = False
 
-if len(sys.argv) == 3:
-    wanthost = sys.argv[2]
+sys.argv.pop(0)
+tmpfile = sys.atgv.pop(0)
+
+# handle optional args
+for arg in sys.argv:
+    if arg == "json":
+        wantjson = True
+    else:
+        wanthost = arg
 
 of = open(tmpfile, 'w')
 with open("/homefarm/.boincguikeys.json", 'r') as f:

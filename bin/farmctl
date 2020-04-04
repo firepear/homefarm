@@ -142,10 +142,12 @@ case "${1}" in
         exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control ./bin/backup restore
         ;;
     status)
+        shift
         tmpfile=$(mktemp)
         if [[ "${*}" =~ "nopage" ]]; then
             nopage="true"
         fi
+        #echo "./bin/stats \"${tmpfile}\" \"${*}\""
         ./bin/stats "${tmpfile}" "${*}"
         tmplines=$(wc -l ${tmpfile} | cut -d' ' -f1)
         if [[ "${nopage}" != "" ]]; then
