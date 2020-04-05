@@ -85,12 +85,14 @@ wanthost = ""
 wantjson = False
 
 sys.argv.pop(0)
-tmpfile = sys.atgv.pop(0)
+tmpfile = sys.argv.pop(0)
 
 # handle optional args
 for arg in sys.argv:
     if arg == "json":
         wantjson = True
+    elif arg == "nopage":
+        pass
     else:
         wanthost = arg
 

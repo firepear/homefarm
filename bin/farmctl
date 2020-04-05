@@ -151,10 +151,9 @@ case "${1}" in
         if [[ "${*}" =~ "nopage" ]]; then
             nopage="true"
         fi
-        #echo "./bin/stats \"${tmpfile}\" \"${*}\""
         ./bin/stats "${tmpfile}" "${*}"
         tmplines=$(wc -l ${tmpfile} | cut -d' ' -f1)
-        if [[ "${nopage}" != "" ]]; then
+        if [[ "${nopage}" == "true" ]]; then
             cat ${tmpfile}
         else
             if [[ ${tmplines} -gt ${LINES} ]]; then
