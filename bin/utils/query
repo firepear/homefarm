@@ -8,6 +8,7 @@ import argparse
 import glob
 import json
 import os
+import socket
 import sys
 import time
 
@@ -54,6 +55,9 @@ parser.add_argument('-j', '--json', dest="json", action="store_true",
                     help="output data as JSON")
 args = parser.parse_args()
 
+hostname = socket.gethostname()
+banner = ("-" * (77 - len(hostname))) + " " + hostname
+
 # turn args.proj into a joblog filepath
 joblogs = []
 if args.proj == "ALL":
@@ -62,10 +66,10 @@ else:
     globpath = "/var/lib/boinc/job_log_*{}*.txt".format(args.proj)
     joblogs = glob.glob(globpath)
     if len(joblogs) == 0:
-        print("Can't find any attached projects matching '{}'".format(args.proj))
+        print("{}: Can't find any attached projects matching '{}'".format(hostname, args.proj))
         sys.exit(2)
     if len(joblogs) > 1:
-        print("Found multiple projects matching '{}'; must have exactly one match".format(args.proj))
+        print("{}: Found multiple projects matching '{}'; must have exactly one match".format(hostname, args.proj))
         sys.exit(2)
 
 # and the timespan
@@ -110,9 +114,10 @@ for joblog in joblogs:
         matches.append(time)
         cputime += time
 
-jsondata = { 'proj': args.proj, 'wutype':args.wutype, 'span': args.span,
+jsondata = { 'host': hostname, 'proj': args.proj, 'wutype':args.wutype, 'span': args.span,
              'matches': len(matches), 'cputime': cputime }
 report = []
+report.append(banner)
 report.append("WUs in past {} hours: {}".format(args.span, jsondata['matches']))
 report.append("Total CPU time used:  {}".format(strtime(cputime)))
 if len(matches) == 0 or args.count:

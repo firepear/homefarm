@@ -131,7 +131,11 @@ case "${1}" in
         ;;
     query)
         shift
-        exec ./bin/utils/farmcmd "query -p ${*}"
+        for node in nodes/node*yml; do
+            node=$(basename "${node}" .yml)
+            ssh "farmer@${node}" "sudo query -p ${*}" || true
+            echo
+        done
         ;;
     restore)
         if [[ "${2}" == "" ]]; then
