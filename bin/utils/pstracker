@@ -33,17 +33,15 @@ def strtime(time):
 
 t = { 'wu': 0, 'time': 0}
 
-while True:
-    line = input('> ')
-    if line == "q":
-        break
-    data = json.loads(line)
-    if data['err'] is not None:
+line = input('> ')
+data = json.loads(line)
+for rec in data:
+    if rec['err'] is not None:
         continue
 
-    t['wu'] += data['matches']
-    t['time'] += data['cputime']
-    t['proj'] = data['proj']
+    t['wu'] += rec['matches']
+    t['time'] += rec['cputime']
+    t['proj'] = rec['proj']
 
 print("\nWUs for {}: {}".format(t['proj'], t['wu']))
 print("Total time: {}".format(strtime(t['time'])))
