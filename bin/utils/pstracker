@@ -38,6 +38,9 @@ while True:
     if line == "q":
         break
     data = json.loads(line)
+    if data['err'] is not None:
+        continue
+
     t['wu'] += data['matches']
     t['time'] += data['cputime']
     t['proj'] = data['proj']
