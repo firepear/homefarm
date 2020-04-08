@@ -14,10 +14,14 @@ import time
 
 
 def strtime(time):
+    years = 0
     days = 0
     hours = 0
     mins = 0
     timestr = ""
+    if time > 31536000:
+        years = int(time / 31536000)
+        time = time - (31536000 * years)
     if time > 86400:
         days = int(time / 86400)
         time = time - (86400 * days)
@@ -27,6 +31,8 @@ def strtime(time):
     if time > 60:
         mins = int(time / 60)
         time = time - (60 * mins)
+    if years > 0:
+        return "{}y {}d {:02d}h {:02d}min {:02d}s".format(years, days, hours, mins, int(time))
     if days > 0:
         return "{}d {:02d}h {:02d}min {:02d}s".format(days, hours, mins, int(time))
     return "{:02d}h {:02d}min {:02d}s".format(hours, mins, int(time))
