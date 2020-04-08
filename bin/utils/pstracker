@@ -2,45 +2,45 @@
 
 # accumulates project statistics
 
+import json
 import sys
 
-total = { 'wu': 0, 'y': 0, 'd': 0, 'h': 0, 'm': 0, 's': 0 }
-proj = ""
+
+def strtime(time):
+    years = 0
+    days = 0
+    hours = 0
+    mins = 0
+    timestr = ""
+    if time > 31536000:
+        years = int(time / 31536000)
+        time = time - (31536000 * years)
+    if time > 86400:
+        days = int(time / 86400)
+        time = time - (86400 * days)
+    if time > 3600:
+        hours = int(time / 3600)
+        time = time - (3600 * hours)
+    if time > 60:
+        mins = int(time / 60)
+        time = time - (60 * mins)
+    if years > 0:
+        return "{}y {}d {:02d}h {:02d}min {:02d}s".format(years, days, hours, mins, int(time))
+    if days > 0:
+        return "{}d {:02d}h {:02d}min {:02d}s".format(days, hours, mins, int(time))
+    return "{:02d}h {:02d}min {:02d}s".format(hours, mins, int(time))
+
+
+t = { 'wu': 0, 'time': 0}
 
 while True:
     line = input('> ')
     if line == "q":
         break
+    data = json.loads(line)
+    t['wu'] += data['matches']
+    t['time'] += data['cputime']
+    t['proj'] = data['proj']
 
-    node, wus, days, hours, mins, secs, proj = line.split()
-    days = days.rstrip('d')
-    hours = hours.rstrip('h')
-    mins = mins.rstrip('min')
-    secs = secs.rstrip('s')
-
-    total['wu'] += int(wus)
-    total['d'] += int(days)
-    total['h'] += int(hours)
-    total['m'] += int(mins)
-    total['s'] += int(secs)
-
-    oflow_mins = total['s'] // 60
-    total['s'] = total['s'] % 60
-
-    total['m'] += oflow_mins
-    oflow_hours = total['m'] // 60
-    total['m'] = total['m'] % 60
-
-    total['h'] += oflow_hours
-    oflow_days = total['h'] // 24
-    total['h'] = total['h'] % 24
-
-    total['d'] += oflow_days
-    oflow_years = total['d'] // 365
-    total['d'] = total['d'] % 365
-
-
-    total['y'] += oflow_years
-
-print("WUs for {}: {}".format(proj, total['wu']))
-print("Total time: {}y {:03d}d {:02d}h {:02d}min {:02d}s".format(total['y'], total['d'], total['h'], total['m'], total['s']))
+print("\nWUs for {}: {}".format(t['proj'], t['wu']))
+print("Total time: {}".format(strtime(t['time'])))
