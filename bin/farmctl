@@ -131,26 +131,19 @@ case "${1}" in
         ;;
     query)
         shift
-        args="${*}"
         if [[ "${args}" =~ "-j" ]]; then
-            IFS=$'\n'
-            for node in nodes/node*yml; do
-                node=$(basename "${node}" ".yml")
-                output+=( $(ssh "farmer@${node}" "sudo query -p ${args}" || true) )
-            done
-            i=0
-            j="${#output[@]}"
-            k=$((j-1))
+            nodes=( nodes/node*yml )
             echo -n '['
-            while [[ "${i}" -lt "${j}" ]]; do
-                echo -n "${output[${i}]}"
-                if [[ "${i}" -lt "${k}" ]]; then
-                    echo -n ", "
+            i=0
+            for node in "${nodes[@]}"; do
+                node=$(basename "${node}" ".yml")
+                echo -n "$(ssh farmer@${node} sudo query -p ${*} || true)"
+                if [[ "${i}" -lt "$((${#nodes[@]}-1))" ]]; then
+                    echo -n ', '
                 fi
                 i=$((i+1))
             done
             echo ']'
-            unset IFS
         else
             for node in nodes/node*yml; do
                 node=$(basename "${node}" ".yml")
@@ -162,7 +155,7 @@ case "${1}" in
         if [[ "${2}" == "" ]]; then
             echo "restore: homefarm directory must be specified"
         fi
-        cd ${2}
+        cd "${2}"
         source ./bin/common.sh
         exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control ./bin/backup restore
         ;;
@@ -173,17 +166,17 @@ case "${1}" in
             nopage="true"
         fi
         ./bin/stats "${tmpfile}" "${*}"
-        tmplines=$(wc -l ${tmpfile} | cut -d' ' -f1)
+        tmplines=$(wc -l "${tmpfile}" | cut -d' ' -f1)
         if [[ "${nopage}" == "true" ]]; then
-            cat ${tmpfile}
+            cat "${tmpfile}"
         else
             if [[ ${tmplines} -gt ${LINES} ]]; then
-                less ${tmpfile}
+                less "${tmpfile}"
             else
-                cat ${tmpfile}
+                cat "${tmpfile}"
             fi
         fi
-        rm ${tmpfile}
+        rm "${tmpfile}"
         ;;
     status-only)
         if [[ -e /root/.bashrc ]]; then
