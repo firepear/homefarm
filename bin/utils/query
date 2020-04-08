@@ -80,14 +80,14 @@ else:
             print(json.dumps(jsondata))
         else:
             print("{}: Can't find any attached projects matching '{}'".format(hostname, args.proj))
-        sys.exit(2)
+        sys.exit(0)
     if len(joblogs) > 1:
         if args.json:
             jsondata['err'] = "multiple matching projects; must have exactly one"
             print(json.dumps(jsondata))
         else:
             print("{}: Found multiple projects matching '{}'; must have exactly one match".format(hostname, args.proj))
-        sys.exit(2)
+        sys.exit(0)
 
 # and the timespan
 timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))

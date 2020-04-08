@@ -131,11 +131,32 @@ case "${1}" in
         ;;
     query)
         shift
-        for node in nodes/node*yml; do
-            node=$(basename "${node}" .yml)
-            ssh "farmer@${node}" "sudo query -p ${*}" || true
-            echo
-        done
+        args="${*}"
+        if [[ "${args}" =~ "-j" ]]; then
+            IFS=$'\n'
+            for node in nodes/node*yml; do
+                node=$(basename "${node}" ".yml")
+                output+=( $(ssh "farmer@${node}" "sudo query -p ${args}" || true) )
+            done
+            i=0
+            j="${#output[@]}"
+            k=$((j-1))
+            echo -n '['
+            while [[ "${i}" -lt "${j}" ]]; do
+                echo -n "${output[${i}]}"
+                if [[ "${i}" -lt "${k}" ]]; then
+                    echo -n ", "
+                fi
+                i=$((i+1))
+            done
+            echo ']'
+            unset IFS
+        else
+            for node in nodes/node*yml; do
+                node=$(basename "${node}" ".yml")
+                ssh "farmer@${node}" "sudo query -p ${args}" || true
+            done
+        fi
         ;;
     restore)
         if [[ "${2}" == "" ]]; then
