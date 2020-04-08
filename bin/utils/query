@@ -64,6 +64,9 @@ args = parser.parse_args()
 hostname = socket.gethostname()
 banner = ("-" * (77 - len(hostname))) + " " + hostname
 
+jsondata = { 'host': hostname, 'proj': args.proj, 'wutype':args.wutype, 'span': args.span,
+             'matches': None, 'cputime': None, 'err': None }
+
 # turn args.proj into a joblog filepath
 joblogs = []
 if args.proj == "ALL":
@@ -72,10 +75,18 @@ else:
     globpath = "/var/lib/boinc/job_log_*{}*.txt".format(args.proj)
     joblogs = glob.glob(globpath)
     if len(joblogs) == 0:
-        print("{}: Can't find any attached projects matching '{}'".format(hostname, args.proj))
+        if args.json:
+            jsondata['err'] = "no matching attached projects"
+            print(json.dumps(jsondata))
+        else:
+            print("{}: Can't find any attached projects matching '{}'".format(hostname, args.proj))
         sys.exit(2)
     if len(joblogs) > 1:
-        print("{}: Found multiple projects matching '{}'; must have exactly one match".format(hostname, args.proj))
+        if args.json:
+            jsondata['err'] = "multiple matching projects; must have exactly one"
+            print(json.dumps(jsondata))
+        else:
+            print("{}: Found multiple projects matching '{}'; must have exactly one match".format(hostname, args.proj))
         sys.exit(2)
 
 # and the timespan
@@ -102,7 +113,11 @@ for joblog in joblogs:
     try:
         f = open(joblog, 'r')
     except:
-        print("\tNot attached")
+        if args.json:
+            jsondata['err'] = "not attached"
+            print(json.dumps(jsondata))
+        else:
+            print("\tNot attached")
         sys.exit(0)
 
     for line in f:
@@ -120,16 +135,16 @@ for joblog in joblogs:
         matches.append(time)
         cputime += time
 
-jsondata = { 'host': hostname, 'proj': args.proj, 'wutype':args.wutype, 'span': args.span,
-             'matches': len(matches), 'cputime': cputime }
+jsondata['matches'] = len(matches)
+jsondata['cputime'] = cputime
 report = []
+
 report.append(banner)
 report.append("WUs in past {} hours: {}".format(args.span, jsondata['matches']))
 report.append("Total CPU time used:  {}".format(strtime(cputime)))
 if len(matches) == 0 or args.count:
     printout()
     sys.exit(0)
-
 
 mintime = min(matches)
 maxtime = max(matches)
