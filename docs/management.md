@@ -157,7 +157,7 @@ and a list of tasks.
 
 ```
 { HOSTNAME1: {
-    PROJNAME: {
+    PROJNAME1: {
       'url': PROJURL, 'state': PROJSTATE, 'username': USER, 'taskcount': TOTALTASKS, 'taskactive': ACTIVETASKS,
       'usercredit': USERCRED, userrac: USERRAC, 'hostcred': HOSTCRED, 'hostrac': HOSTRAC,
       'tasks': {
@@ -166,8 +166,8 @@ and a list of tasks.
           'done': DONE_FRAC, 'astate': ACTIVITY_STATE, 'cpu_elapsed': RUNTIME_SECS },
         TASKNAME2: { ... },
         ...
-      },
-    },
+      },  # end tasks
+    },    # end PROJNAME1
     PROJNAME2: { ... },
     ...
   },
