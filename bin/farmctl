@@ -165,6 +165,10 @@ case "${1}" in
         if [[ "${*}" =~ "nopage" ]]; then
             nopage="true"
         fi
+        if [[ "${*}" =~ "json" ]]; then
+            json="true"
+            nopage="true"
+        fi
         ./bin/stats "${tmpfile}" "${*}"
         tmplines=$(wc -l "${tmpfile}" | cut -d' ' -f1)
         if [[ "${nopage}" == "true" ]]; then

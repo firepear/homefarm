@@ -7,6 +7,9 @@ import sys
 import time
 import xml.etree.ElementTree as ET
 
+###############################################################################
+#
+# these functions form the BOINC XMLRPC layer
 def boinc_auth_conn(s, key):
     # send the initial authorization request
     s.sendall(b'<auth1/>\003')
@@ -41,6 +44,9 @@ def recv_msg(s):
     return b''.join(chunks).decode('utf-8').strip('\003')
 
 
+###############################################################################
+#
+# these functions handle reporting for the report generator
 def format_eta(eta):
     eta = float(eta)
     if eta > 3600:
@@ -76,11 +82,60 @@ def format_dl(dl):
         return "{:3d}m{:02d}s".format(m, s)
 
 
+# report() is the report generator function. is JSON is requested, it
+# simply dumps the collected data, as-is. otherwise, a human-readable
+# report of all active tasks is created
+def report(tmpfile, hosts, wantjson):
+    of = open(tmpfile, 'w')
+    if wantjson:
+        json.dump(hosts, of)
+        of.close()
+        sys.exit(0)
+
+    hostcount = 0
+    for host, projects in hosts.items():
+        if hostcount > 0:
+            of.write("\n\n\n")
+        of.write("================================================================================\n")
+        of.write("{}\n".format(host))
+        of.write("================================================================================\n")
+        if len(projects) == 0:
+            of.write("No work from this project (yet?)\n")
+            continue
+
+        projcount = 0
+        for projname, p in projects.items():
+            # print a summary for the project
+            if projcount > 0:
+                of.write("--------------------------------------------------------------------------------\n")
+            of.write("{}\t  User: {}\t  State: {}\n".format(projname, p['username'], p['state']))
+            of.write("Tasks: {}\t  Active: {}\t  Credit/RAC: {}/{}\n".format(p['taskcount'], p['taskactive'], int(p["hostcred"]), int(p["hostrac"])))
+            projcount += 1
+            # if there are no active tasks for this project, don't do
+            # detail reporting
+            if p['taskactive'] == 0:
+                continue
+            # ok, we have active tasks. print details.
+            of.write("\n")
+            of.write("     Workunit                                     Stat  Prog    ETA      Dline\n")
+            of.write("     -------------------------------------------  ----  ------  -------  -------\n")
+            # sort tasks by completion percentage and iterate over them,
+            # printing details for active ones
+            wunum = 1
+            for name, t in {k: v for k, v in sorted(p['tasks'].items(), reverse=True, key=lambda item: item[1]['done'])}.items():
+                if not t['active']:
+                    continue
+                of.write("{:3d}  {:43}  {:4}  {:6.2%}  {}  {}\n".format(wunum, name[:43], t['astate'], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
+                wunum += 1
+        hostcount += 1
+    of.close()
+
+
+
+###############################################################################
 
 hosts = {}
-projects = {}
 tasks = None
-hostcount = 0
 wanthost = ""
 wantjson = False
 
@@ -96,7 +151,7 @@ for arg in sys.argv:
     else:
         wanthost = arg
 
-of = open(tmpfile, 'w')
+#of = open(tmpfile, 'w')
 with open("/homefarm/.boincguikeys.json", 'r') as f:
     hosts = json.load(f)
 
@@ -104,7 +159,7 @@ for host, key in hosts.items():
     if wanthost != "" and host != wanthost:
         continue
 
-    projects = {}
+    hosts[host] = {}
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
             s.connect((host, 31416))
@@ -147,7 +202,7 @@ for host, key in hosts.items():
                 pass
             if 'state' not in p:
                 p['state'] = "Active"
-            projects[name] = p
+            hosts[host][name] = p
 
         # now just grab the task data and stow it. we'll process it
         # later on
@@ -155,16 +210,8 @@ for host, key in hosts.items():
         s.sendall(req.encode('utf-8'))
         tasks = ET.fromstring(recv_msg(s))
 
-    if hostcount > 0:
-        of.write("\n\n\n")
-    of.write("================================================================================\n")
-    of.write("{}\n".format(host))
-    of.write("================================================================================\n")
-    if len(projects) == 0:
-        of.write("No work from this project (yet?)\n")
-        continue
-
     projcount = 0
+    projects = hosts[host]
     for projname in sorted(projects):
         task_count = 0  # how many tasks in this project
         task_active = 0 # how many active tasks
@@ -178,8 +225,6 @@ for host, key in hosts.items():
                 continue
             task_count += 1
             t = {}
-
-            # stuff
             t['cpu_eta'] = task.find('estimated_cpu_time_remaining').text
             t['state'] =  task.find('state').text
             t['deadline'] = task.find('report_deadline').text
@@ -211,27 +256,8 @@ for host, key in hosts.items():
                 t['done'] = 0
             # add the task to the list
             ptasks[task.find('name').text] = t
+        hosts[host][projname]['taskcount'] = task_count
+        hosts[host][projname]['taskactive'] = task_active
+        hosts[host][projname]['tasks'] = ptasks
 
-        # print a summary for the project
-        p = projects[projname]
-        if projcount > 0:
-            of.write("--------------------------------------------------------------------------------\n")
-        of.write("{}\t  User: {}\t  State: {}\n".format(projname, p['username'], p['state']))
-        of.write("Tasks: {}\t  Active: {}\t  Credit/RAC: {}/{}\n".format(task_count, task_active, int(p["hostcred"]), int(p["hostrac"])))
-        projcount += 1
-        # if there are no active tasks for this project, don't do
-        # detail reporting
-        if task_active == 0:
-            continue
-        # ok, we have active tasks. print details.
-        of.write("\n")
-        of.write("     Workunit                                     Stat  Prog    ETA      Dline\n")
-        of.write("     -------------------------------------------  ----  ------  -------  -------\n")
-        # sort tasks by completion percentage and iterate over them,
-        # printing details for active ones
-        for name, t in {k: v for k, v in sorted(ptasks.items(), reverse=True, key=lambda item: item[1]['done'])}.items():
-            if not t['active']:
-                continue
-            of.write("{:3d}  {:43}  {:4}  {:6.2%}  {}  {}\n".format(wunum, name[:43], t['astate'], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
-            wunum += 1
-    hostcount += 1
+report(tmpfile, hosts, wantjson)
