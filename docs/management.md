@@ -65,13 +65,6 @@ Tasks: 43         Active: 13      Credit/RAC: 975172/8101
  13  MCM1_0161859_0528_1                          Run    4.51%    1h55m    6d15h
 ```
 
-To quickly check on your nodes without starting up an interactive
-farmctl session, you can run `/HOMEFARM_PATH/bin/farmctl
-status-only`. The output will go to to stdout and you'll be returned
-to your command line. If your Homefarm install is not at `~/homefarm`,
-you'll need to pass the location as an argument. `status-only` does
-not support single-node reporting.
-
 ### Getting project statistics
 
 If you'd like to get basic statistics on how your farm is performing
@@ -177,6 +170,11 @@ and a list of tasks.
 ```
 
 When JSON is requested, output will not be paged.
+
+Running `~/homefarm/farmctl status-only` will give a status report on
+all hosts, in JSON format, rather than starting a `farmctl`
+shell. This allows you to redirect/pipe a system status to the
+location/tool of your choice.
 
 
 ## Keeping the farm up to date
