@@ -220,6 +220,8 @@ for host, key in hosts.items():
             except:
                 t['active'] = False
                 t['done'] = 0
+                t['astate'] = None
+                t['cpu_elapsed'] = 0
             # add the task to the list
             ptasks[task.find('name').text] = t
         data[host][projname]['taskcount'] = task_count
