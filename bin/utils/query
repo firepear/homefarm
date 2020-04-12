@@ -11,8 +11,15 @@ import os
 import socket
 import sys
 import time
+import xml.etree.ElementTree as ET
 
 import homefarm
+
+def printout():
+    if args.json:
+        print(json.dumps(jsondata))
+    else:
+        for line in report: print(line)
 
 
 # set up and handle arguments
@@ -29,13 +36,16 @@ parser.add_argument('-j', '--json', dest="json", action="store_true",
                     help="output data as JSON")
 args = parser.parse_args()
 
+# set up our hostname + report banner
 hostname = socket.gethostname()
 banner = ("-" * (77 - len(hostname))) + " " + hostname
-
+# initialize the JSON data
 jsondata = { 'host': hostname, 'proj': args.proj, 'wutype':args.wutype, 'span': args.span,
              'matches': None, 'cputime': None, 'err': None }
+# calculate our timespan for log matches
+timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))
 
-# turn args.proj into a joblog filepath
+# turn args.proj into a set of joblog filepaths (but only one for now)
 joblogs = []
 if args.proj == "ALL":
     joblogs = glob.glob("/var/lib/boinc/job_log_*.txt")
@@ -57,8 +67,33 @@ else:
             print("{}: Found multiple projects matching '{}'; must have exactly one match".format(hostname, args.proj))
         sys.exit(0)
 
-# and the timespan
-timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))
+# get project info, so we can use proper, repeatable project names
+# rather than the string we were initially handed
+key=""
+with open('/var/lib/boinc/gui_rpc_auth.cfg', 'r') as f:
+    key=f.readline()
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    try:
+        s.connect((hostname, 31416))
+    except:
+        print("warning: could not connect to '{}' with key '{}'\n".format(hostname, key))
+        sys.exit(0)
+    # try to auth
+    authed = homefarm.auth_conn(s, key)
+    if not authed:
+        print("warning: could not auth on '{}' with key '{}'\n".format(hostname, key))
+        sys.exit(0)
+    req = "<boinc_gui_rpc_request><get_project_status/></boinc_gui_rpc_request>\003"
+    s.sendall(req.encode('utf-8'))
+    reply = ET.fromstring(homefarm.recv_msg(s))
+    for p in reply.iter('project'):
+        url = p.find('master_url').text
+        if args.proj in url:
+            jsondata['proj'] = p.find('project_name').text
+        else:
+            continue
+
+
 
 matches = []
 cputime = 0
@@ -108,7 +143,10 @@ jsondata['cputime'] = cputime
 report = []
 
 report.append(banner)
-report.append("WUs in past {} hours: {}".format(args.span, jsondata['matches']))
+if args.wutype != None:
+    report.append("WUs matching '{}' for {} in past {} hours: {}".format(args.wutype, jsondata['proj'], args.span, jsondata['matches']))
+else:
+    report.append("WUs for {} in past {} hours: {}".format(jsondata['proj'], args.span, jsondata['matches']))
 report.append("Total CPU time used:  {}".format(homefarm.strtime(cputime)))
 if len(matches) == 0 or args.count:
     printout()
@@ -146,7 +184,5 @@ for i in range(5):
     jsondata['quints'].append([q[i], qcounts[i],  qcounts[i] / len(matches) * 100])
     report.append("\t<= {}\t {}\t ({:04.1f}%)".format(homefarm.strtime(q[i]), qcounts[i],
                                                       qcounts[i] / len(matches) * 100))
-if args.json:
-    print(json.dumps(jsondata))
-else:
-    for line in report: print(line)
+
+printout()

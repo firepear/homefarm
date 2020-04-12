@@ -7,6 +7,12 @@
 
     * `node-init` now only restarts BOINC if the unit file has changed
 
+    * Python scripts now use a shared common module to eliminate code
+      duplication
+
+    * `cmd` and `query` now use the same format for hostname headers,
+      and `cmd` is using the common shell func for this
+
 
 2.4.3 - 2020-03-22
 --------------------------------------------------------------------
