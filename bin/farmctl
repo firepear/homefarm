@@ -147,7 +147,7 @@ case "${1}" in
         else
             for node in nodes/node*yml; do
                 node=$(basename "${node}" ".yml")
-                ssh "farmer@${node}" "sudo query -p ${*}" || true
+                ssh "farmer@${node}" "PYTHONPATH='/usr/local/lib:files' sudo query -p ${*}" || true
             done
         fi
         ;;
@@ -169,7 +169,7 @@ case "${1}" in
             json="true"
             nopage="true"
         fi
-        ./bin/stats "${tmpfile}" "${*}"
+        PYTHONPATH='/usr/local/lib:files' ./bin/stats "${tmpfile}" "${*}"
         tmplines=$(wc -l "${tmpfile}" | cut -d' ' -f1)
         if [[ "${nopage}" == "true" ]]; then
             cat "${tmpfile}"
