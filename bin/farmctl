@@ -131,7 +131,7 @@ case "${1}" in
         ;;
     query)
         shift
-        if [[ "${args}" =~ "-j" ]]; then
+        if [[ "${*}" =~ "-j" ]]; then
             nodes=( nodes/node*yml )
             echo -n '['
             i=0
@@ -147,7 +147,7 @@ case "${1}" in
         else
             for node in nodes/node*yml; do
                 node=$(basename "${node}" ".yml")
-                ssh "farmer@${node}" "sudo query -p ${args}" || true
+                ssh "farmer@${node}" "sudo query -p ${*}" || true
             done
         fi
         ;;
