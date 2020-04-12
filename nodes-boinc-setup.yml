@@ -16,6 +16,14 @@
     systemd:
       daemon_reload: yes
     when: unitfile.changed
+  - name: Copy python common module
+    become: true
+    copy:
+      src: ./files/homefarm.py
+      dest: /usr/local/lib/homefarm.py
+      owner: root
+      group: root
+      mode: 0644
   - name: Copy query
     become: true
     copy:
