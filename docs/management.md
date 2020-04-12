@@ -176,6 +176,7 @@ and a list of tasks.
 }
 ```
 
+When JSON is requested, output will not be paged.
 
 
 ## Keeping the farm up to date
