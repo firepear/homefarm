@@ -1,5 +1,6 @@
 # the Homefarm python utility module
 
+import hashlib
 import xml.etree.ElementTree as ET
 
 
