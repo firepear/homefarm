@@ -21,36 +21,48 @@ You can also get the status of a single node with `farmctl status <NODENAME>`
 Representative output:
 ```
 ================================================================================
-node06
+node05
 ================================================================================
-Einstein@Home     User: someuser      State: Active
-Tasks: 13         Active: 1       Credit/RAC: 75115/6339
+Asteroids@home    User: username  State: Active
+Tasks: 0          Active: 0       Credit/RAC: 1176960/2319
 --------------------------------------------------------------------------------
-     Workunit                                     Stat  Prog     ETA      Dline
+Einstein@Home     User: username  State: Active
+Tasks: 0          Active: 0       Credit/RAC: 5793205/46106
 --------------------------------------------------------------------------------
-  1  h1_1072.20_O2C02Cl4In0__O2MDFG2e_G34731_107  Run    0.08%   47m49s    6d18h
+GPUGRID   User: username      State: Active
+Tasks: 2          Active: 1       Credit/RAC: 11550174/240838
+
+     Workunit                                     Stat  Prog    ETA      Dline
+     -------------------------------------------  ----  ------  -------  -------
+  1  2p0oA02_379_4-TONI_MDADpr4sp-5-10-RND9684_0  Run   80.00%   15m48s    4d22h
 --------------------------------------------------------------------------------
-World Community Grid      User: someuser      State: Active
-Tasks: 50         Active: 16      Credit/RAC: 53914/3231
+Rosetta@home      User: username  State: Active
+Tasks: 18         Active: 3       Credit/RAC: 68527/2002
+
+     Workunit                                     Stat  Prog    ETA      Dline
+     -------------------------------------------  ----  ------  -------  -------
+  1  hgfp_high_lddt_171_fold_SAVE_ALL_OUT_908892  Run   86.90%    1h03m    1d18h
+  2  Mini_Protein_binds_IL1R_COVID-19_design6_SA  Run   68.10%    2h39m    1d19h
+  3  hgfp_splitdimer_460_fold_SAVE_ALL_OUT_90847  Run   29.72%    5h42m    1d19h
 --------------------------------------------------------------------------------
-     Workunit                                     Stat  Prog     ETA      Dline
---------------------------------------------------------------------------------
-  1  MIP1_00265053_1409_0                         Run   93.33%   16m27s    9d08h
-  2  MCM1_0157754_0687_0                          Run   93.23%   18m47s    6d06h
-  3  MCM1_0157776_9328_0                          Run   64.36%    1h27m    6d10h
-  4  MIP1_00265646_0966_0                         Run   62.86%   57m14s    9d10h
-  5  MCM1_0157729_5344_1                          Run   61.84%    1h33m    6d10h
-  6  MIP1_00265670_2587_0                         Run   56.67%    1h06m    9d11h
-  7  MIP1_00265670_2033_0                         Run   50.00%    1h17m    9d11h
-  8  MIP1_00265708_0787_1                         Run   45.71%    1h23m    9d11h
-  9  MIP1_00265741_1507_0                         Run   42.50%    1h28m    9d12h
- 10  MIP1_00265687_1765_0                         Run   40.00%    1h32m    9d12h
- 11  MIP1_00265723_0205_0                         Run   40.00%    1h32m    9d12h
- 12  MCM1_0157769_9757_0                          Run   37.22%    2h34m    6d11h
- 13  MIP1_00265745_0662_0                         Run   36.67%    1h37m    9d12h
- 14  MIP1_00265723_0299_0                         Run   20.00%    2h03m    9d12h
- 15  MCM1_0157776_8715_0                          Run   14.76%    3h29m    6d12h
- 16  MCM1_0157729_7533_1                          Run   10.53%    3h39m    6d13h
+World Community Grid      User: username  State: Active
+Tasks: 43         Active: 13      Credit/RAC: 975172/8101
+
+     Workunit                                     Stat  Prog    ETA      Dline
+     -------------------------------------------  ----  ------  -------  -------
+  1  MIP1_00289342_0437_0                         Run   86.67%   29m21s    9d12h
+  2  MIP1_00289403_1006_0                         Run   78.18%   47m37s    9d12h
+  3  MCM1_0161950_7544_1                          Run   75.16%   49m23s    6d12h
+  4  MCM1_0161846_8578_0                          Run   72.92%    1h28m    6d12h
+  5  MCM1_0161939_2531_0                          Run   68.53%    1h03m    6d15h
+  6  MCM1_0161945_9716_0                          Run   59.10%   49m26s    6d15h
+  7  MIP1_00289342_5634_0                         Run   53.33%    1h45m    9d12h
+  8  MIP1_00289276_16981_0                        Run   41.43%    1h14m    9d12h
+  9  MIP1_00289276_16992_0                        Run   41.43%    1h14m    9d12h
+ 10  MIP1_00289276_16902_0                        Run   41.43%    1h14m    9d12h
+ 11  MIP1_00289276_17002_0                        Run   41.43%    1h14m    9d12h
+ 12  MCM1_0161954_4788_0                          Run   21.97%    1h34m    6d15h
+ 13  MCM1_0161859_0528_1                          Run    4.51%    1h55m    6d15h
 ```
 
 To quickly check on your nodes without starting up an interactive
@@ -81,19 +93,18 @@ runtime:
 
 ```
 # farmctl query community
---------------------------------------------------------------
-node01
-WUs in past 24 hours: 157
-Total CPU time used:  14d 01h 34min 59s
-        Min runtime: 00h 15min 06s
-        Max runtime: 11h 32min 13s
-        Avg runtime: 02h 09min 00s
+------------------------------------------------------------------------- node01
+WUs for World Community Grid in past 24 hours: 244
+Total CPU time used:  19d 09h 54min 45s
+        Min runtime: 00h 19min 39s
+        Max runtime: 11h 31min 01s
+        Avg runtime: 01h 54min 34s
 WUs by quintile:
-        <= 02h 30min 31s         74      (47.1%)
-        <= 04h 45min 56s         82      (52.2%)
-        <= 07h 01min 21s         0       (00.0%)
-        <= 09h 16min 46s         0       (00.0%)
-        <= 11h 32min 13s         1       (00.6%)
+        <= 02h 33min 55s         208     (85.2%)
+        <= 04h 48min 11s         35      (14.3%)
+        <= 07h 02min 27s         0       (00.0%)
+        <= 09h 16min 43s         0       (00.0%)
+        <= 11h 31min 01s         1       (00.4%)
 ```
 
 The behavior of `query` can be modified with the following arguments:
@@ -106,10 +117,9 @@ The behavior of `query` can be modified with the following arguments:
 
 ```
 # farmctl query community -t MCM -s 96 -c
---------------------------------------------------------------
-node01
-WUs in past 96 hours: 480
-Total CPU time used:  57d 20h 47min 41s
+------------------------------------------------------------------------- node01
+WUs matching 'MCM' for World Community Grid in past 96 hours: 563
+Total CPU time used:  61d 10h 56min 49s
 ```
 
 If `PROJECT_NAME` is the special value `ALL` (in all caps), then data
@@ -117,10 +127,9 @@ for all of a node's attached projects will be evaluated.
 
 ```
 # farmctl query ALL -c
---------------------------------------------------------------
-node01
-WUs in past 24 hours: 186
-Total CPU time: 23d 08h 02min 32s
+------------------------------------------------------------------------- node01
+WUs for ALL in past 24 hours: 260
+Total CPU time used:  23d 18h 02min 55s
 ```
 
 ### JSON output
