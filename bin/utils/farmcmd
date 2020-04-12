@@ -18,5 +18,4 @@ for node in nodes/node*yml; do
     node=$(basename "${node}" .yml)
     shownotice "${node}"
     ssh "farmer@${node}" "sudo ${1}"
-    echo
 done

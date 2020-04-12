@@ -20,6 +20,7 @@ def printout():
         print(json.dumps(jsondata))
     else:
         for line in report: print(line)
+        print()
 
 
 # set up and handle arguments
@@ -38,7 +39,7 @@ args = parser.parse_args()
 
 # set up our hostname + report banner
 hostname = socket.gethostname()
-banner = ("-" * (77 - len(hostname))) + " " + hostname
+banner = ("-" * (79 - len(hostname))) + " " + hostname
 # initialize the JSON data
 jsondata = { 'host': hostname, 'proj': args.proj, 'wutype':args.wutype, 'span': args.span,
              'matches': None, 'cputime': None, 'err': None }
