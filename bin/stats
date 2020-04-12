@@ -109,7 +109,6 @@ tmpfile = sys.argv.pop(0)
 # handle optional args. sys.argv will arrive with only one arg, due to
 # our calling format.
 for arg in sys.argv[0].split():
-    print(arg)
     if arg == "json":
         wantjson = True
     elif arg == "nopage":
