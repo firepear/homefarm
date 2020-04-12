@@ -106,34 +106,36 @@ wantjson = False
 sys.argv.pop(0)
 tmpfile = sys.argv.pop(0)
 
-# handle optional args
-for arg in sys.argv:
+# handle optional args. sys.argv will arrive with only one arg, due to
+# our calling format.
+for arg in sys.argv[0].split():
+    print(arg)
     if arg == "json":
         wantjson = True
     elif arg == "nopage":
         pass
     else:
         wanthost = arg
-
 #of = open(tmpfile, 'w')
 with open("/homefarm/.boincguikeys.json", 'r') as f:
     hosts = json.load(f)
 
+data = {}
 for host, key in hosts.items():
     if wanthost != "" and host != wanthost:
         continue
+    data[host] = {}
 
-    hosts[host] = {}
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
             s.connect((host, 31416))
         except:
-            of.write("warning: could not connect to '{}' with key '{}'\n".format(host, key))
+            print("warning: could not connect to '{}' with key '{}'\n".format(host, key))
             continue
         # try to auth
         authed = homefarm.auth_conn(s, key)
         if not authed:
-            of.write("warning: could not auth on '{}' with key '{}'\n".format(host, key))
+            print("warning: could not auth on '{}' with key '{}'\n".format(host, key))
             continue
 
         # first, get projects data
@@ -166,7 +168,7 @@ for host, key in hosts.items():
                 pass
             if 'state' not in p:
                 p['state'] = "Active"
-            hosts[host][name] = p
+            data[host][name] = p
 
         # now just grab the task data and stow it. we'll process it
         # later on
@@ -175,7 +177,7 @@ for host, key in hosts.items():
         tasks = ET.fromstring(homefarm.recv_msg(s))
 
     projcount = 0
-    projects = hosts[host]
+    projects = data[host]
     for projname in sorted(projects):
         task_count = 0  # how many tasks in this project
         task_active = 0 # how many active tasks
@@ -220,8 +222,8 @@ for host, key in hosts.items():
                 t['done'] = 0
             # add the task to the list
             ptasks[task.find('name').text] = t
-        hosts[host][projname]['taskcount'] = task_count
-        hosts[host][projname]['taskactive'] = task_active
-        hosts[host][projname]['tasks'] = ptasks
+        data[host][projname]['taskcount'] = task_count
+        data[host][projname]['taskactive'] = task_active
+        data[host][projname]['tasks'] = ptasks
 
-report(tmpfile, hosts, wantjson)
+report(tmpfile, data, wantjson)
