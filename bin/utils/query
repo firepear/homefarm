@@ -12,40 +12,8 @@ import socket
 import sys
 import time
 
+import homefarm
 
-def strtime(time):
-    years = 0
-    days = 0
-    hours = 0
-    mins = 0
-    timestr = ""
-    if time > 31536000:
-        years = int(time / 31536000)
-        time = time - (31536000 * years)
-    if time > 86400:
-        days = int(time / 86400)
-        time = time - (86400 * days)
-    if time > 3600:
-        hours = int(time / 3600)
-        time = time - (3600 * hours)
-    if time > 60:
-        mins = int(time / 60)
-        time = time - (60 * mins)
-    if years > 0:
-        return "{}y {}d {:02d}h {:02d}min {:02d}s".format(years, days, hours, mins, int(time))
-    if days > 0:
-        return "{}d {:02d}h {:02d}min {:02d}s".format(days, hours, mins, int(time))
-    return "{:02d}h {:02d}min {:02d}s".format(hours, mins, int(time))
-
-def printout():
-    if args.json:
-        print(json.dumps(jsondata))
-    else:
-        for line in report: print(line)
-
-
-########################################################################
-# main script begins
 
 # set up and handle arguments
 parser = argparse.ArgumentParser(description='parse BOINC job logs')
@@ -141,7 +109,7 @@ report = []
 
 report.append(banner)
 report.append("WUs in past {} hours: {}".format(args.span, jsondata['matches']))
-report.append("Total CPU time used:  {}".format(strtime(cputime)))
+report.append("Total CPU time used:  {}".format(homefarm.strtime(cputime)))
 if len(matches) == 0 or args.count:
     printout()
     sys.exit(0)
@@ -150,9 +118,9 @@ mintime = min(matches)
 maxtime = max(matches)
 avgtime = sum(matches)/len(matches)
 jsondata['times'] = [ mintime, maxtime, avgtime ]
-report.append("\tMin runtime: {}".format(strtime(mintime)))
-report.append("\tMax runtime: {}".format(strtime(maxtime)))
-report.append("\tAvg runtime: {}".format(strtime(avgtime)))
+report.append("\tMin runtime: {}".format(homefarm.strtime(mintime)))
+report.append("\tMax runtime: {}".format(homefarm.strtime(maxtime)))
+report.append("\tAvg runtime: {}".format(homefarm.strtime(avgtime)))
 if len(matches) < 2:
     printout()
     sys.exit(0)
@@ -176,6 +144,9 @@ for m in matches:
         qcounts[4] += 1
 for i in range(5):
     jsondata['quints'].append([q[i], qcounts[i],  qcounts[i] / len(matches) * 100])
-    report.append("\t<= {}\t {}\t ({:04.1f}%)".format(strtime(q[i]), qcounts[i],
+    report.append("\t<= {}\t {}\t ({:04.1f}%)".format(homefarm.strtime(q[i]), qcounts[i],
                                                       qcounts[i] / len(matches) * 100))
-printout()
+if args.json:
+    print(json.dumps(jsondata))
+else:
+    for line in report: print(line)

@@ -137,7 +137,7 @@ case "${1}" in
             i=0
             for node in "${nodes[@]}"; do
                 node=$(basename "${node}" ".yml")
-                echo -n "$(ssh farmer@${node} sudo query -p ${*} || true)"
+                echo -n "$(ssh farmer@${node} sudo PYTHONPATH='/usr/local/lib:files' query -p ${*} || true)"
                 if [[ "${i}" -lt "$((${#nodes[@]}-1))" ]]; then
                     echo -n ', '
                 fi
@@ -147,7 +147,7 @@ case "${1}" in
         else
             for node in nodes/node*yml; do
                 node=$(basename "${node}" ".yml")
-                ssh "farmer@${node}" "PYTHONPATH='/usr/local/lib:files' sudo query -p ${*}" || true
+                ssh "farmer@${node}" "sudo PYTHONPATH='/usr/local/lib:files' query -p ${*}" || true
             done
         fi
         ;;
