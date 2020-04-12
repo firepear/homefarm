@@ -123,6 +123,50 @@ WUs in past 24 hours: 186
 Total CPU time: 23d 08h 02min 32s
 ```
 
+### JSON output
+
+Some Homefarm commands can generate JSON as well as human-readable
+reports. Currently `query` and `status` can do this.
+
+To get JSON from `query`, add `-j` to your command line. The output
+will be formatted as:
+
+```
+[ { "host": HOSTNAME, "proj": PROJNAME, "wutype": WU_TYPE,
+    "span": HOURS, "matches": WU_COUNT, "cputime": SECONDS,
+    "err": null }, ... ]
+```
+
+The fields mostly map onto the arguments for `query`. If `err` is not
+`null`, then there was an error getting results for that host, and its
+data should be disregarded.
+
+To get JSON from `status`, add `json` to the command line. The
+resulting data will be a dict/map of hosts, each of which contains a
+dict/map of projects, each of which contains data about the project
+and a list of tasks.
+
+```
+{ HOSTNAME1: {
+    PROJNAME: {
+      'url': PROJURL, 'state': PROJSTATE, 'username': USER, 'taskcount': TOTALTASKS, 'taskactive': ACTIVETASKS,
+      'usercredit': USERCRED, userrac: USERRAC, 'hostcred': HOSTCRED, 'hostrac': HOSTRAC,
+      'tasks': {
+        TASKNAME: {
+          'state': BOINCSTATE, 'active': (true|false), 'cpu_eta': ETA_SECS, 'deadline': DEADLINE_EPOCH,
+          'done': DONE_FRAC, 'astate': ACTIVITY_STATE, 'cpu_elapsed': RUNTIME_SECS },
+        TASKNAME2: { ... },
+        ...
+      },
+    },
+    PROJNAME2: { ... },
+    ...
+  },
+  HOSTNAME2: { ... },
+  ...
+}
+```
+
 
 
 ## Keeping the farm up to date
