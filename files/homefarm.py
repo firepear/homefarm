@@ -12,7 +12,8 @@ def auth_conn(s, key):
     Once this function completes successfully, 's' will be fully
     authed and ready to handle requests.
     """
-    s.sendall(b'<auth1/>\003') # send the initial authorization request
+    # send the initial authorization request
+    s.sendall(b'<auth1/>\003')
     # get the reply, stringify it from bytes, strip the trailing
     # ETX, and turn that into a tree
     reply = ET.fromstring(s.recv(1024).decode('utf-8').strip('\003'))
@@ -32,17 +33,17 @@ def auth_conn(s, key):
         return False
 
 def recv_msg(s):
-    """Assemble a BOINC RPC response and convert to a UTF8 string"""
+    """When passed an open socket 's', assemble a BOINC RPC response and
+    convert it to a UTF8 string
+    """
     chunks = []
-    msgend = False
-    while not msgend:
+    # messages terminate with \003 (ETX), so read from the socket
+    # until last byte of the most recent byte object matches
+    while len(chunks) == 0 or chunks[-1][-1] != 3:
         # try to read 4kB
         chunk = s.recv(4096)
         if chunk == b'':
             raise RuntimeError("socket connection broken")
-        if chunk[-1] == 3:
-            # messages terminate with \003
-            msgend = True
         chunks.append(chunk)
     return b''.join(chunks).decode('utf-8').strip('\003')
 
