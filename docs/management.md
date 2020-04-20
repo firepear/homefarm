@@ -130,18 +130,27 @@ Total CPU time used:  23d 18h 02min 55s
 Some Homefarm commands can generate JSON as well as human-readable
 reports. Currently `query` and `status` can do this.
 
+**`query`**
+
+When JSON is requested, output will not be paged.
+
 To get JSON from `query`, add `-j` to your command line. The output
 will be formatted as:
 
 ```
 [ { "host": HOSTNAME, "proj": PROJNAME, "wutype": WU_TYPE,
     "span": HOURS, "matches": WU_COUNT, "cputime": SECONDS,
+    "times": [ MIN, MAX, AVG ],
+    "quints": [ [ Q1_TIME, Q1_COUNT, Q1_PERCENT ], ... Q5 ],
     "err": null }, ... ]
 ```
 
-The fields mostly map onto the arguments for `query`. If `err` is not
-`null`, then there was an error getting results for that host, and its
-data should be disregarded.
+The fields mostly map onto the arguments for `query`. The rest can be
+seen in its output. If `err` is not `null`, then there was an error getting results for
+that host and its data should be disregarded. The value of `err` will
+be the error message.
+
+**`status`**
 
 To get JSON from `status`, add `json` to the command line. The
 resulting data will be a dict/map of hosts, each of which contains a
@@ -168,8 +177,6 @@ and a list of tasks.
   ...
 }
 ```
-
-When JSON is requested, output will not be paged.
 
 Running `~/homefarm/farmctl status-only` will give a status report on
 all hosts, in JSON format, rather than starting a `farmctl`

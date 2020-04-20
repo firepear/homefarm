@@ -4,6 +4,23 @@
 # query - parse and operate on BOINC job logs
 #
 
+# joblog format is 13 fields per line. 6 of those are text field names.
+#
+#  00
+#  log timestamp in Unix epoch format
+#  01  02
+# 'ue' estimated run time of the work unit
+#  03  04
+# 'ct' actual CPU time
+#  05  06
+# 'fe' estimated flops
+#  07  08
+# 'nm' work unit name
+#  09  10
+# 'et' elapsed time (work unit wall clock time)
+#  11  12
+# 'es' status (rc)
+
 import argparse
 import glob
 import json
@@ -15,12 +32,37 @@ import xml.etree.ElementTree as ET
 
 import homefarm
 
-def printout():
+def report(d):
     if args.json:
-        print(json.dumps(jsondata))
+        print(json.dumps(d))
     else:
-        for line in report: print(line)
+        # print host banner
+        print(("-" * (79 - len(d['host']))) + " " + d['host'])
+        # print formatted report bits
+        #
+        # first the WU count and total elapsed time. if there are no
+        # matches, of if we've been called with '-c', we're done.
+        if args.wutype != None:
+            print(f"WUs matching '{d['wutype']}' for {data['proj']} in past {d['span']} hours: {data['matches']}")
+        else:
+            print(f"WUs for {data['proj']} in past {d['span']} hours: {data['matches']}")
+        print(f"Total CPU time used:  {homefarm.strtime(d['cputime'])}")
+        if d['matches'] == 0 or args.count:
+            sys.exit(0)
+        # we're still here, so print the mix/max/avg runtimes
+        print(f"\tMin runtime: {homefarm.strtime(d['times'][0])}")
+        print(f"\tMax runtime: {homefarm.strtime(d['times'][1])}")
+        print(f"\tAvg runtime: {homefarm.strtime(d['times'][2])}")
+        if d['matches'] < 5:
+            sys.exit(0)
+        # and we have more than 5 results, so show the quintile
+        # bucket data
+        print("WUs by quintile:")
+        for i in range(5):
+            print(f"\t<= {homefarm.strtime(d['quints'][i][0])}\t {d['quints'][i][1]}\t ({d['quints'][i][2]:04.1f}%)")
+        # finally, a blank line for good output spacing
         print()
+    sys.exit(0)
 
 
 # set up and handle arguments
@@ -37,16 +79,15 @@ parser.add_argument('-j', '--json', dest="json", action="store_true",
                     help="output data as JSON")
 args = parser.parse_args()
 
-# set up our hostname + report banner
-hostname = socket.gethostname()
-banner = ("-" * (79 - len(hostname))) + " " + hostname
+
 # initialize the JSON data
-jsondata = { 'host': hostname, 'proj': args.proj, 'wutype':args.wutype, 'span': args.span,
-             'matches': None, 'cputime': None, 'err': None }
+data = { 'host': socket.gethostname(), 'proj': args.proj,
+         'wutype':args.wutype, 'span': args.span, 'matches': 0,
+         'cputime': 0, 'times': [], 'quints': [], 'err': None }
 # calculate our timespan for log matches
 timelimit = int(time.mktime(time.localtime()) - (3600 * args.span))
 
-# turn args.proj into a set of joblog filepaths (but only one for now)
+# turn args.proj into a set of joblog filepaths
 joblogs = []
 if args.proj == "ALL":
     joblogs = glob.glob("/var/lib/boinc/job_log_*.txt")
@@ -54,45 +95,40 @@ else:
     globpath = "/var/lib/boinc/job_log_*{}*.txt".format(args.proj)
     joblogs = glob.glob(globpath)
     if len(joblogs) == 0:
-        if args.json:
-            jsondata['err'] = "no matching attached projects"
-            print(json.dumps(jsondata))
-        else:
-            print("{}: Can't find any attached projects matching '{}'".format(hostname, args.proj))
-        sys.exit(0)
+        data['err'] = f'no matching attached projects: {args.proj}'
+        report(data)
     if len(joblogs) > 1:
-        if args.json:
-            jsondata['err'] = "multiple matching projects; must have exactly one"
-            print(json.dumps(jsondata))
-        else:
-            print("{}: Found multiple projects matching '{}'; must have exactly one match".format(hostname, args.proj))
-        sys.exit(0)
+        data['err'] = f"multiple projects matching {args.proj}; must have exactly one"
+        report(data)
 
-# get project info, so we can use proper, repeatable project names
-# rather than the string we were initially handed
-key=""
-with open('/var/lib/boinc/gui_rpc_auth.cfg', 'r') as f:
-    key=f.readline()
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    try:
-        s.connect((hostname, 31416))
-    except:
-        print("warning: could not connect to '{}' with key '{}'\n".format(hostname, key))
-        sys.exit(0)
-    # try to auth
-    authed = homefarm.auth_conn(s, key)
-    if not authed:
-        print("warning: could not auth on '{}' with key '{}'\n".format(hostname, key))
-        sys.exit(0)
-    req = "<boinc_gui_rpc_request><get_project_status/></boinc_gui_rpc_request>\003"
-    s.sendall(req.encode('utf-8'))
-    reply = ET.fromstring(homefarm.recv_msg(s))
-    for p in reply.iter('project'):
-        url = p.find('master_url').text
-        if args.proj in url:
-            jsondata['proj'] = p.find('project_name').text
-        else:
-            continue
+
+# if 'ALL' wasn't requested then get project info, so we can use
+# proper, repeatable project names rather than the string we were
+# initially handed
+if args.proj != "ALL":
+    key=""
+    with open('/var/lib/boinc/gui_rpc_auth.cfg', 'r') as f:
+        key=f.readline()
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.connect((data['host'], 31416))
+        except:
+            data['err'] = "could not connect with key '{key}'"
+            report(data)
+        # try to auth
+        authed = homefarm.auth_conn(s, key)
+        if not authed:
+            data['err'] = "could not auth with key '{key}'"
+            report(data)
+        req = "<boinc_gui_rpc_request><get_project_status/></boinc_gui_rpc_request>\003"
+        s.sendall(req.encode('utf-8'))
+        reply = ET.fromstring(homefarm.recv_msg(s))
+        for p in reply.iter('project'):
+            url = p.find('master_url').text
+            if args.proj in url:
+                data['proj'] = p.find('project_name').text
+            else:
+                continue
 
 
 
@@ -100,33 +136,17 @@ matches = []
 cputime = 0
 f = None
 
-# The zeroth column is the log time (Unix style -- milliseconds since 1/1/1970 UTC)
-# 1  2
-# ue estimated run time of the work unit
-# 3  4
-# ct actual CPU time
-# 5  6
-# fe estimated flops
-# 7  8
-# nm work unit name
-# 9  10
-# et elapsed time (work unit wall clock time)
-# 11 12
-# es status (rc)
 for joblog in joblogs:
     try:
         f = open(joblog, 'r')
     except:
         if args.json:
-            jsondata['err'] = "not attached"
-            print(json.dumps(jsondata))
-        else:
-            print("\tNot attached")
-        sys.exit(0)
+            data['err'] = f"couldn't open joblog {r}"
+            report(data)
 
     for line in f:
         line = line.rstrip("\n")
-        # split line into fields: see above
+        # split line into fields: see top comment for record layout
         fields = line.split()
         # skip this line if it's not within our timespan
         if int(fields[0]) < timelimit:
@@ -135,55 +155,46 @@ for joblog in joblogs:
         if args.wutype != None:
             if args.wutype not in fields[8]:
                 continue
+        # match! turn the elapsed time into a rounded integer
         time = round(float(fields[4]))
+        # add the result to our list of matches (we care about the
+        # timings for future calculations, not the WU itself)
         matches.append(time)
+        # and accumulate the time into a total
         cputime += time
 
-jsondata['matches'] = len(matches)
-jsondata['cputime'] = cputime
-report = []
+# capture the number of matches and total elapsed time
+data['matches'] = len(matches)
+data['cputime'] = cputime
+if data['matches'] > 0:
+    # calculate min/max/avg times
+    mintime = min(matches)
+    maxtime = max(matches)
+    avgtime = sum(matches)/len(matches)
+    data['times'] = [ mintime, maxtime, avgtime ]
+    # calculate the data for quintuple timing buckets
+    # qspan is the width/duration of a bucket, in seconds
+    qspan = int((max(matches) -  min(matches)) / 5)
+    # q[] just pre-calculates the timings of the individual quintiles,
+    # since those are used in more than one place in the code that
+    # follows
+    q = [ min(matches) + qspan, min(matches) + qspan * 2, min(matches) + qspan * 3,
+          min(matches) + qspan * 4, max(matches) ]
+    # qcounts is the count per quintile. counting happens right after
+    qcounts = [0, 0, 0, 0, 0]
+    for m in matches:
+        if m >= min(matches) and m < q[0]:
+            qcounts[0] += 1
+        elif m >= q[0] and m < q[1]:
+            qcounts[1] += 1
+        elif m >= q[1] and m < q[2]:
+            qcounts[2] += 1
+        elif m >= q[2] and m < q[3]:
+            qcounts[3] += 1
+        else:
+            qcounts[4] += 1
+    # now we store the timing, count, and percentage of total for each quint
+    for i in range(5):
+        data['quints'].append( [ q[i], qcounts[i],  qcounts[i] / len(matches) * 100 ] )
 
-report.append(banner)
-if args.wutype != None:
-    report.append("WUs matching '{}' for {} in past {} hours: {}".format(args.wutype, jsondata['proj'], args.span, jsondata['matches']))
-else:
-    report.append("WUs for {} in past {} hours: {}".format(jsondata['proj'], args.span, jsondata['matches']))
-report.append("Total CPU time used:  {}".format(homefarm.strtime(cputime)))
-if len(matches) == 0 or args.count:
-    printout()
-    sys.exit(0)
-
-mintime = min(matches)
-maxtime = max(matches)
-avgtime = sum(matches)/len(matches)
-jsondata['times'] = [ mintime, maxtime, avgtime ]
-report.append("\tMin runtime: {}".format(homefarm.strtime(mintime)))
-report.append("\tMax runtime: {}".format(homefarm.strtime(maxtime)))
-report.append("\tAvg runtime: {}".format(homefarm.strtime(avgtime)))
-if len(matches) < 2:
-    printout()
-    sys.exit(0)
-
-jsondata['quints'] = []
-report.append("WUs by quintile:")
-qspan = int((max(matches) -  min(matches)) / 5)
-q = [ min(matches) + qspan, min(matches) + qspan * 2, min(matches) + qspan * 3,
-      min(matches) + qspan * 4, max(matches) ]
-qcounts = [0, 0, 0, 0, 0]
-for m in matches:
-    if m >= min(matches) and m < q[0]:
-        qcounts[0] += 1
-    elif m >= q[0] and m < q[1]:
-        qcounts[1] += 1
-    elif m >= q[1] and m < q[2]:
-        qcounts[2] += 1
-    elif m >= q[2] and m < q[3]:
-        qcounts[3] += 1
-    else:
-        qcounts[4] += 1
-for i in range(5):
-    jsondata['quints'].append([q[i], qcounts[i],  qcounts[i] / len(matches) * 100])
-    report.append("\t<= {}\t {}\t ({:04.1f}%)".format(homefarm.strtime(q[i]), qcounts[i],
-                                                      qcounts[i] / len(matches) * 100))
-
-printout()
+report(data)

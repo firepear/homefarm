@@ -1,3 +1,17 @@
+2.5.1 - 2020-04-xx
+--------------------------------------------------------------------
+
+    * `query` refactored to avoid data duplication arising from hasty
+      JSON implementation
+
+    * JSON returned by `query` is now invariant, always including
+      `times` and `quints` data
+
+    * Much improved documentation in `query` code
+
+    * Simplification of socket reading code
+
+
 2.5.0 - 2020-04-12
 --------------------------------------------------------------------
 

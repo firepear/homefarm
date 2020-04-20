@@ -46,7 +46,7 @@ def format_dl(dl):
         return "{:3d}m{:02d}s".format(m, s)
 
 
-# report() is the report generator function. is JSON is requested, it
+# report() is the report generator function. if JSON is requested, it
 # simply dumps the collected data, as-is. otherwise, a human-readable
 # report of all active tasks is created
 def report(tmpfile, hosts, wantjson):
