@@ -130,9 +130,9 @@ Total CPU time used:  23d 18h 02min 55s
 Some Homefarm commands can generate JSON as well as human-readable
 reports. Currently `query` and `status` can do this.
 
-**`query`**
-
 When JSON is requested, output will not be paged.
+
+**`query`**
 
 To get JSON from `query`, add `-j` to your command line. The output
 will be formatted as:
