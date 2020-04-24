@@ -1,4 +1,4 @@
-2.5.1 - 2020-04-xx
+2.5.1 - 2020-04-24
 --------------------------------------------------------------------
 
     * `query` refactored to avoid data duplication arising from hasty
