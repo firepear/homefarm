@@ -1,3 +1,11 @@
+2.5.2 - 2020-04-xx
+--------------------------------------------------------------------
+
+    * Fixed two error cases in `status` that did not return JSON
+
+    * JSON output from `status` now always includes `err`
+
+
 2.5.1 - 2020-04-24
 --------------------------------------------------------------------
 

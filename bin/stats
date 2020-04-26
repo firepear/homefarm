@@ -123,18 +123,18 @@ data = {}
 for host, key in hosts.items():
     if wanthost != "" and host != wanthost:
         continue
-    data[host] = {}
+    data[host] = {'err': None}
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
             s.connect((host, 31416))
         except:
-            print("warning: could not connect to '{}' with key '{}'\n".format(host, key))
+            data[host]['err'] = f"could not connect to '{host}' with key '{key}'"
             continue
         # try to auth
         authed = homefarm.auth_conn(s, key)
         if not authed:
-            print("warning: could not auth on '{}' with key '{}'\n".format(host, key))
+            data[host]['err'] = f"could not auth on '{host}' with key '{key}'"
             continue
 
         # first, get projects data

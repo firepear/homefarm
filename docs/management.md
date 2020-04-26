@@ -132,6 +132,10 @@ reports. Currently `query` and `status` can do this.
 
 When JSON is requested, output will not be paged.
 
+If the value of `err` in JSON output is not `null`, then there was an
+error getting results for that host and its data should be
+disregarded. The value of `err` will be the error message.
+
 **`query`**
 
 To get JSON from `query`, add `-j` to your command line. The output
@@ -146,9 +150,7 @@ will be formatted as:
 ```
 
 The fields mostly map onto the arguments for `query`. The rest can be
-seen in its output. If `err` is not `null`, then there was an error getting results for
-that host and its data should be disregarded. The value of `err` will
-be the error message.
+seen in its output. 
 
 **`status`**
 
@@ -159,6 +161,7 @@ and a list of tasks.
 
 ```
 { HOSTNAME1: {
+    "err": null,
     PROJNAME1: {
       'url': PROJURL, 'state': PROJSTATE, 'username': USER, 'taskcount': TOTALTASKS, 'taskactive': ACTIVETASKS,
       'usercredit': USERCRED, userrac: USERRAC, 'hostcred': HOSTCRED, 'hostrac': HOSTRAC,
