@@ -5,6 +5,8 @@
 
     * JSON output from `status` now always includes `err`
 
+    * `status` now uses f-strings
+
 
 2.5.1 - 2020-04-24
 --------------------------------------------------------------------

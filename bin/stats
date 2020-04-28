@@ -61,7 +61,7 @@ def report(tmpfile, hosts, wantjson):
         if hostcount > 0:
             of.write("\n\n\n")
         of.write("================================================================================\n")
-        of.write("{}\n".format(host))
+        of.write(f"{host}\n")
         of.write("================================================================================\n")
         if len(projects) == 0:
             of.write("No work from this project (yet?)\n")
@@ -69,11 +69,13 @@ def report(tmpfile, hosts, wantjson):
 
         projcount = 0
         for projname, p in projects.items():
+            if projname == 'err':
+                continue
             # print a summary for the project
             if projcount > 0:
                 of.write("--------------------------------------------------------------------------------\n")
-            of.write("{}\t  User: {}\t  State: {}\n".format(projname, p['username'], p['state']))
-            of.write("Tasks: {}\t  Active: {}\t  Credit/RAC: {}/{}\n".format(p['taskcount'], p['taskactive'], int(p["hostcred"]), int(p["hostrac"])))
+            of.write(f"{projname}\t  User: {p['username']}\t  State: {p['state']}\n")
+            of.write(f"Tasks: {p['taskcount']}\t  Active: {p['taskactive']}\t  Credit/RAC: {int(p['hostcred'])}/{int(p['hostrac'])}\n")
             projcount += 1
             # if there are no active tasks for this project, don't do
             # detail reporting
@@ -89,7 +91,7 @@ def report(tmpfile, hosts, wantjson):
             for name, t in {k: v for k, v in sorted(p['tasks'].items(), reverse=True, key=lambda item: item[1]['done'])}.items():
                 if not t['active']:
                     continue
-                of.write("{:3d}  {:43}  {:4}  {:6.2%}  {}  {}\n".format(wunum, name[:43], t['astate'], t['done'], format_eta(t['cpu_eta']), format_dl(t['deadline'])))
+                of.write(f"{wunum:3d}  {name[:43]:43}  {t['astate']:4}  {t['done']:6.2%}  {format_eta(t['cpu_eta'])}  {format_dl(t['deadline'])}\n")
                 wunum += 1
         hostcount += 1
     of.close()
@@ -178,6 +180,9 @@ for host, key in hosts.items():
     projcount = 0
     projects = data[host]
     for projname in sorted(projects):
+        if projname == 'err':
+            continue
+
         task_count = 0  # how many tasks in this project
         task_active = 0 # how many active tasks
         wunum = 1       # counter for printing task details
