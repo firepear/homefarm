@@ -114,7 +114,7 @@ case "${1}" in
         localip=$(awk 'END{print $1}' /etc/hosts)
         echo
         echo "Welcome to homefarm ${VERSION}"
-        echo "    Local IP is ${localip}"
+        echo "    Container IP is ${localip}"
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
         echo
