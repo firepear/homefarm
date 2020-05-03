@@ -3,7 +3,9 @@
 # accumulates project statistics
 
 import json
+import sqlite3
 import sys
+import time
 
 
 def strtime(time):
@@ -31,17 +33,92 @@ def strtime(time):
     return "{:02d}h {:02d}min {:02d}s".format(hours, mins, int(time))
 
 
-t = { 'wu': 0, 'time': 0}
+def setup_db(c):
+    c.execute("CREATE TABLE IF NOT EXISTS projects (id INTEGER PRIMARY KEY, name TEXT, last_update INTEGER)")
+    c.execute("CREATE TABLE IF NOT EXISTS stats (projectid INTEGER, host TEXT, wu INTEGER, time INTEGER)")
 
+
+def get_updates(c):
+    rows = c.fetchall()
+    if len(rows) == 0:
+        print("No data")
+        return
+    print("Hours since last update:")
+    now = int(time.time())
+    for row in rows:
+        h = int((now - row[2]) / 3600)
+        print(f"\t{row[1]}:\t{h}")
+
+
+def show_totals(p, c):
+    for proj in sorted(p.keys()):
+        print(proj)
+        d = c.execute("SELECT sum(wu), sum(time) FROM stats WHERE projectid=?", [ p[proj] ]).fetchone()
+        print(f"    Total CPU time: {strtime(d[1])}")
+        print(f"    Total WUs returned: {d[0]}")
+
+
+# open db connection
+conn = sqlite3.connect('projectstats.db')
+c = conn.cursor()
+
+# try a select. if it fails, we need to create the tables.
+try:
+    # pull double duty: if this succeeds and we've been asked for the
+    # last updated stats, we're ready to go
+    c.execute("SELECT * FROM projects ORDER BY name")
+except:
+    setup_db(c)
+    c.execute("SELECT * FROM projects ORDER BY name")
+
+# if we're being asked for update stats, handle that
+if len(sys.argv) > 1 and sys.argv[1] == "-u":
+    get_updates(c)
+    sys.exit(0)
+# no? then it's time to generate some stats. first thing: turn the
+# list of projects into a map
+projects = { proj[1]: proj[0] for proj in c.fetchall() }
+# if we're being asked for totals, handle that
+if len(sys.argv) > 1 and sys.argv[1] == "-t":
+    show_totals(projects, c)
+    sys.exit(0)
+
+
+# ask for data
 line = input('> ')
+# vivify the data and scan it
 data = json.loads(line)
+err = False
+for rec in data:
+    # set err and display problem if an error is found
+    if rec['err'] is not None:
+        print(f"{rec['host']}: {rec['err']}")
+        err = True
+        continue
+    # add new projects if we find them
+    if rec['proj'] not in projects:
+        yn = input(f"found unknown project '{rec['proj']}'. add it? (y/N)> ")
+        if yn.lower().startswith('n') or yn == "":
+            print("unknown, unadded projects are an error. exiting")
+            sys.exit(0)
+        c.execute("INSERT INTO projects VALUES (NULL, ?, ?)", [rec['proj'], 0])
+        conn.commit()
+        projects[rec['proj']] = c.lastrowid
+
+# if there were errors, ask if the user wishes to proceed
+if err:
+    yn = input("\nThere were errors encountered in the data. halt? (Y/n)> ")
+    if yn.lower().startswith('y') or yn == "":
+        print("exiting")
+        sys.exit(0)
+
+# either there were no errors, or the user wishes to continue
 for rec in data:
     if rec['err'] is not None:
         continue
+    c.execute("INSERT INTO stats VALUES (?,?,?,?)",
+              [ projects[rec['proj']], rec['host'], rec['matches'], rec['cputime'] ])
+    c.execute("UPDATE projects SET last_update=? WHERE id=?", [ int(time.time()), projects[rec['proj']] ])
+    conn.commit()
 
-    t['wu'] += rec['matches']
-    t['time'] += rec['cputime']
-    t['proj'] = rec['proj']
-
-print("\nWUs for {}: {}".format(t['proj'], t['wu']))
-print("Total time: {}".format(strtime(t['time'])))
+show_totals(projects, c)
