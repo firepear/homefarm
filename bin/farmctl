@@ -37,6 +37,8 @@ function hf_init() {
         mkdir -p /homefarm/nodes
         # create local package cache dir
         mkdir -p /homefarm/srv/arch
+        # init project stats db
+        ./bin/utils/pstracker -u >> /dev/null
     fi
 
     # copy ssh pubkey for distribution to nodes
