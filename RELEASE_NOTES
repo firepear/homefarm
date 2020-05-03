@@ -4,6 +4,8 @@
     * Initial work done to support ARM machines, and possible future
       projects
 
+    * `pstracker` util now uses a sqlite DB to track stats
+
 
 2.5.2 - 2020-05-02
 --------------------------------------------------------------------
