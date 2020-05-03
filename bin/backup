@@ -6,14 +6,15 @@ cd /homefarm
 
 # no arguments: create tarball
 if [[ "${1}" == "" ]]; then
-    tar zcvf ${ARCHIVE} ./.ssh \
+    tar zcvf ${ARCHIVE} $(ls ./.ssh \
         ./.boincguikeys.json \
         ./.current_tag \
         ./.mirror_url \
         ./farm.cfg \
         ./nodes/ \
+        ./projstats.db \
         ./srv/pacman.conf \
-        ./srv/mirrorlist >> /dev/null
+        ./srv/mirrorlist) >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
     exit
 fi
