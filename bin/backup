@@ -12,7 +12,7 @@ if [[ "${1}" == "" ]]; then
         ./.mirror_url \
         ./farm.cfg \
         ./nodes/ \
-        ./projstats.db \
+        ./projectstats.db \
         ./srv/pacman.conf \
         ./srv/mirrorlist >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
