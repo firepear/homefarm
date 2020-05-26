@@ -1,6 +1,7 @@
 #!/bin/bash
 
 LOCALREPO="/homefarm/srv/arch"
+DEVMODE="false"
 
 update_homefarm() {
     # if we have a stored latest tag, read it in as current
@@ -21,14 +22,18 @@ update_homefarm() {
     if [[ "${CURRENT_TAG}" == "${NEWEST_TAG}" ]]; then
         # if tags match, do nothing
         git checkout master >> /dev/null 2>&1
-        git checkout "${NEWEST_TAG}" >> /dev/null 2>&1
+        if [[ "${DEVMODE}" == "false" ]]; then
+            git checkout "${NEWEST_TAG}" >> /dev/null 2>&1
+        fi
         return
     fi
 
     shownotice "New Homefarm release: ${NEWEST_TAG}"
     git checkout master
     git pull
-    git checkout "${NEWEST_TAG}"
+    if [[ "${DEVMODE}" == "false" ]]; then
+        git checkout "${NEWEST_TAG}"
+    fi
 
     # cache the new tag name and set repo update flag
     echo "${NEWEST_TAG}" > ./.current_tag
@@ -66,8 +71,8 @@ EOF
 fi
 
 # set dev mode, if requested
-if [[ "${1}" == "devmode" ]]; then
-    devmode="true"
+if [[ "${1}" == "DEVMODE" ]]; then
+    DEVMODE="true"
     shift
 fi
 
@@ -102,7 +107,7 @@ fi
 NODES=( ./nodes/*yml )
 NODE=$(basename "${NODES[0]}" .yml)
 
-if [[ "${devmode}" != "true" ]]; then
+if [[ "${DEVMODE}" == "false" ]]; then
     update_homefarm "${0}"
 fi
 
