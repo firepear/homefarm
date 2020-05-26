@@ -22,18 +22,14 @@ update_homefarm() {
     if [[ "${CURRENT_TAG}" == "${NEWEST_TAG}" ]]; then
         # if tags match, do nothing
         git checkout master >> /dev/null 2>&1
-        if [[ "${DEVMODE}" == "false" ]]; then
-            git checkout "${NEWEST_TAG}" >> /dev/null 2>&1
-        fi
+        git checkout "${NEWEST_TAG}" >> /dev/null 2>&1
         return
     fi
 
     shownotice "New Homefarm release: ${NEWEST_TAG}"
     git checkout master
     git pull
-    if [[ "${DEVMODE}" == "false" ]]; then
-        git checkout "${NEWEST_TAG}"
-    fi
+    git checkout "${NEWEST_TAG}"
 
     # cache the new tag name and set repo update flag
     echo "${NEWEST_TAG}" > ./.current_tag
