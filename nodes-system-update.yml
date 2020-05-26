@@ -4,6 +4,7 @@
   - name: Diff Homefarm and installed packages
     shell:
       cmd: grep -v -f /homefarm/srv/arch/nodepkgs.txt /homefarm/files/pkgs.txt
+    ignore_errors: yes
     register: newpkgs
 
 - hosts: compute_nodes
