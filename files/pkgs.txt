@@ -136,6 +136,7 @@ python-yaml
 readline
 sed
 shadow
+smartmontools
 sqlite
 sudo
 systemd
