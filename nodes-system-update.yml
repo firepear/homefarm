@@ -2,8 +2,12 @@
 - hosts: controller
   tasks:
   - name: Diff Homefarm and installed packages
-    action: shell grep -v -f /homefarm/srv/arch/nodepkgs.txt  /homefarm/files/pkgs.txt
+    shell:
+      cmd: grep -v -f /homefarm/srv/arch/nodepkgs.txt /homefarm/files/pkgs.txt
     register: newpkgs
+  - name: Show pkgs
+    debug:
+      msg: "{{ newpkgs.stdout_lines }}"
 
 - hosts: compute_nodes
   remote_user: farmer
@@ -33,6 +37,5 @@
   - name: Install new Homefarm packages
     become: true
     pacman:
-      name: "{{ item }}"
+      name: "{{ hostvars['localhost'].newpkgs.stdout_lines }}"
       state: present
-    with_items: "{{ newpkgs.stdout_lines }}"
