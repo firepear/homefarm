@@ -1,5 +1,6 @@
 ---
 - hosts: controller
+  tasks:
   - name: Diff Homefarm and installed packages
     action: shell grep -v -f /homefarm/srv/arch/nodepkgs.txt  /homefarm/files/pkgs.txt
     register: newpkgs
