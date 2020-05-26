@@ -69,6 +69,7 @@ fi
 # set dev mode, if requested
 if [[ "${1}" == "--devmode" ]]; then
     DEVMODE="true"
+    rm /homefarm/srv/arch/prevmd5
     echo "DEVMODE enabled"
     shift
 fi
@@ -122,7 +123,7 @@ if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
     fi
 fi
 
-if [[ "${localrepo_updated}" == "true" ]]; then
+if [[ "${localrepo_updated}" == "true" ]] && [[ "${DEVMODE}" == "false" ]]; then
     shownotice "Rebooting compute nodes"
     for node in nodes/*yml; do
         ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
