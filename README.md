@@ -29,9 +29,6 @@ There are a few assumptions:
 * 2020-04-24: v2.5.1: Refactoring and bugfixes in `query` and networking
 * 2020-04-12: v2.5.0: `status` and `query` can now output JSON
 * 2020-03-22: v2.4.3: `query` now returns total elapsed CPU time for matching WUs
-* 2020-03-21: v2.4.2: `query` can operate across all projects
-* 2020-03-19: v2.4.1: Changed playbook semantics to fix bug cause by
-  file move. Scripts now pushed to nodes with every update.
 
 See the [Release
 notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
