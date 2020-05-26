@@ -67,8 +67,9 @@ EOF
 fi
 
 # set dev mode, if requested
-if [[ "${1}" == "DEVMODE" ]]; then
+if [[ "${1}" == "--devmode" ]]; then
     DEVMODE="true"
+    echo "DEVMODE enabled"
     shift
 fi
 
