@@ -5,9 +5,6 @@
     shell:
       cmd: grep -v -f /homefarm/srv/arch/nodepkgs.txt /homefarm/files/pkgs.txt
     register: newpkgs
-  - name: Show pkgs
-    debug:
-      msg: "{{ newpkgs.stdout_lines }}"
 
 - hosts: compute_nodes
   remote_user: farmer
@@ -31,11 +28,12 @@
     pacman:
       update-cache: yes
       upgrade: yes
-  - name: Clear package cache
-    become: true
-    shell: yes | pacman -Scc
   - name: Install new Homefarm packages
     become: true
     pacman:
       name: "{{ hostvars['localhost'].newpkgs.stdout_lines }}"
       state: present
+    when: hostvars['localhost'].newpkgs.stdout != ""
+  - name: Clear package cache
+    become: true
+    shell: yes | pacman -Scc
