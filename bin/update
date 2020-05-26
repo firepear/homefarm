@@ -69,7 +69,7 @@ fi
 # set dev mode, if requested
 if [[ "${1}" == "--devmode" ]]; then
     DEVMODE="true"
-    rm /homefarm/srv/arch/prevmd5
+    rm -f /homefarm/srv/arch/prevmd5
     echo "DEVMODE enabled"
     shift
 fi
