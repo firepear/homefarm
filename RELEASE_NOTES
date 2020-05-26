@@ -1,6 +1,15 @@
 2.6.0 - 2020-05-xx
 --------------------------------------------------------------------
 
+    * Added `smartmontools` to initial packages list
+
+    ? Initial package list and first node package list are now merged
+      when `farmctl update` is run, so that the localrepo catches
+      updates to the init package list
+
+    ? Packages which are in initial package list but not in the first
+      node's package list are now deployed to nodes on update
+
     * Initial work done to support ARM machines, and possible future
       projects
 

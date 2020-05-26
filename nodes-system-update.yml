@@ -21,6 +21,15 @@
     pacman:
       update-cache: yes
       upgrade: yes
+  - name: Diff Homefarm and installed packages
+    local_action: shell grep -v -f /homefarm/srv/arch/nodepkgs.txt  /homefarm/files/pkgs.txt
+    register: newpkgs
+  - name: Install new Homefarm packages
+    become: true
+    pacman:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ newpkgs.results }}"
   - name: Clear package cache
     become: true
     shell: yes | pacman -Scc
