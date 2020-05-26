@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOCALREPO="/homefarm/srv/arch"
+LOCALREPO="/homefarm/srv/homefarm/arch"
 DEVMODE="false"
 
 update_homefarm() {

@@ -1,3 +1,10 @@
+2.7.0 - 2020-0x-xx
+--------------------------------------------------------------------
+
+    * Initial work done to support ARM machines, and possible future
+      projects
+
+
 2.6.0 - 2020-05-26
 --------------------------------------------------------------------
 
@@ -9,9 +16,6 @@
 
     * Packages which are in initial package list but not in the first
       node's package list are now deployed to nodes on update
-
-    * Initial work done to support ARM machines, and possible future
-      projects
 
     * `pstracker` util now uses a sqlite DB to track stats
 

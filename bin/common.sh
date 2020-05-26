@@ -53,13 +53,15 @@ hf_fetch() {
 }
 
 update_localrepo() {
-    repodir=${1}
+    arch=$(uname -m)
+    repodir="${1}/${arch}"
     mirrorurl=${2}
     firstnode=${3}
+
     # grab core db file from mirror and test it against the last
     # hash. do nothing if they match.
     cd "${repodir}" || exit
-    hf_fetch "${mirrorurl}/core/os/x86_64/core.db.tar.gz"
+    hf_fetch "${mirrorurl}/core/os/${arch}/core.db.tar.gz"
     coremd5=$(md5sum core.db.tar.gz)
     if [[ -e "prevmd5" ]]; then
         prevmd5=$(cat prevmd5)
