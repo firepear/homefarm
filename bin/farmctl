@@ -6,10 +6,30 @@
 
 set -e
 
+declare -A FP_CONFIG
+HTTPDIR="/homefarm/srv/homefarm"
+
+
 # hf_init takes the place of the old control-install script. it
 # handles the initial node setup, other than package install (which is
 # done by the docker build)
 function hf_init() {
+    if [[ ! -e /homefarm/.fpconfig.yaml ]]; then
+        mv /homefarm/files/fp_hf_config.yaml
+    fi
+    source /homefarm/bin/common.sh
+    fp_parseconfig /homefarm/.fpconfig.yaml
+    cd "${FP_CONFIG[rootdir]}"
+
+    shownotice "Initializing Arch source repo URL"
+    if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
+        MIRROR_URL=$(gutcheck "URL of remote repo (e.g. http://mirrors.ocf.berkeley.edu/archlinux/)")
+        sed -i -e "'s/HF_MIRRORURL_UNSET/${MIRROR_URL}/'" /homefarm/.fpconfig.yaml
+        fp_parseconfig /homefarm/.fpconfig.yaml
+    else
+        echo "Skipping; already configured"
+    fi
+
     # generate ssh key
     shownotice "Generating SSH configuration for Ansible"
     if [[ -e /root/.ssh/id_farmer ]]; then
@@ -25,7 +45,7 @@ function hf_init() {
 
     # do local files and httpd setup
     shownotice "Configuring Homefarm installer webserver"
-    if [[ -e /homefarm/srv/pacman.conf ]]; then
+    if [[ -e "${HTTPDIR}/pacman.conf" ]]; then
         echo "Skipping; already configured"
     else
         HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
@@ -42,22 +62,15 @@ function hf_init() {
     fi
 
     # copy ssh pubkey for distribution to nodes
-    cp /homefarm/.ssh/id_farmer.pub /homefarm/srv
+    cp /homefarm/.ssh/id_farmer.pub "${HTTPDIR}"
     # symlink install/setup scripts
-    ln -fs /homefarm/bin/node-install /homefarm/srv
-    ln -fs /homefarm/bin/node-setup /homefarm/srv
-    ln -fs /homefarm/bin/common.sh /homefarm/srv
-    ln -fs /homefarm/bin/util/fix-wlan0 /homefarm/srv
+    ln -fs /homefarm/bin/node-install "${HTTPDIR}"
+    ln -fs /homefarm/bin/node-setup "${HTTPDIR}"
+    ln -fs /homefarm/bin/common.sh "${HTTPDIR}"
+    ln -fs /homefarm/bin/util/fix-wlan0 "${HTTPDIR}"
 
     shownotice "Initializing local package mirror"
-    if [[ -e /homefarm/.mirror_url ]]; then
-        echo "Skipping; already configured"
-    else
-        MIRROR_URL=$(gutcheck "URL of remote repo (e.g. http://mirrors.ocf.berkeley.edu/archlinux/)")
-        echo "${MIRROR_URL}" > ./.mirror_url
-        LOCALREPO="/homefarm/srv/arch"
-        update_localrepo "${LOCALREPO}" "${MIRROR_URL}"
-    fi
+    update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}"
 
     shownotice "Setup complete"
 }
@@ -96,8 +109,9 @@ function hf_envinit() {
 # if we're not starting up the container, then put ourselves in a
 # known location
 if [[ "${1}" != "up" ]] && [[ "${1}" != "restore" ]] && [[ "${1}" != "status-only" ]] && [[ "${1}" != "help" ]] && [[ "${1}" != "" ]]; then
-    cd /homefarm
-    source ./bin/common.sh
+    source /homefarm/bin/common.sh
+    fp_parseconfig /homefarm/.fpconfig.yaml
+    cd "${FP_CONFIG[rootdir]}"
     VERSION=$(git tag | tail -1)
 fi
 
@@ -122,7 +136,7 @@ case "${1}" in
         echo
         hf_envinit
         hf_buildhosts
-        /usr/bin/darkhttpd /homefarm/srv --port 80 --daemon >> /dev/null
+        /usr/bin/darkhttpd "${HTTPDIR}" --port 80 --daemon >> /dev/null
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     node-init)

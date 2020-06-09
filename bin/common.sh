@@ -113,3 +113,57 @@ update_localrepo() {
     repo-add -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.* >> update.log 2>&1
     cd /homefarm || exit
 }
+
+# fp_parseconfig parses a JSON configuration file and stores its
+# contents in the variable FP_CONFIG.
+#
+# it takes a minimum of two arguments. the first is the path to the
+# configuration file to be parsed. the second (and any further)
+# arguments are spliced together to form the JSON 'path' which will be
+# extracted.
+#
+# this means that your config must have a top-level object, perhaps
+# named after your program or project, which contains the
+# configuration for that program or project.
+#
+# the contents of that object should not contain nested data. this
+# means that objects-of-objects are impossible to represent, and that
+# lists should be represented by separating values with '::'.
+fp_parseconfig() {
+    # check for the existance of `jq`
+    echo '{}' | jq > /dev/null
+    rc="${?}"
+    if [[ "${rc}" != "0" ]]; then
+        echo "error: can't find command 'jq'; please install and re-run. exiting"
+        exit 1
+    fi
+
+    # our first argument is our config file. assign it and take it off
+    # the list
+    conf="${1}"
+    shift
+
+    # the remaining arguments are going to be the part of the config
+    # file we want to extract. assemble them into a period-delimited
+    # string, starting with a period, to pass to 'jq'
+    param=""
+    for arg in ${@}; do
+        param="${param}.${arg}"
+    done
+    # call jq, trim curly braces, and use awk to remove spaces. then
+    # do processing and store the values.
+    for line in $(cat "${conf}" | jq "${param}" | tail +2 | head -n -1 | awk '{ print $1$2 }'); do
+        # use ${param%word} expansion to trim trailing commas
+        line="${line%,}"
+        # use ${param/pattern/string} expansion to remove all quotes
+        line="${line//\"/''}"
+        # extract key and value with cut
+        key=$(echo "${line}" | cut -d: -f1)
+        val=$(echo "${line}" | cut -d: -f2)
+        # if value contains '::', change them into spaces for future
+        # iteration as a list
+        val="${val//::/ }"
+        # store in array
+        FP_CONFIG[$key]="${val}"
+    done
+}

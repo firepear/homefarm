@@ -1,0 +1,9 @@
+{
+    "homefarm": {
+        "rootdir": "/homefarm",
+        "httpdir": "/homefarm/srv/homefarm",
+        "localrepo": "/homefarm/srv/homefarm/arch",
+        "mirrorurl": "MIRRORURL_UNSET",
+        "marches": "x86_64",
+    }
+}
