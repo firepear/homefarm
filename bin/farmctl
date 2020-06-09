@@ -92,7 +92,8 @@ function hf_buildhosts() {
 }
 
 # to support one-shot commands, we need to do environment
-# initialization without starting bash. so it lives here.
+# initialization without starting bash. so it lives here. but we also
+# use this when we *are* starting bash :)
 function hf_envinit() {
     /bin/ln -s /homefarm/.ssh /root/.ssh
     /bin/ln -s /homefarm/bin/utils/complete /root/.bashrc
@@ -126,6 +127,15 @@ case "${1}" in
         exec ./bin/utils/farmcmd "${2}"
         ;;
     on-up)
+        # this case runs on the second invocation of farmctl, after
+        # the container has been started by 'farmctl up'. it
+        # initializes the environment and then execs bash in place of
+        # this scipt
+        if [[ -e /root/.bashrc ]]; then
+            echo "This command cannot be run within an interactive environment."
+            exit 0
+        fi
+        # figure out our IP and print a welcome message
         localip=$(awk 'END{print $1}' /etc/hosts)
         echo
         echo "Welcome to homefarm ${VERSION}"
@@ -133,9 +143,13 @@ case "${1}" in
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
         echo
+        # set up transient files/links
         hf_envinit
+        # generate a hostsfile
         hf_buildhosts
+        # start the httpd
         /usr/bin/darkhttpd "${FP_CONFIG[httpdir]}" --port 80 --daemon >> /dev/null
+        # add /homefarm/bin to PATH and launch a shell for the user
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     node-init)
@@ -215,6 +229,8 @@ case "${1}" in
         ./bin/farmctl status nopage json
         ;;
     up)
+        # this case brings up the docker container, executing 'farmctl
+        # on-up' as the command
         if [[ "${2}" == "" ]]; then
             HOMEFARM_DIR=~/homefarm
         else
