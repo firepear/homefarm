@@ -1,8 +1,10 @@
 #!/bin/bash
 set -e
 
+declare -A FP_CONFIG
+fp_parseconfig homefarm
 ARCHIVE="/homefarm/homefarm.backup.tar.gz"
-cd /homefarm
+cd "${FP_CONFIG[rootdir]}"
 
 # no arguments: create tarball
 if [[ "${1}" == "" ]]; then
@@ -13,8 +15,8 @@ if [[ "${1}" == "" ]]; then
         ./farm.cfg \
         ./nodes/ \
         ./projectstats.db \
-        ./srv/pacman.conf \
-        ./srv/mirrorlist >> /dev/null
+        ./srv/homefarm/pacman.conf \
+        ./srv/homefarm/mirrorlist >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
     exit
 fi
@@ -42,8 +44,8 @@ echo "Unpacking tarball"
 tar zxvf ${ARCHIVE} >> /dev/null
 echo "Restoring local package mirror"
 . ./bin/common.sh
-mkdir -p /homefarm/srv/arch
+mkdir -p /homefarm/srv/homefarm/arch
 MIRROR_URL=$(cat ./.mirror_url)
-LOCALREPO="/homefarm/srv/arch"
+LOCALREPO="/homefarm/srv/homefarm/arch"
 update_localrepo "${LOCALREPO}" "${MIRROR_URL}"
 echo "Farm backup and repo restored."
