@@ -1,8 +1,10 @@
 2.7.0 - 2020-0x-xx
 --------------------------------------------------------------------
 
-    * Initial work done to support ARM machines, and possible future
-      projects
+    * Initial work done to support Homefarm on non-x86 architectures
+
+    * `farmctl` infra work: all subcommands are now passed all
+      arguments following `farmctl [subcmd]`
 
 
 2.6.0 - 2020-05-26
