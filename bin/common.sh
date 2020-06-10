@@ -78,7 +78,7 @@ update_localrepo() {
     if [[ "${firstnode}" == "" ]]; then
         # this branch runs during control node install and uses the
         # initial packages list
-        cp /homefarm/files/pkgs.txt ./db
+        cp "/homefarm/files/pkgs-${arch}.txt" ./db/pkgs.txt
     else
         # this branch runs during normal update. it grabs a package
         # list from the first node and sets localrepo_updated to true,
@@ -87,7 +87,7 @@ update_localrepo() {
         # scp node pkgs to the repodir
         scp -q "farmer@${firstnode}:pkgs.txt" "${repodir}/nodepkgs.txt"
         # merge the node pkgs and the initial homefarm pkgs
-        cat /homefarm/files/pkgs.txt "${repodir}/nodepkgs.txt" | sort | uniq > "${repodir}/db/pkgs.txt"
+        cat "/homefarm/files/pkgs-${arch}.txt" "${repodir}/nodepkgs.txt" | sort | uniq > "${repodir}/db/pkgs.txt"
         export localrepo_updated="true"
     fi
     # grab remaining db files from mirror, and unpack all of them
