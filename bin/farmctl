@@ -14,7 +14,7 @@ declare -A FP_CONFIG
 # done by the docker build)
 function hf_init() {
     if [[ ! -e /homefarm/.fpconfig.yaml ]]; then
-        mv /homefarm/files/fp_hf_config.yaml
+        mv /homefarm/files/fp_hf_config.yaml /homefarm/.fpconfig.yaml
     fi
     source /homefarm/bin/common.sh
     fp_parseconfig /homefarm/.fpconfig.yaml homefarm

@@ -152,7 +152,7 @@ fp_parseconfig() {
     done
     # call jq, trim curly braces, and use awk to remove spaces. then
     # do processing and store the values.
-    for line in $(cat "${conf}" | jq "${param}" | tail +2 | head -n -1 | awk '{ print $1$2 }'); do
+    for line in $(jq "${param}" < "${conf}" | tail +2 | head -n -1 | awk '{ print $1$2 }'); do
         # use ${param%word} expansion to trim trailing commas
         line="${line%,}"
         # use ${param/pattern/string} expansion to remove all quotes
