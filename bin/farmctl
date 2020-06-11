@@ -109,8 +109,16 @@ function hf_envinit() {
 # if we're not starting up the container, then put ourselves in a
 # known location
 if [[ "${1}" != "up" ]] && [[ "${1}" != "restore" ]] && [[ "${1}" != "status-only" ]] && [[ "${1}" != "help" ]] && [[ "${1}" != "" ]]; then
-    source /homefarm/bin/common.sh
-    fp_parseconfig /homefarm/.fpconfig.yaml homefarm
+    if [[ -e /homefarm/bin/common.sh ]]; then
+        source /homefarm/bin/common.sh
+    else
+        source ./bin/common.sh
+    fi
+    if [[ -e /homefarm/.fpconfig.yaml ]]; then
+        fp_parseconfig /homefarm/.fpconfig.yaml homefarm
+    else
+        fp_parseconfig ./files/fp_hf_config.yaml homefarm
+    fi
     cd "${FP_CONFIG[rootdir]}"
     VERSION=$(git tag | tail -1)
 fi
@@ -123,6 +131,8 @@ case "${1}" in
     backup)
         exec ./bin/backup
         ;;
+    build)
+        docker build --tag control .
     cmd)
         exec ./bin/utils/farmcmd "${2}"
         ;;
