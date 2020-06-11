@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-source /homefarm/bin/common.sh
-
-declare -A FP_CONFIG
-fp_parseconfig homefarm
 ARCHIVE="/homefarm/homefarm.backup.tar.gz"
 cd "${FP_CONFIG[rootdir]}"
 
