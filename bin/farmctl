@@ -133,6 +133,7 @@ case "${1}" in
         ;;
     build)
         docker build --tag control .
+        ;;
     cmd)
         exec ./bin/utils/farmcmd "${2}"
         ;;
