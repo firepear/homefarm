@@ -1,15 +1,18 @@
 #!/bin/bash
 set -e
 
+declare -A FP_CONFIG
+source ./bin/common.sh
+
 ARCHIVE="/homefarm/homefarm.backup.tar.gz"
-cd "${FP_CONFIG[rootdir]}"
 
 # no arguments: create tarball
 if [[ "${1}" == "" ]]; then
+    fp_parseconfig ./.fpconfig.json homefarm
     tar zcvf ${ARCHIVE} ./.ssh \
         ./.boincguikeys.json \
         ./.current_tag \
-        ./.mirror_url \
+        ./.fpconfig.json \
         ./farm.cfg \
         ./nodes/ \
         ./projectstats.db \
@@ -41,9 +44,8 @@ fi
 echo "Unpacking tarball"
 tar zxvf ${ARCHIVE} >> /dev/null
 echo "Restoring local package mirror"
-. ./bin/common.sh
-mkdir -p /homefarm/srv/homefarm/arch
-MIRROR_URL=$(cat ./.mirror_url)
-LOCALREPO="/homefarm/srv/homefarm/arch"
-update_localrepo "${LOCALREPO}" "${MIRROR_URL}"
+source ./bin/common.sh
+fp_parseconfig ./.fpconfig.json homefarm
+mkdir -p "${FP_CONFIG[localrepo]}"
+update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}"
 echo "Farm backup and repo restored."

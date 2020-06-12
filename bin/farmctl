@@ -8,23 +8,21 @@ set -e
 
 declare -A FP_CONFIG
 
-
 # hf_init takes the place of the old control-install script. it
 # handles the initial node setup, other than package install (which is
 # done by the docker build)
 function hf_init() {
-    if [[ ! -e /homefarm/.fpconfig.yaml ]]; then
-        mv /homefarm/files/fp_hf_config.yaml /homefarm/.fpconfig.yaml
+    if [[ ! -e ./.fpconfig.json ]]; then
+        mv /homefarm/files/fp_hf_config.json /homefarm/.fpconfig.json
     fi
-    source /homefarm/bin/common.sh
-    fp_parseconfig /homefarm/.fpconfig.yaml homefarm
-    cd "${FP_CONFIG[rootdir]}"
 
     shownotice "Initializing Arch source repo URL"
     if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
         MIRROR_URL=$(gutcheck "URL of remote repo (e.g. http://mirrors.ocf.berkeley.edu/archlinux/)")
-        sed -i -e "'s/HF_MIRRORURL_UNSET/${MIRROR_URL}/'" /homefarm/.fpconfig.yaml
-        fp_parseconfig /homefarm/.fpconfig.yaml homefarm
+        MIRROR_URL="${MIRROR_URL//\//'\/'}"
+        sedexpr="s/HF_MIRRORURL_UNSET/${MIRROR_URL}/"
+        sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
+        fp_parseconfig /homefarm/.fpconfig.json homefarm
     else
         echo "Skipping; already configured"
     fi
@@ -106,22 +104,30 @@ function hf_envinit() {
 
 ################################################################################
 
-# if we're not starting up the container, then put ourselves in a
-# known location
-if [[ "${1}" != "up" ]] && [[ "${1}" != "restore" ]] && [[ "${1}" != "status-only" ]] && [[ "${1}" != "help" ]] && [[ "${1}" != "" ]]; then
-    if [[ -e /homefarm/bin/common.sh ]]; then
-        source /homefarm/bin/common.sh
-    else
-        source ./bin/common.sh
-    fi
-    if [[ -e /homefarm/.fpconfig.yaml ]]; then
-        fp_parseconfig /homefarm/.fpconfig.yaml homefarm
-    else
-        fp_parseconfig ./files/fp_hf_config.yaml homefarm
-    fi
-    cd "${FP_CONFIG[rootdir]}"
-    VERSION=$(git tag | tail -1)
+# find out where we're supposed to be, and move there. if /homefarm
+# exists then we're inside a container and we should be there. if not,
+# we should be inside the homefarm git repo
+if [[ -d /homefarm ]]; then
+    cd /homefarm
+else
+    gitdir=$(cat ~/.homefarmdir)
+    cd "${gitdir}"
 fi
+
+# source common functions
+source ./bin/common.sh
+
+# parse the fpconfig file. it'll be at ./.fpconfig.json if we've done
+# `farmctl init` and in the files directory otherwise
+if [[ -e ./.fpconfig.json ]]; then
+    fp_parseconfig ./.fpconfig.json homefarm
+else
+    fp_parseconfig ./files/fp_hf_config.json homefarm
+fi
+
+# set version
+VERSION=$(git tag | tail -1)
+
 
 
 case "${1}" in
@@ -131,8 +137,13 @@ case "${1}" in
     backup)
         exec ./bin/backup
         ;;
-    build)
+    build-image)
+        docker image prune -f
+        docker image pull archlinux/base
+        docker image prune -f
+        cd ./files/docker/controller
         docker build --tag control .
+        cd ../../../
         ;;
     cmd)
         exec ./bin/utils/farmcmd "${2}"
@@ -242,12 +253,7 @@ case "${1}" in
     up)
         # this case brings up the docker container, executing 'farmctl
         # on-up' as the command
-        if [[ "${2}" == "" ]]; then
-            HOMEFARM_DIR=~/homefarm
-        else
-            HOMEFARM_DIR="${2}"
-        fi
-        exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/farmctl on-up
+        exec docker run --rm -p 9099:80 -v "${gitdir}:/homefarm" -it control ./bin/farmctl on-up
         ;;
     update)
         exec ./bin/update "${2}"
