@@ -47,17 +47,26 @@ function hf_init() {
     else
         HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
         sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
-        sed -e "${sedexpr}" ./files/pacman.conf > ./srv/pacman.conf
-        # copy the example farm inventory file to the real one
-        cp ./files/farm.cfg ./farm.cfg
-        # make the nodes directory for user convenience
-        mkdir -p /homefarm/nodes
+        sed -e "${sedexpr}" ./files/pacman.conf > "${FP_CONFIG[httpdir]}/pacman.conf"
         # create local package cache dir
         mkdir -p /homefarm/srv/arch
         # init project stats db
         ./bin/utils/pstracker -u >> /dev/null
     fi
 
+    shownotice "Initializing local package mirror"
+    for arch in ${FP_CONFIG[marches]}; do
+        update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}" "${arch}"
+    done
+
+    shownotice "Finishing up initialization"
+    cd "${FP_CONFIG[rootdir]}"
+    # make the nodes directory for user convenience
+    mkdir -p /homefarm/nodes
+    # copy the example farm inventory file to the real one
+    if [[ ! -e ./farm.cfg ]]; then
+        cp ./files/farm.cfg ./farm.cfg
+    fi
     # copy ssh pubkey for distribution to nodes
     cp /homefarm/.ssh/id_farmer.pub "${FP_CONFIG[httpdir]}"
     # symlink install/setup scripts
@@ -65,9 +74,6 @@ function hf_init() {
     ln -fs /homefarm/bin/node-setup "${FP_CONFIG[httpdir]}"
     ln -fs /homefarm/bin/common.sh "${FP_CONFIG[httpdir]}"
     ln -fs /homefarm/bin/util/fix-wlan0 "${FP_CONFIG[httpdir]}"
-
-    shownotice "Initializing local package mirror"
-    update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}"
 
     shownotice "Setup complete"
 }
