@@ -3,7 +3,7 @@
   tasks:
   - name: Diff Homefarm and installed packages
     shell:
-      cmd: grep -v -f /homefarm/srv/arch/nodepkgs.txt /homefarm/files/pkgs.txt
+      cmd: grep -v -f /homefarm/srv/homefarm/arch/nodepkgs.txt /homefarm/files/pkgs.txt
     ignore_errors: yes
     register: newpkgs
 
@@ -13,7 +13,7 @@
   - name: Copy mirrorlist
     become: true
     copy:
-      src: ./srv/mirrorlist
+      src: ./srv/homefarm/mirrorlist
       dest: /etc/pacman.d/mirrorlist
       owner: root
       group: root
