@@ -53,10 +53,11 @@ hf_fetch() {
 }
 
 update_localrepo() {
-    arch=$(uname -m)
-    repodir="${1}/${arch}"
-    mirrorurl=${2}
-    firstnode=${3}
+    repodir="${1}"
+    mirrorurl="${2}"
+    arch="${3}"
+    repodir="${repodir}/${arch}"
+    firstnode="${4}"
 
     # grab core db file from mirror and test it against the last
     # hash. do nothing if they match.
@@ -155,11 +156,12 @@ fp_parseconfig() {
     for line in $(jq "${param}" < "${conf}" | tail +2 | head -n -1 | awk '{ print $1$2 }'); do
         # use ${param%word} expansion to trim trailing commas
         line="${line%,}"
-        # use ${param/pattern/string} expansion to remove all quotes
-        line="${line//\"/''}"
-        # extract key and value with cut
+        # extract key and value
         key=$(echo "${line}" | cut -d: -f1)
-        val=$(echo "${line}" | cut -d: -f2)
+        val=$(echo "{ ${line} }" | jq ".${key}")
+        # use ${param/pattern/string} expansion to remove all quotes
+        key="${key//\"/''}"
+        val="${val//\"/''}"
         # if value contains '::', change them into spaces for future
         # iteration as a list
         val="${val//::/ }"
