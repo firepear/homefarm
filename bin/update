@@ -1,6 +1,9 @@
 #!/bin/bash
 
-LOCALREPO="/homefarm/srv/homefarm/arch"
+declare -A FP_CONFIG
+source ./bin/common.sh
+fp_parseconfig ./.fpconfig.json homefarm
+
 DEVMODE="false"
 
 update_homefarm() {
@@ -41,7 +44,7 @@ update_homefarm() {
 }
 
 update_os() {
-    cd /homefarm
+    cd ${FP_CONFIG[rootdir]}
     # future me running shellcheck: this variable is exported from
     # common.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
@@ -74,14 +77,8 @@ if [[ "${1}" == "--devmode" ]]; then
     shift
 fi
 
-# read in utility code (includes update_localrepo)
-cd /homefarm
-. ./bin/common.sh
-
 # read in mirror; error if we don't have one
-if [[ -e ./.mirror_url ]]; then
-    MIRROR_URL=$(cat ./.mirror_url)
-else
+if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
     cat <<EOF
 There is no mirror URL set for the local repo. Has 'control init' been
 run successfully?
@@ -109,7 +106,9 @@ if [[ "${DEVMODE}" == "false" ]]; then
     update_homefarm "${0}"
 fi
 
-update_localrepo "${LOCALREPO}" "${MIRROR_URL}" "${NODE}"
+for arch in ${FP_CONFIG[marches]}; do
+    update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}" "${arch}" "${NODE}"
+done
 update_os
 
 # run this playbook here, because it sets the custom BOINC unit file,
