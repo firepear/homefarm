@@ -2,6 +2,14 @@
 - hosts: compute_nodes
   remote_user: farmer
   tasks:
+  - name: Update pacman.conf
+    become: true
+    copy:
+      src: ./srv/homefarm/pacman.conf
+      dest: /etc/pacman.conf
+      owner: root
+      group: root
+      mode: 0644
   - name: Copy boinc unit file
     become: true
     copy:
