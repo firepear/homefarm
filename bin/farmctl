@@ -149,7 +149,6 @@ case "${1}" in
         docker image prune -f
         cd ./files/docker/controller
         docker build --tag control .
-        cd ../../../
         ;;
     cmd)
         exec ./bin/utils/farmcmd "${2}"
