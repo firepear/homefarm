@@ -3,7 +3,7 @@
   tasks:
   - name: Diff Homefarm and installed packages
     shell:
-      cmd: grep -v -f /homefarm/srv/homefarm/arch/nodepkgs.txt /homefarm/files/pkgs.txt
+      cmd: grep -v -f /homefarm/srv/homefarm/arch/nodepkgs.txt /homefarm/files/pkgs-{{ lookup('env','HFARCH') }}.txt
     ignore_errors: yes
     register: newpkgs
 

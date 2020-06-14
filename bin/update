@@ -49,7 +49,7 @@ update_os() {
     # common.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
         shownotice "Updating compute nodes"
-        ansible-playbook nodes-system-update.yml
+        HFARCH="${1}" ansible-playbook nodes-system-update.yml
     fi
 }
 
@@ -108,8 +108,8 @@ fi
 
 for arch in ${FP_CONFIG[marches]}; do
     update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}" "${arch}" "${NODE}"
+    update_os "${arch}"
 done
-update_os
 
 # run this playbook here, because it sets the custom BOINC unit file,
 # and pushes jlparse and boinccmdcmd to nodes. Those things need to be
