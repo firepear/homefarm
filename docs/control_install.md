@@ -1,72 +1,91 @@
 # Controller installation
 
-First, create the controller image
+Welcome to Homefarm!
+
+The first step toward getting your cluster running is to create a
+'controller' container. This container is where cluster administration
+will be performed.
+
+This is probably the most involved part of setting up Homefarm,
+because the controller handles so many things. It's straightforward
+though, and is broken up into four groups of tasks: Building the
+controller image, Bringing up the controller, Controller
+initialization, and Ansible setup.
+
+
+
+## Building the controller image
+
+There's a little bit of prep work to do before we build the container:
 
 1. Install docker, if you haven't already :)
 1. In the directory of your choosing, run `'git clone https://github.com/firepear/homefarm.git'`
     * This git clone will also hold your cluster configuration and act
       as the non-volatile storage for the container you're about to
       create, so put it somewhere reasonably stable.
-    * For the purposes of this document, we will assume it is at `~/homefarm`
-1. Build the controler:
-    * `'cd ~/homefarm/files/docker/controller/ && docker build --tag control . && cd ~/homefarm'`
-    * This will automatically pull the Arch Linux base container for
-      you, if needed. This is also the only docker incantation you'll
-      need; everything else happens through scripts.
+1. Create a config file which simply holds the location of the clone
+   you just created
+   * `'echo ~/path/to/clone > ~/.homefarmdir'`
+   * For the purposes of this document, we will assume it is at `~/homefarm`
 
-## Bring up the controller
+Now it's time to build the container image.
 
-In the previous version of Homefarm, the controller was a separate
-machine -- a Raspberry Pi -- and it was dedicated to doing nothing but
-managing your farm. Now the controller is a Docker instance, and we
-can pop it in and out of existance whenever we need it.
+`'~/homefarm/bin/farmctl build-image'`
 
-To bring it up, go into your homefarm directory and run:
 
-`~/homefarm/bin/farmctl up`
 
-If you put homefarm somewhere else, you'll need to specify its location:
+## Bringing up the controller
 
-`/PATH/TO/HOMEFARM/bin/farmctl up /PATH/TO/HOMEFARM`
+Starting the controller container is easy. Just run:
 
-And you should see something like the following:
+`'~/homefarm/bin/farmctl up'`
+
+You should see something like the following:
 
 ```
 Welcome to homefarm
-    Local IP is 172.17.0.2
+    Controller IP is 172.17.0.2
     Installer httpd is listening on DOCKERHOST:9099
     Run 'farmctl' to see options, or refer to the docs
-[root@77c3fe3f72ba homefarm]# 
+[root@77c3fe3f72ba homefarm]#
 ```
 
-## Initialize the controller environment and local repo
 
-Compute nodes will install their initial packages from the control
-node's local mirror (which will be built in the next step), but an
-Arch mirrorlist should still be generated so that the standard repos
-will also be available.
 
-On a machine with a browser:
+## Controller initialization
 
-1. Go to `https://www.archlinux.org/mirrorlist/`
+Now we need to set up some things on the controller. Later on a
+partial Arch repository will be created so that all compute nodes can
+pull from a local source. For that to happen, we need to create an
+Arch mirrorlist.
+
+Arch linux has a tool that will do this for you. On a machine with a
+browser:
+
+1. Go to [https://www.archlinux.org/mirrorlist/](https://www.archlinux.org/mirrorlist/)
 1. Generate a custom userlist for your location (use defaults unless
    you know you need something specific)
-1. Copy the generated URL, for use on the control node
+1. Copy the URL from your browser
 
 In the controller container:
 
-1. Run `curl -o ./srv/mirrorlist' '[MIRRORLIST_URL]'`
+1. Run `mkdir ./srv/homefarm && curl -o ./srv/mirrorlist '[MIRRORLIST_URL]'`
 1. Edit `mirrorlist` to uncomment the hosts you want to use as mirrors
    (`vi` and `mg` are available).
 
-And complete setup of the controller by initializing its environment:
+Now complete setup of the controller by initializing its environment:
 
 `farmctl init`
 
+This is mostly automatic, but it will ask you for the IP address of
+the host which is running the container.
 
-## Set up the Ansible inventory
 
-Now it's time to define the machines which will be part if your farm.
+
+## Ansible setup
+
+The last piece of controller setup is to define the machines which
+will be part if your farm.
 
 1. Edit `farm.cfg` and change the names and IP addresses in the
    `[compute_nodes]` stanza to match the machines you'll be setting up
