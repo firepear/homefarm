@@ -23,14 +23,15 @@ On the controller:
 
 ## Reinstalling an existing node
 
-Simply reinstall the node, as above. You don't need to make any
-changes on the control node, since it already knows about the machine
-you're reinstalling.
+Simply reinstall the node as per the [Compute node
+install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
+docment.  You don't need to make any changes on the controller,
+since it already knows about the machine you're reinstalling.
 
-After `compute-install` and `compute-setup` are complete, on the
-control node:
-1. Run `'ansible-playbook compute-nodes-boinc.yml'`
-1. Run `'ansible-playbook update-projects.yml'`
+After `node-setup` is complete, on the controller:
+
+1. Run `'farmctl node-init'`
+1. Run `'farmctl project-sync'`
 
 The node then will be back in service, with the same configuration it
 had before.
