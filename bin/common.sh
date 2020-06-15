@@ -52,6 +52,13 @@ hf_fetch() {
     fi
 }
 
+hf_docker_test() {
+    if grep docker /proc/1/cgroup > /dev/null; then
+        echo "This command can't be run inside the Homefarm container."
+        exit
+    fi
+}
+
 update_localrepo() {
     repodir="${1}"
     mirrorurl="${2}"

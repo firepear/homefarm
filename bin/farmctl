@@ -147,6 +147,7 @@ case "${1}" in
         exec ./bin/backup
         ;;
     build-image)
+        hf_docker_test
         docker image prune -f
         docker image pull archlinux/base
         docker image prune -f
@@ -161,10 +162,7 @@ case "${1}" in
         # the container has been started by 'farmctl up'. it
         # initializes the environment and then execs bash in place of
         # this scipt
-        if [[ -e /root/.bashrc ]]; then
-            echo "This command cannot be run within an interactive environment."
-            exit 0
-        fi
+        hf_docker_test
         # figure out our IP and print a welcome message
         localip=$(awk 'END{print $1}' /etc/hosts)
         echo
@@ -242,10 +240,7 @@ case "${1}" in
         rm "${tmpfile}"
         ;;
     status-only)
-        if [[ -e /root/.bashrc ]]; then
-            echo "This command cannot be run within an interactive environment."
-            exit 0
-        fi
+        hf_docker_test
         if [[ "${2}" == "" ]]; then
             HOMEFARM_DIR=~/homefarm
         else
