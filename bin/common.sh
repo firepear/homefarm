@@ -45,7 +45,7 @@ gutcheck() {
 hf_fetch() {
     err=$(curl --connect-timeout 10 --max-time 60 -f -s -S -O "${1}" 2>&1)
     rc=${?}
-    if [[ ${rc} -ne 0 ]]; then
+    if [[ "${rc}" != "0" ]]; then
         echo "error: couldn't fetch '${1}'. problem was:"
         echo "${err}"
         exit ${rc}
@@ -61,6 +61,7 @@ update_localrepo() {
 
     # grab core db file from mirror and test it against the last
     # hash. do nothing if they match.
+    mkdir -p "${repodir}"
     cd "${repodir}" || exit
     hf_fetch "${mirrorurl}/core/os/${arch}/core.db.tar.gz"
     coremd5=$(md5sum core.db.tar.gz)

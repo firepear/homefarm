@@ -13,12 +13,12 @@ declare -A FP_CONFIG
 # done by the docker build)
 function hf_init() {
     if [[ ! -e ./.fpconfig.json ]]; then
-        mv /homefarm/files/fp_hf_config.json /homefarm/.fpconfig.json
+        cp /homefarm/files/fp_hf_config.json /homefarm/.fpconfig.json
     fi
 
     shownotice "Initializing Arch source repo URL"
     if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
-        MIRROR_URL=$(grep '^Server' srv/homefarm/mirrorlist | cut -d' ' -f3)
+        MIRROR_URL=$(grep '^Server' srv/homefarm/mirrorlist | cut -d' ' -f3 | cut -d'$' -f1)
         MIRROR_URL="${MIRROR_URL//\//'\/'}"
         sedexpr="s/HF_MIRRORURL_UNSET/${MIRROR_URL}/"
         sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
