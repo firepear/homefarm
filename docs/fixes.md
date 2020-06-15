@@ -3,13 +3,18 @@
 Sometimes Arch breaks packages. Sometimes Homefarm has bugs. Sometimes
 you need to do a fix to unbreak an OS update. This is how to do those.
 
+Please file an issue if you can't find an answer to your problem.
+
+
 ## `farmctl status` can't connect after `farmctl update`
+
+_Note: This should no longer occur. Please file an issue if you see
+this._
 
 BOINC was probably upgraded, and the custom Homefarm service file was
 overwritten.
 
-Run `farmctl node-init` and see if `status` works afterward. If it
-doesn't, please file an issue.
+Run `farmctl node-init` and see if `status` works afterward.
 
 
 
