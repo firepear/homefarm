@@ -202,6 +202,23 @@ It's safe to run the update as often as you'd like. If there's
 nothing to do, it will simply do nothing! This makes it very easy to
 keep all aspects of your cluster up to date.
 
+### Updating the controller image
+
+One thing that `farmctl update` does not affect is the controller
+image itself. Over time the OS packages it contains will become out of
+date.
+
+It is safe to rebuild the Docker image that `farmctl` runs inside of
+at anytime. Since Homefarm's data is stored as a mounted volume rather
+than within the image itself, recreating it does not lose any data,
+any configuration you may have done, or wipe the local Arch repo.
+
+Just run `exit` to drop out of the farmctl shell, then run
+`'~/homefarm/bin/farmctl build-image'` -- the same command used to
+initially construct the controller image.
+
+It is likely not necessary to do this more than every three months or
+so.
 
 
 ## Run a command on all nodes

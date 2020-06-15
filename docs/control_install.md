@@ -54,30 +54,25 @@ Welcome to homefarm
 
 ## Controller initialization
 
-Now we need to set up some things on the controller. Later on a
-partial Arch repository will be created so that all compute nodes can
-pull from a local source. For that to happen, we need to create an
-Arch mirrorlist. Arch linux has a tool that will do this for you. On a
-machine with a browser:
+Now we need to set up some things on the controller. This is mostly
+automatic and/or scripted, but there is one manual step.  We need to
+an Arch Linux repo mirrorlist. Arch has a tool that will do this for
+you, so on a machine with a browser:
 
 1. Go to [https://www.archlinux.org/mirrorlist/](https://www.archlinux.org/mirrorlist/)
-1. Generate a custom userlist for your location (use defaults unless
-   you know you need something specific)
-1. Copy the URL from your browser
+1. Select your location and generate a list
+1. Copy the URL of the list from your browser
 
-And in the controller container:
+And then in the controller container:
 
-1. Run `mkdir ./srv/homefarm && curl -o ./srv/homefarm/mirrorlist
+1. Run `mkdir -p ./srv/homefarm && curl -o ./srv/homefarm/mirrorlist
    '[MIRRORLIST_URL]'`
-1. Edit `./srv/homefarm/mirrorlist` to uncomment the hosts you want to
-   use as mirrors (`vi` and `mg` are available).
+1. Edit `./srv/homefarm/mirrorlist` to uncomment the host(s) you want
+   to use as mirrors (`vi` and `mg` are available).
 
-Now complete setup of the controller by initializing its environment:
-
-`'farmctl init'`
-
-This is mostly automatic, but it will ask you for the IP address of
-the host which is running the container.
+Now run `'farmctl init'` to complete initialization of the controller
+environment. This is mostly automatic, but it will ask you for the IP
+address of the host which is running the container.
 
 
 
