@@ -72,7 +72,9 @@ fi
 # set dev mode, if requested
 if [[ "${1}" == "--devmode" ]]; then
     DEVMODE="true"
-    rm -f /homefarm/srv/arch/prevmd5
+    for arch in ${FP_CONFIG[marches]}; do
+        rm -f "${FP_CONFIG[localrepo]}/${arch}/prevmd5"
+    done
     echo "DEVMODE enabled"
     shift
 fi
