@@ -28,7 +28,7 @@ There's a little bit of prep work to do before we build the container:
    * `'echo ~/path/to/clone > ~/.homefarmdir'`
    * For the purposes of this document, we will assume it is at `~/homefarm`
 
-Now it's time to build the container image.
+Now it's time to build the container image. Run:
 
 `'~/homefarm/bin/farmctl build-image'`
 
@@ -57,25 +57,24 @@ Welcome to homefarm
 Now we need to set up some things on the controller. Later on a
 partial Arch repository will be created so that all compute nodes can
 pull from a local source. For that to happen, we need to create an
-Arch mirrorlist.
-
-Arch linux has a tool that will do this for you. On a machine with a
-browser:
+Arch mirrorlist. Arch linux has a tool that will do this for you. On a
+machine with a browser:
 
 1. Go to [https://www.archlinux.org/mirrorlist/](https://www.archlinux.org/mirrorlist/)
 1. Generate a custom userlist for your location (use defaults unless
    you know you need something specific)
 1. Copy the URL from your browser
 
-In the controller container:
+And in the controller container:
 
-1. Run `mkdir ./srv/homefarm && curl -o ./srv/mirrorlist '[MIRRORLIST_URL]'`
-1. Edit `mirrorlist` to uncomment the hosts you want to use as mirrors
-   (`vi` and `mg` are available).
+1. Run `mkdir ./srv/homefarm && curl -o ./srv/homefarm/mirrorlist
+   '[MIRRORLIST_URL]'`
+1. Edit `./srv/homefarm/mirrorlist` to uncomment the hosts you want to
+   use as mirrors (`vi` and `mg` are available).
 
 Now complete setup of the controller by initializing its environment:
 
-`farmctl init`
+`'farmctl init'`
 
 This is mostly automatic, but it will ask you for the IP address of
 the host which is running the container.
