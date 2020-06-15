@@ -82,6 +82,9 @@ function hf_init() {
 # have the compute nodes in it for a lot of things to work, we'll
 # parse them out of farm.cfg and inject them into the hostsfile
 function hf_buildhosts() {
+    if [[ ! -e ./farm.cfg ]]; then
+        return
+    fi
     found_nodes="false"
     while read -r line; do
         if [[ "${found_nodes}" == "true" ]]; then
