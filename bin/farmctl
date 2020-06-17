@@ -162,7 +162,6 @@ case "${1}" in
         # the container has been started by 'farmctl up'. it
         # initializes the environment and then execs bash in place of
         # this scipt
-        hf_docker_test
         # figure out our IP and print a welcome message
         localip=$(awk 'END{print $1}' /etc/hosts)
         echo
@@ -256,6 +255,7 @@ case "${1}" in
     up)
         # this case brings up the docker container, executing 'farmctl
         # on-up' as the command
+        hf_docker_test
         exec docker run --rm -p 9099:80 -v "${gitdir}:/homefarm" -it control ./bin/farmctl on-up
         ;;
     update)
