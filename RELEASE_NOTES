@@ -12,6 +12,9 @@
 
     * Initial work done to support Homefarm on non-x86 architectures
 
+    * Automated downloads now fail if xfer speeds are < 1kBps for more
+      than 10 seconds, rather than a forced failure after 60 seconds
+
     * Much infra work and restructuring. Many bugfixes and doc tweaks
 
 
