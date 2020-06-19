@@ -23,12 +23,14 @@ There are a few assumptions:
 
 # News
 
+* 2020-06-19: v2.7.0: Automated build/rebuild of control
+  container. Improved initial setup experience. Initial work done to
+  support multiple architectures
 * 2020-05-26: v2.6.0: Added support for injecting packages via the
   initial pkgs list.
 * 2020-05-02: v2.5.2: JSON improvements and bugfixes
 * 2020-04-24: v2.5.1: Refactoring and bugfixes in `query` and networking
 * 2020-04-12: v2.5.0: `status` and `query` can now output JSON
-* 2020-03-22: v2.4.3: `query` now returns total elapsed CPU time for matching WUs
 
 See the [Release
 notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
