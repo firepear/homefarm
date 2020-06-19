@@ -53,10 +53,13 @@ Done!
 
 # My controller state is fine; my image has just gotten old
 
+You probably only need to do this every few months, but it's easy to
+do whenever you decide that the time is right.
+
 1. Exit the controller, if it's active
 1. Rebuild the container: `'~/homefarm/bin/farmctl build-image'`
-   * This will not touch any configuration; it will only refresh the
-     packages in the docker image
+   * This will not touch any configuration or the local Arch mirror;
+     it will only refresh the packages in the docker image
 1. `'~/homefarm/bin/farmctl up'`
 
 Done!
