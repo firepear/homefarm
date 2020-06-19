@@ -43,7 +43,7 @@ gutcheck() {
 }
 
 hf_fetch() {
-    err=$(curl --connect-timeout 10 --max-time 60 -f -s -S -O "${1}" 2>&1)
+    err=$(curl --connect-timeout 10 --speed-time 10 --speed-limit 1024 -f -s -S -O "${1}" 2>&1)
     rc=${?}
     if [[ "${rc}" != "0" ]]; then
         echo "error: couldn't fetch '${1}'. problem was:"
@@ -115,6 +115,9 @@ update_localrepo() {
     cd "${repodir}" || exit
     # call the python script which manages all the repo files
     /homefarm/bin/repo-update "${repodir}" "${mirrorurl}"
+    if [[ "${?}" != "0" ]]; then
+        exit 1
+    fi
     # delete the db files and the installed package list
     rm -rf "${repodir}/db"
     # rebuild the local repo index

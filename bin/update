@@ -110,6 +110,9 @@ fi
 
 for arch in ${FP_CONFIG[marches]}; do
     update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}" "${arch}" "${NODE}"
+    if [[ "${?}" != "0" ]]; then
+        exit 1
+    fi
     update_os "${arch}"
 done
 
