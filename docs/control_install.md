@@ -59,20 +59,18 @@ automatic and/or scripted, but there is one manual step.  We need to
 an Arch Linux repo mirrorlist. Arch has a tool that will do this for
 you, so on a machine with a browser:
 
-1. Go to [https://www.archlinux.org/mirrorlist/](https://www.archlinux.org/mirrorlist/)
-1. Select your location and generate a list
-1. Copy the URL of the list from your browser
+1. Go to [https://www.archlinux.org/mirrors/status/#successful](https://www.archlinux.org/mirrors/status/#successful)
+1. Find a mirror that is geographically close to you and has low delay
+1. Copy the URL of your chosen mirror
 
-And then in the controller container:
+Then, in the controller container, edit `./srv/homefarm/mirrorlist`
+(`vi` and `mg` are available) and add a line:
 
-1. Run `mkdir -p ./srv/homefarm && curl -o ./srv/homefarm/mirrorlist
-   '[MIRRORLIST_URL]'`
-1. Edit `./srv/homefarm/mirrorlist` to uncomment the host(s) you want
-   to use as mirrors (`vi` and `mg` are available).
+`Server = MIRROR_URL`
 
-Now run `'farmctl init'` to complete initialization of the controller
-environment. This is mostly automatic, but it will ask you for the IP
-address of the host which is running the container.
+Save and exit, then run `'farmctl init'` to complete initialization of
+the controller environment. This is mostly automatic, but it will ask
+you for the IP address of the host which is running the container.
 
 
 
