@@ -18,7 +18,7 @@
       owner: root
       group: root
       mode: 0644
-    register: cc-config
+    register: ccconfig
   - name: Copy boinc unit file
     become: true
     copy:
@@ -62,4 +62,4 @@
     service:
       name: boinc-client
       state: restarted
-    when: unitfile.changed or cc-config.changed
+    when: unitfile.changed or ccconfig.changed
