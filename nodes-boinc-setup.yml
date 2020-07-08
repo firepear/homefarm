@@ -10,7 +10,7 @@
       owner: root
       group: root
       mode: 0644
-  - name: Copy BOINC client config
+  - name: Update BOINC client config
     become: true
     copy:
       src: ./nodes/{{ inventory_hostname }}-cc.xml
@@ -19,7 +19,7 @@
       group: root
       mode: 0644
     register: ccconfig
-  - name: Copy boinc unit file
+  - name: Update BOINC unit file
     become: true
     copy:
       src: ./files/boinc-client.service
@@ -33,7 +33,7 @@
     systemd:
       daemon_reload: yes
     when: unitfile.changed
-  - name: Copy python common module
+  - name: Update Python common module
     become: true
     copy:
       src: ./files/homefarm.py
@@ -41,7 +41,7 @@
       owner: root
       group: root
       mode: 0644
-  - name: Copy query
+  - name: Update query util
     become: true
     copy:
       src: ./bin/utils/query
@@ -49,7 +49,7 @@
       owner: root
       group: root
       mode: 0755
-  - name: Copy boinccmdcmd
+  - name: Update boinccmdcmd
     become: true
     copy:
       src: ./bin/utils/boinccmdcmd
@@ -57,9 +57,12 @@
       owner: root
       group: root
       mode: 0755
-  - name: Restart boinc
+  - name: Reload BOINC client config
+    command: /bin/boinccmd --read_cc_config
+    when: ccconfig.changed
+  - name: Restart BOINC
     become: true
     service:
       name: boinc-client
       state: restarted
-    when: unitfile.changed or ccconfig.changed
+    when: unitfile.changed
