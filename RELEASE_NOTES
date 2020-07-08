@@ -1,6 +1,10 @@
 2.7.1 - 2020-07-08
 --------------------------------------------------------------------
 
+    * Subcommand rename: `node-init` -> `boinc-config`. This better
+      reflects its current status as something which is not only used
+      to initialize nodes
+
     * BOINC client configuration file now correctly deployed to
       compute nodes
 

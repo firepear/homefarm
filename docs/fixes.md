@@ -14,7 +14,7 @@ this._
 BOINC was probably upgraded, and the custom Homefarm service file was
 overwritten.
 
-Run `farmctl node-init` and see if `status` works afterward.
+Run `farmctl boinc-config` and see if `status` works afterward.
 
 
 

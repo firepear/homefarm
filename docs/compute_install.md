@@ -69,7 +69,7 @@ perform these steps.
    * The file(s) should be named `[HOSTNAME].yml`
    * See the file `./files/node.yml` as an example, or copy it as a
      starting point
-1. Run `'farmctl node-init'` to handle initial BOINC configuration and
+1. Run `'farmctl boinc-config'` to handle initial BOINC configuration and
    some script setups.
 1. Run `'farmctl project-sync'` to attach the nodes to their projects,
    as defined in the `HOSTNAME.yml` files.

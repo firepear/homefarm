@@ -23,7 +23,8 @@ There are a few assumptions:
 
 # News
 
-* 2020-07-08: v2.7.1: Fixed deployment of cc_config.xml to nodes
+* 2020-07-08: v2.7.1: `node-init` subcmd renamed to
+  `boinc-config`. Fixed deployment of cc_config.xml to nodes
 * 2020-06-19: v2.7.0: Automated build/rebuild of control
   container. Improved initial setup experience. Initial work done to
   support multiple architectures

@@ -146,6 +146,9 @@ case "${1}" in
     backup)
         exec ./bin/backup
         ;;
+    boinc-config)
+        exec /bin/ansible-playbook nodes-boinc-setup.yml
+        ;;
     build-image)
         hf_docker_test
         docker image prune -f
@@ -178,9 +181,6 @@ case "${1}" in
         /usr/bin/darkhttpd "${FP_CONFIG[httpdir]}" --port 80 --daemon >> /dev/null
         # add /homefarm/bin to PATH and launch a shell for the user
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
-        ;;
-    node-init)
-        exec /bin/ansible-playbook nodes-boinc-setup.yml
         ;;
     project-sync)
         exec /bin/ansible-playbook nodes-sync-projects.yml
@@ -275,12 +275,12 @@ usage: ${0} SUBCOMMAND [ARGS]
   backup
       Create tarball with all farm-specific files
 
+  boinc-config
+      Deploy or update BOINC configuration on compute nodes
+
   cmd <COMMAND_LINE>
       Run a command on all nodes. COMMAND_LINE be a single argument, so use
       quotes as appropriate
-
-  node-init
-      Do initial BOINC configuration on compute nodes
 
   project-sync
       Sync project statuses to compute nodes

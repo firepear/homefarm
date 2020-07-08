@@ -15,10 +15,10 @@ On the new compute node:
    docment
 
 On the controller:
-1. Run `'ansible-playbook compute-nodes-boinc.yml'`
 1. Edit the new node's config in the `nodes` dir (or symlink to an
    existing node config, as desired)
-1. Run `'ansible-playbook update-projects.yml'`
+1. Run `'farmctl boinc-config'`
+1. Run `'farmctl project-sync'`
 
 
 ## Reinstalling an existing node
@@ -30,7 +30,7 @@ since it already knows about the machine you're reinstalling.
 
 After `node-setup` is complete, on the controller:
 
-1. Run `'farmctl node-init'`
+1. Run `'farmctl boinc-config'`
 1. Run `'farmctl project-sync'`
 
 The node then will be back in service, with the same configuration it
