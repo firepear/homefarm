@@ -14,10 +14,11 @@
     become: true
     copy:
       src: ./nodes/{{ inventory_hostname }}-cc.xml
-      dest: /var/lib/boinc
+      dest: /var/lib/boinc/cc_config.xml
       owner: root
       group: root
       mode: 0644
+    register: cc-config
   - name: Copy boinc unit file
     become: true
     copy:
@@ -61,4 +62,4 @@
     service:
       name: boinc-client
       state: restarted
-    when: unitfile.changed
+    when: unitfile.changed or cc-config.changed
