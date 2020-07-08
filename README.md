@@ -23,6 +23,7 @@ There are a few assumptions:
 
 # News
 
+* 2020-07-08: v2.7.1: Fixed deployment of cc_config.xml to nodes
 * 2020-06-19: v2.7.0: Automated build/rebuild of control
   container. Improved initial setup experience. Initial work done to
   support multiple architectures
@@ -30,7 +31,6 @@ There are a few assumptions:
   initial pkgs list.
 * 2020-05-02: v2.5.2: JSON improvements and bugfixes
 * 2020-04-24: v2.5.1: Refactoring and bugfixes in `query` and networking
-* 2020-04-12: v2.5.0: `status` and `query` can now output JSON
 
 See the [Release
 notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)

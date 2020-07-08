@@ -1,3 +1,16 @@
+2.7.1 - 2020-07-08
+--------------------------------------------------------------------
+
+    * BOINC client configuration file now correctly deployed to
+      compute nodes
+
+    * cc filename changed on controller from cc_NODE.xml to
+      NODE-cc.xml to sort per-node configs together
+
+    * Enabled logging of `file_xfer` events, which upstream BOINC
+      seems to have compiled out in recent months
+
+
 2.7.0 - 2020-06-19
 --------------------------------------------------------------------
 
