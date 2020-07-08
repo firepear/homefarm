@@ -10,6 +10,14 @@
       owner: root
       group: root
       mode: 0644
+  - name: Copy BOINC client config
+    become: true
+    copy:
+      src: ./nodes/{{ inventory_hostname }}-cc.xml
+      dest: /var/lib/boinc
+      owner: root
+      group: root
+      mode: 0644
   - name: Copy boinc unit file
     become: true
     copy:
