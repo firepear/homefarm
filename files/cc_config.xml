@@ -1,4 +1,7 @@
 <cc_config>
+  <log_flags>
+    <file_xfer>1</file_xfer>
+  </log_flags>
   <options>
   </options>
 </cc_config>
