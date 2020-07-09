@@ -15,6 +15,7 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
 
 localrepo = sys.argv[1]
 mirrorurl = sys.argv[2]
+arch      = sys.argv[3]
 
 # switch to the local repo directory
 os.chdir(localrepo)
@@ -22,7 +23,7 @@ os.chdir(localrepo)
 log = open("update.log", 'w', buffering=1)
 log.write("Beginning run: {}\n".format(datetime.now()))
 
-repos = ["core", "extra", "community"]
+repos = ["core", "extra", "community", "alarm"]
 pkgs = []     # installed packages
 pkgfiles = {} # package filename-to-repo map
 localpkgs = glob.glob("*.pkg.tar.xz") # currently downloaded packages
@@ -39,6 +40,8 @@ with open("./db/pkgs.txt") as pkgfile:
 # gather data on all available packages
 print("Processing package databases", flush=True)
 for repo in repos:
+    if arch == "x86_64" and repo == "alarm":
+        continue
     repopkgs = os.listdir("./db/{}".format(repo))
     # read the 'desc' file of each pkg in the repo. build a map of pkg
     # filenames to repo we're pulling them from.

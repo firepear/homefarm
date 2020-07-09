@@ -28,7 +28,7 @@ function hf_init() {
         sedexpr="s/HF_MIRRORURL_UNSET/${MIRROR_URL}/"
         sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
         fp_parseconfig /homefarm/.fpconfig.json homefarm
-        cp ./files/mirrorlist-armv7h srv/homefarm
+        ln -s ./files/mirrorlist-armv7h srv/homefarm
     else
         echo "Skipping; already configured"
     fi

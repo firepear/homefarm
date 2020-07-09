@@ -78,7 +78,11 @@ update_localrepo() {
     # hash. do nothing if they match.
     mkdir -p "${repodir}"
     cd "${repodir}" || exit
-    hf_fetch "${mirrorurl}/core/os/${arch}/core.db.tar.gz"
+    if [[ "${arch}" == "x86_64" ]]; then
+        hf_fetch "${mirrorurl}/core/os/${arch}/core.db.tar.gz"
+    else
+        hf_fetch "${mirrorurl}/${arch}/core/core.db.tar.gz"
+    fi
     coremd5=$(md5sum core.db.tar.gz)
     if [[ -e "prevmd5" ]]; then
         prevmd5=$(cat prevmd5)
@@ -103,10 +107,18 @@ update_localrepo() {
     export localrepo_updated="true"
     # grab remaining db files from mirror, and unpack all of them
     echo "Updating package databases"
-    for repo in core extra community; do
+    for repo in core extra community alarm; do
+        if [[ "${arch}" == "x86_64" ]] && [[ "${repo}" == "alarm" ]]; then
+            # skip the 'alarm' repo for x86
+            continue
+        fi
         cd "${repodir}" || exit
         if [[ ! -e "${repo}.db.tar.gz" ]]; then
-            hf_fetch "${mirrorurl}/${repo}/os/${arch}/${repo}.db.tar.gz"
+            if [[ "${arch}" == "x86_64" ]]; then
+                hf_fetch "${mirrorurl}/${repo}/os/${arch}/${repo}.db.tar.gz"
+            else
+                hf_fetch "${mirrorurl}/${arch}/${repo}/${repo}.db.tar.gz"
+            fi
         fi
         mkdir -p "${repodir}/db/${repo}"
         mv "${repo}.db.tar.gz" "${repodir}/db/${repo}"
@@ -116,7 +128,7 @@ update_localrepo() {
     done
     cd "${repodir}" || exit
     # call the python script which manages all the repo files
-    /homefarm/bin/repo-update "${repodir}" "${mirrorurl}"
+    /homefarm/bin/repo-update "${repodir}" "${mirrorurl}" "${arch}"
     if [[ "${?}" != "0" ]]; then
         exit 1
     fi
