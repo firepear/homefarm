@@ -123,7 +123,7 @@ mv "pacman-${CPUARCH}.conf" /etc/pacman.conf
 hf_fetch  "${CONTROLLER}/mirrorlist-${CPUARCH}"
 mv "mirrorlist-${CPUARCH}" /etc/pacman.d/mirrorlist
 # do install of needed packages
-if [[ "${CPUARCH}" == "armv7h" ]]; then
+if [[ "${CPUARCH}" == "armv7h" ]] || [[ "${CPUARCH}" == "aarch64" ]]; then
     # just use pacman
     pacman -Syu --noconfirm
     pacman -S --noconfirm --needed openssh python ansible sudo grep awk boinc-nox vi mg

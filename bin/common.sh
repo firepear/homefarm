@@ -89,24 +89,13 @@ update_localrepo() {
     fi
     echo "${coremd5}" > prevmd5
 
-    shownotice "Updating local mirror"
+    shownotice "Updating local mirror for ${arch}"
     # generate and grab installed packages list
     mkdir -p "${repodir}/db"
-    if [[ "${firstnode}" == "" ]]; then
-        # this branch runs during control node install and uses the
-        # initial packages list
-        cp "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" ./db/pkgs.txt
-    else
-        # this branch runs during normal update. it grabs a package
-        # list from the first node and sets localrepo_updated to true,
-        # which will trigger OS updates on the compute nodes
-        ssh -o StrictHostKeyChecking=accept-new "farmer@${firstnode}" 'sudo pacman -Qi | grep Name | awk '"'"'{print $3}'"'"' > pkgs.txt'
-        # scp node pkgs to the repodir
-        scp -q "farmer@${firstnode}:pkgs.txt" "${repodir}/nodepkgs.txt"
-        # merge the node pkgs and the initial homefarm pkgs
-        cat "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" "${repodir}/nodepkgs.txt" | sort | uniq > "${repodir}/db/pkgs.txt"
-        export localrepo_updated="true"
-    fi
+    cp "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" ./db/pkgs.txt
+    # merge the local pkgs list and the homefarm pkgs
+    cat "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" | sort | uniq > "${repodir}/db/pkgs.txt"
+    export localrepo_updated="true"
     # grab remaining db files from mirror, and unpack all of them
     echo "Updating package databases"
     for repo in core extra community; do

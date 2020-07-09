@@ -109,7 +109,12 @@ if [[ "${DEVMODE}" == "false" ]]; then
 fi
 
 for arch in ${FP_CONFIG[marches]}; do
-    update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}" "${arch}" "${NODE}"
+    if [[ "${arch}" == "armv7h" ]] || [[ "${arch}" == "aarch64" ]]; then
+        mirrorurl="http://mirror.archlinuxarm.org/"
+    else
+        mirrorurl="${FP_CONFIG[mirrorurl]}"
+    fi
+    update_localrepo "${FP_CONFIG[localrepo]}" "${mirrorurl}" "${arch}" "${NODE}"
     if [[ "${?}" != "0" ]]; then
         exit 1
     fi
