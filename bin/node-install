@@ -1,6 +1,79 @@
 #!/bin/bash
 set -e
 
+function hf_clockcheck() {
+    shownotice "Hardware clock check"
+    cat <<EOF
+The system time (hardware clock) needs to be set to UTC. The present
+time, according to the system clock, is:
+
+EOF
+    date '+%F %T'
+    UTC=$(affirmative "Is this correct")
+    if [[ "${UTC}" == "false" ]]; then
+        echo "Please reboot and set the hardware clock."
+        echo
+        exit 1
+    fi
+}
+
+function hf_storageconfig() {
+    shownotice "Drive configuration"
+    echo "These are the storage devices on this machine:"
+    echo
+    DRIVES=( /dev/sd? /dev/nvme?n? )
+    for I in $( seq 0 $((${#DRIVES[@]} - 1)) )
+    do
+        PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null) || true
+        readarray PARTMAP <<<"${PARTMAPRAW}"
+        echo -n "${I} - ${PARTMAP[1]}"
+        for J in $( seq 2 $(( ${#PARTMAP[@]} - 1 )) )
+        do
+            echo -n -e "\t${PARTMAP[${J}]}"
+        done
+        echo
+    done
+    DRIVENUM=$(gutcheck "Enter the number of the device to be used")
+    if [[ "${DRIVENUM}" = "" ]] && [[ ! ${+DRIVES[${DRIVENUM}]} ]]; then
+        echo "Sorry, '${DRIVENUM}' is not a valid option. Terminating install."
+        exit 1
+    fi
+    INSTALLDEVICE=${DRIVES[${DRIVENUM}]}
+    echo
+    echo "All data on ${INSTALLDEVICE} will be wiped."
+    if [[ $(affirmative "Are you sure") == "false" ]]; then
+        echo "exiting"
+        exit 1
+    fi
+    echo "OK. Preparing ${INSTALLDEVICE}"
+
+    # lay down new disk label
+    parted -s "${INSTALLDEVICE}" mklabel gpt
+    # make efi partition
+    parted -s -a none "${INSTALLDEVICE}" mkpart ESP fat32 1MiB 513MiB
+    parted -s "${INSTALLDEVICE}" name 1 "esp"
+    parted "${INSTALLDEVICE}" set 1 boot on
+    parted "${INSTALLDEVICE}" set 1 esp on
+
+    # lay down system partition
+    parted -s -a optimal "${INSTALLDEVICE}" mkpart primary ext4 513MiB 100%
+    parted -s "${INSTALLDEVICE}" name 2 "root"
+    echo -n "Settling partitions for 5 seconds... "
+    sleep 2
+    udevadm settle
+    partx -u "${INSTALLDEVICE}"
+    sleep 3
+    echo "OK"
+    # format and mount partitions
+    mkfs.ext4 -F /dev/disk/by-partlabel/root
+    mount /dev/disk/by-partlabel/root /mnt
+    mkdir /mnt/boot
+    mkfs.fat -F32 /dev/disk/by-partlabel/esp
+    mount /dev/disk/by-partlabel/esp /mnt/boot
+}
+
+
+
 WPACONF="/etc/wpa_supplicant/w.conf"
 
 if [[ "${1}" == "" ]]; then
@@ -30,107 +103,53 @@ USERWPAPW="${4}"
 if [[ ! -e "common.sh" ]]; then
     curl --connect-timeout 10 --max-time 60 -f -s -S -O "${CONTROLLER}/common.sh"
 fi
-# and source
-. ./common.sh
+source ./common.sh
 
 clear
 shownotice "Beginning Homefarm/Arch install"
-shownotice "Hardware clock check"
-cat <<EOF
-The system time (hardware clock) needs to be set to UTC. The present
-time, according to the system clock, is:
-
-EOF
-date '+%F %T'
-UTC=$(affirmative "Is this correct")
-if [[ "${UTC}" == "false" ]]; then
-    echo "Please reboot and set the hardware clock."
-    echo
-    exit 1
+CPUARCH=hf_setarch
+if [[ "${CPUARCH}" == "x86_64" ]]; then
+    # make sure the clock is set
+    hf_clockcheck
+    # and setup a drive
+    hf_storageconfig
 fi
 
-# setup drive
-shownotice "Drive configuration"
-echo "These are the storage devices on this machine:"
-echo
-DRIVES=( /dev/sd? /dev/nvme?n? )
-for I in $( seq 0 $((${#DRIVES[@]} - 1)) )
-do
-    PARTMAPRAW=$(parted -m -s "${DRIVES[${I}]}" print 2>/dev/null) || true
-    readarray PARTMAP <<<"${PARTMAPRAW}"
-    echo -n "${I} - ${PARTMAP[1]}"
-    for J in $( seq 2 $(( ${#PARTMAP[@]} - 1 )) )
-    do
-        echo -n -e "\t${PARTMAP[${J}]}"
-    done
-    echo
-done
-DRIVENUM=$(gutcheck "Enter the number of the device to be used")
-if [[ "${DRIVENUM}" = "" ]] && [[ ! ${+DRIVES[${DRIVENUM}]} ]]; then
-    echo "Sorry, '${DRIVENUM}' is not a valid option. Terminating install."
-    exit 1
-fi
-INSTALLDEVICE=${DRIVES[${DRIVENUM}]}
-echo
-echo "All data on ${INSTALLDEVICE} will be wiped."
-if [[ $(affirmative "Are you sure") == "false" ]]; then
-    echo "exiting"
-    exit 1
-fi
-echo "OK. Preparing ${INSTALLDEVICE}"
 
-# lay down new disk label
-parted -s "${INSTALLDEVICE}" mklabel gpt
-# make efi partition
-parted -s -a none "${INSTALLDEVICE}" mkpart ESP fat32 1MiB 513MiB
-parted -s "${INSTALLDEVICE}" name 1 "esp"
-parted "${INSTALLDEVICE}" set 1 boot on
-parted "${INSTALLDEVICE}" set 1 esp on
-
-# lay down system partition
-parted -s -a optimal "${INSTALLDEVICE}" mkpart primary ext4 513MiB 100%
-parted -s "${INSTALLDEVICE}" name 2 "root"
-echo -n "Settling partitions for 5 seconds... "
-sleep 2
-udevadm settle
-partx -u "${INSTALLDEVICE}"
-sleep 3
-echo "OK"
-# format and mount partitions
-mkfs.ext4 -F /dev/disk/by-partlabel/root
-mount /dev/disk/by-partlabel/root /mnt
-mkdir /mnt/boot
-mkfs.fat -F32 /dev/disk/by-partlabel/esp
-mount /dev/disk/by-partlabel/esp /mnt/boot
-
-
-# install base preqs
 shownotice "Base install"
 # get cluster pacman.conf and mirrorlist
-hf_fetch "${CONTROLLER}/pacman.conf"
-mv pacman.conf /etc/pacman.conf
-hf_fetch  "${CONTROLLER}/mirrorlist"
-mv mirrorlist /etc/pacman.d/mirrorlist
-
-
-# base install via pacstrap
-pkglist="base openssh wpa_supplicant lm_sensors python ansible sudo grep awk boinc-nox linux linux-firmware logrotate vi mg"
-pacstrap /mnt ${pkglist}
-# generate /etc/fstab
-genfstab -U /mnt >> /mnt/etc/fstab
-# copy over resolf.conf so the system will have nameservice
-rm -f /mnt/etc/resolv.conf
-cp /etc/resolv.conf /mnt/etc/resolv.conf
-# install pacman.conf and mirrorlist to system
-cp /etc/pacman.conf /mnt/etc/pacman.conf
-cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-# copy wpa configuration if we have it
-if [[ -e "${WPACONF}" ]]; then
-    mkdir -p /mnt/etc/wpa_supplicant
-    cp "${WPACONF}" "/mnt/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
+hf_fetch "${CONTROLLER}/pacman-${CPUARCH}.conf"
+mv "pacman-${CPUARCH}.conf" /etc/pacman.conf
+hf_fetch  "${CONTROLLER}/mirrorlist-${CPUARCH}"
+mv "mirrorlist-${CPUARCH}" /etc/pacman.d/mirrorlist
+# do install of needed packages
+if [[ "${CPUARCH}" == "armv7h" ]]; then
+    # just use pacman
+    pacman -Syu --noconfirm
+    pacman -S --noconfirm --needed openssh python ansible sudo grep awk boinc-nox vi mg
+    if [[ -e "${WPACONF}" ]]; then
+        mv "${WPACONF}" "/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
+    fi
+else
+    # base install via pacstrap
+    pkglist="base openssh wpa_supplicant lm_sensors python ansible sudo grep awk boinc-nox linux linux-firmware vi mg"
+    pacstrap /mnt ${pkglist}
+    # generate /etc/fstab
+    genfstab -U /mnt >> /mnt/etc/fstab
+    # copy over resolf.conf so the system will have nameservice
+    rm -f /mnt/etc/resolv.conf
+    cp /etc/resolv.conf /mnt/etc/resolv.conf
+    # install pacman.conf and mirrorlist to system
+    cp /etc/pacman.conf /mnt/etc/pacman.conf
+    cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+    # copy wpa configuration if we have it
+    if [[ -e "${WPACONF}" ]]; then
+        mkdir -p /mnt/etc/wpa_supplicant
+        cp "${WPACONF}" "/mnt/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
+    fi
 fi
 
-cat > /mnt/root/stage1 <<EOF
+cat > /root/stage1 <<EOF
 #!/bin/bash
 set -e
 cd /root
@@ -142,9 +161,7 @@ USERWPAPW="${USERWPAPW}"
 WPACONF="/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
 INSTALLDEVICE="${INSTALLDEVICE}"
 
-
-# source util funcs
-. ./common.sh
+source ./common.sh
 
 # set TZ
 shownotice "Timezone configuration"
@@ -162,7 +179,7 @@ until [[ "\${TZ}" != "" ]]; do
     fi
 done
 ln -sf "/usr/share/zoneinfo/\${TZ}" /etc/localtime
-hwclock --systohc
+hwclock --systohc || true
 
 shownotice "Networking setup"
 # set hostname
@@ -215,29 +232,40 @@ systemctl enable boinc-client
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen > /dev/null
 
-# make the install device bootable via EFI
-shownotice "Finishing install"
-if [[ "\${INSTALLDEVICE}" =~ ^/dev/nvme ]]; then
-    INSTALLPART="\${INSTALLDEVICE}p2"
-else
-    INSTALLPART="\${INSTALLDEVICE}2"
-fi
-PARTUUID=\$(blkid -s PARTUUID -o value \${INSTALLPART})
-mkdir -p /boot/loader/entries
-cat > /boot/loader/entries/arch.conf <<EOF2
-title          Arch Linux
-linux          /vmlinuz-linux
-initrd         /initramfs-linux.img
-options        root=PARTUUID=\${PARTUUID} rw
+
+if [[ "\${INSTALLDEVICE}" != "" ]]; then
+    # make the install device bootable via EFI
+    shownotice "Finishing install"
+    if [[ "\${INSTALLDEVICE}" =~ ^/dev/nvme ]]; then
+        INSTALLPART="\${INSTALLDEVICE}p2"
+    else
+        INSTALLPART="\${INSTALLDEVICE}2"
+    fi
+    PARTUUID=\$(blkid -s PARTUUID -o value \${INSTALLPART})
+    mkdir -p /boot/loader/entries
+    cat > /boot/loader/entries/arch.conf <<EOF2
+    title          Arch Linux
+    linux          /vmlinuz-linux
+    initrd         /initramfs-linux.img
+    options        root=PARTUUID=\${PARTUUID} rw
 EOF2
-bootctl install
+    bootctl install
+fi
+
 hf_fetch "\${CONTROLLER}/node-setup"
 EOF
-chmod +x /mnt/root/stage1
-cp ./common.sh /mnt/root
-arch-chroot /mnt /root/stage1
-umount /mnt/boot
-umount /mnt
+
+
+if [[ "${CPUARCH}" == "x86_64" ]]; then
+    cp /root/stage1 /mnt/root/stage1
+    chmod +x /mnt/root/stage1
+    cp ./common.sh /mnt/root
+    arch-chroot /mnt /root/stage1
+    umount /mnt/boot
+    umount /mnt
+else
+    /root/stage1
+fi
 
 shownotice "Installation complete"
 echo "Rebooting in 5 seconds."
