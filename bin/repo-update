@@ -42,6 +42,7 @@ print("Processing package databases", flush=True)
 for repo in repos:
     if arch == "x86_64" and repo == "alarm":
         continue
+    print(f"    {repo}", flush=True)
     repopkgs = os.listdir("./db/{}".format(repo))
     # read the 'desc' file of each pkg in the repo. build a map of pkg
     # filenames to repo we're pulling them from.
@@ -69,15 +70,19 @@ for pkg in pkgfiles.keys():
     if pkg not in localpkgs:
         fetch_count = 0
         filetype = ""
+        pkgurl=""
+        if arch == "x86_64":
+            pkgurl = f"{mirrorurl}/{pkgfiles[pkg]}/os/x86_64/{pkg}"
+        else:
+            pkgurl = f"{mirrorurl}/{arch}/{pkgfiles[pkg]}/{pkg}"
+        pkgdest = f"{localrepo}/{pkg}"
         # try to fetch until we get "XZ compressed" or 5 tries
         while ("XZ compressed" not in filetype and "Zstandard" not in filetype) and fetch_count < 5:
-            pkgurl = "{}/{}/os/x86_64/{}".format(mirrorurl, pkgfiles[pkg], pkg)
-            pkgdest = "{}/{}".format(localrepo, pkg)
             fetch_count += 1
             rc = 1
             while rc != 0:
-                log.write("Downloading '{}' (try {})\n".format(pkgurl, fetch_count))
-                rc = subprocess.run(['curl', '-f', '-s', '-S',
+                log.write(f"Downloading '{pkgurl}' (try {fetch_count})\n")
+                rc = subprocess.run(['curl', '-L', '-f', '-s', '-S',
                                      '--connect-timeout', '10', '--speed-time', '10', '--speed-limit', '1024',
                                      pkgurl, '-o', pkgdest], check=True).returncode
             filetype = subprocess.check_output(['file', pkgdest], text=True)

@@ -51,7 +51,7 @@ hf_setarch() {
 
 
 hf_fetch() {
-    err=$(curl --connect-timeout 10 --speed-time 10 --speed-limit 1024 -f -s -S -O "${1}" 2>&1)
+    err=$(curl --connect-timeout 10 --speed-time 10 --speed-limit 1024 -L -f -s -S -O "${1}" 2>&1)
     rc=${?}
     if [[ "${rc}" != "0" ]]; then
         echo "error: couldn't fetch '${1}'. problem was:"
@@ -117,7 +117,7 @@ update_localrepo() {
             if [[ "${arch}" == "x86_64" ]]; then
                 hf_fetch "${mirrorurl}/${repo}/os/${arch}/${repo}.db.tar.gz"
             else
-                hf_fetch "${mirrorurl}/${arch}/${repo}/${repo}.db.tar.gz"
+                    hf_fetch "${mirrorurl}/${arch}/${repo}/${repo}.db.tar.gz"
             fi
         fi
         mkdir -p "${repodir}/db/${repo}"

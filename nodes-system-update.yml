@@ -13,7 +13,7 @@
   - name: Copy mirrorlist
     become: true
     copy:
-      src: ./srv/homefarm/mirrorlist
+      src: ./srv/homefarm/mirrorlist-{{ ansible_architecture }}
       dest: /etc/pacman.d/mirrorlist
       owner: root
       group: root

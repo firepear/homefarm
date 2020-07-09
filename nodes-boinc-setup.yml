@@ -5,7 +5,7 @@
   - name: Update pacman.conf
     become: true
     copy:
-      src: ./srv/homefarm/pacman-{{ ansible-architecture }}.conf
+      src: ./srv/homefarm/pacman-{{ ansible_architecture }}.conf
       dest: /etc/pacman.conf
       owner: root
       group: root
