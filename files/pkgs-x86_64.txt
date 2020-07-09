@@ -52,6 +52,7 @@ ldns
 less
 libarchive
 libassuan
+libbsd
 libcap
 libcap-ng
 libcroco
@@ -71,6 +72,7 @@ libnftnl
 libnghttp2
 libnl
 libnsl
+libp11-kit
 libpcap
 libpsl
 libsasl
@@ -92,6 +94,7 @@ linux-firmware
 lm_sensors
 logrotate
 lz4
+mg
 mkinitcpio
 mkinitcpio-busybox
 mpfr
@@ -145,6 +148,7 @@ systemd-sysvcompat
 tar
 tzdata
 util-linux
+vi
 wpa_supplicant
 xz
 zlib
