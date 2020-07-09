@@ -62,6 +62,7 @@ function hf_init() {
         sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
         for arch in ${FP_CONFIG[marches]}; do
             sed -e "${sedexpr}" "./files/pacman-${arch}.conf" > "${FP_CONFIG[httpdir]}/pacman-${arch}.conf"
+        done
         # create local package cache dir
         mkdir -p /homefarm/srv/arch
         # init project stats db
