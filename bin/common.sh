@@ -41,6 +41,15 @@ gutcheck() {
     echo "${GUTCHECK}"
 }
 
+hf_setarch() {
+    CPUARCH=$(grep Arch /etc/pacman.conf | cut -d' ' -f3)
+    if [[ "${CPUARCH}" == "auto" ]]; then
+        CPUARCH="x86_64"
+    fi
+    echo "${CPUARCH}"
+}
+
+
 hf_fetch() {
     err=$(curl --connect-timeout 10 --speed-time 10 --speed-limit 1024 -f -s -S -O "${1}" 2>&1)
     rc=${?}
