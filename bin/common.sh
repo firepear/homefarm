@@ -117,7 +117,7 @@ update_localrepo() {
             if [[ "${arch}" == "x86_64" ]]; then
                 hf_fetch "${mirrorurl}/${repo}/os/${arch}/${repo}.db.tar.gz"
             else
-                    hf_fetch "${mirrorurl}/${arch}/${repo}/${repo}.db.tar.gz"
+                hf_fetch "${mirrorurl}/${arch}/${repo}/${repo}.db.tar.gz"
             fi
         fi
         mkdir -p "${repodir}/db/${repo}"

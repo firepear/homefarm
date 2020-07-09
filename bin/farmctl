@@ -60,7 +60,8 @@ function hf_init() {
     else
         HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
         sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
-        sed -e "${sedexpr}" ./files/pacman.conf > "${FP_CONFIG[httpdir]}/pacman.conf"
+        for arch in ${FP_CONFIG[marches]}; do
+            sed -e "${sedexpr}" "./files/pacman-${arch}.conf" > "${FP_CONFIG[httpdir]}/pacman-${arch}.conf"
         # create local package cache dir
         mkdir -p /homefarm/srv/arch
         # init project stats db

@@ -42,7 +42,6 @@ print("Processing package databases", flush=True)
 for repo in repos:
     if arch == "x86_64" and repo == "alarm":
         continue
-    print(f"    {repo}", flush=True)
     repopkgs = os.listdir("./db/{}".format(repo))
     # read the 'desc' file of each pkg in the repo. build a map of pkg
     # filenames to repo we're pulling them from.
