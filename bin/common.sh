@@ -93,7 +93,7 @@ update_localrepo() {
     # generate and grab installed packages list
     mkdir -p "${repodir}/db"
     cp "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" ./db/pkgs.txt
-    if [[ =e "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" ]]; then
+    if [[ -e "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" ]]; then
         # if a local pkgs list exists, merge it and the homefarm pkgs list
         cat "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" | sort | uniq > "${repodir}/db/pkgs.txt"
     else
