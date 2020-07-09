@@ -30,15 +30,15 @@ update_homefarm() {
     fi
 
     shownotice "New Homefarm release: ${NEWEST_TAG}"
-    git checkout master
-    git pull
-    git checkout "${NEWEST_TAG}"
+    git checkout master >> /dev/null 2>&1
+    git pull >> /dev/null 2>&1
+    git checkout "${NEWEST_TAG}" >> /dev/null 2>&1
 
     # cache the new tag name and set repo update flag
     echo "${NEWEST_TAG}" > ./.current_tag
     touch ./.repoupdate
 
-    shownotice "Repo updated; restarting update"
+    shownotice "Homefarm updated; restarting update"
     echo; echo; echo
     exec "${1}"
 }
