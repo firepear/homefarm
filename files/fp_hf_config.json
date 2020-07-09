@@ -4,6 +4,6 @@
         "httpdir": "/homefarm/srv/homefarm",
         "localrepo": "/homefarm/srv/homefarm/arch",
         "mirrorurl": "HF_MIRRORURL_UNSET",
-        "marches": "x86_64"
+        "marches": "HF_MARCHES_UNSET"
     }
 }

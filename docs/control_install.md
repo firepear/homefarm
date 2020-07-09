@@ -63,14 +63,21 @@ you, so on a machine with a browser:
 1. Find a mirror that is geographically close to you and has low delay
 1. Copy the URL of your chosen mirror
 
-Then, in the controller container, edit `./srv/homefarm/mirrorlist`
+Mn the controller container, edit `./srv/homefarm/mirrorlist-x86_64`
 (`vi` and `mg` are available) and add a line:
 
 `Server = MIRROR_URL`
 
-Save and exit, then run `'farmctl init'` to complete initialization of
-the controller environment. This is mostly automatic, but it will ask
-you for the IP address of the host which is running the container.
+then save and exit
+
+
+Run `'farmctl init'` to complete initialization of the controller
+environment. This is mostly automatic, but it will ask you for:
+
+* The machine architectures you want to mirror packages for. The
+  default is `x86_64`. If you only have Raspberry Pis, enter
+  `armv7h`. If you have both, enter `x86_64 armv7h`
+* The IP address of the host which is running the container
 
 
 

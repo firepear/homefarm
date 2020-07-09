@@ -16,22 +16,31 @@ function hf_init() {
         cp /homefarm/files/fp_hf_config.json /homefarm/.fpconfig.json
     fi
 
-    shownotice "Initializing Arch source repo URL"
+    shownotice "Initializing Arch source repo config"
+    # set mirror url
     if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
-        MIRROR_URL=$(grep '^Server' srv/homefarm/mirrorlist | cut -d' ' -f3 | cut -d'$' -f1)
+        MIRROR_URL=$(grep '^Server' srv/homefarm/mirrorlist-x86_64 | cut -d' ' -f3 | cut -d'$' -f1)
         MIRROR_URL="${MIRROR_URL//\//'\/'}"
         sedexpr="s/HF_MIRRORURL_UNSET/${MIRROR_URL}/"
         sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
         fp_parseconfig /homefarm/.fpconfig.json homefarm
+        cp ./files/mirrorlist-armv7h srv/homefarm
     else
         echo "Skipping; already configured"
     fi
+    # set marches
+    if [[ "${FP_CONFIG[marches]}" == "HF_MARCHES_UNSET" ]]; then
+        MARCHES=$(gutcheck "Arches to mirror" "x86_64")
+        sedexpr="s/HF_MARCHES_UNSET/${MARCHES}/"
+        sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
+        fp_parseconfig /homefarm/.fpconfig.json homefarm
+    fi
 
-    # generate ssh key
     shownotice "Generating SSH configuration for Ansible"
     if [[ -e /root/.ssh/id_farmer ]]; then
         echo "Skipping; already configured"
     else
+        # generate ssh key
         ssh-keygen -t ed25519 -N "" -f id_farmer
         mkdir -p /homefarm/.ssh
         mv id_farmer* /homefarm/.ssh
