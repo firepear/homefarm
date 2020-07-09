@@ -93,15 +93,20 @@ update_localrepo() {
     # generate and grab installed packages list
     mkdir -p "${repodir}/db"
     cp "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" ./db/pkgs.txt
-    # merge the local pkgs list and the homefarm pkgs
-    cat "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" | sort | uniq > "${repodir}/db/pkgs.txt"
+    if [[ =e "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" ]]; then
+        # if a local pkgs list exists, merge it and the homefarm pkgs list
+        cat "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" | sort | uniq > "${repodir}/db/pkgs.txt"
+    else
+        # else just copy the standard list
+        cp "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" "${repodir}/db/pkgs.txt"
+    fi
     export localrepo_updated="true"
     # grab remaining db files from mirror, and unpack all of them
     echo "Updating package databases"
     for repo in core extra community; do
         cd "${repodir}" || exit
         if [[ ! -e "${repo}.db.tar.gz" ]]; then
-            hf_fetch "${mirrorurl}/${repo}/os/x86_64/${repo}.db.tar.gz"
+            hf_fetch "${mirrorurl}/${repo}/os/${arch}/${repo}.db.tar.gz"
         fi
         mkdir -p "${repodir}/db/${repo}"
         mv "${repo}.db.tar.gz" "${repodir}/db/${repo}"
