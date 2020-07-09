@@ -12,6 +12,10 @@ declare -A FP_CONFIG
 # handles the initial node setup, other than package install (which is
 # done by the docker build)
 function hf_init() {
+    # checkout most recent tag to ensure good state
+    git checkout $(git tag | tail -1) >> /dev/null 2>&1
+
+    # copy config file if it doesn't exist
     if [[ ! -e ./.fpconfig.json ]]; then
         cp /homefarm/files/fp_hf_config.json /homefarm/.fpconfig.json
     fi
