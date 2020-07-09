@@ -118,8 +118,8 @@ for arch in ${FP_CONFIG[marches]}; do
     if [[ "${?}" != "0" ]]; then
         exit 1
     fi
-    update_os "${arch}"
 done
+update_os
 
 # run this playbook here, because it sets the custom BOINC unit file,
 # and pushes jlparse and boinccmdcmd to nodes. Those things need to be
