@@ -49,7 +49,7 @@ Wifi:
    manually create it)
 1. `'wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/w.conf'` to
    attach to WiFi
-1. `'dhcpcd IFACE'` to obtain an IP address. This may take a few
+1. `'dhcpcd wlan0'` to obtain an IP address. This may take a few
    seconds to complete.
 
 
