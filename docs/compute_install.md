@@ -66,8 +66,6 @@ Wifi:
     configuration
 1. Answer the questions the installer asks. It will handle the rest
 
-## Homefarm setup
-
 After the reboot, login as root and run `'/bin/bash node-setup
 CONTROL_NODE_IP'` to complete the Homefarm-specific portions of
 installation. When `node-setup` completes, the node is ready for
