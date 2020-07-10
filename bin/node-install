@@ -107,7 +107,7 @@ source ./common.sh
 
 clear
 shownotice "Beginning Homefarm/Arch install"
-CPUARCH=hf_setarch
+CPUARCH=$(hf_setarch)
 if [[ "${CPUARCH}" == "x86_64" ]]; then
     # make sure the clock is set
     hf_clockcheck
@@ -264,6 +264,7 @@ if [[ "${CPUARCH}" == "x86_64" ]]; then
     umount /mnt/boot
     umount /mnt
 else
+    chmod +x /root/stage1
     /root/stage1
 fi
 

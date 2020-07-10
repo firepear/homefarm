@@ -28,7 +28,8 @@ function hf_init() {
         sedexpr="s/HF_MIRRORURL_UNSET/${MIRROR_URL}/"
         sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
         fp_parseconfig /homefarm/.fpconfig.json homefarm
-        ln -s ./files/mirrorlist-armv7h srv/homefarm
+        ln -s ./files/mirrorlist-armv7h srv/homefarm/mirrorlist-armv7h
+        ln -s ./files/mirrorlist-armv7h srv/homefarm/mirrorlist-armv7l
     else
         echo "Skipping; already configured"
     fi
@@ -55,13 +56,16 @@ function hf_init() {
 
     # do local files and httpd setup
     shownotice "Configuring Homefarm installer webserver"
-    if [[ -e "${FP_CONFIG[httpdir]}/pacman.conf" ]]; then
+    if [[ -e "${FP_CONFIG[httpdir]}/pacman-x86_64.conf" ]]; then
         echo "Skipping; already configured"
     else
         HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
         sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
         for arch in ${FP_CONFIG[marches]}; do
             sed -e "${sedexpr}" "./files/pacman-${arch}.conf" > "${FP_CONFIG[httpdir]}/pacman-${arch}.conf"
+            if [[ "${arch}" == "armv7h" ]]; then
+                ln -s "${FP_CONFIG[httpdir]}/pacman-${arch}.conf" "${FP_CONFIG[httpdir]}/pacman-archv7l.conf"
+            fi
         done
         # create local package cache dir
         mkdir -p /homefarm/srv/arch

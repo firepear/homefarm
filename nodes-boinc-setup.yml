@@ -58,6 +58,7 @@
       group: root
       mode: 0755
   - name: Reload BOINC client config
+    become: true
     command: /bin/boinccmd --read_cc_config
     when: ccconfig.changed
   - name: Restart BOINC
