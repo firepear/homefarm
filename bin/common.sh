@@ -42,7 +42,7 @@ gutcheck() {
 }
 
 hf_setarch() {
-    CPUARCH=$(grep Arch /etc/pacman.conf | cut -d' ' -f3)
+    CPUARCH=$(grep Architecture /etc/pacman.conf | cut -d' ' -f3)
     if [[ "${CPUARCH}" == "auto" ]]; then
         CPUARCH="x86_64"
     fi
