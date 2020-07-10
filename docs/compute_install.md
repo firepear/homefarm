@@ -60,10 +60,10 @@ Wifi:
    * This is the only time you'll need to supply the port number when
      asked for the control node's IP
 1. Run `'/bin/bash ./node-install CONTROL_NODE_IP IFACE [ESSID WPA_PASSWD]'`
-  * `IFACE` is the interface you wish to set up during the install
-  * `ESSID` and `WPA_PASSWD` are not needed if you are using a wired
-    connection, or if you followed the above procedure for WiFi
-    configuration
+   * `IFACE` is the interface you wish to set up during the install
+   * `ESSID` and `WPA_PASSWD` are not needed if you are using a wired
+     connection, or if you followed the above procedure for WiFi
+     configuration
 1. Answer the questions the installer asks. It will handle the rest
 
 After the reboot, login as root and run `'/bin/bash node-setup
