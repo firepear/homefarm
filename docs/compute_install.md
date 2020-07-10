@@ -3,7 +3,7 @@
 ## Arch install (x86_64)
 
 Download the [Arch Linux
-installer](https://alpinelinux.org/downloads/) and boot it.
+installer](https://www.archlinux.org/download/) and boot it.
 
 If the node uses wifi, bring it up with the following commands:
 
