@@ -6,7 +6,7 @@ import sys
 import time
 import xml.etree.ElementTree as ET
 
-import homefarm
+import homefarm as hf
 
 ###############################################################################
 #
@@ -49,9 +49,9 @@ def format_dl(dl):
 # report() is the report generator function. if JSON is requested, it
 # simply dumps the collected data, as-is. otherwise, a human-readable
 # report of all active tasks is created
-def report(tmpfile, hosts, wantjson):
+def report(tmpfile, hosts, conf):
     of = open(tmpfile, 'w')
-    if wantjson:
+    if conf['json']:
         json.dump(hosts, of)
         of.close()
         sys.exit(0)
@@ -101,9 +101,8 @@ def report(tmpfile, hosts, wantjson):
 ###############################################################################
 
 hosts = {}
+conf = { 'host': False, 'json': False, 'compact': False }
 tasks = None
-wanthost = ""
-wantjson = False
 
 sys.argv.pop(0)
 tmpfile = sys.argv.pop(0)
@@ -112,18 +111,21 @@ tmpfile = sys.argv.pop(0)
 # our calling format.
 for arg in sys.argv[0].split():
     if arg == "json":
-        wantjson = True
+        conf['json'] = True
+    elif arg == "compact":
+        conf['compact'] = True
     elif arg == "nopage":
         pass
     else:
-        wanthost = arg
-#of = open(tmpfile, 'w')
+        conf['host'] = arg
+
+
 with open("/homefarm/.boincguikeys.json", 'r') as f:
     hosts = json.load(f)
 
 data = {}
 for host, key in hosts.items():
-    if wanthost != "" and host != wanthost:
+    if conf['host'] != "" and host != conf['host']:
         continue
     data[host] = {'err': None}
 
@@ -134,7 +136,7 @@ for host, key in hosts.items():
             data[host]['err'] = f"could not connect to '{host}' with key '{key}'"
             continue
         # try to auth
-        authed = homefarm.auth_conn(s, key)
+        authed = hf.auth_conn(s, key)
         if not authed:
             data[host]['err'] = f"could not auth on '{host}' with key '{key}'"
             continue
@@ -142,7 +144,7 @@ for host, key in hosts.items():
         # first, get projects data
         req = "<boinc_gui_rpc_request><get_project_status/></boinc_gui_rpc_request>\003"
         s.sendall(req.encode('utf-8'))
-        reply = ET.fromstring(homefarm.recv_msg(s))
+        reply = ET.fromstring(hf.recv_msg(s))
         for project in reply.iter('project'):
             # and extract a few bits on a per-project basis. some of
             # this is trivia, but some of it will let us process the
@@ -175,7 +177,7 @@ for host, key in hosts.items():
         # later on
         req = "<boinc_gui_rpc_request><get_results/></boinc_gui_rpc_request>\003"
         s.sendall(req.encode('utf-8'))
-        tasks = ET.fromstring(homefarm.recv_msg(s))
+        tasks = ET.fromstring(hf.recv_msg(s))
 
     projcount = 0
     projects = data[host]
@@ -232,4 +234,4 @@ for host, key in hosts.items():
         data[host][projname]['taskactive'] = task_active
         data[host][projname]['tasks'] = ptasks
 
-report(tmpfile, data, wantjson)
+report(tmpfile, data, conf)
