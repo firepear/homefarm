@@ -64,12 +64,14 @@ Wifi:
    * `ESSID` and `WPA_PASSWD` are not needed if you are using a wired
      connection, or if you followed the above procedure for WiFi
      configuration
+   * If you get DNS failures here, but you can ping by IP, run
+     `systemctl disable --now systemd-resolved` as a workaround. If
+     you do this, you'll need to enable and start it on next boot
 1. Answer the questions the installer asks. It will handle the rest
-
-After the reboot, login as root and run `'/bin/bash node-setup
-CONTROL_NODE_IP'` to complete the Homefarm-specific portions of
-installation. When `node-setup` completes, the node is ready for
-Homefarm to take over its management.
+1. After the reboot, login as root and run `'/bin/bash node-setup
+   CONTROL_NODE_IP'` to complete the Homefarm-specific portions of
+   installation. When `node-setup` completes, the node is ready for
+   Homefarm to take over its management.
 
 You can test the inital install by running `'ssh farmer@[NODENAME]'`
 from the controller. If you can login, then everything should be good
