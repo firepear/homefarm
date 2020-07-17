@@ -1,4 +1,19 @@
 ---
+- hosts: controller
+  tasks:
+  - name: Ensure node config dir exists
+    file:
+      path: ./nodes
+      owner: root
+      state: directory
+      mode: 0755
+  - name: Ensure project config file for all nodes
+    command: cp --no-clobber ./files/node.yml ./nodes/{{ item }}.yml
+    loop: "{{ groups['compute_nodes'] }}"
+  - name: Ensure cc_config file for all nodes
+    command: cp --no-clobber ./files/cc_config.xml ./nodes/{{ item }}-cc.xml
+    loop: "{{ groups['compute_nodes'] }}"
+
 - hosts: compute_nodes
   remote_user: farmer
   tasks:
@@ -57,13 +72,13 @@
       owner: root
       group: root
       mode: 0755
-  - name: Reload BOINC client config
-    become: true
-    command: /bin/boinccmd --read_cc_config
-    when: ccconfig.changed
   - name: Restart BOINC
     become: true
     service:
       name: boinc-client
       state: restarted
     when: unitfile.changed
+  - name: Reload BOINC client config
+    become: true
+    command: /bin/boinccmd --read_cc_config
+    when: ccconfig.changed
