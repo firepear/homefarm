@@ -101,7 +101,7 @@ def report(tmpfile, hosts, conf):
 ###############################################################################
 
 hosts = {}
-conf = { 'host': False, 'json': False, 'compact': False }
+conf = { 'host': None, 'json': False, 'compact': False }
 tasks = None
 
 sys.argv.pop(0)
@@ -125,7 +125,7 @@ with open("/homefarm/.boincguikeys.json", 'r') as f:
 
 data = {}
 for host, key in hosts.items():
-    if conf['host'] != "" and host != conf['host']:
+    if conf['host'] != None and host != conf['host']:
         continue
     data[host] = {'err': None}
 
