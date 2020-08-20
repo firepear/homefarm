@@ -252,7 +252,47 @@ EOF2
     bootctl install
 fi
 
-hf_fetch "\${CONTROLLER}/node-setup"
+CPUARCH=\$(hf_setarch)
+
+# grab the controller's ssh key, for later
+hf_fetch "${CONTROLLER}/id_farmer.pub"
+
+# create user, set passwd, config sudo access, and setup ssh keys
+shownotice "Creating user for Ansible"
+useradd -d /home/farmer -m -s /bin/bash farmer
+passwd=\$( openssl passwd -1 -salt BOINC "\$(openssl rand -base64 32)" )
+usermod -p "\${passwd}" farmer
+echo "farmer ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers > /dev/null
+mkdir -p /home/farmer/.ssh
+chmod 700 /home/farmer/.ssh
+mv id_farmer.pub /home/farmer/.ssh/authorized_keys
+chown -R farmer:farmer /home/farmer/.ssh
+sed -i -E 's/^\#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+
+# randomize or set root passwd
+shownotice "Set root password"
+passwd=\$(gutcheck "Enter a password for root", "Randomize")
+if [[ "\${passwd}" == "Randomize" ]]; then
+    passwd=\$( openssl passwd -1 -salt BOINC "\$(openssl rand -base64 32)" )
+else
+    passwd=\$( openssl passwd -1 -salt BOINC "\${passwd}" )
+fi
+usermod -p "\${passwd}" root
+
+if [[ "\${CPUARCH}" == "x86_64" ]]; then
+    shownotice "Configuring sensors"
+    /usr/bin/sensors-detect --auto > /dev/null
+
+    shownotice "Setting boot parameters"
+    bootparams=\$(gutcheck "Enter desired boot parameters" "vsyscall=emulate mitigations=off")
+    # add vsyscall to kernel boot parameters; needed for FAH2
+    sedcmd="s/^(options\s+.*)\\\$/\1 \${bootparams}/"
+    sed -i -E -e "\${sedcmd}" /boot/loader/entries/arch.conf
+fi
+
+# this is a no-op if already enabled, and saves the user a step on
+# reboot if they had to use this workaround
+systemctl enable systemd-resolved
 EOF
 
 
