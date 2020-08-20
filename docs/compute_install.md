@@ -37,22 +37,18 @@ this doc.
 See the Arch Linux ARM website pages for the [Raspberry Pi 3](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3)
 or [Raspberry Pi 4](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-4).
 
-If you are installing on an RPi3, use the ARMv7 installer path, not
-AArch64. Once you've booted the Pi, follow these steps if you need
-Wifi:
+For now, use the ARMv7 installer path, not AArch64. Once you've booted
+the Pi, follow these steps if you need Wifi:
 
 1. `'wpa_passphrase ESSID WPA_PASSWD > /etc/wpa_supplicant/w.conf'` to
-   generate a wpa_supplicant configuration file. This should work
-   unless you have a very interesting WiFi setup (and in that case,
-   you likely know what your conf file should look like and can
-   manually create it)
+   generate a wpa_supplicant configuration file
 1. `'wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/w.conf'` to
-   attach to WiFi
+   attach to WiFi (this will take several seconds)
 1. `'dhcpcd wlan0'` to obtain an IP address. This may take a few
-   seconds to complete.
+   seconds to complete
 
 
-## Homefarm install
+## Homefarm install (all architectures)
 
 1. Run `'curl -O CONTROL_NODE_IP:9099/node-install'` to fetch the
    compute node install script from your control node
@@ -63,13 +59,11 @@ Wifi:
      connection, or if you followed the above procedure for WiFi
      configuration
    * If you get DNS failures here, but you can ping by IP, run
-     `systemctl disable --now systemd-resolved` as a workaround.
-     You'll need to enable and start the service after reboot
-1. Answer the questions the installer asks. It will handle the rest
-1. After the reboot, login as root and run `'/bin/bash node-setup
-   CONTROL_NODE_IP'` to complete the Homefarm-specific portions of
-   installation. When `node-setup` completes, the node is ready for
-   Homefarm to take over its management.
+     `systemctl disable --now systemd-resolved` then rerun
+     `node-install`
+1. Answer the questions the installer asks. It will handle the rest.
+   After reboot, the node is ready for Homefarm to take over its
+   management
 
 You can test the inital install by running `'ssh farmer@NODENAME'`
 from the controller. If you can login, then everything should be good
