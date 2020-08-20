@@ -80,5 +80,6 @@
     when: unitfile.changed
   - name: Reload BOINC client config
     become: true
+    ignore_errors: yes
     command: /bin/boinccmd --read_cc_config
     when: ccconfig.changed
