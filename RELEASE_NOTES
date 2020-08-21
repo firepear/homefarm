@@ -1,3 +1,22 @@
+2.8.0 - 2020-08-xx
+--------------------------------------------------------------------
+
+    * Multi-arch support is enabled. Homefarm can now deploy and
+      manage heterogenous farms (currently: x86_64, armv7h)
+
+    * 'localpkg' files allow inclusion of user-selected packages into
+      the local repo mirrors
+
+    * node-setup is no longer needed; installation is no longer a
+      multi-reboot process
+
+    * The 'cmd' subcommand now accepts a second argument, which is a
+      node name glob, allowing commands against a specified subset of
+      the farm
+
+    * Various fixes and improvements
+
+
 2.7.1 - 2020-07-08
 --------------------------------------------------------------------
 

@@ -14,7 +14,13 @@ EOF
     exit
 fi
 
-for node in nodes/node*yml; do
+if [[ "${2}" == "" ]]; then
+    glob='nodes/node*yml'
+else
+    glob="nodes/${2}.yml"
+fi
+
+for node in ${glob}; do
     node=$(basename "${node}" .yml)
     shownotice "${node}"
     ssh "farmer@${node}" "sudo ${1}"

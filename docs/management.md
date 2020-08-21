@@ -221,7 +221,7 @@ It is likely not necessary to do this more than every three months or
 so.
 
 
-## Run a command on all nodes
+## Run a command on farm nodes
 
 If you'd like to execute an ad hoc command across the entire farm, use
 `farmctl cmd 'COMMAND'`.
@@ -246,6 +246,16 @@ Tdie:         +56.5 C  (high = +70.0 C)
 `COMMAND` is expected to be a single argument, so use your bash
 quoting skills to handle complex requests.
 
+If you want to run a command against only some nodes, use: `farmctl
+cmd 'COMMAND' 'GLOB'`. The second argument is a shell glob that
+determines which nodes the command will be run against. Let's say I
+have six nodes, two of which are Raspberry Pis:
+
+`node01 node02 node03 node04 nodepi01 nodepi02`
+
+To run a command only against the Pis, I could use `farmctl cmd
+'COMMAND' 'nodepi*'`. And if I wanted to reboot the second and third
+x86 node, I could use `farmctl cmd 'COMMAND' 'node0[23]'`
 
 
 ## Managing BOINC
