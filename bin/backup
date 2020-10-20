@@ -16,8 +16,8 @@ if [[ "${1}" == "" ]]; then
         ./farm.cfg \
         ./nodes/ \
         ./projectstats.db \
-        ./srv/homefarm/pacman.conf \
-        ./srv/homefarm/mirrorlist >> /dev/null
+        ./srv/homefarm/pacman*.conf \
+        ./srv/homefarm/mirrorlist* >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
     exit
 fi
