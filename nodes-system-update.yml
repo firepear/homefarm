@@ -1,9 +1,13 @@
 ---
 - hosts: controller
   tasks:
-  - name: Diff Homefarm and installed packages
+  - name: Sort localpkgs file
     shell:
-      cmd: grep -v -f /homefarm/srv/homefarm/arch/nodepkgs.txt /homefarm/files/pkgs-{{ lookup('env','HFARCH') }}.txt
+      cmd: sort /homefarm/localpkgs-{{ hfarch }}.txt > l.s && mv l.s /homefarm/localpkgs-{{ hfarch }}.txt
+  - name: Diff Homefarm and local packages
+    shell:
+      cmd: comm -1 /homefarm/files/pkgs-{{ hfarch }}.txt /homefarm/localpkgs-{{ hfarch }}.txt
+      # hfarch gets passed in from 'ansible-playbook --extra-vars'
     ignore_errors: yes
     register: newpkgs
 

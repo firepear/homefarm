@@ -49,7 +49,7 @@ update_os() {
     # common.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
         shownotice "Updating compute nodes"
-        HFARCH="${1}" ansible-playbook nodes-system-update.yml
+        ansible-playbook --extra-vars "hfarch=$1" nodes-system-update.yml
     fi
 }
 
