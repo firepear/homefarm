@@ -118,8 +118,12 @@ for arch in ${FP_CONFIG[marches]}; do
     if [[ "${?}" != "0" ]]; then
         exit 1
     fi
+    if [[ "${arch}" == "armv7h" ]]; then
+        # the arch repos list 32-bit arm as "v7h", but it's "v7l" on modern rpis
+        arch="armv7l"
+    fi
+    update_os "${arch}"
 done
-update_os
 
 # run this playbook here, because it sets the custom BOINC unit file,
 # and pushes jlparse and boinccmdcmd to nodes. Those things need to be

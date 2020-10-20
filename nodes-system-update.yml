@@ -4,6 +4,7 @@
   - name: Sort localpkgs file
     shell:
       cmd: sort /homefarm/localpkgs-{{ hfarch }}.txt > l.s && mv l.s /homefarm/localpkgs-{{ hfarch }}.txt
+    ignore_errors: yes
   - name: Diff Homefarm and local packages
     shell:
       cmd: comm -1 /homefarm/files/pkgs-{{ hfarch }}.txt /homefarm/localpkgs-{{ hfarch }}.txt
@@ -22,23 +23,27 @@
       owner: root
       group: root
       mode: 0644
+    when: ansible_architecture == hfarch
   - name: Halt BOINC
     become: true
     service:
       name: boinc-client
       state: stopped
+    when: ansible_architecture == hfarch
     ignore_errors: true
   - name: Upgrade system software
     become: true
     pacman:
       update-cache: yes
       upgrade: yes
+    when: ansible_architecture == hfarch
   - name: Install new Homefarm packages
     become: true
     pacman:
       name: "{{ hostvars['localhost'].newpkgs.stdout_lines }}"
       state: present
-    when: hostvars['localhost'].newpkgs.stdout != ""
+    when: ansible_architecture == hfarch and hostvars['localhost'].newpkgs.stdout != ""
   - name: Clear package cache
     become: true
     shell: yes | pacman -Scc
+    when: ansible_architecture == hfarch
