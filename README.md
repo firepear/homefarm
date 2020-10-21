@@ -21,8 +21,11 @@ There are a few assumptions:
   will be generated for Ansible's use
 * You're familiar with BOINC, projects, workunits, and so on
 
+
+
 # News
 
+* 2020-10-xx: v2.8.0: 
 * 2020-07-08: v2.7.1: `node-init` subcmd renamed to
   `boinc-config`. Fixed deployment of cc_config.xml to nodes
 * 2020-06-19: v2.7.0: Automated build/rebuild of control
@@ -31,17 +34,19 @@ There are a few assumptions:
 * 2020-05-26: v2.6.0: Added support for injecting packages via the
   initial pkgs list.
 * 2020-05-02: v2.5.2: JSON improvements and bugfixes
-* 2020-04-24: v2.5.1: Refactoring and bugfixes in `query` and networking
 
 See the [Release
 notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
 for all updates.
+
+
 
 # Documentation
 
 * Setting up a farm
     * [Controller setup](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
     * [Compute node install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
+    * [BOINC configuration](https://github.com/firepear/homefarm/blob/master/docs/boinc.md)
 * Managing and maintaining your farm
     * [Everyday farm ops](https://github.com/firepear/homefarm/blob/master/docs/management.md)
     * [Add/reinstall a compute node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
