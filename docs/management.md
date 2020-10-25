@@ -187,6 +187,7 @@ shell. This allows you to redirect/pipe a system status to the
 location/tool of your choice.
 
 
+
 ## Keeping the farm up to date
 
 Run `'farmctl update'`. This will:
@@ -201,6 +202,16 @@ update around once per week.
 It's safe to run the update as often as you'd like. If there's
 nothing to do, it will simply do nothing! This makes it very easy to
 keep all aspects of your cluster up to date.
+
+### Adding packages to your local repository
+
+If there are packages that you would like to add to the local repository, and have installed automatically on nodes, simply add them to a file named `/homefarm/localpkgs-[ARCH].txt. You can look up packages on https://www.archlinux.org/packages/ or https://archlinuxarm.org/packages . List the package name, one per line. As an example, to add Nvidia drivers and OpenCL libs for supporting GPGPU work:
+
+```
+nvidia
+ocl-icd
+opencl-nvidia
+```
 
 ### Updating the controller image
 
@@ -219,6 +230,7 @@ initially construct the controller image.
 
 It is likely not necessary to do this more than every three months or
 so.
+
 
 
 ## Run a command on farm nodes

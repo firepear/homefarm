@@ -25,7 +25,8 @@ There are a few assumptions:
 
 # News
 
-* 2020-10-xx: v2.8.0: 
+* 2020-10-25: v2.8.0: Support for arm7h/arm7l. Admin can now add
+  packages to the local repo.
 * 2020-07-08: v2.7.1: `node-init` subcmd renamed to
   `boinc-config`. Fixed deployment of cc_config.xml to nodes
 * 2020-06-19: v2.7.0: Automated build/rebuild of control
