@@ -7,7 +7,7 @@ packages to enable OpenCL/CUDA support, and you'll be good to go.
 For each machine you wish to be GPGPU-enabled, login as
 `farmer`. Then, for Nvidia GPUs, run:
 
-`'sudo pacman -S nvidia opencl-nvidia ocl-icd'`
+`'sudo pacman -S nvidia nvidia-utils opencl-nvidia ocl-icd'`
 
 Or for AMD GPUs:
 
