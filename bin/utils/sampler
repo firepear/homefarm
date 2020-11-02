@@ -18,6 +18,6 @@ while true; do
     ts=$(date +'%Y-%m-%dT%H:%M:%S')
     temp=$(sensors | grep Tdie | awk '{print $2}')
     avgclk=$(cat /proc/cpuinfo | grep MHz | awk '{ sum += $4; n++} END { print sum / n }')
-    echo "${ts}\t${temp}\t${avgclk}" >> capture.txt
+    echo -e "${ts}\t${temp}\t${avgclk}" >> capture.txt
     sleep 1
 done
