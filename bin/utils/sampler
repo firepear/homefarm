@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# the trap builtin lets us gracefully handle interrupts and do final
+# processing
+trap ctrl_c INT
+
+
+function ctrl_c() {
+    exit
+}
+
+# zero the capture file
+echo "" > capture.txt
+
+# start an infinite loop of checking Tdie and averaging all CPU
+# clocks, once per second
+while true; do
+    ts=$(date +'%Y-%m-%dT%H:%M:%S')
+    temp=$(sensors | grep Tdie | awk '{print $2}')
+    avgclk=$(cat /proc/cpuinfo | grep MHz | awk '{ sum += $4; n++} END { print sum / n }')
+    echo "${ts}\t${temp}\t${avgclk}" >> capture.txt
+    sleep 1
+done
