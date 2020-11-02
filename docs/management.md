@@ -209,6 +209,7 @@ If there are packages that you would like to add to the local repository, and ha
 
 ```
 nvidia
+nvidia-utils
 ocl-icd
 opencl-nvidia
 ```
