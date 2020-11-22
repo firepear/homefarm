@@ -122,25 +122,31 @@ for arch in ${FP_CONFIG[marches]}; do
         # the arch repos list 32-bit arm as "v7h", but it's "v7l" on modern rpis
         arch="armv7l"
     fi
+
     update_os "${arch}"
+
+    # this sets the custom BOINC unit file, and pushes utils to
+    # nodes. those need to be refreshed every time there is an update,
+    # of any sort.
+    if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
+        shownotice "Pushing updated scripts to ${arch} nodes"
+        ansible-playbook --extra-vars "hfarch=${arch}" nodes-boinc-setup.yml
+        if [[ -e ./.repoupdate ]]; then
+            rm ./.repoupdate
+        fi
+    fi
+
+    # reboots
+    if [[ "${localrepo_updated}" == "true" ]] && [[ "${DEVMODE}" == "false" ]]; then
+        shownotice "Rebooting ${arch} nodes"
+        for node in nodes/*yml; do
+            node_arch=$(ssh "farmer@$(basename """${node}""" .yml)" 'uname -m')
+            if [[ "${node_arch}" == "${arch}" ]]; then
+                ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
+            fi
+        done
+    fi
 done
 
-# run this playbook here, because it sets the custom BOINC unit file,
-# and pushes jlparse and boinccmdcmd to nodes. Those things need to be
-# refreshed every time there is an update, of any sort.
-if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
-    shownotice "Pushing updated scripts to nodes"
-    ansible-playbook nodes-boinc-setup.yml
-    if [[ -e ./.repoupdate ]]; then
-       rm ./.repoupdate
-    fi
-fi
-
-if [[ "${localrepo_updated}" == "true" ]] && [[ "${DEVMODE}" == "false" ]]; then
-    shownotice "Rebooting compute nodes"
-    for node in nodes/*yml; do
-        ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
-    done
-fi
 
 echo "Everything is up to date"

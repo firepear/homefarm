@@ -25,6 +25,7 @@
       owner: root
       group: root
       mode: 0644
+    when: ansible_architecture == hfarch
   - name: Update BOINC client config
     become: true
     copy:
@@ -33,6 +34,7 @@
       owner: root
       group: root
       mode: 0644
+    when: ansible_architecture == hfarch
     register: ccconfig
   - name: Update BOINC unit file
     become: true
@@ -42,12 +44,13 @@
       owner: root
       group: root
       mode: 0644
+    when: ansible_architecture == hfarch
     register: unitfile
   - name: Reload unit files
     become: true
     systemd:
       daemon_reload: yes
-    when: unitfile.changed
+    when: ansible_architecture == hfarch and unitfile.changed
   - name: Update Python common module
     become: true
     copy:
@@ -56,6 +59,7 @@
       owner: root
       group: root
       mode: 0644
+    when: ansible_architecture == hfarch
   - name: Update query util
     become: true
     copy:
@@ -64,6 +68,7 @@
       owner: root
       group: root
       mode: 0755
+    when: ansible_architecture == hfarch
   - name: Update boinccmdcmd
     become: true
     copy:
@@ -72,14 +77,15 @@
       owner: root
       group: root
       mode: 0755
+    when: ansible_architecture == hfarch
   - name: Restart BOINC
     become: true
     service:
       name: boinc-client
       state: restarted
-    when: unitfile.changed
+    when: ansible_architecture == hfarch and unitfile.changed
   - name: Reload BOINC client config
     become: true
     ignore_errors: yes
     command: /bin/boinccmd --read_cc_config
-    when: ccconfig.changed
+    when: ansible_architecture == hfarch and ccconfig.changed
