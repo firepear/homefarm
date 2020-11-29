@@ -93,6 +93,8 @@ function hf_init() {
     ln -fs /homefarm/bin/node-setup "${FP_CONFIG[httpdir]}"
     ln -fs /homefarm/bin/common.sh "${FP_CONFIG[httpdir]}"
     ln -fs /homefarm/bin/util/fix-wlan0 "${FP_CONFIG[httpdir]}"
+    # symlink other files
+    ln -fs /homefarm/files/atboot.service "${FP_CONFIG[httpdir]}"
 
     shownotice "Setup complete"
 }
