@@ -19,6 +19,7 @@ db
 dbus
 device-mapper
 diffutils
+dmidecode
 dnssec-anchors
 e2fsprogs
 expat
@@ -146,6 +147,7 @@ systemd
 systemd-libs
 systemd-sysvcompat
 tar
+tmux
 tzdata
 util-linux
 vi

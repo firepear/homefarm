@@ -132,7 +132,7 @@ if [[ "${CPUARCH}" == "armv7h" ]] || [[ "${CPUARCH}" == "aarch64" ]]; then
     fi
 else
     # base install via pacstrap
-    pkglist="base openssh wpa_supplicant lm_sensors python ansible sudo grep awk boinc-nox linux linux-firmware vi mg"
+    pkglist="base openssh wpa_supplicant dmidecode lm_sensors python ansible sudo grep awk boinc-nox linux linux-firmware vi mg"
     pacstrap /mnt ${pkglist}
     # generate /etc/fstab
     genfstab -U /mnt >> /mnt/etc/fstab
@@ -280,10 +280,11 @@ fi
 usermod -p "\${passwd}" root
 
 if [[ "\${CPUARCH}" == "x86_64" ]]; then
-    shownotice "Configuring sensors"
-    /usr/bin/sensors-detect --auto > /dev/null
+    shownotice "Setting up boot tasks and parameters"
+    hf_fetch "${CONTROLLER}/atboot.service"
+    mv atboot.service /etc/systemd
+    systemctl enable atboot
 
-    shownotice "Setting boot parameters"
     bootparams=\$(gutcheck "Enter desired boot parameters" "vsyscall=emulate mitigations=off")
     # add vsyscall to kernel boot parameters; needed for FAH2
     sedcmd="s/^(options\s+.*)\\\$/\1 \${bootparams}/"

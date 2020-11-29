@@ -1,0 +1,8 @@
+[Unit]
+Description=BOINC node atboot tasks
+
+[Service]
+ExecStart=/usr/bin/sensors-detect --auto > /dev/null
+
+[Install]
+WantedBy=multi-user.target
