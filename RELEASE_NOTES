@@ -1,8 +1,6 @@
 2.8.1 - 2020-12-xx
 --------------------------------------------------------------------
 
-    * nvidia-utils, tmux, and dmidecode packages added
-
     * The update process now happens once per architecture, rather
       than having per-arch and interleaved sections. This makes the
       overall process take longer, but keeps updated arches from
@@ -10,6 +8,9 @@
 
     * Removing node-setup broke the configuration of lm_sensors on
       install. That now happens at boot in a systemd unit
+
+    * tmux, dmidecode, and dependencies added to x86_64 packages list
+
 
 
 2.8.0 - 2020-10-25

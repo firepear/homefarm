@@ -59,6 +59,7 @@ libcap-ng
 libcroco
 libedit
 libelf
+libevent
 libffi
 libgcrypt
 libgpg-error
@@ -85,6 +86,7 @@ libtasn1
 libtirpc
 libunistring
 libusb
+libutempter
 libutil-linux
 libxml2
 libyaml
