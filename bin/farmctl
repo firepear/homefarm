@@ -168,7 +168,12 @@ case "${1}" in
         exec ./bin/backup
         ;;
     boinc-config)
-        exec /bin/ansible-playbook nodes-boinc-setup.yml
+        for arch in ${FP_CONFIG[marches]}; do
+            if [[ "${arch}" == "armv7h" ]]; then
+                arch="armv7l"
+            fi
+            /bin/ansible-playbook --extra-vars "hfarch=${arch}" nodes-boinc-setup.yml
+        done
         ;;
     build-image)
         hf_docker_test
