@@ -172,7 +172,8 @@ case "${1}" in
             if [[ "${arch}" == "armv7h" ]]; then
                 arch="armv7l"
             fi
-            /bin/ansible-playbook --extra-vars "hfarch=${arch}" nodes-boinc-setup.yml
+            # needs '|| true' to guard against failures due to unreachable machines
+            /bin/ansible-playbook --extra-vars "hfarch=${arch}" nodes-boinc-setup.yml || true
         done
         ;;
     build-image)

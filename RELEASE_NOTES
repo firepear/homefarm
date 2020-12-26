@@ -9,6 +9,9 @@
     * Removing node-setup broke the configuration of lm_sensors on
       install. That now happens at boot in a systemd unit
 
+    * Fixed errors in running the `boinc-config` subcommand on
+      multiple architectures
+
     * tmux, dmidecode, and dependencies added to x86_64 packages list
 
 

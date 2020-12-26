@@ -25,6 +25,7 @@ There are a few assumptions:
 
 # News
 
+* 2020-12-26: v2.8.1: `update` now runs per-arch. Various fixes.
 * 2020-10-25: v2.8.0: Support for arm7h/arm7l. Admin can now add
   packages to the local repo.
 * 2020-07-08: v2.7.1: `node-init` subcmd renamed to
