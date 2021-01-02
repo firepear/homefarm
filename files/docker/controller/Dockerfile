@@ -6,6 +6,6 @@
 #
 
 FROM archlinux/base
-RUN yes | pacman -Syu --needed darkhttpd python ansible git openssh tar file awk vi mg keychain procps-ng coreutils iputils jq && yes | pacman -Scc
+RUN yes | pacman -Syu --needed darkhttpd python ansible git openssh tar file awk vi mg keychain procps-ng coreutils iputils jq go && yes | pacman -Scc
 VOLUME ["/homefarm"]
 WORKDIR /homefarm
