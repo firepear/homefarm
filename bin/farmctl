@@ -178,6 +178,7 @@ case "${1}" in
         ;;
     build-image)
         hf_docker_test
+        docker image rm control
         docker image prune -f
         docker image pull archlinux/base
         docker image prune -f
