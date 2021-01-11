@@ -1,4 +1,12 @@
-2.8.1 - 2020-12-xx
+2.8.2 - 2021-01-11
+--------------------------------------------------------------------
+
+    * Fixes to control image builds
+
+    * Added Go (the programming language) to the controller dockerfile
+
+
+2.8.1 - 2020-12-26
 --------------------------------------------------------------------
 
     * The update process now happens once per architecture, rather

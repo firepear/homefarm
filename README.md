@@ -25,6 +25,7 @@ There are a few assumptions:
 
 # News
 
+* 2021-01-11: v2.8.2: Fixes for control image builds
 * 2020-12-26: v2.8.1: `update` now runs per-arch. Various fixes.
 * 2020-10-25: v2.8.0: Support for arm7h/arm7l. Admin can now add
   packages to the local repo.
@@ -33,9 +34,6 @@ There are a few assumptions:
 * 2020-06-19: v2.7.0: Automated build/rebuild of control
   container. Improved initial setup experience. Initial work done to
   support multiple architectures
-* 2020-05-26: v2.6.0: Added support for injecting packages via the
-  initial pkgs list.
-* 2020-05-02: v2.5.2: JSON improvements and bugfixes
 
 See the [Release
 notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
