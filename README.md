@@ -11,8 +11,8 @@ that lives on the control node.
 There are a few assumptions:
 
 * One machine capable of running Docker, to host the controller
-* One or more x86_64 machines capable of running Arch Linux, to become
-  compute nodes
+* One or more x86_64 or armv7h/l machines capable of running Arch
+  Linux, to become compute nodes
   * It's further assumed that these machines will be used for no other
     purpose, and it is okay to wipe their drives
 * You are aware of your local network configuration, and have IPs to
