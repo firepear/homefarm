@@ -23,7 +23,7 @@
   - name: Copy armv7 executable to staging location
     copy:
       src: /homefarm/files/gnatwren/cmd/gwagent/gwagent
-      dest: /homefarm/files/gwagent-arm7l
+      dest: /homefarm/files/gwagent-armv7l
   - name: Build gwquery
     command: go build
     args:
