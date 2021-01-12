@@ -23,10 +23,10 @@
     environment:
       GOOS: linux
       GOARCH: arm
-  - name: Copy arm executable to staging location
+  - name: Copy armv7 executable to staging location
     copy:
       src: /homefarm/files/gnatwren/cmd/gwagent/gwagent
-      dest: /homefarm/files/gwagent-arm
+      dest: /homefarm/files/gwagent-arm7h
   - name: Build gwquery
     command: go build
     args:
@@ -35,3 +35,63 @@
     copy:
       src: /homefarm/files/gnatwren/cmd/gwquery/gwquery
       dest: /homefarm/bin/gwquery
+      mode: 0755
+
+
+- hosts: compute_nodes
+  remote_user: farmer
+  tasks:
+  - name: Deploy gwagent
+    become: true
+    copy:
+      src: /homefarm/files/gwagent-{{ ansible_architecture }}
+      dest: /usr/local/bin/gwagent
+      owner: root
+      group: root
+      mode: 0755
+    when: ansible_architecture == hfarch
+  - name: Create gwagent config dir
+    become: true
+    file:
+      path: /etc/gnatwren
+      owner: root
+      group: root
+      mode: 0755
+      state: directory
+    when: ansible_architecture == hfarch
+  - name: Deploy gwagent config file
+    become: true
+    copy:
+      src: ./files/gwagent-config.json
+      dest: /etc/gnatwren/agent-config.json
+      owner: root
+      group: root
+      mode: 0644
+    when: ansible_architecture == hfarch
+  - name: Deploy gwagent unit file
+    become: true
+    copy:
+      src: ./files/gnatwren/assets/gnatwren-agent.service
+      dest: /usr/lib/systemd/system/gnatwren-agent.service
+      owner: root
+      group: root
+      mode: 0644
+    when: ansible_architecture == hfarch
+    register: unitfile
+  - name: Reload unit files
+    become: true
+    systemd:
+      daemon_reload: yes
+    when: ansible_architecture == hfarch and unitfile.changed
+  - name: Enable gwagent
+    become: true
+    service:
+      name: gnatwren-agent
+      enabled: yes
+    when: ansible_architecture == hfarch and unitfile.changed
+  - name: Restart gwagent
+    become: true
+    service:
+      name: gnatwren-agent
+      state: restarted
+    when: ansible_architecture == hfarch and unitfile.changed
