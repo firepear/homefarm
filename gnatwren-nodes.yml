@@ -23,7 +23,7 @@
   - name: Deploy gwagent config file
     become: true
     ansible.builtin.template:
-      src: ./files/gwagent-config.json
+      src: ./gwagent-config.json
       dest: /etc/gnatwren/agent-config.json
       owner: root
       group: root
