@@ -131,10 +131,10 @@ function hf_buildhosts() {
 # initialization without starting bash. so it lives here. but we also
 # use this when we *are* starting bash :)
 function hf_envinit() {
-    /bin/ln -s /homefarm/.ssh /root/.ssh
-    /bin/ln -s /homefarm/bin/utils/complete /root/.bashrc
+    /bin/ln -fs /homefarm/.ssh /root/.ssh
+    /bin/ln -fs /homefarm/bin/utils/complete /root/.bashrc
     touch ./.bash_history
-    /bin/ln -s /homefarm/.bash_history /root/.bash_history
+    /bin/ln -fs /homefarm/.bash_history /root/.bash_history
     /usr/bin/keychain -q --host control /homefarm/.ssh/id_farmer >> /dev/null 2>&1
     source /root/.keychain/control-sh >> /dev/null 2>&1
 }
@@ -207,25 +207,6 @@ case "${1}" in
         shift
         exec ./bin/utils/farmcmd "${@}"
         ;;
-    on-up)
-        # this case runs on the second invocation of farmctl, after
-        # the container has been started by 'farmctl up'. it
-        # initializes the environment and then execs bash in place of
-        # this script
-
-        # set up transient files/links
-        hf_envinit
-        # generate a hostsfile
-        hf_buildhosts
-        # start the httpd
-        /usr/bin/darkhttpd "${FP_CONFIG[httpdir]}" --port 80 --daemon >> /dev/null
-        # start gwgather
-        if [[ -e ./bin/gwgather ]]; then
-            ./bin/gwgather -config=./gwgather-config.json &
-        fi
-        # add /homefarm/bin to PATH and launch a shell for the user
-        exec env PATH="${PATH}:/homefarm/bin" /bin/bash
-        ;;
     project-sync)
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
@@ -290,7 +271,26 @@ case "${1}" in
             echo "farmctl is running. do `farmctl attach` to connect."
             builtin exit 0
         fi
-        exec docker run --name farmcontrol -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
+        exec docker run --name farmcontrol -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -rm -it farmcontrol ./bin/farmctl on-up
+        ;;
+    on-up)
+        # this case runs on the second invocation of farmctl, after
+        # the container has been started by 'farmctl up'. it
+        # initializes the environment and then execs bash in place of
+        # this script
+
+        # set up transient files/links
+        hf_envinit
+        # generate a hostsfile
+        hf_buildhosts
+        # start the httpd
+        /usr/bin/darkhttpd "${FP_CONFIG[httpdir]}" --port 80 --daemon >> /dev/null
+        # start gwgather
+        if [[ -e ./bin/gwgather ]]; then
+            ./bin/gwgather -config=./gwgather-config.json &
+        fi
+        # add /homefarm/bin to PATH and launch a shell for the user
+        exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     update)
         exec ./bin/update "${2}"
