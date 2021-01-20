@@ -1,9 +1,26 @@
+2.9.0 - 2021-01-xx
+--------------------------------------------------------------------
+
+    * Homefarm's control container is now long-running rather than
+      transient, with `farmctl up` now only being needed initially or
+      after a `farmctl down`
+
+    * `farmctl attach` is the new `farmctl up`
+
+    * A monitoring and metrics platform, Gnatwren, is now included. It
+      is deployed and running by default. See the doc for more
+      information
+
+
+
 2.8.2 - 2021-01-11
 --------------------------------------------------------------------
 
+    * Added Go (the programming language) to the controller dockerfile
+      in support of Gnatwren
+
     * Fixes to control image builds
 
-    * Added Go (the programming language) to the controller dockerfile
 
 
 2.8.1 - 2020-12-26

@@ -191,7 +191,7 @@ case "${1}" in
         docker image pull archlinux
         docker image prune -f
         cd ./files/docker/controller
-        docker build --tag control .
+        docker build --tag farmcontrol .
         ;;
     cmd)
         shift
@@ -216,6 +216,10 @@ case "${1}" in
         hf_buildhosts
         # start the httpd
         /usr/bin/darkhttpd "${FP_CONFIG[httpdir]}" --port 80 --daemon >> /dev/null
+        # start gwgather
+        if [[ -e ./bin/gwgather ]]; then
+            ./bin/gwgather -config=./gwgather-config.json &
+        fi
         # add /homefarm/bin to PATH and launch a shell for the user
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
@@ -293,7 +297,7 @@ case "${1}" in
         # this case brings up the docker container, executing 'farmctl
         # on-up' as the command
         hf_docker_test
-        exec docker run --rm -p 9099:80 -v "${gitdir}:/homefarm" -it control ./bin/farmctl on-up
+        exec docker run -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
         ;;
     update)
         exec ./bin/update "${2}"
