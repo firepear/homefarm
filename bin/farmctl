@@ -279,20 +279,6 @@ case "${1}" in
         fi
         rm "${tmpfile}"
         ;;
-    status-only)
-        hf_docker_test
-        if [[ "${2}" == "" ]]; then
-            HOMEFARM_DIR=~/homefarm
-        else
-            HOMEFARM_DIR="${2}"
-        fi
-        exec docker run --rm -p 9099:80 -v "${HOMEFARM_DIR}:/homefarm" -it control ./bin/farmctl status-only2
-        ;;
-    status-only2)
-        hf_envinit
-        hf_buildhosts
-        ./bin/farmctl status nopage json
-        ;;
     up)
         # this case brings up the docker container, executing 'farmctl
         # on-up' as the command
