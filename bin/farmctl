@@ -287,7 +287,7 @@ case "${1}" in
         # this case brings up the docker container, executing 'farmctl
         # on-up' as the command
         hf_docker_test
-        exec docker run -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
+        exec docker run -name farmcontrol -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
         ;;
     update)
         exec ./bin/update "${2}"
