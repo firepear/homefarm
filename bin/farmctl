@@ -205,15 +205,8 @@ case "${1}" in
         # this case runs on the second invocation of farmctl, after
         # the container has been started by 'farmctl up'. it
         # initializes the environment and then execs bash in place of
-        # this scipt
-        # figure out our IP and print a welcome message
-        localip=$(awk 'END{print $1}' /etc/hosts)
-        echo
-        echo "Welcome to homefarm ${VERSION}"
-        echo "    Container IP is ${localip}"
-        echo "    Installer httpd is listening on DOCKERHOST:9099"
-        echo "    Run 'farmctl' to see options, or refer to the docs"
-        echo
+        # this script
+
         # set up transient files/links
         hf_envinit
         # generate a hostsfile
@@ -293,7 +286,14 @@ case "${1}" in
         exec ./bin/update "${2}"
         ;;
     version)
-        echo "Homefarm ${VERSION}"
+        # figure out our IP and print a welcome message
+        localip=$(awk 'END{print $1}' /etc/hosts)
+        echo
+        echo "This is homefarm ${VERSION}"
+        echo "    Container IP is ${localip}"
+        echo "    Installer httpd is listening on DOCKERHOST:9099"
+        echo "    Run 'farmctl' to see options, or refer to the docs"
+        echo
         exit 0
         ;;
     *)
@@ -332,7 +332,7 @@ usage: ${0} SUBCOMMAND [ARGS]
       Update Homefarm, the local repository, and OS packages on compute nodes
 
   version
-      Display version information
+      Display version and networking information
 EOF
 esac
 
