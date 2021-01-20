@@ -172,6 +172,10 @@ case "${1}" in
     init)
         hf_init
         ;;
+    attach)
+        hf_docker_test
+        docker attach farmcontrol
+        ;;
     backup)
         exec ./bin/backup
         ;;
