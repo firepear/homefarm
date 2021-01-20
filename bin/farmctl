@@ -78,6 +78,14 @@ function hf_init() {
         update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}" "${arch}"
     done
 
+    # build gnatwren and create agent config file
+    shownotice "Initializing Gnatwren"
+    ansible-playbook gnatwren-control.yml
+    sedexpr="s/0\.0\.0\.0/${HOSTADDR}/"
+    if [[ ! -e ./gwagent-config.json ]]; then
+        sed -e "${sedexpr}" ./files/gnatwren/assets/agent-config.json > ./gwagent-config.json
+    fi
+
     shownotice "Finishing up initialization"
     cd "${FP_CONFIG[rootdir]}"
     # make the nodes directory for user convenience

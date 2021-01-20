@@ -24,6 +24,21 @@
     copy:
       src: /homefarm/files/gnatwren/cmd/gwagent/gwagent
       dest: /homefarm/files/gwagent-armv7l
+  - name: Build gwgather
+    command: go build
+    args:
+      chdir: /homefarm/files/gnatwren/cmd/gwgather
+  - name: Deploy gwquery
+    copy:
+      src: /homefarm/files/gnatwren/cmd/gwgather/gwgather
+      dest: /homefarm/bin/gwgather
+      mode: 0755
+  - name: Instantiate gwgather config
+    copy:
+      src: /homefarm/files/gnatwren/assets/gather-config.json
+      dest: /homefarm/gwgather-config.json
+      mode: 0644
+      force: no
   - name: Build gwquery
     command: go build
     args:

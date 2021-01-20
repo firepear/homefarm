@@ -22,7 +22,7 @@
     when: ansible_architecture == hfarch
   - name: Deploy gwagent config file
     become: true
-    ansible.builtin.template:
+    copy:
       src: ./gwagent-config.json
       dest: /etc/gnatwren/agent-config.json
       owner: root
