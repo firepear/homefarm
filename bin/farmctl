@@ -238,7 +238,7 @@ case "${1}" in
         fi
         cd "${2}"
         source ./bin/common.sh
-        exec docker run --rm -p 9099:80 -v "${2}:/homefarm" -it control ./bin/backup restore
+        exec docker run -rm -v "${2}:/homefarm" -it farmcontrol ./bin/backup restore
         ;;
     status)
         shift
@@ -271,7 +271,7 @@ case "${1}" in
             echo "farmctl is running. do `farmctl attach` to connect."
             builtin exit 0
         fi
-        exec docker run --name farmcontrol -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -rm -it farmcontrol ./bin/farmctl on-up
+        exec docker run --name farmcontrol -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
         ;;
     on-up)
         # this case runs on the second invocation of farmctl, after
