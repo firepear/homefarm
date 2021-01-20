@@ -262,7 +262,7 @@ case "${1}" in
         # on-up' as the command
         hf_docker_test
         if docker container ls | grep farmcontrol > /dev/null; then
-            echo "farmctl is running. do `farmctl attach` to connect."
+            echo "farmctl is running. do 'farmctl attach' to connect."
             builtin exit 0
         fi
         exec docker run --name farmcontrol -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
