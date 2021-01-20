@@ -286,6 +286,10 @@ case "${1}" in
         # this case brings up the docker container, executing 'farmctl
         # on-up' as the command
         hf_docker_test
+        if docker container ls | grep farmcontrol > /dev/null; then
+            echo "farmctl is running. do `farmctl attach` to connect."
+            builtin exit 0
+        fi
         exec docker run --name farmcontrol -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
         ;;
     update)
@@ -300,7 +304,7 @@ case "${1}" in
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
         echo
-        exit 0
+        builtin exit 0
         ;;
     *)
         if [[ "${1}" != "" && "${1}" != "help" ]]; then
