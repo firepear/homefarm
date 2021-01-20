@@ -190,7 +190,7 @@ case "${1}" in
         ;;
     build-image)
         hf_docker_test
-        docker image rm control || true
+        docker image rm farmcontrol || true
         docker image prune -f
         docker image pull archlinux
         docker image prune -f
