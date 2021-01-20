@@ -139,12 +139,6 @@ function hf_envinit() {
     source /root/.keychain/control-sh >> /dev/null 2>&1
 }
 
-# mask the builtin 'exit' to keep people's reflexes from killing the
-# container
-function exit() {
-    echo "To exit this farmctl session, do `Ctrl-p, Ctrl-q`"
-}
-
 
 ################################################################################
 
