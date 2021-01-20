@@ -290,11 +290,8 @@ case "${1}" in
         exec ./bin/update "${2}"
         ;;
     version)
-        # figure out our IP and print a welcome message
-        localip=$(awk 'END{print $1}' /etc/hosts)
         echo
         echo "This is homefarm ${VERSION}"
-        echo "    Container IP is ${localip}"
         echo "    Installer httpd is listening on DOCKERHOST:9099"
         echo "    Run 'farmctl' to see options, or refer to the docs"
         echo
