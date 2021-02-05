@@ -227,7 +227,11 @@ case "${1}" in
         else
             for node in nodes/node*yml; do
                 node=$(basename "${node}" ".yml")
-                ssh "farmer@${node}" "sudo PYTHONPATH='/usr/local/lib:files' query -p ${*}" || true
+                output=$(ssh farmer@${node} sudo PYTHONPATH='/usr/local/lib:files' query -p ${*} 2>&1 || true)
+                if [[ ! "${output}" =~ "No route" ]]; then
+                    echo "${output}"
+                    echo
+                fi
             done
         fi
         ;;
