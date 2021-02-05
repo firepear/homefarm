@@ -1,5 +1,9 @@
-2.9.0 - 2021-01-xx
+3.0.0 - 2021-02-xx
 --------------------------------------------------------------------
+
+    * A monitoring and metrics platform, Gnatwren, is now included. It
+      is deployed and running by default. See the doc for more
+      information
 
     * Homefarm's control container is now long-running rather than
       transient, with `farmctl up` now only being needed initially or
@@ -7,9 +11,7 @@
 
     * `farmctl attach` is the new `farmctl up`
 
-    * A monitoring and metrics platform, Gnatwren, is now included. It
-      is deployed and running by default. See the doc for more
-      information
+    * Added 'HISTCONTROL=ignoreboth' to bashrc
 
 
 
