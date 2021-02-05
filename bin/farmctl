@@ -212,11 +212,16 @@ case "${1}" in
             i=0
             for node in "${nodes[@]}"; do
                 node=$(basename "${node}" ".yml")
-                echo -n "$(ssh farmer@${node} sudo PYTHONPATH='/usr/local/lib:files' query -p ${*} || true)"
-                if [[ "${i}" -lt "$((${#nodes[@]}-1))" ]]; then
-                    echo -n ', '
+                output=$(ssh farmer@${node} sudo PYTHONPATH='/usr/local/lib:files' query -p ${*} 2>&1 || true)
+                if [[ "${output}" =~ "No route" ]]; then
+                    i=$((i+1))
+                else
+                    echo -n "${output}"
+                    if [[ "${i}" -lt "$((${#nodes[@]}-1))" ]]; then
+                        echo -n ', '
+                    fi
+                    i=$((i+1))
                 fi
-                i=$((i+1))
             done
             echo ']'
         else
