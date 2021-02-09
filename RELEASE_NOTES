@@ -11,6 +11,9 @@
 
     * `farmctl attach` is the new `farmctl up`
 
+    * `farmctl query` now handles connection failures gracefully
+      rather than dying
+
     * Added 'HISTCONTROL=ignoreboth' to bashrc
 
 
