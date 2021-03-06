@@ -216,10 +216,10 @@ case "${1}" in
                 if [[ "${output}" =~ "No route" ]]; then
                     i=$((i+1))
                 else
-                    echo -n "${output}"
-                    if [[ "${i}" -lt "$((${#nodes[@]}-1))" ]]; then
+                    if [[ "${i}" -gt "0" ]]; then
                         echo -n ', '
                     fi
+                    echo -n "${output}"
                     i=$((i+1))
                 fi
             done
