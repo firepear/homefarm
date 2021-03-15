@@ -32,7 +32,7 @@
   - name: Deploy gwagent config file
     become: true
     copy:
-      src: ./gwagent-config.json
+      src: /homefarm/gwagent-config.json
       dest: /etc/gnatwren/agent-config.json
       owner: root
       group: root
@@ -42,7 +42,7 @@
   - name: Deploy gwagent unit file
     become: true
     copy:
-      src: ./files/gnatwren/assets/gnatwren-agent.service
+      src: /homefarm/files/gnatwren/assets/gnatwren-agent.service
       dest: /usr/lib/systemd/system/gnatwren-agent.service
       owner: root
       group: root
