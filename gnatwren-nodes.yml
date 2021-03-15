@@ -11,6 +11,15 @@
       group: root
       mode: 0755
     when: ansible_architecture == hfarch
+  - name: Create gwagent run dir
+    become: true
+    file:
+      path: /var/run/gnatwren
+      owner: nobody
+      group: nobody
+      mode: 0755
+      state: directory
+    when: ansible_architecture == hfarch
   - name: Create gwagent config dir
     become: true
     file:
