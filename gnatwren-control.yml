@@ -38,13 +38,13 @@
       src: /homefarm/files/gnatwren/assets/gather-config.json
       dest: /homefarm/gwgather-config.json
       mode: 0644
-      force: no
+      backup: yes
   - name: Instantiate gwagent config
     copy:
       src: /homefarm/files/gnatwren/assets/agent-config.json
       dest: /homefarm/gwagent-config.json
       mode: 0644
-      force: no
+      backup: yes
   - name: Build gwquery
     command: go build
     args:
