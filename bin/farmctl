@@ -191,6 +191,7 @@ case "${1}" in
     build-image)
         hf_docker_test
         docker container stop farmcontrol || true
+        docker container rm farmcontrol || true
         docker image rm farmcontrol || true
         docker image prune -f
         docker image pull archlinux
