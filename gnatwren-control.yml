@@ -29,7 +29,7 @@
     args:
       chdir: /homefarm/files/gnatwren/cmd/gwgather
     environment:
-      CGO_ENABLED=0
+      CGO_ENABLED: 0
   - name: Deploy gwquery
     copy:
       src: /homefarm/files/gnatwren/cmd/gwgather/gwgather
