@@ -282,7 +282,7 @@ usermod -p "\${passwd}" root
 if [[ "\${CPUARCH}" == "x86_64" ]]; then
     shownotice "Setting up boot tasks and parameters"
     hf_fetch "${CONTROLLER}/atboot.service"
-    mv atboot.service /etc/systemd
+    mv atboot.service /etc/systemd/system
     systemctl enable atboot
 
     bootparams=\$(gutcheck "Enter desired boot parameters" "vsyscall=emulate mitigations=off")
