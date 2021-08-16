@@ -34,7 +34,7 @@
   - name: Upgrade system software
     become: true
     pacman:
-      update-cache: yes
+      update_cache: yes
       upgrade: yes
     when: ansible_architecture == hfarch
   - name: Install new Homefarm packages
