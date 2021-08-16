@@ -101,7 +101,7 @@ def report(tmpfile, hosts, conf):
 ###############################################################################
 
 hosts = {}
-conf = { 'host': None, 'json': False, 'compact': False }
+conf = { 'host': None, 'json': False, 'compact': False, 'active': False }
 tasks = None
 
 sys.argv.pop(0)
@@ -114,6 +114,8 @@ for arg in sys.argv[0].split():
         conf['json'] = True
     elif arg == "compact":
         conf['compact'] = True
+    elif arg == "active":
+        conf['active'] = True
     elif arg == "nopage":
         pass
     else:
@@ -228,8 +230,14 @@ for host, key in hosts.items():
                 t['done'] = 0
                 t['astate'] = None
                 t['cpu_elapsed'] = 0
-            # add the task to the list
-            ptasks[task.find('name').text] = t
+            # add the task to the list if 'active' was passed in and
+            # the task is active, or add regardless if 'active' was
+            # not passed
+            if conf['active']:
+                if t['active']:
+                    ptasks[task.find('name').text] = t
+            else:
+                ptasks[task.find('name').text] = t
         data[host][projname]['taskcount'] = task_count
         data[host][projname]['taskactive'] = task_active
         data[host][projname]['tasks'] = ptasks

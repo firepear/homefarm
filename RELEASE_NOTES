@@ -1,4 +1,4 @@
-3.0.0 - 2021-02-xx
+3.0.0 - 2021-08-xx
 --------------------------------------------------------------------
 
     * A monitoring and metrics platform, Gnatwren, is now included. It
@@ -16,6 +16,7 @@
 
     * Added 'HISTCONTROL=ignoreboth' to bashrc
 
+    * Misc fixes and improvements
 
 
 2.8.2 - 2021-01-11
