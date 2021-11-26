@@ -193,11 +193,10 @@ case "${1}" in
         docker container stop farmcontrol || true
         docker container rm farmcontrol || true
         docker image rm farmcontrol || true
-        docker image prune -f
         docker image pull archlinux
-        docker image prune -f
         cd ./files/docker/controller
         docker build --tag farmcontrol .
+        docker image prune -f
         ;;
     cmd)
         shift
