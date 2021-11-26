@@ -1,6 +1,5 @@
 ---
-- hosts: compute_nodes
-  remote_user: farmer
+- hosts: controller
   tasks:
   - name: Clone/pull Gnatwren repository
     git:
@@ -27,10 +26,14 @@
       dest: /homefarm/files/gwagent-armv7l
   - name: Instantiate gwagent config
     copy:
-      src: /homefarm/files/gnatwren/assets/agent-config.json
+      src: /homefarm/files/gnatwren/assets/gwagent-config.json
       dest: /homefarm/gwagent-config.json
       mode: 0644
-      backup: yes
+      force: no
+
+- hosts: compute_nodes
+  remote_user: farmer
+  tasks:
   - name: Deploy gwagent
     become: true
     copy:
