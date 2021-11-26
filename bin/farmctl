@@ -276,7 +276,7 @@ case "${1}" in
             echo "farmctl is running. do 'farmctl attach' to connect."
             builtin exit 0
         fi
-        exec docker run --name farmcontrol -d --restart always -p 9099:80 -p 11099:11099 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
+        exec docker run --name farmcontrol -d --restart always -p 9099:80 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
         ;;
     on-up)
         # this case runs on the second invocation of farmctl, after
@@ -290,10 +290,6 @@ case "${1}" in
         hf_buildhosts
         # start the httpd
         /usr/bin/darkhttpd "${FP_CONFIG[httpdir]}" --port 80 --daemon >> /dev/null
-        # start gwgather
-        if [[ -e ./bin/gwgather ]]; then
-            ./bin/gwgather -config=./gwgather-config.json &
-        fi
         # add /homefarm/bin to PATH and launch a shell for the user
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
