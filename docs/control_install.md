@@ -19,18 +19,18 @@ initialization, and Ansible setup.
 There's a little bit of prep work to do before we build the container:
 
 1. Install docker, if you haven't already :)
-1. In the directory of your choosing, run `'git clone https://github.com/firepear/homefarm.git'`
+1. In the directory of your choosing, run `git clone https://github.com/firepear/homefarm.git`
     * This git clone will also hold your cluster configuration and act
       as the non-volatile storage for the container you're about to
       create, so put it somewhere reasonably stable.
 1. Create a config file which simply holds the location of the clone
    you just created
-   * `'echo ~/path/to/clone > ~/.homefarmdir'`
+   * `echo ~/path/to/clone > ~/.homefarmdir`
    * For the purposes of this document, we will assume it is at `~/homefarm`
 
 Now it's time to build the container image. Run:
 
-`'~/homefarm/bin/farmctl build-image'`
+`~/homefarm/bin/farmctl build-image`
 
 
 
@@ -38,18 +38,24 @@ Now it's time to build the container image. Run:
 
 Starting the controller container is easy. Just run:
 
-`'~/homefarm/bin/farmctl up'`
+`~/homefarm/bin/farmctl up`
 
 You should see something like the following:
 
 ```
-Welcome to homefarm
-    Controller IP is 172.17.0.2
-    Installer httpd is listening on DOCKERHOST:9099
-    Run 'farmctl' to see options, or refer to the docs
-[root@77c3fe3f72ba homefarm]#
+$ ./homefarm/bin/farmctl up
+dbd864a9bef65e02b01d199c05a165b21f3cd89a768c2d3cbb831b0323a8b4e0
+$
 ```
 
+The long string is the docker id of the container that was just
+spun-up in the background. To attach to the container, do
+
+`./homefarm/bin/farmctl up`
+
+and to detach while inside it, use the standard docker interrupt code,
+`Ctrl-p Ctrl-q`. It's fine if you accidentally `exit` or do a `Ctrl-c`
+while inside; the container will simply restart.
 
 
 ## Controller initialization
@@ -63,15 +69,14 @@ you, so on a machine with a browser:
 1. Find a mirror that is geographically close to you and has low delay
 1. Copy the URL of your chosen mirror
 
-Mn the controller container, edit `./srv/homefarm/mirrorlist-x86_64`
+Attach to the controller and edit `./srv/homefarm/mirrorlist-x86_64`
 (`vi` and `mg` are available) and add a line:
 
 `Server = MIRROR_URL`
 
-then save and exit
+then save and exit.
 
-
-Run `'farmctl init'` to complete initialization of the controller
+Now run `'farmctl init'` to complete initialization of the controller
 environment. This is mostly automatic, but it will ask you for:
 
 * The machine architectures you want to mirror packages for. The
