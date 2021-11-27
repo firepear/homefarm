@@ -8,4 +8,12 @@ simple to get going.
   README](https://github.com/firepear/gnatwren) and follow the Docker
   install instructions to stand up an instance of `gwgather` (the data
   collection and reporting portion of Gnatwren)
-- 
+- From inside the `farmctl` shell, do:
+  - `ansible-playbook --extra-vars "hfarch=x86_64" gnatwren.yaml`
+  - Edit `gwagent-config.json` to point at the IP of the machine where
+    the `gwgather` container is running
+  - Rerun the gnatwren playbook (sorry for this kludge)
+
+After that, you should be able to visit `http://GWGATHER_IP:9098/` and
+see current stats about your farm. See the Gnatwren docs for more
+info.
