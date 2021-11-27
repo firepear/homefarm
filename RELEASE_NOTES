@@ -1,13 +1,12 @@
 3.0.0 - 2021-08-xx
 --------------------------------------------------------------------
 
-    * A monitoring and metrics platform, Gnatwren, is now included. It
-      is deployed and running by default. See the doc for more
-      information
+    * A monitoring and metrics platform, Gnatwren, is now
+      available. See the Using Gnatwren doc for more information
 
     * Homefarm's control container is now long-running rather than
-      transient, with `farmctl up` now only being needed initially or
-      after a `farmctl down`
+      transient, with `farmctl up` now only being needed initially, or
+      after a `farmctl down` or image rebuild
 
     * `farmctl attach` is the new `farmctl up`
 

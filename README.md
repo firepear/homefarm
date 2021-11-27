@@ -47,6 +47,7 @@ for all updates.
     * [Controller setup](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
     * [Compute node install](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
     * [BOINC configuration](https://github.com/firepear/homefarm/blob/master/docs/boinc.md)
+    * [Using Gnatwren](https://github.com/firepear/homefarm/blob/master/docs/gnatwren.md)
 * Managing and maintaining your farm
     * [Everyday farm ops](https://github.com/firepear/homefarm/blob/master/docs/management.md)
     * [Add/reinstall a compute node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
