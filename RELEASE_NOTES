@@ -13,6 +13,8 @@
     * `farmctl query` now handles connection failures gracefully
       rather than dying
 
+    * Improvements to `farmctl build-image`
+
     * Added 'HISTCONTROL=ignoreboth' to bashrc
 
     * Misc fixes and improvements
