@@ -38,6 +38,11 @@ def report(d):
     else:
         # print host banner
         print(("-" * (79 - len(d['host']))) + " " + d['host'])
+        # report errors if they exist
+        if d['err'] is not None:
+            print(d['err'])
+            sys.exit(2)
+
         # print formatted report bits
         #
         # first the WU count and total elapsed time. if there are no
@@ -95,7 +100,7 @@ else:
     globpath = "/var/lib/boinc/job_log_*{}*.txt".format(args.proj)
     joblogs = glob.glob(globpath)
     if len(joblogs) == 0:
-        data['err'] = f'no matching attached projects: {args.proj}'
+        data['err'] = f'no matching attached projects: {args.proj} (maybe no WUs completed yet?)'
         report(data)
     if len(joblogs) > 1:
         data['err'] = f"multiple projects matching {args.proj}; must have exactly one"
