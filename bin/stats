@@ -33,17 +33,17 @@ def format_dl(dl):
         dl = abs(dl)
 
     if dl > 86400:
-        d = int(dl / 86400) * od
+        d = int(dl / 86400)
         h = int((dl - 86400 * d) / 3600)
-        return "{:3d}d{:02d}h".format(d, h)
+        return "{:3d}d{:02d}h".format(d * od, h)
     elif dl > 3600:
-        h = int(dl / 3600) * od
+        h = int(dl / 3600)
         m = int((dl - 3600 * h) / 60)
-        return "{:3d}h{:02d}m".format(h, m)
+        return "{:3d}h{:02d}m".format(h * od, m)
     else:
-        m = int(dl / 60) * od
+        m = int(dl / 60)
         s = int(dl - 60 * m)
-        return "{:3d}m{:02d}s".format(m, s)
+        return "{:3d}m{:02d}s".format(m * od, s)
 
 
 # report() is the report generator function. if JSON is requested, it
