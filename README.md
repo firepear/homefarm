@@ -25,12 +25,12 @@ There are a few assumptions:
 
 # News
 
+* 2022-04-24: v3.0.3: Fixes for Gnatwren deployment playbook
 * 2022-04-06: v3.0.2: Fixes for `farmctl status` deadline reporting
 * 2022-02-28: v3.0.1: Fixes for `farmctl query`
 * 2021-11-26: v3.0.0: Initial monitoring support; long-running control
   container
 * 2021-01-11: v2.8.2: Fixes for control image builds
-* 2020-12-26: v2.8.1: `update` now runs per-arch. Various fixes.
 
 See the [Release
 notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)

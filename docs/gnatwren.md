@@ -9,7 +9,7 @@ simple to get going.
   install instructions to stand up an instance of `gwgather` (the data
   collection and reporting portion of Gnatwren)
 - From inside the `farmctl` shell, do:
-  - `ansible-playbook --extra-vars "hfarch=x86_64" gnatwren.yaml`
+  - `ansible-playbook --extra-vars "hfarch=x86_64" gnatwren.yml`
   - Edit `gwagent-config.json` to point at the IP of the machine where
     the `gwgather` container is running
   - Rerun the gnatwren playbook (sorry for this kludge)
