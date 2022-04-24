@@ -43,6 +43,7 @@
       group: root
       mode: 0755
     when: ansible_architecture == hfarch
+    register: binary
   - name: Create gwagent run dir
     become: true
     file:
@@ -97,4 +98,4 @@
     service:
       name: gnatwren-agent
       state: restarted
-    when: ansible_architecture == hfarch and config.changed
+    when: (ansible_architecture == hfarch) and (config.changed or binary.changed)
