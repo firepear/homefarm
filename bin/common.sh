@@ -77,7 +77,7 @@ update_localrepo() {
     # hash. do nothing if they match.
     mkdir -p "${repodir}"
     cd "${repodir}" || exit
-    hf_fetch "${mirrorurl}/core/os/${arch}/core.db.tar.gz"
+    hf_fetch "${mirrorurl}/core/os/x86_64/core.db.tar.gz"
     coremd5=$(md5sum core.db.tar.gz)
     if [[ -e "prevmd5" ]]; then
         prevmd5=$(cat prevmd5)
@@ -88,14 +88,14 @@ update_localrepo() {
     fi
     echo "${coremd5}" > prevmd5
 
-    shownotice "Updating local mirror for ${arch}"
+    shownotice "Updating local mirror"
     # generate and grab installed packages list
     mkdir -p "${repodir}/db"
     cat "${FP_CONFIG[rootdir]}/files/pkgs-core.txt" "${FP_CONFIG[rootdir]}/files/pkgs-compute.txt" \
        "${FP_CONFIG[rootdir]}/files/pkgs-storage.txt" ./db/pkgs.txt
     # if a local pkgs list exists, merge it and the homefarm pkgs list
     if [[ -e "${FP_CONFIG[rootdir]}/localpkgs.txt" ]]; then
-        cat ./db/pkgs.txt "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" | sort | \
+        cat ./db/pkgs.txt "${FP_CONFIG[rootdir]}/localpkgs.txt" | sort | \
             uniq > ./db/pkgs.2
         mv ./db/pkgs.2 ./db/pkgs.txt
     fi
@@ -106,7 +106,7 @@ update_localrepo() {
     for repo in core extra community; do
         cd "${repodir}" || exit
         if [[ ! -e "${repo}.db.tar.gz" ]]; then
-            hf_fetch "${mirrorurl}/${repo}/os/${arch}/${repo}.db.tar.gz"
+            hf_fetch "${mirrorurl}/${repo}/os/x86_64/${repo}.db.tar.gz"
         fi
         mkdir -p "${repodir}/db/${repo}"
         mv "${repo}.db.tar.gz" "${repodir}/db/${repo}"

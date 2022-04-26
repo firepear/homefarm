@@ -31,13 +31,6 @@ function hf_init() {
     else
         echo "Skipping; already configured"
     fi
-    # set marches
-    if [[ "${FP_CONFIG[marches]}" == "HF_MARCHES_UNSET" ]]; then
-        #MARCHES=$(gutcheck "Arches to mirror" "x86_64")
-        sedexpr="s/HF_MARCHES_UNSET/${MARCHES}/"
-        sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
-        fp_parseconfig /homefarm/.fpconfig.json homefarm
-    fi
 
     shownotice "Generating SSH configuration for Ansible"
     if [[ -e /root/.ssh/id_farmer ]]; then
@@ -67,9 +60,7 @@ function hf_init() {
     fi
 
     shownotice "Initializing local package mirror"
-    for arch in ${FP_CONFIG[marches]}; do
-        update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}" "${arch}"
-    done
+    update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}"
 
     # build gnatwren and create agent config file
     shownotice "Initializing Gnatwren"
@@ -173,13 +164,8 @@ case "${1}" in
         exec ./bin/backup
         ;;
     boinc-config)
-        for arch in ${FP_CONFIG[marches]}; do
-            if [[ "${arch}" == "armv7h" ]]; then
-                arch="armv7l"
-            fi
-            # needs '|| true' to guard against failures due to unreachable machines
-            /bin/ansible-playbook nodes-boinc-setup.yml || true
-        done
+        # needs '|| true' to guard against failures due to unreachable machines
+        /bin/ansible-playbook nodes-boinc-setup.yml || true
         ;;
     build-image)
         hf_docker_test

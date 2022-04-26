@@ -41,16 +41,11 @@ else
 fi
 usermod -p "${passwd}" root
 
-if [[ "${CPUARCH}" == "x86_64" ]]; then
-    shownotice "Configuring sensors"
-    /usr/bin/sensors-detect --auto > /dev/null
-
-    shownotice "Setting boot parameters"
-    bootparams=$(gutcheck "Enter desired boot parameters" "vsyscall=emulate mitigations=off")
-    # add vsyscall to kernel boot parameters; needed for FAH2
-    sedcmd="s/^(options\s+.*)\$/\1 ${bootparams}/"
-    sed -i -E -e "${sedcmd}" /boot/loader/entries/arch.conf
-fi
+shownotice "Setting boot parameters"
+bootparams=$(gutcheck "Enter desired boot parameters" "vsyscall=emulate mitigations=off")
+# add vsyscall to kernel boot parameters; needed for FAH2
+sedcmd="s/^(options\s+.*)\$/\1 ${bootparams}/"
+sed -i -E -e "${sedcmd}" /boot/loader/entries/arch.conf
 
 shownotice "Setup complete"
 echo "Rebooting in 5 seconds."

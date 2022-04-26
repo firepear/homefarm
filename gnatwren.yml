@@ -5,25 +5,10 @@
     git:
       repo: 'https://github.com/firepear/gnatwren.git'
       dest: /homefarm/files/gnatwren
-  - name: Build agent for x86
+  - name: Build agent
     command: go build
     args:
       chdir: /homefarm/files/gnatwren/cmd/gwagent
-  - name: Copy x86 executable to staging location
-    copy:
-      src: /homefarm/files/gnatwren/cmd/gwagent/gwagent
-      dest: /homefarm/files/gwagent-x86_64
-  - name: Build agent for armv7
-    command: go build
-    args:
-      chdir: /homefarm/files/gnatwren/cmd/gwagent
-    environment:
-      GOOS: linux
-      GOARCH: arm
-  - name: Copy armv7 executable to staging location
-    copy:
-      src: /homefarm/files/gnatwren/cmd/gwagent/gwagent
-      dest: /homefarm/files/gwagent-armv7l
   - name: Instantiate gwagent config
     copy:
       src: /homefarm/files/gnatwren/assets/gwagent-config.json
@@ -37,7 +22,7 @@
   - name: Deploy gwagent
     become: true
     copy:
-      src: /homefarm/files/gwagent-{{ ansible_architecture }}
+      src: /homefarm/files/gnatwren/cmd/gwagent/gwagent
       dest: /usr/local/bin/gwagent
       owner: root
       group: root
