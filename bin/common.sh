@@ -70,19 +70,14 @@ hf_docker_test() {
 update_localrepo() {
     repodir="${1}"
     mirrorurl="${2}"
-    arch="${3}"
-    repodir="${repodir}/${arch}"
-    firstnode="${4}"
+    repodir="${repodir}/x86_64"
+    firstnode="${3}"
 
     # grab core db file from mirror and test it against the last
     # hash. do nothing if they match.
     mkdir -p "${repodir}"
     cd "${repodir}" || exit
-    if [[ "${arch}" == "x86_64" ]]; then
-        hf_fetch "${mirrorurl}/core/os/${arch}/core.db.tar.gz"
-    else
-        hf_fetch "${mirrorurl}/${arch}/core/core.db.tar.gz"
-    fi
+    hf_fetch "${mirrorurl}/core/os/${arch}/core.db.tar.gz"
     coremd5=$(md5sum core.db.tar.gz)
     if [[ -e "prevmd5" ]]; then
         prevmd5=$(cat prevmd5)
@@ -96,29 +91,22 @@ update_localrepo() {
     shownotice "Updating local mirror for ${arch}"
     # generate and grab installed packages list
     mkdir -p "${repodir}/db"
-    cp "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" ./db/pkgs.txt
-    if [[ -e "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" ]]; then
-        # if a local pkgs list exists, merge it and the homefarm pkgs list
-        cat "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" | sort | uniq > "${repodir}/db/pkgs.txt"
-    else
-        # else just copy the standard list
-        cp "${FP_CONFIG[rootdir]}/files/pkgs-${arch}.txt" "${repodir}/db/pkgs.txt"
+    cat "${FP_CONFIG[rootdir]}/files/pkgs-core.txt" "${FP_CONFIG[rootdir]}/files/pkgs-compute.txt" \
+       "${FP_CONFIG[rootdir]}/files/pkgs-storage.txt" ./db/pkgs.txt
+    # if a local pkgs list exists, merge it and the homefarm pkgs list
+    if [[ -e "${FP_CONFIG[rootdir]}/localpkgs.txt" ]]; then
+        cat ./db/pkgs.txt "${FP_CONFIG[rootdir]}/localpkgs-${arch}.txt" | sort | \
+            uniq > ./db/pkgs.2
+        mv ./db/pkgs.2 ./db/pkgs.txt
     fi
+
     export localrepo_updated="true"
     # grab remaining db files from mirror, and unpack all of them
     echo "Updating package databases"
-    for repo in core extra community alarm; do
-        if [[ "${arch}" == "x86_64" ]] && [[ "${repo}" == "alarm" ]]; then
-            # skip the 'alarm' repo for x86
-            continue
-        fi
+    for repo in core extra community; do
         cd "${repodir}" || exit
         if [[ ! -e "${repo}.db.tar.gz" ]]; then
-            if [[ "${arch}" == "x86_64" ]]; then
-                hf_fetch "${mirrorurl}/${repo}/os/${arch}/${repo}.db.tar.gz"
-            else
-                hf_fetch "${mirrorurl}/${arch}/${repo}/${repo}.db.tar.gz"
-            fi
+            hf_fetch "${mirrorurl}/${repo}/os/${arch}/${repo}.db.tar.gz"
         fi
         mkdir -p "${repodir}/db/${repo}"
         mv "${repo}.db.tar.gz" "${repodir}/db/${repo}"
@@ -128,7 +116,7 @@ update_localrepo() {
     done
     cd "${repodir}" || exit
     # call the python script which manages all the repo files
-    /homefarm/bin/repo-update "${repodir}" "${mirrorurl}" "${arch}"
+    /homefarm/bin/repo-update "${repodir}" "${mirrorurl}"
     if [[ "${?}" != "0" ]]; then
         exit 1
     fi

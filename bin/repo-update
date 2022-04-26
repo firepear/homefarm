@@ -15,7 +15,6 @@ if len(sys.argv) == 1 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
 
 localrepo = sys.argv[1]
 mirrorurl = sys.argv[2]
-arch      = sys.argv[3]
 
 # switch to the local repo directory
 os.chdir(localrepo)
@@ -40,8 +39,6 @@ with open("./db/pkgs.txt") as pkgfile:
 # gather data on all available packages
 print("Processing package databases", flush=True)
 for repo in repos:
-    if arch == "x86_64" and repo == "alarm":
-        continue
     repopkgs = os.listdir("./db/{}".format(repo))
     # read the 'desc' file of each pkg in the repo. build a map of pkg
     # filenames to repo we're pulling them from.
@@ -69,11 +66,7 @@ for pkg in pkgfiles.keys():
     if pkg not in localpkgs:
         fetch_count = 0
         filetype = ""
-        pkgurl=""
-        if arch == "x86_64":
-            pkgurl = f"{mirrorurl}/{pkgfiles[pkg]}/os/x86_64/{pkg}"
-        else:
-            pkgurl = f"{mirrorurl}/{arch}/{pkgfiles[pkg]}/{pkg}"
+        pkgurl = f"{mirrorurl}/{pkgfiles[pkg]}/os/x86_64/{pkg}"
         pkgdest = f"{localrepo}/{pkg}"
         # try to fetch until we get "XZ compressed" or 5 tries
         while ("XZ compressed" not in filetype and "Zstandard" not in filetype) and fetch_count < 5:

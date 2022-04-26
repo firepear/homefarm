@@ -108,37 +108,28 @@ if [[ "${DEVMODE}" == "false" ]]; then
     update_homefarm "${0}"
 fi
 
-for arch in ${FP_CONFIG[marches]}; do
-    if [[ "${arch}" == "armv7h" ]] || [[ "${arch}" == "aarch64" ]]; then
-        mirrorurl="http://mirror.archlinuxarm.org"
-    else
-        mirrorurl="${FP_CONFIG[mirrorurl]}"
-    fi
-    update_localrepo "${FP_CONFIG[localrepo]}" "${mirrorurl}" "${arch}" "${NODE}"
-    if [[ "${?}" != "0" ]]; then
-        exit 1
-    fi
-    if [[ "${arch}" == "armv7h" ]]; then
-        # the arch repos list 32-bit arm as "v7h", but it's "v7l" on modern rpis
-        arch="armv7l"
-    fi
+mirrorurl="${FP_CONFIG[mirrorurl]}"
+update_localrepo "${FP_CONFIG[localrepo]}" "${mirrorurl}" "${NODE}"
+if [[ "${?}" != "0" ]]; then
+    exit 1
+fi
 
-    update_os "${arch}"
+update_os "${arch}"
 
-    # this sets the custom BOINC unit file, and pushes utils to
-    # nodes. those need to be refreshed every time there is an update,
-    # of any sort.
-    if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
-        shownotice "Pushing updated scripts to ${arch} nodes"
-        ansible-playbook nodes-boinc-setup.yml
-        if [[ -e ./.repoupdate ]]; then
-            rm ./.repoupdate
-        fi
+# this sets the custom BOINC unit file, and pushes utils to
+# nodes. those need to be refreshed every time there is an update,
+# of any sort.
+if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
+    shownotice "Pushing updated scripts to ${arch} nodes"
+    ansible-playbook nodes-boinc-setup.yml
+    if [[ -e ./.repoupdate ]]; then
+        rm ./.repoupdate
     fi
+fi
 
-    # reboots
-    if [[ "${localrepo_updated}" == "true" ]]; then
-        shownotice "Rebooting ${arch} nodes"
+# reboots
+if [[ "${localrepo_updated}" == "true" ]]; then
+    shownotice "Rebooting ${arch} nodes"
         for node in nodes/*yml; do
             node_arch=$(ssh "farmer@$(basename """${node}""" .yml)" 'uname -m')
             if [[ "${node_arch}" == "${arch}" ]]; then
