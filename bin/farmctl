@@ -23,19 +23,17 @@ function hf_init() {
     shownotice "Initializing Arch source repo config"
     # set mirror url
     if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
-        MIRROR_URL=$(grep '^Server' srv/homefarm/mirrorlist-x86_64 | cut -d' ' -f3 | cut -d'$' -f1)
+        MIRROR_URL=$(grep '^Server' srv/homefarm/mirrorlist | cut -d' ' -f3 | cut -d'$' -f1)
         MIRROR_URL="${MIRROR_URL//\//'\/'}"
         sedexpr="s/HF_MIRRORURL_UNSET/${MIRROR_URL}/"
         sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
         fp_parseconfig /homefarm/.fpconfig.json homefarm
-        ln -s ./files/mirrorlist-armv7h srv/homefarm/mirrorlist-armv7h
-        ln -s ./files/mirrorlist-armv7h srv/homefarm/mirrorlist-armv7l
     else
         echo "Skipping; already configured"
     fi
     # set marches
     if [[ "${FP_CONFIG[marches]}" == "HF_MARCHES_UNSET" ]]; then
-        MARCHES=$(gutcheck "Arches to mirror" "x86_64")
+        #MARCHES=$(gutcheck "Arches to mirror" "x86_64")
         sedexpr="s/HF_MARCHES_UNSET/${MARCHES}/"
         sed -i -e "${sedexpr}" /homefarm/.fpconfig.json
         fp_parseconfig /homefarm/.fpconfig.json homefarm
@@ -56,20 +54,14 @@ function hf_init() {
 
     # do local files and httpd setup
     shownotice "Configuring Homefarm installer webserver"
-    if [[ -e "${FP_CONFIG[httpdir]}/pacman-x86_64.conf" ]]; then
+    if [[ -e "${FP_CONFIG[httpdir]}/pacman.conf" ]]; then
         echo "Skipping; already configured"
     else
         HOSTADDR=$(gutcheck "Docker host's address (e.g. 10.1.10.114)")
         sedexpr="s/CONTROL_NODE_IP/${HOSTADDR}/"
-        for arch in ${FP_CONFIG[marches]}; do
-            sed -e "${sedexpr}" "./files/pacman-${arch}.conf" > "${FP_CONFIG[httpdir]}/pacman-${arch}.conf"
-            if [[ "${arch}" == "armv7h" ]]; then
-                ln -s "${FP_CONFIG[httpdir]}/pacman-${arch}.conf" "${FP_CONFIG[httpdir]}/pacman-archv7l.conf"
-            fi
-        done
+        sed -e "${sedexpr}" "./files/pacman.conf" > "${FP_CONFIG[httpdir]}/pacman.conf"
         # create local package cache dirs
         mkdir -p /homefarm/srv/arch
-        mkdir -p /homefarm/srv/alpine
         # init project stats db
         ./bin/utils/pstracker -u >> /dev/null
     fi

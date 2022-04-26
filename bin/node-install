@@ -107,46 +107,34 @@ source ./common.sh
 
 clear
 shownotice "Beginning Homefarm/Arch install"
-CPUARCH=$(hf_setarch)
-if [[ "${CPUARCH}" == "x86_64" ]]; then
-    # make sure the clock is set
-    hf_clockcheck
-    # and setup a drive
-    hf_storageconfig
-fi
+# make sure the clock is set
+hf_clockcheck
+# and setup a drive
+hf_storageconfig
 
 
 shownotice "Base install"
 # get cluster pacman.conf and mirrorlist
-hf_fetch "${CONTROLLER}/pacman-${CPUARCH}.conf"
-mv "pacman-${CPUARCH}.conf" /etc/pacman.conf
-hf_fetch  "${CONTROLLER}/mirrorlist-${CPUARCH}"
-mv "mirrorlist-${CPUARCH}" /etc/pacman.d/mirrorlist
+hf_fetch "${CONTROLLER}/pacman.conf"
+mv pacman.conf /etc/pacman.conf
+hf_fetch  "${CONTROLLER}/mirrorlist"
+mv mirrorlist /etc/pacman.d/mirrorlist
 # do install of needed packages
-if [[ "${CPUARCH}" == "armv7h" ]] || [[ "${CPUARCH}" == "aarch64" ]]; then
-    # just use pacman
-    pacman -Syu --noconfirm
-    pacman -S --noconfirm --needed openssh python ansible sudo grep awk boinc-nox vi mg
-    if [[ -e "${WPACONF}" ]]; then
-        mv "${WPACONF}" "/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
-    fi
-else
-    # base install via pacstrap
-    pkglist="base openssh wpa_supplicant dmidecode lm_sensors python ansible sudo grep awk boinc-nox linux linux-firmware vi mg"
-    pacstrap /mnt ${pkglist}
-    # generate /etc/fstab
-    genfstab -U /mnt >> /mnt/etc/fstab
-    # copy over resolf.conf so the system will have nameservice
-    rm -f /mnt/etc/resolv.conf
-    cp /etc/resolv.conf /mnt/etc/resolv.conf
-    # install pacman.conf and mirrorlist to system
-    cp /etc/pacman.conf /mnt/etc/pacman.conf
-    cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-    # copy wpa configuration if we have it
-    if [[ -e "${WPACONF}" ]]; then
-        mkdir -p /mnt/etc/wpa_supplicant
-        cp "${WPACONF}" "/mnt/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
-    fi
+# base install via pacstrap
+pkglist="base openssh wpa_supplicant dmidecode lm_sensors python ansible sudo grep awk linux linux-firmware vi mg"
+pacstrap /mnt ${pkglist}
+# generate /etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
+# copy over resolf.conf so the system will have nameservice
+rm -f /mnt/etc/resolv.conf
+cp /etc/resolv.conf /mnt/etc/resolv.conf
+# install pacman.conf and mirrorlist to system
+cp /etc/pacman.conf /mnt/etc/pacman.conf
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+# copy wpa configuration if we have it
+if [[ -e "${WPACONF}" ]]; then
+    mkdir -p /mnt/etc/wpa_supplicant
+    cp "${WPACONF}" "/mnt/etc/wpa_supplicant/wpa_supplicant-${USERIFACE}.conf"
 fi
 
 cat > /root/stage1 <<EOF
@@ -252,8 +240,6 @@ EOF2
     bootctl install
 fi
 
-CPUARCH=\$(hf_setarch)
-
 # grab the controller's ssh key, for later
 hf_fetch "${CONTROLLER}/id_farmer.pub"
 
@@ -279,17 +265,15 @@ else
 fi
 usermod -p "\${passwd}" root
 
-if [[ "\${CPUARCH}" == "x86_64" ]]; then
-    shownotice "Setting up boot tasks and parameters"
-    hf_fetch "${CONTROLLER}/atboot.service"
-    mv atboot.service /etc/systemd/system
-    systemctl enable atboot
+shownotice "Setting up boot tasks and parameters"
+hf_fetch "${CONTROLLER}/atboot.service"
+mv atboot.service /etc/systemd/system
+systemctl enable atboot
 
-    bootparams=\$(gutcheck "Enter desired boot parameters" "vsyscall=emulate mitigations=off")
-    # add vsyscall to kernel boot parameters; needed for FAH2
-    sedcmd="s/^(options\s+.*)\\\$/\1 \${bootparams}/"
-    sed -i -E -e "\${sedcmd}" /boot/loader/entries/arch.conf
-fi
+bootparams=\$(gutcheck "Enter desired boot parameters" "vsyscall=emulate mitigations=off")
+# add vsyscall to kernel boot parameters; needed for FAH2
+sedcmd="s/^(options\s+.*)\\\$/\1 \${bootparams}/"
+sed -i -E -e "\${sedcmd}" /boot/loader/entries/arch.conf
 
 # this is a no-op if already enabled, and saves the user a step on
 # reboot if they had to use this workaround
@@ -297,17 +281,13 @@ systemctl enable systemd-resolved
 EOF
 
 
-if [[ "${CPUARCH}" == "x86_64" ]]; then
-    cp /root/stage1 /mnt/root/stage1
-    chmod +x /mnt/root/stage1
-    cp ./common.sh /mnt/root
-    arch-chroot /mnt /root/stage1
-    umount /mnt/boot
-    umount /mnt
-else
-    chmod +x /root/stage1
-    /root/stage1
-fi
+cp /root/stage1 /mnt/root/stage1
+chmod +x /mnt/root/stage1
+cp ./common.sh /mnt/root
+arch-chroot /mnt /root/stage1
+umount /mnt/boot
+umount /mnt
+
 
 shownotice "Installation complete"
 echo "Rebooting in 5 seconds."
