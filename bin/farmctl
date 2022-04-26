@@ -67,8 +67,9 @@ function hf_init() {
                 ln -s "${FP_CONFIG[httpdir]}/pacman-${arch}.conf" "${FP_CONFIG[httpdir]}/pacman-archv7l.conf"
             fi
         done
-        # create local package cache dir
+        # create local package cache dirs
         mkdir -p /homefarm/srv/arch
+        mkdir -p /homefarm/srv/alpine
         # init project stats db
         ./bin/utils/pstracker -u >> /dev/null
     fi

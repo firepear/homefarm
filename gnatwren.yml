@@ -31,7 +31,7 @@
       mode: 0644
       force: no
 
-- hosts: compute_nodes
+- hosts: compute_nodes:storage_nodes
   remote_user: farmer
   tasks:
   - name: Deploy gwagent
