@@ -6,7 +6,6 @@ attr
 audit
 base
 bash
-boinc-nox
 bzip2
 ca-certificates
 ca-certificates-mozilla
@@ -38,6 +37,7 @@ gnutls
 gpgme
 grep
 gzip
+hwloc
 hwids
 iana-etc
 icu
@@ -94,7 +94,6 @@ licenses
 linux
 linux-api-headers
 linux-firmware
-lm_sensors
 logrotate
 lz4
 mg

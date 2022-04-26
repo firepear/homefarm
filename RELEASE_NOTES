@@ -1,15 +1,18 @@
-<<<<<<< HEAD
 3.1.0 - 2022-0x-xx
 --------------------------------------------------------------------
 
+    * Removed ARM support
+
     * Began work to support storage as well as compute clients
-=======
+
+    * Removed unmaintained `testnode` dockerfile
+
+
 3.0.3 - 2022-04-24
 --------------------------------------------------------------------
 
     * Fixed gnatwren playbook not restarting gwagent when a new binary
       deployed.
->>>>>>> 02ffd4cd15515232f44f36c8780a4c459cc6523a
 
 
 3.0.2 - 2022-04-06

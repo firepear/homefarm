@@ -1,0 +1,7 @@
+boinc-nox
+libclc
+nvidia
+nvidia-utils
+ocl-icd
+opencl-mesa
+opencl-nvidia
