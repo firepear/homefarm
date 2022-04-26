@@ -178,7 +178,7 @@ case "${1}" in
                 arch="armv7l"
             fi
             # needs '|| true' to guard against failures due to unreachable machines
-            /bin/ansible-playbook --extra-vars "hfarch=${arch}" nodes-boinc-setup.yml || true
+            /bin/ansible-playbook nodes-boinc-setup.yml || true
         done
         ;;
     build-image)

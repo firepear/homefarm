@@ -42,7 +42,6 @@
       owner: root
       group: root
       mode: 0755
-    when: ansible_architecture == hfarch
     register: binary
   - name: Create gwagent run dir
     become: true
@@ -52,7 +51,6 @@
       group: nobody
       mode: 0755
       state: directory
-    when: ansible_architecture == hfarch
   - name: Create gwagent config dir
     become: true
     file:
@@ -61,7 +59,6 @@
       group: root
       mode: 0755
       state: directory
-    when: ansible_architecture == hfarch
   - name: Deploy gwagent config file
     become: true
     copy:
@@ -70,7 +67,6 @@
       owner: root
       group: root
       mode: 0644
-    when: ansible_architecture == hfarch
     register: config
   - name: Deploy gwagent unit file
     become: true
@@ -80,22 +76,21 @@
       owner: root
       group: root
       mode: 0644
-    when: ansible_architecture == hfarch
     register: unitfile
   - name: Reload unit files
     become: true
     systemd:
       daemon_reload: yes
-    when: ansible_architecture == hfarch and unitfile.changed
+    when: unitfile.changed
   - name: Enable gwagent
     become: true
     service:
       name: gnatwren-agent
       enabled: yes
-    when: ansible_architecture == hfarch and unitfile.changed
+    when: unitfile.changed
   - name: Restart gwagent
     become: true
     service:
       name: gnatwren-agent
       state: restarted
-    when: (ansible_architecture == hfarch) and (config.changed or binary.changed)
+    when: config.changed or binary.changed

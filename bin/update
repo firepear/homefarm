@@ -49,7 +49,7 @@ update_os() {
     # common.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
         shownotice "Updating compute nodes"
-        ansible-playbook --extra-vars "hfarch=$1" nodes-system-update.yml
+        ansible-playbook nodes-system-update.yml
     fi
 }
 
@@ -130,7 +130,7 @@ for arch in ${FP_CONFIG[marches]}; do
     # of any sort.
     if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
         shownotice "Pushing updated scripts to ${arch} nodes"
-        ansible-playbook --extra-vars "hfarch=${arch}" nodes-boinc-setup.yml
+        ansible-playbook nodes-boinc-setup.yml
         if [[ -e ./.repoupdate ]]; then
             rm ./.repoupdate
         fi
