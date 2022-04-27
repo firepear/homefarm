@@ -11,10 +11,10 @@ that lives on the control node.
 There are a few assumptions:
 
 * One machine capable of running Docker, to host the controller
-* One or more x86_64 or armv7h/l machines capable of running Arch
-  Linux, to become compute nodes
-  * It's further assumed that these machines will be used for no other
-    purpose, and it is okay to wipe their drives
+* One or more x86_64 machines capable of running Arch Linux, to become
+  compute or storage nodes. Further:
+  * These machines are being used for no other purpose
+  * It is okay to wipe their drives
 * You are aware of your local network configuration, and have IPs to
   assign to the nodes.
 * All nodes are on a private network -- an SSH key with no passphrase
@@ -56,8 +56,7 @@ for all updates.
       issue](https://github.com/firepear/homefarm/issues) on Github.
     * Sometimes Arch renames packages and other such things, and this
       will cause the update script to break. If this happens to you,
-      check out [our Twitter feed](https://twitter.com/firepear) for
-      up-to-date workarounds.
+      check the _Fixes and Unbreaks_ page above, or file a ticket.
 * Other
     * Have homefarm? Want to install Arch on a machine that _isn't_
       part of the farm? Follow the compute node install process, but

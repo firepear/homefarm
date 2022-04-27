@@ -12,7 +12,7 @@
   - name: Instantiate gwagent config
     copy:
       src: /homefarm/files/gnatwren/assets/gwagent-config.json
-      dest: /homefarm/gwagent-config.json
+      dest: /homefarm/files/gwagent-config.json
       mode: 0644
       force: no
 
@@ -47,7 +47,7 @@
   - name: Deploy gwagent config file
     become: true
     copy:
-      src: /homefarm/gwagent-config.json
+      src: /homefarm/files/gwagent-config.json
       dest: /etc/gnatwren/agent-config.json
       owner: root
       group: root
