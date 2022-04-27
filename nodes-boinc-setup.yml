@@ -1,6 +1,10 @@
 ---
 - hosts: controller
   tasks:
+  - name: Get BOINC and related packages
+    shell:
+      cmd: cat /homefarm/files/pkgs-compute.txt
+    register: boincpkgs
   - name: Ensure node config dir exists
     file:
       path: ./nodes
@@ -25,12 +29,13 @@
       owner: root
       group: root
       mode: 0644
-  - name: Install BOINC
+  - name: Install BOINC and related packages
     become: true
     pacman:
-      name: boinc-nox
+      name: "{{ hostvars['localhost'].newpkgs.stdout_lines }}"
       state: present
-      update-cache: yes
+      update_cache: yes
+    when: hostvars['localhost'].newpkgs.stdout != ""
   - name: Update BOINC client config
     become: true
     copy:

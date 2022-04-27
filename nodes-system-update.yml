@@ -1,15 +1,21 @@
 ---
 - hosts: controller
   tasks:
+  - name: Check for localpkgs
+    stat:
+      path: /homefarm/localpkgs.txt
+    register: localpkgs
   - name: Sort localpkgs file
     shell:
       cmd: sort /homefarm/localpkgs.txt > l.s && mv l.s /homefarm/localpkgs.txt
     ignore_errors: yes
+    when: localpkgs.stat.exists
   - name: Diff Homefarm and local packages
     shell:
-      cmd: comm -1 /homefarm/files/pkgs-core.txt /homefarm/localpkgs.txt
+      cmd: comm -1 /homefarm/files/pkgs-base.txt /homefarm/localpkgs.txt
     ignore_errors: yes
     register: newpkgs
+    when: localpkgs.stat.exists
 
 - hosts: compute_nodes
   remote_user: farmer

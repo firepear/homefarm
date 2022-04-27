@@ -91,8 +91,8 @@ update_localrepo() {
     shownotice "Updating local mirror"
     # generate and grab installed packages list
     mkdir -p "${repodir}/db"
-    cat "${FP_CONFIG[rootdir]}/files/pkgs-core.txt" "${FP_CONFIG[rootdir]}/files/pkgs-compute.txt" \
-       "${FP_CONFIG[rootdir]}/files/pkgs-storage.txt" ./db/pkgs.txt
+    cat "${FP_CONFIG[rootdir]}/files/pkgs-base.txt" "${FP_CONFIG[rootdir]}/files/pkgs-compute.txt" \
+       "${FP_CONFIG[rootdir]}/files/pkgs-storage.txt" > ./db/pkgs.txt
     # if a local pkgs list exists, merge it and the homefarm pkgs list
     if [[ -e "${FP_CONFIG[rootdir]}/localpkgs.txt" ]]; then
         cat ./db/pkgs.txt "${FP_CONFIG[rootdir]}/localpkgs.txt" | sort | \

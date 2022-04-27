@@ -80,7 +80,7 @@ fi
 # read in mirror; error if we don't have one
 if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
     cat <<EOF
-There is no mirror URL set for the local repo. Has 'control init' been
+There is no mirror URL set for the local repo. Has 'farmctl init' been
 run successfully?
 EOF
     exit 1
@@ -100,14 +100,14 @@ fi
 # script proper begins
 
 NODES=( ./nodes/*yml )
-NODE=$(basename "${NODES[0]}" .yml)
+FIRSTNODE=$(basename "${NODES[0]}" .yml)
 
 if [[ "${DEVMODE}" == "false" ]]; then
     update_homefarm "${0}"
 fi
 
 mirrorurl="${FP_CONFIG[mirrorurl]}"
-update_localrepo "${FP_CONFIG[localrepo]}" "${mirrorurl}" "${NODE}"
+update_localrepo "${FP_CONFIG[localrepo]}" "${mirrorurl}" "${FIRSTNODE}"
 if [[ "${?}" != "0" ]]; then
     exit 1
 fi
@@ -118,7 +118,7 @@ update_os "${arch}"
 # nodes. those need to be refreshed every time there is an update,
 # of any sort.
 if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
-    shownotice "Pushing updated scripts to ${arch} nodes"
+    shownotice "Pushing updated scripts to compute nodes"
     ansible-playbook nodes-boinc-setup.yml
     if [[ -e ./.repoupdate ]]; then
         rm ./.repoupdate
@@ -127,12 +127,9 @@ fi
 
 # reboots
 if [[ "${localrepo_updated}" == "true" ]]; then
-    shownotice "Rebooting ${arch} nodes"
-        for node in nodes/*yml; do
-            node_arch=$(ssh "farmer@$(basename """${node}""" .yml)" 'uname -m')
-            if [[ "${node_arch}" == "${arch}" ]]; then
-                ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
-            fi
+    shownotice "Rebooting compute nodes"
+        for node in nodes/node*yml; do
+            ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
         done
     fi
 done
