@@ -1,6 +1,6 @@
 # Compute node install
 
-## Arch install (x86_64)
+## Arch install
 
 Download the [Arch Linux
 installer](https://www.archlinux.org/download/) and boot it.
@@ -32,23 +32,7 @@ doc](https://github.com/firepear/homefarm/blob/master/docs/fixes.md)
 for instructions before moving on to the "Homefarm setup" portion of
 this doc.
 
-## Arch install (Raspberry Pi)
-
-See the Arch Linux ARM website pages for the [Raspberry Pi 3](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3)
-or [Raspberry Pi 4](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-4).
-
-For now, use the ARMv7 installer path, not AArch64. Once you've booted
-the Pi, follow these steps if you need Wifi:
-
-1. `'wpa_passphrase ESSID WPA_PASSWD > /etc/wpa_supplicant/w.conf'` to
-   generate a wpa_supplicant configuration file
-1. `'wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/w.conf'` to
-   attach to WiFi (this will take several seconds)
-1. `'dhcpcd wlan0'` to obtain an IP address. This may take a few
-   seconds to complete
-
-
-## Homefarm install (all architectures)
+## Homefarm install
 
 1. Run `'curl -O CONTROL_NODE_IP:9099/node-install'` to fetch the
    compute node install script from your control node

@@ -77,12 +77,8 @@ Attach to the controller and edit `./srv/homefarm/mirrorlist-x86_64`
 then save and exit.
 
 Now run `'farmctl init'` to complete initialization of the controller
-environment. This is mostly automatic, but it will ask you for:
-
-* The machine architectures you want to mirror packages for. The
-  default is `x86_64`. If you only have Raspberry Pis, enter
-  `armv7h`. If you have both, enter `x86_64 armv7h`
-* The IP address of the host which is running the container
+environment. This is mostly automatic, but it will ask you for the IP
+address of the host which is running the container
 
 
 
