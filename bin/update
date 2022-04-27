@@ -132,7 +132,7 @@ if [[ "${localrepo_updated}" == "true" ]]; then
             ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
         done
     fi
-done
+fi
 
 
 echo "Everything is up to date"
