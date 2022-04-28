@@ -69,13 +69,13 @@ perform these steps.
   - See the file `./files/node.yml` as an example, or copy it as a
     starting point
 
-For compute nodes:
+### Compute nodes
 
 - Run `farmctl boinc-config` to handle initial BOINC configuration and
    some script setups.
 - Run `farmctl project-sync` to attach the nodes to their projects,
    as defined in the `NODENAME.yml` files.
 
-For storage nodes:
+### Storage nodes
 
 - Soon

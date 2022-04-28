@@ -23,6 +23,7 @@
       name: node
   - name: Update BOINC project app configs
     become: true
+    no_log: true
     copy:
       src: "./nodes/{{ inventory_hostname }}-app_config-{{ item.url }}.xml"
       dest: "/var/lib/boinc/projects/{{ item.url }}/app_config.xml"
@@ -35,6 +36,7 @@
     when: appconfigpath is exists
     register: appconfig
   - name: Update project statuses
+    no_log: true
     command: /usr/local/bin/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}
     loop: "{{ node.projects }}"
   - name: Copy GUI auth file

@@ -6,10 +6,11 @@ simple to get going.
 
 ## Installing
 
-- Check out the [Gnatwren
-  README](https://github.com/firepear/gnatwren) and follow the Docker
+- Follow the [Gnatwren](https://github.com/firepear/gnatwren) Docker
   install instructions to stand up an instance of `gwgather` (the data
   collection and reporting portion of Gnatwren)
+  - This will be separate from your Homefarm container, and will not
+    interact with it.
 - While attached to the `farmctl` container, do:
   - `ansible-playbook gnatwren.yml`
   - Edit `./files/gwagent-config.json` to point at the IP of the
