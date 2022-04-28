@@ -12,7 +12,7 @@
     when: localpkgs.stat.exists
   - name: Diff Homefarm and local packages
     shell:
-      cmd: comm -1 /homefarm/files/pkgs-base.txt /homefarm/localpkgs.txt
+      cmd: comm -1 /homefarm/srv/homefarm/arch/x86_64/pkgs.txt /homefarm/localpkgs.txt
     ignore_errors: yes
     register: newpkgs
     when: localpkgs.stat.exists

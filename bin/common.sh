@@ -120,7 +120,8 @@ update_localrepo() {
     if [[ "${?}" != "0" ]]; then
         exit 1
     fi
-    # delete the db files and the installed package list
+    # delete the db files
+    mv "${repodir}/db/pkgs.txt" "${repodir}"
     rm -rf "${repodir}/db"
     # rebuild the local repo index
     echo "Building repo index (this may take a moment)"
