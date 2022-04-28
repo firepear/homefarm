@@ -1,8 +1,10 @@
 # Using Gnatwren
 
-Homefarm has support for a lightweight monitoring service (also
+Homefarm integrates with a lightweight monitoring service (also
 written by myself) named Gnatwren. If you'd like to use it, it's very
 simple to get going.
+
+## Installing
 
 - Check out the [Gnatwren
   README](https://github.com/firepear/gnatwren) and follow the Docker
@@ -17,3 +19,14 @@ simple to get going.
 You should then be able to visit `http://GWGATHER_IP:9098/` and
 see current stats about your farm. See the Gnatwren docs for more
 info.
+
+## Updating Gnatwren or its configuration
+
+If there is a new version of Gnatwren, rebuild the `gwgather`
+container as described above.
+
+Rerun `ansible-playbook gnatwren.yml` anytime to rebuild and re-deploy
+the agent software if there have been changes.
+
+Similarly, edit `./files/gwagent-config.json` and rerun the playbook
+to push configuration changes to your nodes.

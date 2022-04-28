@@ -49,7 +49,12 @@ $
 ```
 
 The long string is the docker id of the container that was just
-spun-up in the background. To attach to the container, do
+spun-up in the background. The controller container is set to restart
+after machine reboots, as well as if it exits for any reason, so you
+shouldn't need to run `farmctl up` again until you rebuild the
+controller image.
+
+To attach to the container:
 
 `./homefarm/bin/farmctl attach`
 
