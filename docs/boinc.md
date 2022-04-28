@@ -36,11 +36,16 @@ Run `'farmctl project-sync'` to push the changes out to the nodes.
 
 ## Configuring individual BOINC projects
 
-For each project you wish to have a configuration, create/edit the file `nodes/<NODE_NAME>-app\_config-<PROJECT\_URL>.xml`. `PROJECT_URL` must match the URL defined in the node's project list in `/nodes/<NODE_NAME>.yml`. Example:
+For each project you wish to have a configuration, create/edit the
+file `nodes/<NODE_NAME>-app\_config-<PROJECT\_URL>.xml`. `PROJECT_URL`
+must match the URL defined in the node's project list in
+`/nodes/<NODE_NAME>.yml`. Example:
 
 `node02-app_config-www.worldcommunitygrid.org.xml`
 
-Add whatever [BOINC project configuration directives](https://boinc.berkeley.edu/wiki/Client_configuration#Project-level_configuration) you would like.
+Add whatever [BOINC project configuration
+directives](https://boinc.berkeley.edu/wiki/Client_configuration#Project-level_configuration)
+you would like.
 
 Run `'farmctl project-sync'` to push the changes out to the nodes.
 
