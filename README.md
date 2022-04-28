@@ -65,7 +65,7 @@ for all updates.
 * Other
     * Have homefarm? Want to install Arch on a machine that _isn't_
       part of the farm? Follow the compute node install process, but
-      don't run `compute-setup` after the first reboot. You'll have a
-      core install with a working network connection, ready for user
-      creation and install of whatever packages you need.
+      don't run any of the compute or storage specific setups. You'll
+      have a core install with a working network connection, ready for
+      user creation and further system configuration.
 

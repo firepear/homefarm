@@ -5,8 +5,13 @@ you need to do a fix to unbreak an OS update. This is how to do those.
 
 Please file an issue if you can't find an answer to your problem.
 
+## GPGPU WUs in state `Paus`
 
-## `farmctl status` can't connect after `farmctl update`
+See the GPGPU doc.
+
+## Older/Resolved
+
+### `farmctl status` can't connect after `farmctl update`
 
 _Note: This should no longer occur. Please file an issue if you see
 this._
@@ -19,7 +24,7 @@ Run `farmctl boinc-config` and see if `status` works afterward.
 
 
 
-## 2019-12-21 Arch linux uses `wlan0` during install
+### 2019-12-21 Arch linux uses `wlan0` during install
 
 If this happes to you, don't fret. A few simple fixes will take care
 of everything and then you'll be on your way.
@@ -53,7 +58,7 @@ Now pick back up where you left off in the previous doc, with "Homefarm setup".
 
 
 
-## 2019-03-09 pip ansible update breakage
+### 2019-03-09 pip ansible update breakage
 
 This was the impetus for moving Homefarm to the Arch ansible
 package. To get things in line, run the following commands on the
