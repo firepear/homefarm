@@ -52,8 +52,8 @@ for all updates.
       -- optional, but recommended
 * Managing and maintaining your farm
     * [Everyday farm ops](https://github.com/firepear/homefarm/blob/master/docs/management.md)
-    * [Add/reinstall a compute node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
-    * [Backup/reinstall the control node](https://github.com/firepear/homefarm/blob/master/docs/backup.md)
+    * [Add or reinstall a node](https://github.com/firepear/homefarm/blob/master/docs/newnode.md)
+    * [Backup or restore the controller](https://github.com/firepear/homefarm/blob/master/docs/backup.md)
     * [Using GPUs](https://github.com/firepear/homefarm/blob/master/docs/gpgpu.md)
     * [Fixes and Unbreaks](https://github.com/firepear/homefarm/blob/master/docs/fixes.md)
 * Problems and troubleshooting
