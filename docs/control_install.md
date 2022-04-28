@@ -25,7 +25,7 @@ There's a little bit of prep work to do before we build the container:
       create, so put it somewhere reasonably stable.
 1. Create a config file which simply holds the location of the clone
    you just created
-   * `echo ~/path/to/clone > ~/.homefarmdir`
+   * `echo /path/to/clone > ~/.homefarmdir`
    * For the purposes of this document, we will assume it is at `~/homefarm`
 
 Now it's time to build the container image. Run:
@@ -51,7 +51,7 @@ $
 The long string is the docker id of the container that was just
 spun-up in the background. To attach to the container, do
 
-`./homefarm/bin/farmctl up`
+`./homefarm/bin/farmctl attach`
 
 and to detach while inside it, use the standard docker interrupt code,
 `Ctrl-p Ctrl-q`. It's fine if you accidentally `exit` or do a `Ctrl-c`
@@ -69,14 +69,14 @@ you, so on a machine with a browser:
 1. Find a mirror that is geographically close to you and has low delay
 1. Copy the URL of your chosen mirror
 
-Attach to the controller and edit `./srv/homefarm/mirrorlist-x86_64`
+Attach to the controller and edit `./srv/homefarm/mirrorlist`
 (`vi` and `mg` are available) and add a line:
 
 `Server = MIRROR_URL`
 
 then save and exit.
 
-Now run `'farmctl init'` to complete initialization of the controller
+Now run `farmctl init` to complete initialization of the controller
 environment. This is mostly automatic, but it will ask you for the IP
 address of the host which is running the container
 
@@ -84,15 +84,17 @@ address of the host which is running the container
 
 ## Ansible setup
 
-The last piece of controller setup is to define the machines which
-will be part if your farm.
+The last piece of controller setup is to tell Ansible about the
+machines which will be part if your farm.
 
 1. Edit `farm.cfg` and change the names and IP addresses in the
-   `[compute_nodes]` stanza to match the machines you'll be setting up
-   as compute nodes
-2. Exit from the controller container, then bring it back up:
-   * `'exit'`
-   * `'~/homefarm/bin/farmctl up'`
+   `[compute_nodes]` and/or `[storage_nodes]` stanzas to match the
+   machines you'll be setting up next
+1. Exit from the controller container, then bring it back up:
+   * `exit`
+   * `~/homefarm/bin/farmctl attach`
 
 The control node is now ready. You can begin [installing compute
-nodes](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md).
+nodes](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
+and/or [storage
+nodes](https://github.com/firepear/homefarm/blob/master/docs/storage_install.md).

@@ -3,6 +3,8 @@
 
     * Added per-node, per-project configuration support
 
+    * Removed obviated copy of gwagent-config.json
+
 
 3.1.0 - 2022-04-28
 --------------------------------------------------------------------

@@ -190,7 +190,7 @@ location/tool of your choice.
 
 ## Keeping the farm up to date
 
-Run `'farmctl update'`. This will:
+Run `farmctl update`. This will:
 
 * Update Homefarm itself
 * Update the controller's Arch package mirror
@@ -205,14 +205,9 @@ keep all aspects of your cluster up to date.
 
 ### Adding packages to your local repository
 
-If there are packages that you would like to add to the local repository, and have installed automatically on nodes, simply add them to a file named `/homefarm/localpkgs-[ARCH].txt. You can look up packages on https://www.archlinux.org/packages/ or https://archlinuxarm.org/packages . List the package name, one per line. As an example, to add Nvidia drivers and OpenCL libs for supporting GPGPU work:
+If there are packages that you would like to add to the local repository, and have installed automatically on nodes, simply add them to a file named `/homefarm/localpkgs.txt. You can look up packages on https://www.archlinux.org/packages/ or https://archlinuxarm.org/packages . List the package name, one per line.
 
-```
-nvidia
-nvidia-utils
-ocl-icd
-opencl-nvidia
-```
+Running `farmctl update` will install the desired packages on your nodes.
 
 ### Updating the controller image
 
@@ -226,7 +221,7 @@ than within the image itself, recreating it does not lose any data,
 any configuration you may have done, or wipe the local Arch repo.
 
 Just run `exit` to drop out of the farmctl shell, then run
-`'~/homefarm/bin/farmctl build-image'` -- the same command used to
+`~/homefarm/bin/farmctl build-image` -- the same command used to
 initially construct the controller image.
 
 It is likely not necessary to do this more than every three months or
