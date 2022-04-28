@@ -1,4 +1,4 @@
-# Compute node install
+# Homefarm node install
 
 ## Arch install
 
@@ -61,15 +61,21 @@ to be installed.
 Once you have all nodes installed, return to the controller and
 perform these steps.
 
-1. Ensure that all the nodes you've added have entries in `farm.cfg`
-   * Create (or symlink if the new node will be sharing a
-     configuration with an existing node) a config file in the
-     `/homefarm/nodes` directory
-   * The file(s) should be named `NODENAME.yml`
-   * See the file `./files/node.yml` as an example, or copy it as a
-     starting point
-1. Run `'farmctl boinc-config'` to handle initial BOINC configuration and
+- Ensure that all nodes you've brought up have entries in `farm.cfg`
+- Create (or symlink if the new node will be sharing a configuration
+  with an existing node) a config file in the `/homefarm/nodes`
+  directory
+  - The file(s) should be named `NODENAME.yml`
+  - See the file `./files/node.yml` as an example, or copy it as a
+    starting point
+
+For compute nodes:
+
+- Run `farmctl boinc-config` to handle initial BOINC configuration and
    some script setups.
-1. Run `'farmctl project-sync'` to attach the nodes to their projects,
+- Run `farmctl project-sync` to attach the nodes to their projects,
    as defined in the `NODENAME.yml` files.
 
+For storage nodes:
+
+- Soon
