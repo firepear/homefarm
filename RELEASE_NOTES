@@ -3,9 +3,14 @@
 
     * Added per-node, per-project configuration support
 
+    * A cc.xml file is no longer required for each node
+
     * Removed obviated copy of gwagent-config.json
 
     * Misc tweaks, improvements, and fixes
+
+    * Go is no longer part of the farmcontrol docker image. It is now
+      installed alongside gnatwren
 
 
 3.1.0 - 2022-04-28
