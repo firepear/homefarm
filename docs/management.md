@@ -7,12 +7,13 @@ tab-completable, too!
 This document assumes that you are in the controller container.
 
 
+# Compute node management
 
-## Checking farm status
+## Checking BOINC project status
 
 Use `farmctl status`. Run it anytime you'd like to see what the
-machines in your farm are doing. If too much output is generated to
-fit onscreen, `less` will be invoked.
+compute nodes in your farm are doing. If too much output is generated
+to fit onscreen, `less` will be invoked.
 
 If you don't want paging, invoke it with `farmctl status nopage`
 
@@ -65,7 +66,7 @@ Tasks: 43         Active: 13      Credit/RAC: 975172/8101
  13  MCM1_0161859_0528_1                          Run    4.51%    1h55m    6d15h
 ```
 
-### Getting project statistics
+## Getting BOINC project statistics
 
 If you'd like to get basic statistics on how your farm is performing
 on a certain project (or even workunit type), the `query` subcommand
@@ -125,7 +126,32 @@ WUs for ALL in past 24 hours: 260
 Total CPU time used:  23d 18h 02min 55s
 ```
 
-### JSON output
+## Managing joblogs
+
+Each BOINC project has a joblog which records statistics about
+processed WUs. This file is not managed by the `boinc-client` service
+and therefore does not get rotated as the service's logs do. It grows
+fairly slowly though, and would take a very long time to fill up any
+appreciable fraction of a modern storage device. Homefarm does give
+you a tool to manage these files, though.
+
+To check the disk space being used by all joblogs, use `farmctl joblog
+size`. Sample output:
+
+```
+------------------------------------------------------------------------- node06
+
+196K    /var/lib/boinc/job_log_asteroidsathome.net_boinc.txt
+1.4M    /var/lib/boinc/job_log_einstein.phys.uwm.edu.txt
+368K    /var/lib/boinc/job_log_www.gpugrid.net.txt
+```
+
+If there are any logs you'd like to truncate (or logs from detached
+projects that you'd like to remove), use `joblog clean <URL>`, where
+`URL` is the project URL as reported in the output of `joblog size`.
+
+
+## JSON output
 
 Some Homefarm commands can generate JSON as well as human-readable
 reports. Currently `query` and `status` can do this.
@@ -188,7 +214,7 @@ location/tool of your choice.
 
 
 
-## Keeping the farm up to date
+# Keeping the farm up to date
 
 Run `farmctl update`. This will:
 
@@ -203,13 +229,13 @@ It's safe to run the update as often as you'd like. If there's
 nothing to do, it will simply do nothing! This makes it very easy to
 keep all aspects of your cluster up to date.
 
-### Adding packages to your local repository
+## Adding packages to your local repository
 
 If there are packages that you would like to add to the local repository, and have installed automatically on nodes, simply add them to a file named `/homefarm/localpkgs.txt. You can look up packages on https://www.archlinux.org/packages/ or https://archlinuxarm.org/packages . List the package name, one per line.
 
 Running `farmctl update` will install the desired packages on your nodes.
 
-### Updating the controller image
+## Updating the controller image
 
 One thing that `farmctl update` does not affect is the controller
 image itself. Over time the OS packages it contains will become out of
@@ -229,7 +255,7 @@ so.
 
 
 
-## Run a command on farm nodes
+# Run a command on farm nodes
 
 If you'd like to execute an ad hoc command across the entire farm, use
 `farmctl cmd 'COMMAND'`.
