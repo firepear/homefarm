@@ -1,6 +1,6 @@
 # Homefarm node install
 
-## Arch install
+## Boot Arch Linux
 
 Download the [Arch Linux
 installer](https://www.archlinux.org/download/) and boot it.

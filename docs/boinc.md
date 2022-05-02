@@ -15,7 +15,7 @@ Edit `nodes/<NODE_NAME>.yml` for any nodes you wish to modify.
     wish to clean up the file, and leaving them in place makes it easy
     to re-attach later. You can also comment them out.
 
-Run `'farmctl project-sync'` to have the changes pushed out to
+Run `farmctl project-sync` to have the changes pushed out to
 the node(s).
 
 To change the user a node is running a project as:
@@ -32,22 +32,26 @@ and/or update whatever [BOINC config
 directives](https://boinc.berkeley.edu/wiki/Client_configuration) you
 would like.
 
-Run `'farmctl project-sync'` to push the changes out to the nodes.
+Run `farmctl project-sync` to push the changes out to the nodes.
 
 ## Configuring individual BOINC projects
 
-For each project you wish to have a configuration, create/edit the
-file `nodes/<NODE_NAME>-app_config-<PROJECT_URL>.xml`. `PROJECT_URL`
-must match the URL defined in the node's project list in
+Homefarm allows per-node, per-project configuration, as supported by
+the BOINC standard `app_config.xml` file.
+
+For each project you wish to have a configuration, create or edit the
+file `nodes/<NODE_NAME>-app_config-<PROJECT_URL>.xml`.
+
+`PROJECT_URL` must match the URL defined in the node's project list in
 `/nodes/<NODE_NAME>.yml`. Example:
 
 `node02-app_config-www.worldcommunitygrid.org.xml`
 
-Add whatever [BOINC project configuration
+Add whatever [project configuration
 directives](https://boinc.berkeley.edu/wiki/Client_configuration#Project-level_configuration)
 you would like.
 
-Run `'farmctl project-sync'` to push the changes out to the nodes.
+Run `farmctl project-sync` to push the changes out to the nodes.
 
 ## Connecting to compute nodes
 

@@ -43,8 +43,8 @@ for all changes and full history.
 * Setting up a farm
     * [Controller setup](https://github.com/firepear/homefarm/blob/master/docs/control_install.md)
     * [Node installation](https://github.com/firepear/homefarm/blob/master/docs/compute_install.md)
-    * [BOINC
-      configuration](https://github.com/firepear/homefarm/blob/master/docs/boinc.md)
+* Configuring your farm
+    * [BOINC configuration](https://github.com/firepear/homefarm/blob/master/docs/boinc.md)
       -- for compute nodes
     * [Storage configuration](https://github.com/firepear/homefarm/blob/master/docs/storage.md)
     * [Using
