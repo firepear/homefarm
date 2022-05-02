@@ -181,6 +181,34 @@ case "${1}" in
         shift
         exec ./bin/utils/farmcmd "${@}"
         ;;
+    joblog)
+        shift
+        nodes=( nodes/node*yml )
+        if [[ "${1}" == "size" ]]; then
+            for node in "${nodes[@]}"; do
+                node=$(basename "${node}" ".yml")
+                shownotice ${node}
+                ssh farmer@${node} sudo du -hs /var/lib/boinc/job_log*
+            done
+            echo
+        elif [[ "${1}" == "clean" ]]; then
+            if [[ "${2}" == "" ]]; then
+                echo "'joblog clean' requires a project URL as an argument"
+                exit 1
+            fi
+            for node in "${nodes[@]}"; do
+                node=$(basename "${node}" ".yml")
+                ssh farmer@${node} sudo systemctl stop boinc-client
+                output=$(ssh farmer@${node} sudo rm "/var/lib/boinc/job_log_${2}.txt 2>&1 || true")
+                if [[ "${output}" != "" ]]; then
+                    echo "${node}: couldn't clean joblog: ${output}"
+                fi
+                ssh farmer@${node} sudo systemctl start boinc-client
+            done
+        else
+            echo "unknown joblog subcommand '${1}'; see 'farmctl help'"
+        fi
+        ;;
     project-sync)
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
@@ -298,6 +326,12 @@ usage: ${0} SUBCOMMAND [ARGS]
   cmd <COMMAND_LINE>
       Run a command on all nodes. COMMAND_LINE be a single argument, so use
       quotes as appropriate
+
+  joblog [size | clean <URL>]
+
+      Check filesize of all project joblogs with 'size'. To safely truncate
+      large joblogs use 'clean' followed by the project URL (as it appears in
+      the 'size' listing).
 
   project-sync
       Sync project statuses to compute nodes

@@ -25,16 +25,16 @@ There are a few assumptions:
 
 # News
 
+* 2022-05-02: v3.2.0: New cmd `farmctl joblog`. Added per-node,
+  per-project support for `app_config.xml` files
 * 2022-04-28: v3.1.0: ARM support removed
 * 2022-04-24: v3.0.3: Fixes for Gnatwren deployment playbook
 * 2022-04-06: v3.0.2: Fixes for `farmctl status` deadline reporting
 * 2022-02-28: v3.0.1: Fixes for `farmctl query`
-* 2021-11-26: v3.0.0: Initial monitoring support; long-running control
-  container
 
 See the [Release
 notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
-for all updates.
+for all changes and full history.
 
 
 

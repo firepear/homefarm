@@ -1,5 +1,8 @@
-3.2.0 - 2022-0x-xx
+3.2.0 - 2022-05-02
 --------------------------------------------------------------------
+
+    * Added a farmctl subcommand, 'joblog' which allows for checking
+      joblog sizes and cleaning them up
 
     * Added per-node, per-project configuration support
 
