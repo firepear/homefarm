@@ -40,10 +40,10 @@ Homefarm allows per-node, per-project configuration, as supported by
 the BOINC standard `app_config.xml` file.
 
 For each project you wish to have a configuration, create or edit the
-file `nodes/<NODE_NAME>-app_config-<PROJECT_URL>.xml`.
+file `nodes/<NODE_NAME>-app_config-<PROJECT_URL>.xml`
 
 `PROJECT_URL` must match the URL defined in the node's project list in
-`/nodes/<NODE_NAME>.yml`. Example:
+`nodes/<NODE_NAME>.yml`. A concrete example:
 
 `node02-app_config-www.worldcommunitygrid.org.xml`
 

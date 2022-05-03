@@ -1,5 +1,13 @@
 # Homefarm node install
 
+## Conventions and standards
+
+- Compute nodes should be named `nodeNN...` (`node` followed by
+  however many digits you would like)
+- Storage nodes should be named `storNN...`
+
+
+
 ## Boot Arch Linux
 
 Download the [Arch Linux
@@ -7,16 +15,16 @@ installer](https://www.archlinux.org/download/) and boot it.
 
 If the node uses wifi, bring it up with the following commands:
 
-1. `'ip addr'` to find the wireless interface (it will probably
+1. Do `ip addr` to find the wireless interface (it will probably
    begin with `wlp`)
-1. `'wpa_passphrase ESSID WPA_PASSWD > /etc/wpa_supplicant/w.conf'` to
+1. `wpa_passphrase ESSID WPA_PASSWD > /etc/wpa_supplicant/w.conf` to
    generate a wpa_supplicant configuration file. This should work
    unless you have a very interesting WiFi setup (and in that case,
    you likely know what your conf file should look like and can
    manually create it)
-1. `'wpa_supplicant -B -i IFACE -c /etc/wpa_supplicant/w.conf'` to
+1. `wpa_supplicant -B -i IFACE -c /etc/wpa_supplicant/w.conf` to
    attach to WiFi
-1. `'dhcpcd IFACE'` to obtain an IP address. This may take a few
+1. `dhcpcd IFACE` to obtain an IP address. This may take a few
    seconds to complete.
 
 Note for the next step: annoyingly, some versions of the Arch
@@ -34,11 +42,11 @@ this doc.
 
 ## Homefarm install
 
-1. Run `'curl -O CONTROL_NODE_IP:9099/node-install'` to fetch the
+1. Run `curl -O CONTROL_NODE_IP:9099/node-install` to fetch the
    compute node install script from your control node
    * This is the only time you'll need to supply the port number when
      asked for the control node's IP
-1. Run `'/bin/bash ./node-install CONTROL_NODE_IP IFACE [ESSID WPA_PASSWD]'`
+1. Run `/bin/bash ./node-install CONTROL_NODE_IP IFACE [ESSID WPA_PASSWD]`
    * `ESSID` and `WPA_PASSWD` are not needed if you are using a wired
      connection, or if you followed the above procedure for WiFi
      configuration
