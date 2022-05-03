@@ -12,9 +12,7 @@ There are a few assumptions:
 
 * One machine capable of running Docker, to host the controller
 * One or more x86_64 machines capable of running Arch Linux, to become
-  compute or storage nodes. Further:
-  * These machines are being used for no other purpose
-  * It is okay to wipe their drives
+  compute or storage nodes
 * You are aware of your local network configuration, and have IPs to
   assign to the nodes.
 * All nodes are on a private network -- an SSH key with no passphrase

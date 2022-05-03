@@ -1,11 +1,16 @@
 # Homefarm node install
 
-## Conventions and standards
+## Conventions, standards, and cautions
 
+- All nodes should be x86_64
 - Compute nodes should be named `nodeNN...` (`node` followed by
   however many digits you would like)
 - Storage nodes should be named `storNN...`
-
+- Don't task a single node with compute and storage
+- Task a Homefarm node with non-Homefarm tasks at your own risk
+- The installer will wipe any storage devices in use by Homefarm
+- Homefarm will only use a single storage device on a compute
+  node, and will not use much of it. Go cheap and small.
 
 
 ## Boot Arch Linux
