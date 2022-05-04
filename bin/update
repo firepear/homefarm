@@ -128,10 +128,9 @@ fi
 # reboots
 if [[ "${localrepo_updated}" == "true" ]]; then
     shownotice "Rebooting compute nodes"
-        for node in nodes/node*yml; do
-            ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
-        done
-    fi
+    for node in nodes/node*yml; do
+        ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
+    done
 fi
 
 

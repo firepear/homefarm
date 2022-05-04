@@ -32,10 +32,10 @@
   - name: Install BOINC and related packages
     become: true
     pacman:
-      name: "{{ hostvars['localhost'].newpkgs.stdout_lines }}"
+      name: "{{ hostvars['localhost'].boincpkgs.stdout_lines }}"
       state: present
       update_cache: yes
-    when: hostvars['localhost'].newpkgs.stdout != ""
+    when: hostvars['localhost'].boincpkgs.stdout != ""
   - name: Update BOINC client config
     become: true
     copy:
