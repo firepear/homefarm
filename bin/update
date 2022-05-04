@@ -24,13 +24,13 @@ update_homefarm() {
 
     if [[ "${CURRENT_TAG}" == "${NEWEST_TAG}" ]]; then
         # if tags match, do nothing
-        git checkout master >> /dev/null 2>&1
+        git checkout main >> /dev/null 2>&1
         git checkout "${NEWEST_TAG}" >> /dev/null 2>&1
         return
     fi
 
     shownotice "New Homefarm release: ${NEWEST_TAG}"
-    git checkout master >> /dev/null 2>&1
+    git checkout main >> /dev/null 2>&1
     git pull >> /dev/null 2>&1
     git checkout "${NEWEST_TAG}" >> /dev/null 2>&1
 
