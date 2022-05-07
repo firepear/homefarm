@@ -5,6 +5,7 @@ source ./bin/common.sh
 fp_parseconfig ./.fpconfig.json homefarm
 
 DEVMODE="false"
+REPOUPD="false"
 
 update_homefarm() {
     # if we have a stored latest tag, read it in as current
@@ -76,6 +77,12 @@ if [[ "${1}" == "--devmode" ]]; then
     echo "DEVMODE enabled"
     shift
 fi
+# set repo-only mode
+if [[ "${1}" == "--repoup" ]]; then
+    REPOUPD="true"
+    echo "repo update only"
+    shift
+fi
 
 # read in mirror; error if we don't have one
 if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
@@ -110,6 +117,9 @@ mirrorurl="${FP_CONFIG[mirrorurl]}"
 update_localrepo "${FP_CONFIG[localrepo]}" "${mirrorurl}" "${FIRSTNODE}"
 if [[ "${?}" != "0" ]]; then
     exit 1
+fi
+if [[ "${REPOUPD}" == "true" ]]; then
+    exit 0
 fi
 
 update_os "${arch}"
