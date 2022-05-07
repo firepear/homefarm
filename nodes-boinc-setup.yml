@@ -58,6 +58,11 @@
     become: true
     systemd:
       daemon_reload: yes
+  - name: Enable BOINC client
+    ansible.builtin.systemd:
+      name: boinc-client
+      enabled: yes
+      masked: no
   - name: Update Python common module
     become: true
     copy:
