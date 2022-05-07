@@ -301,7 +301,7 @@ case "${1}" in
         ;;
     update)
         shift
-        exec ./bin/update "${*}"
+        exec ./bin/update "${@}"
         ;;
     version)
         echo
