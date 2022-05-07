@@ -121,7 +121,7 @@ hf_fetch  "${CONTROLLER}/mirrorlist"
 mv mirrorlist /etc/pacman.d/mirrorlist
 # do install of needed packages
 # base install via pacstrap
-pkglist="base openssh wpa_supplicant dmidecode lm_sensors python ansible sudo grep awk linux linux-firmware vi mg"
+pkglist="base openssh wpa_supplicant dmidecode python ansible sudo grep awk linux linux-firmware vi mg"
 pacstrap /mnt ${pkglist}
 # generate /etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
