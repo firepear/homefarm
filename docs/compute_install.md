@@ -7,10 +7,16 @@
   however many digits you would like)
 - Storage nodes should be named `storNN...`
 - Don't task a single node with compute and storage
-- Task a Homefarm node with non-Homefarm tasks at your own risk
+- Assign non-Homefarm tasks to a Homefarm node at your own risk
 - The installer will wipe any storage devices in use by Homefarm
-- Homefarm will only use a single storage device on a compute
-  node, and will not use much of it. Go cheap and small.
+  - Homefarm will only use a single storage device on a compute node,
+    and will not use much of it. Go cheap and small. Other storage
+    devices will be wasted space.
+  - For storage nodes, a minimum of two mass storage devices are
+    required: one for the system (which should be as small and cheap
+    as the device in a compute node), and at least one to become part
+    of the storage array. The storage array device should be as large
+    and as high-quality as you would like.
 
 
 ## Boot Arch Linux
@@ -22,12 +28,12 @@ If the node uses wifi, bring it up with the following commands:
 
 1. Do `ip addr` to find the wireless interface (it will probably
    begin with `wlp`)
-1. `wpa_passphrase ESSID WPA_PASSWD > /etc/wpa_supplicant/w.conf` to
+1. `wpa_passphrase <ESSID> <WPA_PASSWD> > /etc/wpa_supplicant/w.conf` to
    generate a wpa_supplicant configuration file. This should work
    unless you have a very interesting WiFi setup (and in that case,
    you likely know what your conf file should look like and can
    manually create it)
-1. `wpa_supplicant -B -i IFACE -c /etc/wpa_supplicant/w.conf` to
+1. `wpa_supplicant -B -i <IFACE> -c /etc/wpa_supplicant/w.conf` to
    attach to WiFi
 1. `dhcpcd IFACE` to obtain an IP address. This may take a few
    seconds to complete.
@@ -47,11 +53,13 @@ this doc.
 
 ## Homefarm install
 
-1. Run `curl -O CONTROL_NODE_IP:9099/node-install` to fetch the
+1. Run `curl -O <CONTROLLER_IP>:9099/node-install` to fetch the
    compute node install script from your control node
    * This is the only time you'll need to supply the port number when
      asked for the control node's IP
-1. Run `/bin/bash ./node-install CONTROL_NODE_IP IFACE [ESSID WPA_PASSWD]`
+1. Run `/bin/bash ./node-install (compute | storage) <CONTROLLER_IP> <IFACE> [<ESSID> <WPA_PASSWD>]`
+   * Use `compute` if this machine will be a BOINC node. Use `storage`
+     if it will be a Ceph node
    * `ESSID` and `WPA_PASSWD` are not needed if you are using a wired
      connection, or if you followed the above procedure for WiFi
      configuration

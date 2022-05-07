@@ -1,3 +1,16 @@
+3.3.0 - 2022-05-06
+--------------------------------------------------------------------
+
+    * Added repo update-only mode to `farmctl update`. This is handy
+      for install purposes
+
+    * Moved boinc-client enable from installer to boinc-config
+      playbook
+
+    * Removed lm_sensors from installer packages. Further package list
+      fixes
+
+
 3.2.1 - 2022-05-04
 --------------------------------------------------------------------
 
