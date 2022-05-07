@@ -6,6 +6,7 @@ attr
 audit
 base
 bash
+binutils
 bzip2
 ca-certificates
 ca-certificates-mozilla
