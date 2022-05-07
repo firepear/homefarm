@@ -300,7 +300,8 @@ case "${1}" in
         exec env PATH="${PATH}:/homefarm/bin" /bin/bash
         ;;
     update)
-        exec ./bin/update "${2}"
+        shift
+        exec ./bin/update "${*}"
         ;;
     version)
         echo
