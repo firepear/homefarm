@@ -1,22 +1,4 @@
 ---
-- hosts: controller
-  tasks:
-  - name: Check for localpkgs
-    stat:
-      path: /homefarm/localpkgs.txt
-    register: localpkgs
-  - name: Sort localpkgs file
-    shell:
-      cmd: sort /homefarm/localpkgs.txt > l.s && mv l.s /homefarm/localpkgs.txt
-    ignore_errors: yes
-    when: localpkgs.stat.exists
-  - name: Diff Homefarm and local packages
-    shell:
-      cmd: comm -1 /homefarm/srv/homefarm/arch/x86_64/pkgs.txt /homefarm/localpkgs.txt
-    ignore_errors: yes
-    register: newpkgs
-    when: localpkgs.stat.exists
-
 - hosts: compute_nodes
   remote_user: farmer
   tasks:
@@ -47,12 +29,34 @@
     pacman:
       update_cache: yes
       upgrade: yes
-  - name: Install new Homefarm packages
+  - name: Clear package cache
+    become: true
+    shell: yes | pacman -Scc
+
+- hosts: storage_nodes
+  remote_user: farmer
+  tasks:
+  - name: Update pacman.conf
+    become: true
+    copy:
+      src: ./srv/homefarm/pacman.conf
+      dest: /etc/pacman.conf
+      owner: root
+      group: root
+      mode: 0644
+  - name: Update mirrorlist
+    become: true
+    copy:
+      src: ./srv/homefarm/mirrorlist
+      dest: /etc/pacman.d/mirrorlist
+      owner: root
+      group: root
+      mode: 0644
+  - name: Upgrade system software
     become: true
     pacman:
-      name: "{{ hostvars['localhost'].newpkgs.stdout_lines }}"
-      state: present
-    when: hostvars['localhost'].newpkgs.stdout != ""
+      update_cache: yes
+      upgrade: yes
   - name: Clear package cache
     become: true
     shell: yes | pacman -Scc

@@ -2,4 +2,5 @@ bridge-utils
 containerd
 docker
 libtool
+logrotate
 runc

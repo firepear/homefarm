@@ -93,14 +93,7 @@ update_localrepo() {
     mkdir -p "${repodir}/db"
     cat "${FP_CONFIG[rootdir]}/files/pkgs-base.txt" "${FP_CONFIG[rootdir]}/files/pkgs-compute.txt" \
        "${FP_CONFIG[rootdir]}/files/pkgs-storage.txt" > ./db/pkgs.txt
-    # if a local pkgs list exists, merge it and the homefarm pkgs list
-    if [[ -e "${FP_CONFIG[rootdir]}/localpkgs.txt" ]]; then
-        cat ./db/pkgs.txt "${FP_CONFIG[rootdir]}/localpkgs.txt" | sort | \
-            uniq > ./db/pkgs.2
-        mv ./db/pkgs.2 ./db/pkgs.txt
-    fi
 
-    export localrepo_updated="true"
     # grab remaining db files from mirror, and unpack all of them
     echo "Updating package databases"
     for repo in core extra community; do
@@ -127,6 +120,7 @@ update_localrepo() {
     echo "Building repo index (this may take a moment)"
     repo-add -n -R "${repodir}/arch.db.tar.gz" "${repodir}"/*.pkg.* >> update.log 2>&1
     cd /homefarm || exit
+    export localrepo_updated="true"
 }
 
 # fp_parseconfig parses a JSON configuration file and stores its

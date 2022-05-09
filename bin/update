@@ -80,7 +80,7 @@ fi
 # set repo-only mode
 if [[ "${1}" == "--repoup" ]]; then
     REPOUPD="true"
-    echo "repo update only"
+    echo "REPOUPD enabled"
     shift
 fi
 
