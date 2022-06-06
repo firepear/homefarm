@@ -3,4 +3,5 @@ containerd
 docker
 libtool
 logrotate
+lvm2
 runc
