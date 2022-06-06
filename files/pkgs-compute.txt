@@ -1,5 +1,6 @@
 boinc-nox
 clang
+clinfo
 compiler-rt
 elfutils
 gcc
