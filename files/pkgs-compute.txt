@@ -1,5 +1,6 @@
 boinc-nox
 clang
+compiler-rt
 elfutils
 gcc
 libclc
