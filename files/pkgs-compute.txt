@@ -4,6 +4,7 @@ compiler-rt
 elfutils
 gcc
 libclc
+lm_sensors
 nvidia
 nvidia-utils
 ocl-icd
