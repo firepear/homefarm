@@ -21,6 +21,7 @@
       name: node
   - name: Create BOINC project dirs
     become: true
+    no_log: true
     ansible.builtin.file:
       path: "/var/lib/boinc/projects/{{ item.url }}"
       state: directory

@@ -1,9 +1,14 @@
-3.4.0 - 2022-05-10
+3.3.1 - 2022-06-06
 --------------------------------------------------------------------
 
-    * Added storage nodes to system update
+    * Go is back in the farmcontrol image. Too fiddly the other way
+      around.
 
-    * Removed localpkgs functionality
+    * lm_sensors is back, but not configured, because mesa needs it
+
+    * Various fixes and tweaks to playbooks and package lists
+
+    * Removed localpkgs functionality (actually a while back)
 
 
 3.3.0 - 2022-05-06
