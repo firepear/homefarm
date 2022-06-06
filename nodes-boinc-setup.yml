@@ -59,6 +59,7 @@
     systemd:
       daemon_reload: yes
   - name: Enable BOINC client
+    become: true
     ansible.builtin.systemd:
       name: boinc-client
       enabled: yes
