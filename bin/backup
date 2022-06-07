@@ -13,10 +13,10 @@ if [[ "${1}" == "" ]]; then
         ./.boincguikeys.json \
         ./.current_tag \
         ./.fpconfig.json \
+        ./ansible.cfg \
         ./farm.cfg \
         ./nodes/ \
         ./projectstats.db \
-        ./localpkgs*
         ./srv/homefarm/pacman*.conf \
         ./srv/homefarm/mirrorlist* >> /dev/null
     echo "Farm configuration archived to ${ARCHIVE}"
