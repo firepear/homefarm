@@ -55,6 +55,7 @@
     register: ccconfig
 
   - name: Update project statuses
+    become: true
     command: /usr/local/bin/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}
     loop: "{{ node.projects }}"
 
