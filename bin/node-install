@@ -90,10 +90,10 @@ if [[ ! -e "${WPACONF}" ]]; then
     fi
 fi
 
-CONTROLLER="$(history | grep '[c]url -O' | awk '{print $4}' | cut -d: -f1):9099"
-USERIFACE="${2}"
-USERESSID="${3}"
-USERWPAPW="${4}"
+CONTROLLER="$(grep '[c]url -O' .zsh_history | awk '{print $4}' | cut -d: -f1):9099"
+USERIFACE="${1}"
+USERESSID="${2}"
+USERWPAPW="${3}"
 
 # fetch util funcs
 if [[ ! -e "common.sh" ]]; then
