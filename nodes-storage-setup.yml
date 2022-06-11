@@ -1,0 +1,35 @@
+---
+- hosts: controller
+  tasks:
+  - name: Get storage related packages
+    shell:
+      cmd: cat /homefarm/files/pkgs-storage.txt
+    register: storagepkgs
+  - name: Ensure node config dir exists
+    file:
+      path: ./nodes
+      owner: root
+      state: directory
+      mode: 0755
+#  - name: Ensure project config file for all nodes
+#    command: cp --no-clobber ./files/node.yml ./nodes/{{ item }}.yml
+#    loop: "{{ groups['compute_nodes'] }}"
+
+- hosts: storage_nodes
+  remote_user: farmer
+  tasks:
+  - name: Update pacman.conf
+    become: true
+    copy:
+      src: ./srv/homefarm/pacman.conf
+      dest: /etc/pacman.conf
+      owner: root
+      group: root
+      mode: 0644
+  - name: Install storage packages
+    become: true
+    pacman:
+      name: "{{ hostvars['localhost'].storagepkgs.stdout_lines }}"
+      state: present
+      update_cache: yes
+    when: hostvars['localhost'].storagepkgs.stdout != ""
