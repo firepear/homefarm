@@ -57,7 +57,7 @@ this doc.
    compute node install script from your control node
    * This is the only time you'll need to supply the port number when
      asked for the control node's IP
-1. Run `/bin/bash ./node-install (compute | storage) <CONTROLLER_IP> <IFACE> [<ESSID> <WPA_PASSWD>]`
+1. Run `/bin/bash ./node-install (compute | storage) <IFACE> [<ESSID> <WPA_PASSWD>]`
    * Use `compute` if this machine will be a BOINC node. Use `storage`
      if it will be a Ceph node
    * `ESSID` and `WPA_PASSWD` are not needed if you are using a wired
