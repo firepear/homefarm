@@ -39,3 +39,8 @@
       url: https://github.com/ceph/ceph/raw/quincy/src/cephadm/cephadm
       method: GET
       dest: /usr/local/bin/cephadm
+  - name: Make cephadm executable
+    become: true
+    ansible.builtin.file:
+      path: /usr/local/bin/cephadm
+      mode: '0755'
