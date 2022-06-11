@@ -33,3 +33,7 @@
       state: present
       update_cache: yes
     when: hostvars['localhost'].storagepkgs.stdout != ""
+  - name: Get cephadm
+    uri:
+      url: https://github.com/ceph/ceph/raw/quincy/src/cephadm/cephadm
+      method: GET
