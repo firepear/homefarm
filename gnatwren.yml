@@ -34,10 +34,10 @@
       group: root
       mode: 0755
     register: binary
-  - name: Create gwagent run dir
+  - name: Create gwagent stash dir
     become: true
     file:
-      path: /var/run/gnatwren
+      path: /var/lib/gnatwren
       owner: nobody
       group: nobody
       mode: 0755
