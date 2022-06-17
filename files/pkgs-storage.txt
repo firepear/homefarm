@@ -5,3 +5,4 @@ libtool
 logrotate
 lvm2
 runc
+which
