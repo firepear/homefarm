@@ -33,6 +33,16 @@
       state: present
       update_cache: yes
     when: hostvars['localhost'].storagepkgs.stdout != ""
+  - name: Enable docker
+    become: true
+    ansible.builtin.service:
+      name: docker
+      enabled: yes
+  - name: Start docker, if needed
+    become: true
+    ansible.builtin.service:
+      name: docker
+      state: started
   - name: Get cephadm
     become: true
     uri:
