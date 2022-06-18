@@ -14,14 +14,12 @@ EOF
     exit
 fi
 
-if [[ "${2}" == "" ]]; then
-    glob='nodes/node*yml'
-else
-    glob="nodes/${2}.yml"
-fi
+glob=$(grep -E '^(node|stor)' farm.cfg | cut -d' ' -f1 | xargs)
 
 for node in ${glob}; do
-    node=$(basename "${node}" .yml)
+    if [[ ! "${node}" =~ ${2} ]]; then
+        continue
+    fi
     shownotice "${node}"
     ssh "farmer@${node}" "sudo ${1}"
 done
