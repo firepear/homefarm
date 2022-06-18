@@ -324,12 +324,12 @@ usage: ${0} SUBCOMMAND [ARGS]
   boinc-config
       Deploy or update BOINC configuration on compute nodes
 
-  cmd <COMMAND_LINE>
-      Run a command on all nodes. COMMAND_LINE be a single argument, so use
-      quotes as appropriate
+  cmd <COMMAND_LINE> [<HOSTGLOB>]
+      Run a command on all nodes matching HOSTGLOB. COMMAND_LINE be a
+      single argument, so use quotes as appropriate. Omit HOSTGLOB to
+      run on all hosts.
 
   joblog [size | clean <URL>]
-
       Check filesize of all project joblogs with 'size'. To safely truncate
       large joblogs use 'clean' followed by the project URL (as it appears in
       the 'size' listing).

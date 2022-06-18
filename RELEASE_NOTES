@@ -1,3 +1,19 @@
+3.4.0 - 2022-06-18
+--------------------------------------------------------------------
+
+    * Initial storage node tooling in place
+
+    * `cmd` is now aware of storage nodes
+
+    * `node-install` no longer requires the controller IP passed in
+
+    * Fixes to `backup`
+
+    * The stash directory for gwagent is now /var/lib
+
+    * Fixes to make running F@H easier
+
+
 3.3.1 - 2022-06-06
 --------------------------------------------------------------------
 
