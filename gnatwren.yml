@@ -1,12 +1,6 @@
 ---
 - hosts: controller
   tasks:
-  - name: Install Go
-    become: true
-    pacman:
-      name: go
-      state: latest
-      update_cache: yes
   - name: Clone/pull Gnatwren repository
     git:
       repo: 'https://github.com/firepear/gnatwren.git'
