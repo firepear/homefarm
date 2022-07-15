@@ -182,7 +182,7 @@ case "${1}" in
         if [[ "${stornodes[0]}" != "" ]]; then
             exec /bin/ssh "farmer@${stornodes[0]}" 'sudo cephadm shell -- ceph -s'
         else
-            echo "no storage nodes in farm; exiting"
+            echo "no storage nodes in farm; nothing to do"
         fi
         ;;
     cmd)
@@ -331,6 +331,9 @@ usage: ${0} SUBCOMMAND [ARGS]
 
   boinc-config
       Deploy or update BOINC configuration on compute nodes
+
+  cephstat
+      If there are storage nodes, run 'ceph -s' on the first one.
 
   cmd <COMMAND_LINE> [<HOSTGLOB>]
       Run a command on all nodes matching HOSTGLOB. COMMAND_LINE be a
