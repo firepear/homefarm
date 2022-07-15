@@ -49,7 +49,7 @@ update_os() {
     # future me running shellcheck: this variable is exported from
     # common.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
-        shownotice "Updating compute nodes"
+        shownotice "Updating nodes"
         ansible-playbook nodes-system-update.yml
     fi
 }
@@ -106,8 +106,8 @@ fi
 ######################################################################
 # script proper begins
 
-NODES=( ./nodes/*yml )
-FIRSTNODE=$(basename "${NODES[0]}" .yml)
+NODES=($(grep -E '^(node|stor)' farm.cfg | cut -f1 -d' ' | xargs))
+FIRSTNODE="${NODES[0]}"
 
 if [[ "${DEVMODE}" == "false" ]]; then
     update_homefarm "${0}"
@@ -130,16 +130,14 @@ update_os "${arch}"
 if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
     shownotice "Pushing updated scripts to compute nodes"
     ansible-playbook nodes-boinc-setup.yml
-    if [[ -e ./.repoupdate ]]; then
-        rm ./.repoupdate
-    fi
+    rm -f ./.repoupdate
 fi
 
 # reboots
 if [[ "${localrepo_updated}" == "true" ]]; then
     shownotice "Rebooting compute nodes"
-    for node in nodes/node*yml; do
-        ssh "farmer@$(basename """${node}""" .yml)" 'sudo reboot' || true
+    for node in ${NODES[*]}; do
+        ssh "farmer@${node}" 'sudo reboot' || true
     done
 fi
 
