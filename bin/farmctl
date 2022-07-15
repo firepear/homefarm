@@ -180,6 +180,7 @@ case "${1}" in
     cephstat)
         stornodes=($(grep -E '^stor' farm.cfg | cut -f1 -d' ' | xargs))
         exec /bin/ssh "farmer@${stornodes[0]}" 'sudo cephadm shell -- ceph -s'
+        ;;
     cmd)
         shift
         exec ./bin/utils/farmcmd "${@}"
