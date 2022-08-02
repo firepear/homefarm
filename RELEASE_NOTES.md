@@ -1,9 +1,17 @@
+## 3.6.0 -- 2022-08-01
+
+- New convenience subcommand `cephshell`, which runs a management
+  shell on the first available storage node
+- Improved `cephstat` to also check all storage nodes
+
+
 ## 3.5.0 -- 2022-07-15
 
 - New convenience subcommand `cephstat`, which runs `ceph -s` on the
   first storage node
 - Update now generates its node list from `farm.cfg` instead of the
   BOINC node config dir
+
 
 ## 3.4.0 -- 2022-06-18
 

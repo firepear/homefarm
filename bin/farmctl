@@ -177,13 +177,25 @@ case "${1}" in
         docker build --tag farmcontrol .
         docker image prune -f
         ;;
+    cephshell)
+        stornodes=($(grep -E '^stor' farm.cfg | cut -f1 -d' ' | xargs))
+        for node in ${stornodes[@]}; do
+            ping -c1 -W 2 "${node}" >> /dev/null 2>&1
+            if [[ "${?}" == "0" ]]; then
+                exec /bin/ssh "farmer@${stornodes[0]}" 'sudo cephadm shell'
+            fi
+            echo "no active storage nodes in farm; nothing to do"
+        done
+        ;;
     cephstat)
         stornodes=($(grep -E '^stor' farm.cfg | cut -f1 -d' ' | xargs))
-        if [[ "${stornodes[0]}" != "" ]]; then
-            exec /bin/ssh "farmer@${stornodes[0]}" 'sudo cephadm shell -- ceph -s'
-        else
-            echo "no storage nodes in farm; nothing to do"
-        fi
+        for node in ${stornodes[@]}; do
+            ping -c1 -W 2 "${node}" >> /dev/null 2>&1
+            if [[ "${?}" == "0" ]]; then
+                exec /bin/ssh "farmer@${stornodes[0]}" 'sudo cephadm shell -- ceph -s'
+            fi
+            echo "no active storage nodes in farm; nothing to do"
+        done
         ;;
     cmd)
         shift
@@ -332,8 +344,11 @@ usage: ${0} SUBCOMMAND [ARGS]
   boinc-config
       Deploy or update BOINC configuration on compute nodes
 
+  cephshell
+      Start a management shell on a storage node
+
   cephstat
-      If there are storage nodes, run 'ceph -s' on the first one.
+      Run 'ceph -s' against the Ceph cluster
 
   cmd <COMMAND_LINE> [<HOSTGLOB>]
       Run a command on all nodes matching HOSTGLOB. COMMAND_LINE be a
