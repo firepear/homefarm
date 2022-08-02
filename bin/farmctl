@@ -182,7 +182,7 @@ case "${1}" in
         for node in ${stornodes[@]}; do
             ping -c1 -W 2 "${node}" >> /dev/null 2>&1
             if [[ "${?}" == "0" ]]; then
-                exec /bin/ssh "farmer@${stornodes[0]}" 'sudo cephadm shell'
+                exec /bin/ssh -t "farmer@${stornodes[0]}" 'sudo cephadm shell'
             fi
             echo "no active storage nodes in farm; nothing to do"
         done
