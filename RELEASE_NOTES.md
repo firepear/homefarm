@@ -1,6 +1,7 @@
 ## 3.6.1 -- 2022-08-08
 
 - Fixed storage node detection for ceph subcommands
+- Fixed `app_config.xml` deploy for projects with complex URLs 
 
 
 ## 3.6.0 -- 2022-08-01
