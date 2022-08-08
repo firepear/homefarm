@@ -180,8 +180,8 @@ case "${1}" in
     cephshell)
         stornodes=($(grep -E '^stor' farm.cfg | cut -f1 -d' ' | xargs))
         for node in ${stornodes[@]}; do
-            ping -c1 -W 2 "${node}" >> /dev/null 2>&1
-            if [[ "${?}" == "0" ]]; then
+            p=$(ping -c1 -W 2 "${node}" | grep -c '100% packet loss')
+            if [[ "${p}" == "0" ]]; then
                 exec /bin/ssh -t "farmer@${stornodes[0]}" 'sudo cephadm shell'
             fi
             echo "no active storage nodes in farm; nothing to do"
@@ -190,8 +190,8 @@ case "${1}" in
     cephstat)
         stornodes=($(grep -E '^stor' farm.cfg | cut -f1 -d' ' | xargs))
         for node in ${stornodes[@]}; do
-            ping -c1 -W 2 "${node}" >> /dev/null 2>&1
-            if [[ "${?}" == "0" ]]; then
+            p=$(ping -c1 -W 2 "${node}" | grep -c '100% packet loss')
+            if [[ "${p}" == "0" ]]; then
                 exec /bin/ssh "farmer@${stornodes[0]}" 'sudo cephadm shell -- ceph -s'
             fi
             echo "no active storage nodes in farm; nothing to do"
