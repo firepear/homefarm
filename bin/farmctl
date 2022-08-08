@@ -183,8 +183,8 @@ case "${1}" in
             if [[ "$(ping -c1 -W 2 "${node}" | grep -c '100% packet loss')" == "0" ]]; then
                 exec /bin/ssh -t "farmer@${node}" 'sudo cephadm shell'
             fi
-            echo "no active storage nodes in farm; nothing to do"
         done
+        echo "no active storage nodes in farm; nothing to do"
         ;;
     cephstat)
         stornodes=($(grep -E '^stor' farm.cfg | cut -f1 -d' ' | xargs))
@@ -192,8 +192,8 @@ case "${1}" in
             if [[ "$(ping -c1 -W 2 "${node}" | grep -c '100% packet loss')" == "0" ]]; then
                 exec /bin/ssh "farmer@${node}" 'sudo cephadm shell -- ceph -s'
             fi
-            echo "no active storage nodes in farm; nothing to do"
         done
+        echo "no active storage nodes in farm; nothing to do"
         ;;
     cmd)
         shift
