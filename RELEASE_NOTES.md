@@ -1,3 +1,8 @@
+## 3.6.1 -- 2022-08-08
+
+- Fixed storage node detection for ceph subcommands
+
+
 ## 3.6.0 -- 2022-08-01
 
 - New convenience subcommand `cephshell`, which runs a management
