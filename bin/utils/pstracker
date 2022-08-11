@@ -46,8 +46,8 @@ def get_updates(c):
     print("Hours since last update:")
     now = int(time.time())
     for row in rows:
-        h = int((now - row[2]) / 3600)
-        print(f"\t{row[1]}:\t{h}")
+        h = (now - row[2]) / 3600.0
+        print(f"\t{row[1]}:\t{h:.2f}")
 
 
 def show_totals(p, c):
