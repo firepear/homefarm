@@ -278,12 +278,12 @@ cpu MHz         : 1890.431
 quoting skills to handle complex requests.
 
 If you want to run a command against only some nodes, use: `farmctl
-cmd 'COMMAND' 'GLOB'`. The second argument is a shell glob that
-determines which nodes the command will be run against. Let's say I
-have six nodes, two of which are Raspberry Pis:
+cmd 'COMMAND' 'REGEXP'`. The second argument is a regular expression
+that determines which nodes the command will be run against. Let's say
+I have six nodes, two of which are Raspberry Pis:
 
 `node01 node02 node03 node04 nodepi01 nodepi02`
 
 To run a command only against the Pis, I could use `farmctl cmd
-'COMMAND' 'nodepi*'`. And if I wanted to reboot the second and third
-x86 node, I could use `farmctl cmd 'COMMAND' 'node0[23]'`
+'COMMAND' 'pi'`. To reboot the second and third
+x86 node, I could use `farmctl cmd 'sudo reboot' 'node0[23]'`
