@@ -229,11 +229,8 @@ It's safe to run the update as often as you'd like. If there's
 nothing to do, it will simply do nothing! This makes it very easy to
 keep all aspects of your cluster up to date.
 
-## Adding packages to your local repository
-
-If there are packages that you would like to add to the local repository, and have installed automatically on nodes, simply add them to a file named `/homefarm/localpkgs.txt. You can look up packages on https://www.archlinux.org/packages/ or https://archlinuxarm.org/packages . List the package name, one per line.
-
-Running `farmctl update` will install the desired packages on your nodes.
+Sometimes you _only_ want to update the local package repo, without
+updating any nodes. Use `farmctl update --repoup` for this.
 
 ## Updating the controller image
 
@@ -263,18 +260,18 @@ If you'd like to execute an ad hoc command across the entire farm, use
 Example:
 
 ```
-# farmctl cmd 'sensors | grep Tdie'
---------------------------------------------------------------
-node01
-Tdie:         +57.0 C  (high = +70.0 C)
+# farmctl cmd 'cat /proc/cpuinfo | grep MHz | head -1'
+------------------------------------------------------------------------- node01
 
---------------------------------------------------------------
-node02
-Tdie:         +59.5 C  (high = +70.0 C)
+cpu MHz         : 1814.622
 
---------------------------------------------------------------
-node03
-Tdie:         +56.5 C  (high = +70.0 C)
+------------------------------------------------------------------------- node02
+
+cpu MHz         : 1830.450
+
+------------------------------------------------------------------------- node03
+
+cpu MHz         : 1890.431
 ```
 
 `COMMAND` is expected to be a single argument, so use your bash

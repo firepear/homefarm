@@ -1,7 +1,14 @@
+## 3.6.2 -- 2022-08-11
+
+- `pstracker` now reports time since update in fractions of hours; the
+  `query` subcommand now accepts fractional hours as a timespan
+  argument
+
+
 ## 3.6.1 -- 2022-08-08
 
 - Fixed storage node detection for ceph subcommands
-- Fixed `app_config.xml` deploy for projects with complex URLs 
+- Fixed `app_config.xml` deploy for projects with complex URLs
 
 
 ## 3.6.0 -- 2022-08-01
