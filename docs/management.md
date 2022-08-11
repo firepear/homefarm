@@ -103,11 +103,12 @@ WUs by quintile:
 
 The behavior of `query` can be modified with the following arguments:
 
-- `-t WU_TYPE` -- Filters by searching only for WUs whose name matches
-  `WU_TYPE`
-- `-s TIMESPAN` -- Specify a number of hours to include, rather than
-  the default 24
-- `-c` -- Show only WU count and no other stats
+- `-t WUTYPE` Filters by searching only for WUs whose name matches
+  `WUTYPE`
+- `-s TIMESPAN` Specify a number of hours to include, rather than
+  the default 24 (can be fractional)
+- `-c` Compact output; show only WU count
+- `-j` Output JSON rather than pretty-printed text
 
 ```
 # farmctl query community -t MCM -s 96 -c

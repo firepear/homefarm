@@ -348,9 +348,9 @@ usage: ${0} SUBCOMMAND [ARGS]
   cephstat
       Run 'ceph -s' against the Ceph cluster
 
-  cmd <COMMAND_LINE> [<HOSTGLOB>]
-      Run a command on all nodes matching HOSTGLOB. COMMAND_LINE be a
-      single argument, so use quotes as appropriate. Omit HOSTGLOB to
+  cmd <COMMAND> [REGEXP]
+      Run a command on all nodes matching REGEXP. COMMAND should be a
+      single argument, so use quotes as appropriate. Omit REGEXP to
       run on all hosts.
 
   joblog [size | clean <URL>]
@@ -361,9 +361,9 @@ usage: ${0} SUBCOMMAND [ARGS]
   project-sync
       Sync project statuses to compute nodes
 
-  query <PROJECT_NAME> [-t <WU_TYPE>] [-s <TIMESPAN>] [-c]
+  query <PROJECT_NAME> [-t <WU_TYPE>] [-s <TIMESPAN>] [-c] [-j]
       Generate counts and runtime stats for WUs completed on a project in a
-      given time. Defaults: all WUs; 24h. If -c is given, only report counts
+      given time. Default: all WUs; 24h. If -c is given, only report counts
 
   restore <HOMEFARM_DIR>
       Restore farm state from a tarball created by 'farmctl backup'. Tarball must
