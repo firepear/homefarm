@@ -20,7 +20,25 @@
       file: ./nodes/{{ inventory_hostname }}.yml
       name: node
 
-  - name: Create BOINC project dirs
+  - name: Update BOINC client config
+    become: true
+    copy:
+      src: ./nodes/{{ inventory_hostname }}-cc.xml
+      dest: /var/lib/boinc/cc_config.xml
+      owner: root
+      group: root
+      mode: 0644
+    vars:
+      ccconfigpath: "./nodes/{{ inventory_hostname }}-cc.xml"
+    when: ccconfigpath is exists
+    register: ccconfig
+
+  - name: Update project statuses
+    become: true
+    command: /usr/local/bin/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}
+    loop: "{{ node.projects }}"
+
+  - name: Create BOINC project dirs if needed
     become: true
     ansible.builtin.file:
       path: "/var/lib/boinc/projects/{{ item.url | regex_replace('^https://', '') | regex_replace('/', '_') }}"
@@ -44,24 +62,6 @@
     when: appconfigpath is exists
     register: appconfig
 
-
-  - name: Update BOINC client config
-    become: true
-    copy:
-      src: ./nodes/{{ inventory_hostname }}-cc.xml
-      dest: /var/lib/boinc/cc_config.xml
-      owner: root
-      group: root
-      mode: 0644
-    vars:
-      ccconfigpath: "./nodes/{{ inventory_hostname }}-cc.xml"
-    when: ccconfigpath is exists
-    register: ccconfig
-
-  - name: Update project statuses
-    become: true
-    command: /usr/local/bin/boinccmdcmd /var/lib/boinc {{ item.url }} {{ item.user }} {{ item.email }} {{ item.passwd }} {{ item.state }}
-    loop: "{{ node.projects }}"
 
   - name: Copy GUI auth file
     become: true
