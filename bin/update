@@ -135,9 +135,11 @@ fi
 
 # reboots
 if [[ "${localrepo_updated}" == "true" ]]; then
-    shownotice "Rebooting compute nodes"
+    shownotice "Rebooting nodes"
     for node in ${NODES[*]}; do
-        ssh "farmer@${node}" 'sudo reboot' || true
+        if [[ "$(ping -c1 -W 2 "${node}" | grep -c '100% packet loss')" == "1" ]]; then
+            ssh "farmer@${node}" 'sudo reboot' || true
+        fi
     done
 fi
 
