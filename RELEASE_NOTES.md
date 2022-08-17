@@ -1,3 +1,10 @@
+## 3.6.3 -- 2022-08-17
+
+- Running an update now only reboots nodes which are alive
+- `cmd` subcommand now takes a regexp rather than a glob as its
+  optional 2nd argument (node specification)
+- `app_config.xml` handling should now be more reliable
+
 ## 3.6.2 -- 2022-08-11
 
 - `pstracker` now reports time since update in fractions of hours; the
