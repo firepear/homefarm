@@ -54,6 +54,11 @@ update_os() {
     fi
 }
 
+update_help() {
+    echo "usage: farmctl update [--repoup] [--force]"
+    echo "see 'farmctl help' and docs/update.md for more information."
+    exit 0
+}
 
 
 
@@ -69,29 +74,22 @@ while [[ "${1}" =~ ^-- ]]; do
             ;;
         "--repoup")
             REPOUPD="true"
-            echo "REPOUPD enabled"
             echo "Forcing repo update"
             ;;
         "--force")
             FORCEUP="true"
             echo "Forcing node update"
             ;;
-        "--help")
-            echo "Usage: farmctl update [--repoup] [--force]"
-            echo
-            echo "See 'farmctl help' and docs/update.md for more information."
-            exit 0
-            ;;
         *)
-            echo "unknown arg '${arg}'; see 'farmctl update --help'"
-            exit
+            echo "unknown arg '${1}'"
+            update_help
+            ;;
     esac
     shift
 done
-# handle unknown args
 if [[ "${1}" != "" ]]; then
-    echo "unknown arg '${1}'; see 'farmctl update --help'"
-    exit 1
+    echo "unknown arg '${1}'"
+    update_help
 fi
 
 
