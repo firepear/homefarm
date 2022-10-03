@@ -77,9 +77,9 @@ while [[ "${1}" =~ ^-- ]]; do
             echo "Forcing node update"
             ;;
         "--help")
-            echo "Update the cluster's OS and Homefarm install, as needed."
+            echo "Usage: farmctl update [--repoup] [--force]"
             echo
-            echo "See docs/update.md for more information."
+            echo "See 'farmctl help' and docs/update.md for more information."
             exit 0
             ;;
         *)
