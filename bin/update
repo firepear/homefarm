@@ -88,22 +88,18 @@ while [[ "${1}" =~ ^-- ]]; do
     esac
     shift
 done
+# handle unknown args
+if [[ "${1}" != "" ]]; then
+    echo "unknown arg '${1}'; see 'farmctl update --help'"
+    exit 1
+fi
+
 
 # read in mirror; error if we don't have one
 if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
     cat <<EOF
 There is no mirror URL set for the local repo. Has 'farmctl init' been
 run successfully?
-EOF
-    exit 1
-fi
-
-# handle unknown args
-if [[ "${1}" != "" ]]; then
-    cat <<EOF
-error: unknown argument: "${1}"
-
-See docs/update.md for more information.
 EOF
     exit 1
 fi
