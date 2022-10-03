@@ -373,8 +373,11 @@ usage: ${0} SUBCOMMAND [ARGS]
       Display info on current tasks. Specifying 'nopage' inhibits autopaging.
       Specifying 'json' implies 'nopage', and outputs JSON
 
-  update
-      Update Homefarm, the local repository, and OS packages on compute nodes
+  update [--repoup] [--force]
+      Update Homefarm, the local repository, and OS packages on
+      compute nodes. `--force` causes machines to be updated whether
+      there are package updates or not. `--repoup` updates the repo
+      without udating machines.
 
   version
       Display version and networking information

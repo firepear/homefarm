@@ -1,3 +1,8 @@
+## 3.6.4 -- 2022-10-03
+
+- Added `--force` option to `update` subcmd, which causes machines to
+  be updated regardless of repo update status.
+
 ## 3.6.3 -- 2022-08-17
 
 - Running an update now only reboots nodes which are alive

@@ -60,29 +60,34 @@ update_os() {
 ######################################################################
 # arg handling
 
-# handle help
-if [[ "${1}" == "-h" ]] || [[ "${1}" == "--help" ]]; then
-    cat <<EOF
-Update the cluster's OS and Homefarm install, as needed.
-
-See docs/update.md for more information.
-EOF
-    exit 0
-fi
-
-# set dev mode, if requested
-if [[ "${1}" == "--devmode" ]]; then
-    DEVMODE="true"
-    rm -f "${FP_CONFIG[localrepo]}/x86_64/prevmd5"
-    echo "DEVMODE enabled"
+while [[ "${1}" =~ ^-- ]]; do
+    case "${1}" in
+        "--devmode")
+            DEVMODE="true"
+            rm -f "${FP_CONFIG[localrepo]}/x86_64/prevmd5"
+            echo "DEVMODE enabled"
+            ;;
+        "--repoup")
+            REPOUPD="true"
+            echo "REPOUPD enabled"
+            echo "Forcing repo update"
+            ;;
+        "--force")
+            FORCEUP="true"
+            echo "Forcing node update"
+            ;;
+        "--help")
+            echo "Update the cluster's OS and Homefarm install, as needed."
+            echo
+            echo "See docs/update.md for more information."
+            exit 0
+            ;;
+        *)
+            echo "unknown arg '${arg}'; see 'farmctl update --help'"
+            exit
+    esac
     shift
-fi
-# set repo-only mode
-if [[ "${1}" == "--repoup" ]]; then
-    REPOUPD="true"
-    echo "REPOUPD enabled"
-    shift
-fi
+done
 
 # read in mirror; error if we don't have one
 if [[ "${FP_CONFIG[mirrorurl]}" == "HF_MIRRORURL_UNSET" ]]; then
@@ -118,7 +123,7 @@ update_localrepo "${FP_CONFIG[localrepo]}" "${mirrorurl}" "${FIRSTNODE}"
 if [[ "${?}" != "0" ]]; then
     exit 1
 fi
-if [[ "${REPOUPD}" == "true" ]]; then
+if [[ "${REPOUPD}" == "true" && "${FORCEUP}" == "" ]]; then
     exit 0
 fi
 
@@ -134,7 +139,7 @@ if [[ -e ./.repoupdate ]] || [[ "${localrepo_updated}" == "true" ]]; then
 fi
 
 # reboots
-if [[ "${localrepo_updated}" == "true" ]]; then
+if [[ "${localrepo_updated}" == "true" || "${FORCEUP}" == "true" ]]; then
     shownotice "Rebooting nodes"
     for node in ${NODES[*]}; do
         if [[ "$(ping -c1 -W 2 "${node}" | grep -c '100% packet loss')" == "1" ]]; then
