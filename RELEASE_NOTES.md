@@ -1,10 +1,7 @@
-## 3.6.5 -- 2022-11-20
+## 3.6.4 -- 2022-11-20
 
 - Fixed problem with nodes not rebooting agter update
 - Added `--reboot-only` option to `update` subcmd
-
-## 3.6.4 -- 2022-10-03
-
 - Added `--force` option to `update` subcmd, which causes machines to
   be updated regardless of repo update status.
 
