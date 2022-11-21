@@ -144,7 +144,9 @@ if [[ "${localrepo_updated}" == "true" || "${FORCEUP}" == "true" || "${REBOOT}" 
     for node in ${NODES[*]}; do
         if [[ "$(ping -c1 -W 2 "${node}" | grep -c '100% packet loss')" == "0" ]]; then
             ssh "farmer@${node}" 'sudo reboot' || true
-            echo -e "\t${node}"
+            echo -e "\t${node} ok"
+        else
+            echo -e "\tcould not reboot ${node}"
         fi
     done
 fi
