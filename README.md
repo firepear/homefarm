@@ -49,10 +49,3 @@ for all changes and full history.
     * Sometimes Arch renames packages and other such things, and this
       will cause the update script to break. If this happens to you,
       check the _Fixes and Unbreaks_ page above, or file a ticket.
-* Other
-    * Have homefarm? Want to install Arch on a machine that _isn't_
-      part of the farm? Follow the compute node install process, but
-      don't run any of the compute or storage specific setups. You'll
-      have a core install with a working network connection, ready for
-      user creation and further system configuration.
-
