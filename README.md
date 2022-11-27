@@ -20,7 +20,7 @@ There are a few assumptions:
 * You're familiar with BOINC, projects, workunits, and so on
 
 See the [Release
-notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES)
+notes](https://github.com/firepear/homefarm/blob/master/RELEASE_NOTES.md)
 for all changes and full history.
 
 
