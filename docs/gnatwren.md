@@ -13,16 +13,15 @@ simple to get going.
     interact with it.
 - While attached to the `farmctl` container, do:
   - `farmctl gnatwren-deploy` to handle initial setup
-  - Edit `farm.cfg` to add a new group (`gnatwren-enabled`) and add
+  - Edit `farm.cfg` to add a new group (`gnatwren_enabled`) and add
     the machines you want to run the Gnatwren agent to this group
   - Edit `./files/gwagent-config.json` to point at the IP of the
     machine where the `gwgather` container is running
-  - Rerun the `farmctl gnatwren-deploy` to deploy/update the Gnatwren
+  - Rerun `farmctl gnatwren-deploy` to deploy/update the Gnatwren
     agent and its configuration to nodes
 
-You should then be able to visit `http://GWGATHER_IP:9098/` and
-see current stats about your farm. See the Gnatwren docs for more
-info.
+You should then be able to visit `http://GWGATHER_IP:9098/` to see
+current stats about your farm. See the Gnatwren docs for more info.
 
 ## Updating Gnatwren or its configuration
 
