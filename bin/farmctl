@@ -199,6 +199,9 @@ case "${1}" in
         shift
         exec ./bin/utils/farmcmd "${@}"
         ;;
+    gnatwren-deploy)
+        exec /bin/ansible-playbook gnatwren.yml
+        ;;
     joblog)
         shift
         nodes=( nodes/node*yml )

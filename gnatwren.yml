@@ -16,7 +16,7 @@
       mode: 0644
       force: no
 
-- hosts: compute_nodes:storage_nodes
+- hosts: gnatwren_enabled
   remote_user: farmer
   tasks:
   - name: Deploy gwagent
@@ -78,4 +78,4 @@
     service:
       name: gnatwren-agent
       state: restarted
-    when: config.changed or binary.changed
+    when: config.changed or or unitfile.changed or binary.changed

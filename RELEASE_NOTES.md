@@ -1,3 +1,10 @@
+## 3.7.0 -- 2022-12-11
+
+- The Gnatwren playbook now operates on group `gnatwren_enabled`; see
+  the Gnatwren doc for more info.
+- New subcmd, `gnatwren-deploy` replaces the old method of running the
+  playbook manually
+
 ## 3.6.4 -- 2022-11-20
 
 - Fixed problem with nodes not rebooting agter update

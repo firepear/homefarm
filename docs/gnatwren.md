@@ -12,10 +12,12 @@ simple to get going.
   - This will be separate from your Homefarm container, and will not
     interact with it.
 - While attached to the `farmctl` container, do:
-  - `ansible-playbook gnatwren.yml`
+  - `farmctl gnatwren-deploy` to handle initial setup
+  - Edit `farm.cfg` to add a new group (`gnatwren-enabled`) and add
+    the machines you want to run the Gnatwren agent to this group
   - Edit `./files/gwagent-config.json` to point at the IP of the
     machine where the `gwgather` container is running
-  - Rerun the gnatwren playbook (sorry for this kludge)
+  - Rerun the `farmctl gnatwren-deploy` to deploy the Gnatwren agent and its 
 
 You should then be able to visit `http://GWGATHER_IP:9098/` and
 see current stats about your farm. See the Gnatwren docs for more
