@@ -78,4 +78,4 @@
     service:
       name: gnatwren-agent
       state: restarted
-    when: config.changed or or unitfile.changed or binary.changed
+    when: config.changed or unitfile.changed or binary.changed

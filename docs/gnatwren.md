@@ -17,7 +17,8 @@ simple to get going.
     the machines you want to run the Gnatwren agent to this group
   - Edit `./files/gwagent-config.json` to point at the IP of the
     machine where the `gwgather` container is running
-  - Rerun the `farmctl gnatwren-deploy` to deploy the Gnatwren agent and its 
+  - Rerun the `farmctl gnatwren-deploy` to deploy/update the Gnatwren
+    agent and its configuration to nodes
 
 You should then be able to visit `http://GWGATHER_IP:9098/` and
 see current stats about your farm. See the Gnatwren docs for more
@@ -28,8 +29,8 @@ info.
 If there is a new version of Gnatwren, rebuild the `gwgather`
 container as described above.
 
-Rerun `ansible-playbook gnatwren.yml` anytime to rebuild and re-deploy
+Rerun `farmctl gnatwren-deploy` anytime to rebuild and re-deploy
 the agent software if there have been changes.
 
-Similarly, edit `./files/gwagent-config.json` and rerun the playbook
-to push configuration changes to your nodes.
+Similarly, edit `./files/gwagent-config.json` and rerun the deploy to
+push configuration changes to your nodes.
