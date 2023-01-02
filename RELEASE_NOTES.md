@@ -1,3 +1,8 @@
+## 3.7.1 -- 2023-01-02
+
+- Removed Gnatwren initialization from `farmctl`
+- Improved hostfile generation
+
 ## 3.7.0 -- 2022-12-11
 
 - The Gnatwren playbook now operates on group `gnatwren_enabled`; see

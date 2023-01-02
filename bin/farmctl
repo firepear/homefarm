@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright (c) 2017-2020 Shawn Boyette <shawn@firepear.net>. All
+# Copyright (c) 2017-2022 Shawn Boyette <shawn@firepear.net>. All
 # rights reserved.  Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
@@ -62,14 +62,6 @@ function hf_init() {
     shownotice "Initializing local package mirror"
     update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}"
 
-    # build gnatwren and create agent config file
-    shownotice "Initializing Gnatwren"
-    ansible-playbook gnatwren-control.yml
-    sedexpr="s/0\.0\.0\.0/${HOSTADDR}/"
-    if [[ ! -e ./gwagent-config.json ]]; then
-        sed -e "${sedexpr}" ./files/gnatwren/assets/agent-config.json > ./gwagent-config.json
-    fi
-
     shownotice "Finishing up initialization"
     cd "${FP_CONFIG[rootdir]}"
     # make the nodes directory for user convenience
@@ -98,14 +90,27 @@ function hf_buildhosts() {
     if [[ ! -e ./farm.cfg ]]; then
         return
     fi
-    found_nodes="false"
+    found_nodes="false" # the "looking at a node list" sentinel value
+    seen_nodes=()       # list of nodes added so far
+
     while read -r line; do
         if [[ "${found_nodes}" == "true" ]]; then
+            # if the line doesn't start with a letter (hostname) or
+            # match '_nodes', then turn the found flag back off
+            if [[ "${line}" =~ ^[^A-Za-z] ]] && [[ ! "${line}" =~ _nodes ]]; then
+                found_nodes="false"
+                continue
+            fi
             nodename=$(echo "${line}" | cut -d' ' -f1)
-            nodeip=$(echo "${line}" | awk '{print $2}' | cut -d'=' -f2)
-            echo "${nodeip} ${nodename}" >> /etc/hosts
+            if [[ ! "${seen_nodes[*]}" =~ ${nodename} ]]; then
+                # if we haven't seen this node before, stash its name
+                # in the seen list and add a line to the hostfile
+                seen_nodes+=(${nodename})
+                nodeip=$(echo "${line}" | awk '{print $2}' | cut -d'=' -f2)
+                echo "${nodeip} ${nodename}" >> /etc/hosts
+            fi
         fi
-        if [[ "${line}" =~ compute_nodes ]]; then
+        if [[ "${line}" =~ _nodes ]]; then
             found_nodes="true"
         fi
     done < ./farm.cfg
@@ -378,8 +383,8 @@ usage: ${0} SUBCOMMAND [ARGS]
 
   update [--repoup] [--force] [--reboot-only]
       Update Homefarm, the local repository, and OS packages on
-      compute nodes. `--force` causes machines to be updated whether
-      there are package updates or not. `--repoup` updates the repo
+      compute nodes. '--force' causes machines to be updated whether
+      there are package updates or not. '--repoup' updates the repo
       without udating machines.
 
   version
