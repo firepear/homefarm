@@ -238,6 +238,9 @@ case "${1}" in
     project-sync)
         exec /bin/ansible-playbook nodes-sync-projects.yml
         ;;
+    project-update)
+        exec /bin/ansible-playbook nodes-project-update.yml
+        ;;
     query)
         shift
         if [[ "${*}" =~ "-j" ]]; then
@@ -368,6 +371,9 @@ usage: ${0} SUBCOMMAND [ARGS]
 
   project-sync
       Sync project statuses to compute nodes
+
+  project-update
+      Force an update on all active projects
 
   query <PROJECT_NAME> [-t <WU_TYPE>] [-s <TIMESPAN>] [-c] [-j]
       Generate counts and runtime stats for WUs completed on a project in a

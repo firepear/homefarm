@@ -109,7 +109,7 @@ fi
 ######################################################################
 # script proper begins
 
-NODES=( $(grep -E '^(node|stor)' farm.cfg | cut -f1 -d' ' | xargs) )
+NODES=( $(grep -E '(node[0-9]|stor[0-9])' /etc/hosts | cut -d' ' -f2 | xargs) )
 FIRSTNODE="${NODES[0]}"
 
 if [[ "${DEVMODE}" == "false" ]]; then

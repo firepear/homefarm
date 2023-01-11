@@ -66,6 +66,18 @@ Tasks: 43         Active: 13      Credit/RAC: 975172/8101
  13  MCM1_0161859_0528_1                          Run    4.51%    1h55m    6d15h
 ```
 
+## Forcing a BOINC project update
+
+Occasionally you might like to force a project to refresh. BOINC gets
+weird sometimes. Maybe you're worried BOINC has gotten
+weird. Regardless of why:
+
+`farmctl project-update`
+
+This will do a `boinccmd --project [PROJECT_URL] update` on all active
+projects, on all compute nodes.
+
+
 ## Getting BOINC project statistics
 
 If you'd like to get basic statistics on how your farm is performing

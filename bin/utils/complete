@@ -1,3 +1,3 @@
 #!/bin/bash
 export HISTCONTROL=ignoreboth
-complete -W "backup boinc-config cephshell cephstat cmd gnatwren-deploy help init joblog project-sync query restore status update version" farmctl
+complete -W "backup boinc-config cephshell cephstat cmd gnatwren-deploy help init joblog project-sync project-update query restore status update version" farmctl

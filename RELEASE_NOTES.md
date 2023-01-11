@@ -1,7 +1,14 @@
+## 3.8.0 -- 2023-01-10
+
+- Added new subcommand `project-update`
+- Fixed update reboot behavior to use de-duped nodelist
+
+
 ## 3.7.1 -- 2023-01-02
 
 - Removed Gnatwren initialization from `farmctl`
 - Improved hostfile generation
+
 
 ## 3.7.0 -- 2022-12-11
 
@@ -10,6 +17,7 @@
 - New subcmd, `gnatwren-deploy` replaces the old method of running the
   playbook manually
 
+
 ## 3.6.4 -- 2022-11-20
 
 - Fixed problem with nodes not rebooting agter update
@@ -17,12 +25,14 @@
 - Added `--force` option to `update` subcmd, which causes machines to
   be updated regardless of repo update status.
 
+
 ## 3.6.3 -- 2022-08-17
 
 - Running an update now only reboots nodes which are alive
 - `cmd` subcommand now takes a regexp rather than a glob as its
   optional 2nd argument (node specification)
 - `app_config.xml` handling should now be more reliable
+
 
 ## 3.6.2 -- 2022-08-11
 

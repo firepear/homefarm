@@ -95,14 +95,11 @@ def change_project_state(proj_url, newstate):
         print("error on state change '{}'".format(r.stderr))
         sys.exit(1)
 
-
-############################################################### state handlers
 def state_attach(proj_url, proj_user, proj_email, proj_password):
     # need account access key to attach
     key = get_access_key(proj_url, proj_user, proj_email, proj_password)
     # now we can send the attach request
     subprocess.run([boinc, pwf, pw, "--project_attach", proj_url, key], stdout=subprocess.PIPE)
-
 
 
 ######################################################################### main
@@ -140,6 +137,8 @@ elif proj_state == "suspended":
         change_project_state(proj_url, "suspend")
 elif proj_state == "detached":
     change_project_state(proj_url, "detach")
+elif proj_state == "update":
+    change_project_state(proj_url, "update")
 else:
     print("requested project state '{}' is not valid".format(proj_state))
     sys.exit(1)
