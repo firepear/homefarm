@@ -1,3 +1,10 @@
+## 3.9.0 (2023-03-xx)
+
+- `atboot.service` now calls a script rather than running a single
+  command
+
+
+
 ## 3.8.0 (2023-01-10)
 
 - Added new subcommand `project-update`

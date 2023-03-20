@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# read config
+
+# handle setup if 
+if [[ which nvidia-smi && ]]; then
+    nvidia-smi -pm 1
+    nvidia-smi -pl 150
+fi
