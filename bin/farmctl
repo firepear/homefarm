@@ -75,7 +75,7 @@ function hf_init() {
     # symlink install/setup scripts
     ln -fs /homefarm/bin/node-install "${FP_CONFIG[httpdir]}"
     ln -fs /homefarm/bin/node-setup "${FP_CONFIG[httpdir]}"
-    ln -fs /homefarm/bin/common.sh "${FP_CONFIG[httpdir]}"
+    ln -fs /homefarm/bin/fpcommon.sh "${FP_CONFIG[httpdir]}"
     ln -fs /homefarm/bin/util/fix-wlan0 "${FP_CONFIG[httpdir]}"
     # symlink other files
     ln -fs /homefarm/files/atboot.service "${FP_CONFIG[httpdir]}"
@@ -142,7 +142,7 @@ else
 fi
 
 # source common functions
-source ./bin/common.sh
+source ./bin/fpcommon.sh
 
 # parse the fpconfig file. it'll be at ./.fpconfig.json if we've done
 # `farmctl init` and in the files directory otherwise
@@ -277,7 +277,7 @@ case "${1}" in
             echo "restore: homefarm directory must be specified"
         fi
         cd "${2}"
-        source ./bin/common.sh
+        source ./bin/fpcommon.sh
         exec docker run -rm -v "${2}:/homefarm" -it farmcontrol ./bin/backup restore
         ;;
     status)

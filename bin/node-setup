@@ -10,7 +10,7 @@ fi
 CONTROLLER="${1}:9099"
 
 # and source
-source ./common.sh
+source ./fpcommon.sh
 CPUARCH=$(hf_setarch)
 
 # grab the controller's ssh key, for later

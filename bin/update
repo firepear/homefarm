@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare -A FP_CONFIG
-source ./bin/common.sh
+source ./bin/fpcommon.sh
 fp_parseconfig ./.fpconfig.json homefarm
 
 DEVMODE="false"
@@ -47,7 +47,7 @@ update_homefarm() {
 update_os() {
     cd ${FP_CONFIG[rootdir]}
     # future me running shellcheck: this variable is exported from
-    # common.sh, in the update_localrepo function
+    # fpcommon.sh, in the update_localrepo function
     if [[ "${localrepo_updated}" == "true" ]]; then
         shownotice "Updating nodes"
         ansible-playbook nodes-system-update.yml

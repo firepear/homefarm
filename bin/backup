@@ -2,7 +2,7 @@
 set -e
 
 declare -A FP_CONFIG
-source ./bin/common.sh
+source ./bin/fpcommon.sh
 
 ARCHIVE="/homefarm/homefarm.backup.tar.gz"
 
@@ -45,7 +45,7 @@ fi
 echo "Unpacking tarball"
 tar zxvf ${ARCHIVE} >> /dev/null
 echo "Restoring local package mirror"
-source ./bin/common.sh
+source ./bin/fpcommon.sh
 fp_parseconfig ./.fpconfig.json homefarm
 mkdir -p "${FP_CONFIG[localrepo]}"
 update_localrepo "${FP_CONFIG[localrepo]}" "${FP_CONFIG[mirrorurl]}"
