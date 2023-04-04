@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# use a low power limit as a default, to be safe
+pl=100
+
+# if we've been provided with a user-specified limit, use that
+if [[ "${1}" != "" ]]; then
+    pl="${1}"
+fi
+
+# turn on persistence mode, then set power limit
+if [[ -e /usr/bin/nvidia-smi ]]; then
+    nvidia-smi -pm 1
+    nvidia-smi -pl "${pl}"
+fi
