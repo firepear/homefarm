@@ -1,8 +1,12 @@
-## 3.9.0 (2023-03-xx)
+## 3.9.0 (2023-04-xx)
 
 - `atboot.service` now calls a script rather than running a single
   command
-
+  - This enables per-node, at-boot configuration, which is initially
+    being used to set power limits on Nvidia GPUs
+- Setup playbooks for BOINC and storage nodes have been renamed, and
+  are now run by a common setup/update playbook
+- `common.sh` renamed to `fpcommand.sh`
 
 
 ## 3.8.0 (2023-01-10)
