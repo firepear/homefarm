@@ -67,6 +67,17 @@ hf_docker_test() {
     fi
 }
 
+fp_set_dockercmd() {
+    dockercmd=$(which docker 2>&1 || true)
+    if [[ "${dockercmd}" =~ ^which ]]; then
+        dockercmd=$(which podman 2>&1 || true)
+    fi
+    if [[ "${dockercmd}" =~ ^which ]]; then
+        echo "error: neither docker or podman found in PATH; bailing"
+        exit 2
+    fi
+}
+
 update_localrepo() {
     repodir="${1}"
     mirrorurl="${2}"

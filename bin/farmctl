@@ -144,6 +144,9 @@ fi
 # source common functions
 source ./bin/fpcommon.sh
 
+# set dockercmd, the container handler
+fp_set_dockercmd
+
 # parse the fpconfig file. it'll be at ./.fpconfig.json if we've done
 # `farmctl init` and in the files directory otherwise
 if [[ -e ./.fpconfig.json ]]; then
@@ -163,7 +166,21 @@ case "${1}" in
         ;;
     attach)
         hf_docker_test
-        docker attach farmcontrol
+        cont=$(sudo ${dockercmd} ps | grep farmcontrol || true)
+        if [[ "${cont}" != "" ]]; then
+            echo "found container; attaching"
+            sudo ${dockercmd} attach farmcontrol
+            exit
+        fi
+        cont=$(sudo ${dockercmd} image ls | grep farmcontrol || true)
+        if [[  "${cont}" != "" ]]; then
+            echo "found stopped container; starting"
+            sudo ${dockercmd} start farmcontrol
+        else
+            echo "found image; running"
+            sudo ${dockercmd} run --name farmcontrol -d -p 9099:80 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
+        fi
+        sudo ${dockercmd} attach farmcontrol
         ;;
     backup)
         exec ./bin/backup
@@ -174,13 +191,13 @@ case "${1}" in
         ;;
     build-image)
         hf_docker_test
-        docker container stop farmcontrol || true
-        docker container rm farmcontrol || true
-        docker image rm farmcontrol || true
-        docker image pull archlinux
+        sudo ${dockercmd} container stop farmcontrol || true
+        sudo ${dockercmd} container rm farmcontrol || true
+        sudo ${dockercmd} image rm farmcontrol || true
+        sudo ${dockercmd} image pull archlinux
         cd ./files/docker/controller
-        docker build --tag farmcontrol .
-        docker image prune -f
+        sudo ${dockercmd} build --tag farmcontrol .
+        sudo ${dockercmd} image prune -f
         ;;
     cephshell)
         stornodes=($(grep -E '^stor' farm.cfg | cut -f1 -d' ' | xargs))
@@ -278,7 +295,7 @@ case "${1}" in
         fi
         cd "${2}"
         source ./bin/fpcommon.sh
-        exec docker run -rm -v "${2}:/homefarm" -it farmcontrol ./bin/backup restore
+        exec sudo ${dockercmd} run -rm -v "${2}:/homefarm" -it farmcontrol ./bin/backup restore
         ;;
     status)
         shift
@@ -303,16 +320,16 @@ case "${1}" in
         fi
         rm "${tmpfile}"
         ;;
-    up)
+#    up)
         # this case brings up the docker container, executing 'farmctl
         # on-up' as the command
-        hf_docker_test
-        if docker container ls | grep farmcontrol > /dev/null; then
-            echo "farmctl is running. do 'farmctl attach' to connect."
-            builtin exit 0
-        fi
-        exec docker run --name farmcontrol -d --restart always -p 9099:80 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
-        ;;
+#        hf_docker_test
+#        if ${dockercmd} container ls | grep farmcontrol > /dev/null; then
+#            echo "farmctl is running. do 'farmctl attach' to connect."
+#            builtin exit 0
+#        fi
+#        exec ${dockercmd} run --name farmcontrol -d -p 9099:80 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
+#        ;;
     on-up)
         # this case runs on the second invocation of farmctl, after
         # the container has been started by 'farmctl up'. it

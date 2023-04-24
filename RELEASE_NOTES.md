@@ -6,7 +6,7 @@
     being used to set power limits on Nvidia GPUs
 - Setup playbooks for BOINC and storage nodes have been renamed, and
   are now run by a common setup/update playbook
-- `common.sh` renamed to `fpcommand.sh`
+- `common.sh` renamed to `fpcommon.sh`
 
 
 ## 3.8.0 (2023-01-10)
