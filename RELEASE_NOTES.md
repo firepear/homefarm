@@ -1,5 +1,6 @@
 ## 3.9.0 (2023-04-xx)
 
+- The control container now runs only when a user is attached
 - `atboot.service` now calls a script rather than running a single
   command
   - This enables per-node, at-boot configuration, which is initially
@@ -7,6 +8,7 @@
 - Setup playbooks for BOINC and storage nodes have been renamed, and
   are now run by a common setup/update playbook
 - `common.sh` renamed to `fpcommon.sh`
+- Fixed git tags not being sorted chronologically
 
 
 ## 3.8.0 (2023-01-10)
