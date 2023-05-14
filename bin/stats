@@ -70,6 +70,7 @@ def report(tmpfile, hosts, conf):
         projcount = 0
         for projname, p in projects.items():
             if projname == 'err':
+                of.write(f"{projname}: {p}\n")
                 continue
             # print a summary for the project
             if projcount > 0:
@@ -142,6 +143,7 @@ for host, key in hosts.items():
         if not authed:
             data[host]['err'] = f"could not auth on '{host}' with key '{key}'"
             continue
+
 
         # first, get projects data
         req = "<boinc_gui_rpc_request><get_project_status/></boinc_gui_rpc_request>\003"
