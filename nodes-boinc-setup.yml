@@ -12,10 +12,10 @@
       state: directory
       mode: 0755
   - name: Ensure project config file for all nodes
-    command: cp --no-clobber ./files/node.yml ./nodes/{{ item }}.yml
+    command: cp --update=none ./files/node.yml ./nodes/{{ item }}.yml
     loop: "{{ groups['compute_nodes'] }}"
   - name: Ensure cc_config file for all nodes
-    command: cp --no-clobber ./files/cc_config.xml ./nodes/{{ item }}-cc.xml
+    command: cp --update=none ./files/cc_config.xml ./nodes/{{ item }}-cc.xml
     loop: "{{ groups['compute_nodes'] }}"
 
 - hosts: compute_nodes

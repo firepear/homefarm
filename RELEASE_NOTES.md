@@ -1,4 +1,4 @@
-## 3.9.0 (2023-04-xx)
+## 3.9.0 (2023-05-xx)
 
 - The control container now runs only when a user is attached
 - `atboot.service` now calls a script rather than running a single
@@ -9,6 +9,8 @@
   are now run by a common setup/update playbook
 - `common.sh` renamed to `fpcommon.sh`
 - Fixed git tags not being sorted chronologically
+- Fixed subcmd `status` errors not being reported
+- Fixed playbook errors induced by changes to `cp` behavior
 
 
 ## 3.8.0 (2023-01-10)

@@ -135,13 +135,13 @@ for host, key in hosts.items():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
             s.connect((host, 31416))
-        except:
-            data[host]['err'] = f"could not connect to '{host}' with key '{key}'"
+        except Exception as err:
+            data[host]['err'] = f"could not connect to '{host}': {err}"
             continue
         # try to auth
         authed = hf.auth_conn(s, key)
         if not authed:
-            data[host]['err'] = f"could not auth on '{host}' with key '{key}'"
+            data[host]['err'] = f"connected but could not auth on '{host}' with key '{key}'"
             continue
 
 
