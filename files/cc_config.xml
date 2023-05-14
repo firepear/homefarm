@@ -3,5 +3,6 @@
     <file_xfer>1</file_xfer>
   </log_flags>
   <options>
+    <allow_remote_gui_rpc>1</allow_remote_gui_rpc>
   </options>
 </cc_config>

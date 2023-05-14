@@ -8,9 +8,12 @@
 - Setup playbooks for BOINC and storage nodes have been renamed, and
   are now run by a common setup/update playbook
 - `common.sh` renamed to `fpcommon.sh`
-- Fixed git tags not being sorted chronologically
+- Fixed `allow_remote_gui_rpc` now being required in
+  `cc_config.xml`. You may need to manually to manually add this line
+  to your nodes' `cc_config`
 - Fixed subcmd `status` errors not being reported
 - Fixed playbook errors induced by changes to `cp` behavior
+- Fixed git tags not being sorted chronologically
 
 
 ## 3.8.0 (2023-01-10)
