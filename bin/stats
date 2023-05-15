@@ -70,8 +70,10 @@ def report(tmpfile, hosts, conf):
         projcount = 0
         for projname, p in projects.items():
             if projname == 'err':
-                of.write(f"{projname}: {p}\n")
+                if  p is not None:
+                    of.write(f"{projname}: {p}\n")
                 continue
+
             # print a summary for the project
             if projcount > 0:
                 of.write("--------------------------------------------------------------------------------\n")
