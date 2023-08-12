@@ -49,6 +49,11 @@
       owner: root
       group: root
       mode: 0644
+  - name: Enable atboot service
+    become: true
+    service:
+      name: atboot
+      enabled: yes
   - name: Update atboot scripts
     become: true
     copy:
