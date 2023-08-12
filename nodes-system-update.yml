@@ -1,10 +1,12 @@
 ---
 - hosts: controller
+  tasks:
   - name: Ensure system config file for all nodes
     command: cp --update=none ./files/fp_sys_config.json ./nodes/{{ item }}_sys_config.json
     loop: "{{ groups['compute_nodes'] }}"
 
 - hosts: compute_nodes
+  tasks:
   - name: Halt BOINC
     become: true
     service:
