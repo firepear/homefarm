@@ -45,6 +45,7 @@ icu
 iproute2
 iptables
 iputils
+jq
 json-c
 kbd
 keyutils
