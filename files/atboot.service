@@ -3,6 +3,8 @@ Description=BOINC node atboot tasks
 
 [Service]
 ExecStart=/usr/local/bin/homefarm-atboot
+RemainAfterExit=true
+Type=oneshot
 
 [Install]
 WantedBy=multi-user.target
