@@ -1,9 +1,31 @@
 #!/bin/bash
 
-# read config
+source /usr/local/lib/fpcommon.sh
 
-# handle setup if 
-if [[ which nvidia-smi && ]]; then
+declare -A FP_CONFIG
+
+if [[ "${EUID}" -ne 0 ]]; then
+    echo "This script must be run as root; exiting"
+    exit 1
+fi
+
+# use a low power limit as a default, to be safe
+pl=100
+
+# then see if we have a value in a config file
+fp_parseconfig /etc/.config.json gpusetup
+if [[ -v FP_CONFIG[pl] ]]; then
+    pl="${FP_CONFIG[pl]}"
+fi
+
+# finally, if we've been provided with a user-specified limit, use
+# that instead
+if [[ "${1}" != "" ]]; then
+    pl="${1}"
+fi
+
+# turn on persistence mode, then set power limit
+if [[ -e /usr/bin/nvidia-smi ]]; then
     nvidia-smi -pm 1
-    nvidia-smi -pl 150
+    nvidia-smi -pl "${pl}"
 fi

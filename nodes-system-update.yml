@@ -1,39 +1,18 @@
 ---
+- hosts: controller
+  - name: Ensure system config file for all nodes
+    command: cp --update=none ./files/fp_sys_config.json ./nodes/{{ item }}_sys_config.json
+    loop: "{{ groups['compute_nodes'] }}"
+
 - hosts: compute_nodes
-  remote_user: farmer
-  tasks:
-  - name: Update pacman.conf
-    become: true
-    copy:
-      src: ./srv/homefarm/pacman.conf
-      dest: /etc/pacman.conf
-      owner: root
-      group: root
-      mode: 0644
-  - name: Update mirrorlist
-    become: true
-    copy:
-      src: ./srv/homefarm/mirrorlist
-      dest: /etc/pacman.d/mirrorlist
-      owner: root
-      group: root
-      mode: 0644
   - name: Halt BOINC
     become: true
     service:
       name: boinc-client
       state: stopped
     ignore_errors: true
-  - name: Upgrade system software
-    become: true
-    pacman:
-      update_cache: yes
-      upgrade: yes
-  - name: Clear package cache
-    become: true
-    shell: yes | pacman -Scc
 
-- hosts: storage_nodes
+- hosts: compute_nodes:storage_nodes
   remote_user: farmer
   tasks:
   - name: Update pacman.conf
@@ -60,3 +39,38 @@
   - name: Clear package cache
     become: true
     shell: yes | pacman -Scc
+  - name: Update atboot service
+    become: true
+    copy:
+      src: ./files/atboot.service
+      dest: /etc/systemd/system/atboot.service
+      owner: root
+      group: root
+      mode: 0644
+  - name: Update atboot scripts
+    become: true
+    copy:
+      src: '{{item}}'
+      dest: /usr/local/bin
+      owner: root
+      group: root
+      mode: 0755
+    loop:
+      - ./files/homefarm-atboot
+      - ./files/homefarm-atboot-gpusetup
+  - name: Update common bash functions
+    become: true
+    copy:
+      src: ./bin/fpcommon.sh
+      dest: /usr/local/lib/fpcommon.sh
+      owner: root
+      group: root
+      mode: 0644
+  - name: Update node system config
+    become: true
+    copy:
+      src: ./nodes/{{ inventory_hostname }}_sys_config.json
+      dest: /etc/hf_sys_config.json
+      owner: root
+      group: root
+      mode: 0644
