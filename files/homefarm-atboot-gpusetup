@@ -13,7 +13,7 @@ fi
 pl=100
 
 # then see if we have a value in a config file
-fp_parseconfig /etc/.config.json gpusetup
+fp_parseconfig /etc/hf_sys_config.json gpusetup
 if [[ -v FP_CONFIG[pl] ]]; then
     pl="${FP_CONFIG[pl]}"
 fi
