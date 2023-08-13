@@ -1,16 +1,14 @@
-## 3.9.0 (2023-05-xx)
+## 3.9.0 (2023-08-12)
 
 - The control container now runs only when a user is attached
 - `atboot.service` now calls a script rather than running a single
   command
   - This enables per-node, at-boot configuration, which is initially
     being used to set power limits on Nvidia GPUs
-- Setup playbooks for BOINC and storage nodes have been renamed, and
-  are now run by a common setup/update playbook
 - `common.sh` renamed to `fpcommon.sh`
 - Fixed `allow_remote_gui_rpc` now being required in
   `cc_config.xml`. You may need to manually to manually add this line
-  to your nodes' `cc_config`
+  to the `cc_config` file for your existing nodes
 - Fixed subcmd `status` errors not being reported
 - Fixed playbook errors induced by changes to `cp` behavior
 - Fixed git tags not being sorted chronologically
