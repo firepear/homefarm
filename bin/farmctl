@@ -253,7 +253,7 @@ case "${1}" in
         fi
         ;;
     project-sync)
-        exec /bin/ansible-playbook nodes-sync-projects.yml
+        exec /bin/ansible-playbook nodes-project-sync.yml
         ;;
     project-update)
         exec /bin/ansible-playbook nodes-project-update.yml

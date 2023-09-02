@@ -1,3 +1,10 @@
+## 3.9.1 (2023-09-02)
+
+- Fixed error in Ansible playbook due to invalid YAML
+- Linted all playbooks
+- Changed one playbook name for consistency
+
+
 ## 3.9.0 (2023-08-12)
 
 - The control container now runs only when a user is attached

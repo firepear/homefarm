@@ -1,81 +1,81 @@
 ---
 - hosts: controller
   tasks:
-  - name: Clone/pull Gnatwren repository
-    git:
-      repo: 'https://github.com/firepear/gnatwren.git'
-      dest: /homefarm/files/gnatwren
-  - name: Build agent
-    command: go build
-    args:
-      chdir: /homefarm/files/gnatwren/cmd/gwagent
-  - name: Instantiate gwagent config
-    copy:
-      src: /homefarm/files/gnatwren/assets/gwagent-config.json
-      dest: /homefarm/files/gwagent-config.json
-      mode: 0644
-      force: no
+    - name: Clone/pull Gnatwren repository
+      git:
+        repo: 'https://github.com/firepear/gnatwren.git'
+        dest: /homefarm/files/gnatwren
+    - name: Build agent
+      command: go build
+      args:
+        chdir: /homefarm/files/gnatwren/cmd/gwagent
+    - name: Instantiate gwagent config
+      copy:
+        src: /homefarm/files/gnatwren/assets/gwagent-config.json
+        dest: /homefarm/files/gwagent-config.json
+        mode: 0644
+        force: false
 
 - hosts: gnatwren_enabled
   remote_user: farmer
   tasks:
-  - name: Deploy gwagent
-    become: true
-    copy:
-      src: /homefarm/files/gnatwren/cmd/gwagent/gwagent
-      dest: /usr/local/bin/gwagent
-      owner: root
-      group: root
-      mode: 0755
-    register: binary
-  - name: Create gwagent stash dir
-    become: true
-    file:
-      path: /var/lib/gnatwren
-      owner: nobody
-      group: nobody
-      mode: 0755
-      state: directory
-  - name: Create gwagent config dir
-    become: true
-    file:
-      path: /etc/gnatwren
-      owner: root
-      group: root
-      mode: 0755
-      state: directory
-  - name: Deploy gwagent config file
-    become: true
-    copy:
-      src: /homefarm/files/gwagent-config.json
-      dest: /etc/gnatwren/agent-config.json
-      owner: root
-      group: root
-      mode: 0644
-    register: config
-  - name: Deploy gwagent unit file
-    become: true
-    copy:
-      src: /homefarm/files/gnatwren/assets/gnatwren-agent.service
-      dest: /usr/lib/systemd/system/gnatwren-agent.service
-      owner: root
-      group: root
-      mode: 0644
-    register: unitfile
-  - name: Reload unit files
-    become: true
-    systemd:
-      daemon_reload: yes
-    when: unitfile.changed
-  - name: Enable gwagent
-    become: true
-    service:
-      name: gnatwren-agent
-      enabled: yes
-    when: unitfile.changed
-  - name: Restart gwagent
-    become: true
-    service:
-      name: gnatwren-agent
-      state: restarted
-    when: config.changed or unitfile.changed or binary.changed
+    - name: Deploy gwagent
+      become: true
+      copy:
+        src: /homefarm/files/gnatwren/cmd/gwagent/gwagent
+        dest: /usr/local/bin/gwagent
+        owner: root
+        group: root
+        mode: 0755
+      register: binary
+    - name: Create gwagent stash dir
+      become: true
+      file:
+        path: /var/lib/gnatwren
+        owner: nobody
+        group: nobody
+        mode: 0755
+        state: directory
+    - name: Create gwagent config dir
+      become: true
+      file:
+        path: /etc/gnatwren
+        owner: root
+        group: root
+        mode: 0755
+        state: directory
+    - name: Deploy gwagent config file
+      become: true
+      copy:
+        src: /homefarm/files/gwagent-config.json
+        dest: /etc/gnatwren/agent-config.json
+        owner: root
+        group: root
+        mode: 0644
+      register: config
+    - name: Deploy gwagent unit file
+      become: true
+      copy:
+        src: /homefarm/files/gnatwren/assets/gnatwren-agent.service
+        dest: /usr/lib/systemd/system/gnatwren-agent.service
+        owner: root
+        group: root
+        mode: 0644
+      register: unitfile
+    - name: Reload unit files
+      become: true
+      systemd:
+        daemon_reload: true
+      when: unitfile.changed
+    - name: Enable gwagent
+      become: true
+      service:
+        name: gnatwren-agent
+        enabled: true
+      when: unitfile.changed
+    - name: Restart gwagent
+      become: true
+      service:
+        name: gnatwren-agent
+        state: restarted
+      when: config.changed or unitfile.changed or binary.changed
