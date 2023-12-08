@@ -328,6 +328,9 @@ case "${1}" in
             echo "farmctl is running. do 'farmctl attach' to connect."
             builtin exit 0
         fi
+        if [[ "${2}" != "" ]]; then
+            gitdir="${2}"
+        fi
         exec ${dockercmd} run --name farmcontrol -d -p 9099:80 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
         ;;
     on-up)
