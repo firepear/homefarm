@@ -320,6 +320,16 @@ case "${1}" in
         fi
         rm "${tmpfile}"
         ;;
+    up)
+        # this case brings up the docker container, per the docs,
+        # executing 'farmctl on-up' as the command
+        hf_docker_test
+        if ${dockercmd} container ls | grep farmcontrol > /dev/null; then
+            echo "farmctl is running. do 'farmctl attach' to connect."
+            builtin exit 0
+        fi
+        exec ${dockercmd} run --name farmcontrol -d -p 9099:80 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
+        ;;
     on-up)
         # this case runs on the second invocation of farmctl, after
         # the container has been started by 'farmctl up'. it
