@@ -137,7 +137,11 @@ function hf_envinit() {
 if [[ -d /homefarm ]]; then
     cd /homefarm
 else
-    gitdir=$(cat ~/.homefarmdir)
+    if [[ "${1}" == "up" && "${2}" != "" ]]; then
+        gitdir=$(realpath "${2}")
+    else
+        gitdir=$(cat ~/.homefarmdir)
+    fi
     cd "${gitdir}"
 fi
 
@@ -327,9 +331,6 @@ case "${1}" in
         if ${dockercmd} container ls | grep farmcontrol > /dev/null; then
             echo "farmctl is running. do 'farmctl attach' to connect."
             builtin exit 0
-        fi
-        if [[ "${2}" != "" ]]; then
-            gitdir="${2}"
         fi
         exec ${dockercmd} run --name farmcontrol -d -p 9099:80 -v "${gitdir}:/homefarm" -it farmcontrol ./bin/farmctl on-up
         ;;
