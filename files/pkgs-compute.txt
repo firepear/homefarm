@@ -9,5 +9,5 @@ lm_sensors
 nvidia-dkms
 nvidia-utils
 ocl-icd
-opencl-mesa
+opencl-rusticl-mesa
 opencl-nvidia
