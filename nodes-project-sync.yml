@@ -9,10 +9,10 @@
         mode: 0755
     - name: Ensure project config file for all nodes
       command: cp --update=none ./files/node.yml ./nodes/{{ item }}.yml
-      loop: "{{ groups['compute_nodes'] }}"
+      loop: "{{ groups['boinc_nodes'] }}"
 
 
-- hosts: compute_nodes
+- hosts: boinc_nodes
   remote_user: farmer
   tasks:
     - name: Import project definitions
@@ -85,4 +85,4 @@
 - hosts: controller
   tasks:
     - name: Assemble RPC keyfile
-      script: "./bin/utils/makeboincguikeyfile {{ groups['compute_nodes'] }}"
+      script: "./bin/utils/makeboincguikeyfile {{ groups['boinc_nodes'] }}"

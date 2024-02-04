@@ -3,9 +3,9 @@
   tasks:
     - name: Ensure system config file for all nodes
       command: cp --update=none ./files/fp_sys_config.json ./nodes/{{ item }}_sys_config.json
-      loop: "{{ groups['compute_nodes'] }}"
+      loop: "{{ groups['boinc_nodes'] }}"
 
-- hosts: compute_nodes
+- hosts: boinc_nodes
   tasks:
     - name: Halt BOINC
       become: true
@@ -14,7 +14,7 @@
         state: stopped
       ignore_errors: true
 
-- hosts: compute_nodes:storage_nodes
+- hosts: boinc_nodes:storage_nodes
   remote_user: farmer
   tasks:
     - name: Update pacman.conf

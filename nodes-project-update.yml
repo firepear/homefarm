@@ -1,5 +1,5 @@
 ---
-- hosts: compute_nodes
+- hosts: boinc_nodes
   remote_user: farmer
   tasks:
     - name: Import project definitions
