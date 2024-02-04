@@ -18,7 +18,7 @@
       command: cp --update=none ./files/cc_config.xml ./nodes/{{ item }}-cc.xml
       loop: "{{ groups['compute_nodes'] }}"
 
-- hosts: compute_nodes
+- hosts: managed_nodes
   remote_user: farmer
   tasks:
     - name: Update pacman.conf
@@ -29,6 +29,10 @@
         owner: root
         group: root
         mode: 0644
+
+- hosts: boinc_nodes
+  remote_user: farmer
+  tasks:
     - name: Install BOINC and related packages
       become: true
       pacman:

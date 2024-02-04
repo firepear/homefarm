@@ -6,7 +6,7 @@ elfutils
 gcc
 libclc
 lm_sensors
-nvidia
+nvidia-dkms
 nvidia-utils
 ocl-icd
 opencl-mesa
