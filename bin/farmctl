@@ -266,22 +266,20 @@ case "${1}" in
         shift
         if [[ "${*}" =~ "-j" ]]; then
             nodes=( nodes/node*yml )
-            echo -n '['
+            output='['
             i=0
             for node in "${nodes[@]}"; do
                 node=$(basename "${node}" ".yml")
-                output=$(ssh farmer@${node} sudo PYTHONPATH='/usr/local/lib:files' query -p ${*} 2>&1 || true)
-                if [[ "${output}" =~ "No route" ]]; then
-                    i=$((i+1))
-                else
+                nodeoutput=$(ssh farmer@${node} sudo PYTHONPATH='/usr/local/lib:files' query -p ${*} 2>&1 || true)
+                if [[ ! "${nodeoutput}" =~ "No route" ]] && [[ ! "${nodeoutput}" =~ "not resolve" ]]; then
                     if [[ "${i}" -gt "0" ]]; then
-                        echo -n ', '
+                        output="${output}, "
                     fi
-                    echo -n "${output}"
+                    output="${output}${nodeoutput}"
                     i=$((i+1))
                 fi
             done
-            echo ']'
+            echo "${output}]"
         else
             for node in nodes/node*yml; do
                 node=$(basename "${node}" ".yml")
